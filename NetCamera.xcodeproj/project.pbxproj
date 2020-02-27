@@ -1,0 +1,590 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4A580BEF24075D0700E82675 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580BEE24075D0700E82675 /* AppDelegate.m */; };
+		4A580BF224075D0700E82675 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580BF124075D0700E82675 /* SceneDelegate.m */; };
+		4A580BF524075D0700E82675 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580BF424075D0700E82675 /* ViewController.m */; };
+		4A580BF824075D0700E82675 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A580BF624075D0700E82675 /* Main.storyboard */; };
+		4A580BFA24075D0D00E82675 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A580BF924075D0D00E82675 /* Assets.xcassets */; };
+		4A580BFD24075D0D00E82675 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A580BFB24075D0D00E82675 /* LaunchScreen.storyboard */; };
+		4A580C0024075D0D00E82675 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580BFF24075D0D00E82675 /* main.m */; };
+		4A580C0A24075D0D00E82675 /* NetCameraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580C0924075D0D00E82675 /* NetCameraTests.m */; };
+		4A580C1524075D0D00E82675 /* NetCameraUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580C1424075D0D00E82675 /* NetCameraUITests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4A580C0624075D0D00E82675 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4A580BE224075D0700E82675 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A580BE924075D0700E82675;
+			remoteInfo = NetCamera;
+		};
+		4A580C1124075D0D00E82675 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4A580BE224075D0700E82675 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4A580BE924075D0700E82675;
+			remoteInfo = NetCamera;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4A580BEA24075D0700E82675 /* NetCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A580BED24075D0700E82675 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		4A580BEE24075D0700E82675 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4A580BF024075D0700E82675 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		4A580BF124075D0700E82675 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
+		4A580BF324075D0700E82675 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		4A580BF424075D0700E82675 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4A580BF724075D0700E82675 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4A580BF924075D0D00E82675 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4A580BFC24075D0D00E82675 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4A580BFE24075D0D00E82675 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4A580BFF24075D0D00E82675 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4A580C0524075D0D00E82675 /* NetCameraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetCameraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A580C0924075D0D00E82675 /* NetCameraTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetCameraTests.m; sourceTree = "<group>"; };
+		4A580C0B24075D0D00E82675 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4A580C1024075D0D00E82675 /* NetCameraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NetCameraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A580C1424075D0D00E82675 /* NetCameraUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NetCameraUITests.m; sourceTree = "<group>"; };
+		4A580C1624075D0D00E82675 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4A580BE724075D0700E82675 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A580C0224075D0D00E82675 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A580C0D24075D0D00E82675 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4A580BE124075D0700E82675 = {
+			isa = PBXGroup;
+			children = (
+				4A580BEC24075D0700E82675 /* NetCamera */,
+				4A580C0824075D0D00E82675 /* NetCameraTests */,
+				4A580C1324075D0D00E82675 /* NetCameraUITests */,
+				4A580BEB24075D0700E82675 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4A580BEB24075D0700E82675 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4A580BEA24075D0700E82675 /* NetCamera.app */,
+				4A580C0524075D0D00E82675 /* NetCameraTests.xctest */,
+				4A580C1024075D0D00E82675 /* NetCameraUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4A580BEC24075D0700E82675 /* NetCamera */ = {
+			isa = PBXGroup;
+			children = (
+				4A580BED24075D0700E82675 /* AppDelegate.h */,
+				4A580BEE24075D0700E82675 /* AppDelegate.m */,
+				4A580BF024075D0700E82675 /* SceneDelegate.h */,
+				4A580BF124075D0700E82675 /* SceneDelegate.m */,
+				4A580BF324075D0700E82675 /* ViewController.h */,
+				4A580BF424075D0700E82675 /* ViewController.m */,
+				4A580BF624075D0700E82675 /* Main.storyboard */,
+				4A580BF924075D0D00E82675 /* Assets.xcassets */,
+				4A580BFB24075D0D00E82675 /* LaunchScreen.storyboard */,
+				4A580BFE24075D0D00E82675 /* Info.plist */,
+				4A580BFF24075D0D00E82675 /* main.m */,
+			);
+			path = NetCamera;
+			sourceTree = "<group>";
+		};
+		4A580C0824075D0D00E82675 /* NetCameraTests */ = {
+			isa = PBXGroup;
+			children = (
+				4A580C0924075D0D00E82675 /* NetCameraTests.m */,
+				4A580C0B24075D0D00E82675 /* Info.plist */,
+			);
+			path = NetCameraTests;
+			sourceTree = "<group>";
+		};
+		4A580C1324075D0D00E82675 /* NetCameraUITests */ = {
+			isa = PBXGroup;
+			children = (
+				4A580C1424075D0D00E82675 /* NetCameraUITests.m */,
+				4A580C1624075D0D00E82675 /* Info.plist */,
+			);
+			path = NetCameraUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4A580BE924075D0700E82675 /* NetCamera */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4A580C1924075D0D00E82675 /* Build configuration list for PBXNativeTarget "NetCamera" */;
+			buildPhases = (
+				4A580BE624075D0700E82675 /* Sources */,
+				4A580BE724075D0700E82675 /* Frameworks */,
+				4A580BE824075D0700E82675 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NetCamera;
+			productName = NetCamera;
+			productReference = 4A580BEA24075D0700E82675 /* NetCamera.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4A580C0424075D0D00E82675 /* NetCameraTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4A580C1C24075D0D00E82675 /* Build configuration list for PBXNativeTarget "NetCameraTests" */;
+			buildPhases = (
+				4A580C0124075D0D00E82675 /* Sources */,
+				4A580C0224075D0D00E82675 /* Frameworks */,
+				4A580C0324075D0D00E82675 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4A580C0724075D0D00E82675 /* PBXTargetDependency */,
+			);
+			name = NetCameraTests;
+			productName = NetCameraTests;
+			productReference = 4A580C0524075D0D00E82675 /* NetCameraTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4A580C0F24075D0D00E82675 /* NetCameraUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4A580C1F24075D0D00E82675 /* Build configuration list for PBXNativeTarget "NetCameraUITests" */;
+			buildPhases = (
+				4A580C0C24075D0D00E82675 /* Sources */,
+				4A580C0D24075D0D00E82675 /* Frameworks */,
+				4A580C0E24075D0D00E82675 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4A580C1224075D0D00E82675 /* PBXTargetDependency */,
+			);
+			name = NetCameraUITests;
+			productName = NetCameraUITests;
+			productReference = 4A580C1024075D0D00E82675 /* NetCameraUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4A580BE224075D0700E82675 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1130;
+				ORGANIZATIONNAME = "Guangzhou Eston Trade Co.,Ltd.";
+				TargetAttributes = {
+					4A580BE924075D0700E82675 = {
+						CreatedOnToolsVersion = 11.3.1;
+					};
+					4A580C0424075D0D00E82675 = {
+						CreatedOnToolsVersion = 11.3.1;
+						TestTargetID = 4A580BE924075D0700E82675;
+					};
+					4A580C0F24075D0D00E82675 = {
+						CreatedOnToolsVersion = 11.3.1;
+						TestTargetID = 4A580BE924075D0700E82675;
+					};
+				};
+			};
+			buildConfigurationList = 4A580BE524075D0700E82675 /* Build configuration list for PBXProject "NetCamera" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4A580BE124075D0700E82675;
+			productRefGroup = 4A580BEB24075D0700E82675 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4A580BE924075D0700E82675 /* NetCamera */,
+				4A580C0424075D0D00E82675 /* NetCameraTests */,
+				4A580C0F24075D0D00E82675 /* NetCameraUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4A580BE824075D0700E82675 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A580BFD24075D0D00E82675 /* LaunchScreen.storyboard in Resources */,
+				4A580BFA24075D0D00E82675 /* Assets.xcassets in Resources */,
+				4A580BF824075D0700E82675 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A580C0324075D0D00E82675 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A580C0E24075D0D00E82675 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4A580BE624075D0700E82675 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A580BF524075D0700E82675 /* ViewController.m in Sources */,
+				4A580BEF24075D0700E82675 /* AppDelegate.m in Sources */,
+				4A580C0024075D0D00E82675 /* main.m in Sources */,
+				4A580BF224075D0700E82675 /* SceneDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A580C0124075D0D00E82675 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A580C0A24075D0D00E82675 /* NetCameraTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4A580C0C24075D0D00E82675 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4A580C1524075D0D00E82675 /* NetCameraUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4A580C0724075D0D00E82675 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A580BE924075D0700E82675 /* NetCamera */;
+			targetProxy = 4A580C0624075D0D00E82675 /* PBXContainerItemProxy */;
+		};
+		4A580C1224075D0D00E82675 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4A580BE924075D0700E82675 /* NetCamera */;
+			targetProxy = 4A580C1124075D0D00E82675 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4A580BF624075D0700E82675 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4A580BF724075D0700E82675 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		4A580BFB24075D0D00E82675 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4A580BFC24075D0D00E82675 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4A580C1724075D0D00E82675 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		4A580C1824075D0D00E82675 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4A580C1A24075D0D00E82675 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TJ2Y6LJ9G5;
+				INFOPLIST_FILE = NetCamera/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = NetCamera.Indentifier.NetCamera;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4A580C1B24075D0D00E82675 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TJ2Y6LJ9G5;
+				INFOPLIST_FILE = NetCamera/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = NetCamera.Indentifier.NetCamera;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4A580C1D24075D0D00E82675 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TJ2Y6LJ9G5;
+				INFOPLIST_FILE = NetCameraTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = NetCamera.Indentifier.NetCameraTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NetCamera.app/NetCamera";
+			};
+			name = Debug;
+		};
+		4A580C1E24075D0D00E82675 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TJ2Y6LJ9G5;
+				INFOPLIST_FILE = NetCameraTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = NetCamera.Indentifier.NetCameraTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NetCamera.app/NetCamera";
+			};
+			name = Release;
+		};
+		4A580C2024075D0D00E82675 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TJ2Y6LJ9G5;
+				INFOPLIST_FILE = NetCameraUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = NetCamera.Indentifier.NetCameraUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = NetCamera;
+			};
+			name = Debug;
+		};
+		4A580C2124075D0D00E82675 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = TJ2Y6LJ9G5;
+				INFOPLIST_FILE = NetCameraUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = NetCamera.Indentifier.NetCameraUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = NetCamera;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4A580BE524075D0700E82675 /* Build configuration list for PBXProject "NetCamera" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4A580C1724075D0D00E82675 /* Debug */,
+				4A580C1824075D0D00E82675 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4A580C1924075D0D00E82675 /* Build configuration list for PBXNativeTarget "NetCamera" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4A580C1A24075D0D00E82675 /* Debug */,
+				4A580C1B24075D0D00E82675 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4A580C1C24075D0D00E82675 /* Build configuration list for PBXNativeTarget "NetCameraTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4A580C1D24075D0D00E82675 /* Debug */,
+				4A580C1E24075D0D00E82675 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4A580C1F24075D0D00E82675 /* Build configuration list for PBXNativeTarget "NetCameraUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4A580C2024075D0D00E82675 /* Debug */,
+				4A580C2124075D0D00E82675 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4A580BE224075D0700E82675 /* Project object */;
+}
