@@ -7,9 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MainViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
+@property (strong, nonatomic) UIWindow *window;
+
++ (instancetype)sharedDelegate;
+    @property (strong, nonatomic) MainViewController *tabBarController;
+- (void)showGuideView;
 
 @end
 

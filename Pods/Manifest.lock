@@ -1,0 +1,24 @@
+PODS:
+  - IQKeyboardManager (6.2.0)
+  - LGXLayout (1.0.0):
+    - Masonry
+  - Masonry (1.1.0)
+
+DEPENDENCIES:
+  - IQKeyboardManager
+  - LGXLayout
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - IQKeyboardManager
+    - LGXLayout
+    - Masonry
+
+SPEC CHECKSUMS:
+  IQKeyboardManager: 6194101620b73af5e67900b8f89707a99de0b804
+  LGXLayout: c4756241405146dbd0be48cc1b5dabd4298f68ca
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+
+PODFILE CHECKSUM: 2ad13f312ef94fd44ed90708ec623a5214d9e803
+
+COCOAPODS: 1.5.0

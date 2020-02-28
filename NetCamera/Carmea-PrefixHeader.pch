@@ -1,0 +1,47 @@
+//
+//  Carmea-PrefixHeader.pch
+//  NetCamera
+//
+//  Created by 汪伟 on 2020/2/27.
+//  Copyright © 2020 Guangzhou Eston Trade Co.,Ltd. All rights reserved.
+//
+
+#ifndef __IPHONE_7_0
+
+#endif
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#ifdef __OBJC__
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "WWDefines.h"
+#import "ColorDefines.h"
+//#import "ReactiveCocoa.h"
+#import "WWPublicMethod.h"
+#import "WWPhoneInfo.h"
+#import "GCDObjC.h"
+#import "MyMD5.h"
+#import "UUIDManager.h"
+#import "TCAlertView.h"
+#import "TargetEngine.h"
+#import "NSObject+PropertyListing.h"
+#import "TCUserManager.h"
+#import "LGXHudManager.h"
+#import "UIButton+common.h"
+#import "UIView+animations.h"
+#import "UIView+autolayout.h"
+#import "UIButton+BGColor.h"
+#import "UIImage+custom.h"
+#import "UIColor+custom.h"
+#import "UIFont+custom.h"
+#import "UIView+badge.h"
+#import "LGXAutoLayout.h"
+#import "LGXDatePicker.h"
+#import "TCNewAlertView.h"
+#import "IQKeyboardManager.h"
+
+
+
+#endif /* PrefixHeader_pch */
