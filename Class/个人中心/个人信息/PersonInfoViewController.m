@@ -22,7 +22,7 @@
 - (void)setupTableView
 {
     self.tableView = [WWTableView new];
-    self.tableView.backgroundColor = kColorBackSecondColor;
+    self.tableView.backgroundColor = kColorBackgroundColor;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 88;
     [self.view addSubview:self.tableView];

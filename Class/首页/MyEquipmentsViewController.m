@@ -119,7 +119,7 @@
 //    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
     
 //    NSString *url = [NSString stringWithFormat:@"https://leo.quarkioe.com/apps/androidapp/#/device/%@/dashboard/%@",model.childId,model.wechat[0]];
-//    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:nil];
+    [TargetEngine controller:self pushToController:PushTargetEquipmentInformation WithTargetId:nil];
 
 }
 

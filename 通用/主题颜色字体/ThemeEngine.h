@@ -15,7 +15,7 @@
 
 + (ThemeEngine *)sharedInstance;
 
-/// 059dfe 主色系 紫色
+/// 04C0BC 主色系 蓝色
 @property (nonatomic, strong) UIColor *mainColor;
 
 /// 585755 tabbar 普通色
@@ -26,7 +26,7 @@
 @property (nonatomic, strong) UIColor *tabbarBGColor;
 /// ffffff 导航字体色
 @property (nonatomic, strong) UIColor *navTitleColor;
-/// ebebeb 线条颜色
+/// #E4E4E4 线条颜色
 @property (nonatomic, strong) UIColor *lineColor;
 /// fafafa 背景颜色
 @property (nonatomic, strong) UIColor *backgroundColor;
@@ -91,7 +91,12 @@ static float const kFontSizeThirteen = 13.0;
  */
 static float const kFontSizeTwelve = 12.0;
 /**
- * 22 - 对应 10 .
+ * 22 - 对应 11 .
+ * 如 首页用户信息的地址
+ */
+static float const kFontSizeEleven = 11.0;
+/**
+ * 20 - 对应 10 .
  * 如 首页用户信息字体
  */
 static float const kFontSizeTen = 10.0;

@@ -9,7 +9,7 @@
 
 #define _kThemeManager [ThemeEngine sharedInstance]
 
-/// 059dfe 主色系
+/// 04C0BC 主色系
 #define kColorMainColor _kThemeManager.mainColor
 /// 585755 tabbar 普通色
 #define kColorTabbarNormalColor _kThemeManager.tabbarNormalColor
@@ -19,11 +19,11 @@
 #define kColorTabbarBGColor _kThemeManager.tabbarBGColor
 /// ffffff 导航字体色
 #define kColorNavTitleColor _kThemeManager.navTitleColor
-/// ebebeb 线条颜色
+/// E4E4E4 线条颜色
 #define kColorLineColor _kThemeManager.lineColor
 /// fafafa 背景颜色
 #define kColorBackgroundColor _kThemeManager.backgroundColor
-/// f5f5f5 背景颜色
+/// 303643 背景颜色
 #define kColorBackSecondColor _kThemeManager.backSecondColor
 
 

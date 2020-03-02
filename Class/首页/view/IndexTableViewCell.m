@@ -74,7 +74,7 @@
     _equipmentAddress = [UILabel new];
     _equipmentAddress.text = @"广东省广州市天河区信息港A座11层";
     _equipmentAddress.textColor = kColorThirdTextColor;
-    _equipmentAddress.font = [UIFont customFontWithSize:11];
+    _equipmentAddress.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [backView addSubview:_equipmentAddress];
     [_equipmentAddress leftToView:backView withSpace:12];
     [_equipmentAddress addCenterY:10 toView:backView];
@@ -96,12 +96,11 @@
     
     UILabel *detailLabel = [UILabel new];
     detailLabel.text = @"查看详情";
-    detailLabel.textColor = UIColorFromRGB(0x04C0BC, 1);
-    detailLabel.font = [UIFont customFontWithSize:11];
+    detailLabel.textColor = kColorMainColor;
+    detailLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [backView addSubview:detailLabel];
     [detailLabel yCenterToView:backView];
     [detailLabel leftToView:lineLabel withSpace:12];
-    
     
     
     

@@ -6,7 +6,7 @@ target 'NetCamera' do
   # use_frameworks!
 
 
-source 'https://github.com/CocoaPods/Specs.git'
+#source 'https://github.com/CocoaPods/Specs.git'
 #source 'https://cdn.cocoapods.org/'
 
 #pod 'ReactiveCocoa', '2.5'

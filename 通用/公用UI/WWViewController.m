@@ -128,10 +128,12 @@
 - (void)setupDefaultNavTheme
 {
     [self setupNavProperties:@{
-                               @"backgroundImage" : [UIImage imageWithColor:UIColorFromRGB(0x303643, 1)],
+                               @"backgroundImage" : [UIImage imageWithColor:kColorBackSecondColor],
                                @"titleColor" : UIColorFromRGB(0xffffff, 1),
                                @"barTintColor" : kColorMainTextColor,
-                               @"shadow" : [UIImage imageNamed:@"tabbar_shadow"],
+//                               @"shadow" : [UIImage imageNamed:@"tabbar_shadow"],
+                               @"shadow" : [UIImage imageWithColor:kColorBackSecondColor],
+
                                }];
 }
 - (void)viewDidLoad {

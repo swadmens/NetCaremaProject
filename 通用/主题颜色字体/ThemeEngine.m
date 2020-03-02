@@ -47,7 +47,7 @@
 - (UIColor *)mainColor
 {
     if (!_mainColor) {
-        _mainColor = UIColorFromRGB(0x059dfe, 1);
+        _mainColor = UIColorFromRGB(0x04c0bc, 1);
     }
     return _mainColor;
 }
@@ -55,7 +55,7 @@
 - (UIColor *)lineColor
 {
     if (!_lineColor) {
-        _lineColor = UIColorFromRGB(0xebebeb, 1);
+        _lineColor = UIColorFromRGB(0xe4e4e4, 1);
     }
     return _lineColor;
 }
@@ -69,7 +69,7 @@
 - (UIColor *)backSecondColor
 {
     if (!_backSecondColor) {
-        _backSecondColor = UIColorFromRGB(0xf5f5f5, 1);
+        _backSecondColor = UIColorFromRGB(0x303643, 1);
     }
     return _backSecondColor;
 }

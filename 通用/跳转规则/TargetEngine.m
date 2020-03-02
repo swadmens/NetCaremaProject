@@ -17,6 +17,8 @@
 #import "SharedClient.h"
 #import "MyEquipmentsViewController.h"//我的设备
 #import "PersonInfoViewController.h"//个人信息
+#import "EquipmentInformationController.h"//设备信息
+
 @interface TargetEngine ()
 //<LGXPhotoBrowserDelegate,UIWebViewDelegate>
 
@@ -478,8 +480,15 @@
             toController = controller;
         }
                break;
-            
-            
+        case PushTargetEquipmentInformation: //  设备信息
+        {
+            EquipmentInformationController *controller = [[EquipmentInformationController alloc] init];
+            controller.equiment_id = pushId;
+            toController = controller;
+        }
+               break;
+        
+           
             
      
    

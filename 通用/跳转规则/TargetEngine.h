@@ -18,6 +18,7 @@ typedef enum : NSUInteger {
     PushTargetCreateOrderView = 3, /// 申请订单界面
     PushTargetMyEquipments = 4, /// 我的设备
     PushTargetPersonInfoView = 5, /// 个人信息
+    PushTargetEquipmentInformation = 6, /// 设备信息
 
     
     
