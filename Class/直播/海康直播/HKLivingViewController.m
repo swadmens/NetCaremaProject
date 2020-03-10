@@ -79,8 +79,11 @@ static NSTimeInterval const kToastDuration = 1;
     UIButton *backButton = [UIButton new];
     [backButton setImage:UIImageWithFileName(@"icon_back_gray") forState:UIControlStateNormal];
     [self.playView addSubview:backButton];
-    [backButton leftToView:self.playView withSpace:15];
-    [backButton topToView:self.playView withSpace:45];
+    [backButton leftToView:self.playView withSpace:2];
+    [backButton topToView:self.playView withSpace:32];
+    [backButton addWidth:40];
+    [backButton addHeight:40];
+    [backButton setBGColor:UIColorFromRGB(0xffffff, 0) forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(goBackButtonClick) forControlEvents:UIControlEventTouchUpInside];
     
     
@@ -131,22 +134,38 @@ static NSTimeInterval const kToastDuration = 1;
         self.shareParams = [[LGXShareParams alloc] init];
 //        [self.shareParams makeShreParamsByData:self.model.share];
         
-        [ShareSDKMethod ShareTextActionWithParams:self.shareParams IsBlack:NO IsReport:NO IsDelete:NO Black:^{
-            DLog(@"拉黑");
-    //        [self shiedTheContentClick];
-        } Report:^{
-            DLog(@"举报");
-//            [self deleteTheContentClick];
-        } Delete:^{
-            DLog(@"删除");
-//            [self deleteTheContentClick];
-        } Result:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
+//        [ShareSDKMethod ShareTextActionWithParams:self.shareParams IsBlack:NO IsReport:NO IsDelete:NO Black:^{
+//            DLog(@"拉黑");
+//    //        [self shiedTheContentClick];
+//        } Report:^{
+//            DLog(@"举报");
+////            [self deleteTheContentClick];
+//        } Delete:^{
+//            DLog(@"删除");
+////            [self deleteTheContentClick];
+//        } Result:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
+//
+//            if (state == SSDKResponseStateSuccess) {
+////                [self shareSuccessData];
+//            }
+//
+//        }];
+    
+    
+    [ShareSDKMethod ShareTextActionWithParams:self.shareParams QRCode:^{
+        //二维码
+        DLog(@"二维码");
+    } url:^{
+        //链接
+        DLog(@"链接");
+    } Result:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
+        if (state == SSDKResponseStateSuccess) {
             
-            if (state == SSDKResponseStateSuccess) {
-//                [self shareSuccessData];
-            }
-        
-        }];
+        }
+    }];
+    
+    
+    
 }
 
 //开始预览

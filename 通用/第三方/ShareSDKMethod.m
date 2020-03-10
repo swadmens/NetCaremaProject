@@ -9,10 +9,10 @@
 #import "ShareSDKMethod.h"
 @implementation ShareSDKMethod
 
-+(void)ShareTextActionWithParams:(LGXShareParams*)shareParams IsBlack:(BOOL)isBlack IsReport:(BOOL)isReport IsDelete:(BOOL)isDelete Black:(BlackBlock)blackBlock Report:(ReportBlock)reportBlock Delete:(DeleteBlock)deleteBlock Result:(ResultBlock)resultBlock
-{
-    
-//    //设置分享参数
+//+(void)ShareTextActionWithParams:(LGXShareParams*)shareParams IsBlack:(BOOL)isBlack IsReport:(BOOL)isReport IsDelete:(BOOL)isDelete Black:(BlackBlock)blackBlock Report:(ReportBlock)reportBlock Delete:(DeleteBlock)deleteBlock Result:(ResultBlock)resultBlock
+//{
+//
+////    //设置分享参数
 //    myReportBlock = reportBlock;
 //    myBlackBlock = blackBlock;
 //    myResultBlock = resultBlock;
@@ -20,16 +20,32 @@
 //    myIsReport = isReport;
 //    myIsBlack = isBlack;
 //    myIsDelete = isDelete;
-//    _shareParams = [NSMutableDictionary dictionary];
+////    _shareParams = [NSMutableDictionary dictionary];
+////
+////    [_shareParams SSDKSetupShareParamsByText:shareParams.content
+////                                     images:shareParams.images
+////                                        url:[NSURL URLWithString:shareParams.url]
+////                                      title:shareParams.title
+////                                       type:SSDKContentTypeAuto];
 //
-//    [_shareParams SSDKSetupShareParamsByText:shareParams.content
-//                                     images:shareParams.images
-//                                        url:[NSURL URLWithString:shareParams.url]
-//                                      title:shareParams.title
-//                                       type:SSDKContentTypeAuto];
-    
-    //创建UI
-    [self createCustomUIWithBlack:isBlack Report:isReport Delete:isDelete];
+//    //创建UI
+//    [self createCustomUIWithBlack:isBlack Report:isReport Delete:isDelete];
+//}
++(void)ShareTextActionWithParams:(LGXShareParams*)shareParams QRCode:(QrCodeBlock)qrcodeBlock url:(SharaUrlBlock)urlBlock Result:(ResultBlock)resultBlock
+{
+    //    //设置分享参数
+        sharaQrCodeBlock = qrcodeBlock;
+        sharaMyUrlBlock = urlBlock;
+    //    _shareParams = [NSMutableDictionary dictionary];
+    //
+    //    [_shareParams SSDKSetupShareParamsByText:shareParams.content
+    //                                     images:shareParams.images
+    //                                        url:[NSURL URLWithString:shareParams.url]
+    //                                      title:shareParams.title
+    //                                       type:SSDKContentTypeAuto];
+        
+        //创建UI
+        [self createCustomUIWithBlack:NO Report:NO Delete:NO];
 }
 //自定义分享UI
 +(void)createCustomUIWithBlack:(BOOL)isBlack Report:(BOOL)isReport Delete:(BOOL)isDelete
@@ -174,12 +190,18 @@
         {
 //            sharetype = SSDKPlatformSubTypeWechatSession;
             //二维码
+            if (sharaQrCodeBlock) {
+                sharaQrCodeBlock();
+            }
         }
             break;
         case 2001:
         {
 //            sharetype = SSDKPlatformSubTypeWechatTimeline;
             //链接
+            if (sharaMyUrlBlock) {
+                sharaMyUrlBlock();
+            }
         }
             break;
         case 2002:

@@ -20,17 +20,27 @@
 typedef void (^ReportBlock)(void);
 typedef void (^BlackBlock)(void);
 typedef void (^DeleteBlock)(void);
+
+typedef void (^QrCodeBlock)(void);
+typedef void (^SharaUrlBlock)(void);
+
 typedef void (^ResultBlock)(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error);
 static NSMutableDictionary *_shareParams;
 static ReportBlock myReportBlock;
 static BlackBlock myBlackBlock;
 static DeleteBlock myDeleteBlock;
 static ResultBlock myResultBlock;
+
+static QrCodeBlock sharaQrCodeBlock;
+static SharaUrlBlock sharaMyUrlBlock;
+
 static BOOL myIsBlack;//是否有拉黑按钮
 static BOOL myIsReport;//是否有举报按钮
 static BOOL myIsDelete;//是否有删除按钮
 @interface ShareSDKMethod : NSObject
 
-+(void)ShareTextActionWithParams:(LGXShareParams*)shareParams IsBlack:(BOOL)isBlack IsReport:(BOOL)isReport IsDelete:(BOOL)isDelete Black:(BlackBlock)blackBlock Report:(ReportBlock)reportBlock Delete:(DeleteBlock)deleteBlock Result:(ResultBlock)resultBlock;
+//+(void)ShareTextActionWithParams:(LGXShareParams*)shareParams IsBlack:(BOOL)isBlack IsReport:(BOOL)isReport IsDelete:(BOOL)isDelete Black:(BlackBlock)blackBlock Report:(ReportBlock)reportBlock Delete:(DeleteBlock)deleteBlock Result:(ResultBlock)resultBlock;
+
++(void)ShareTextActionWithParams:(LGXShareParams*)shareParams QRCode:(QrCodeBlock)qrcodeBlock url:(SharaUrlBlock)urlBlock Result:(ResultBlock)resultBlock;
 
 @end

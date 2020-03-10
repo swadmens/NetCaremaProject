@@ -406,13 +406,21 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     self.shareParams = [[LGXShareParams alloc] init];
 //        [self.shareParams makeShreParamsByData:self.model.share];
             
-    [ShareSDKMethod ShareTextActionWithParams:self.shareParams IsBlack:NO IsReport:NO IsDelete:NO Black:nil Report:nil Delete:nil Result:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
+    [ShareSDKMethod ShareTextActionWithParams:self.shareParams QRCode:^{
         
-        if (state == SSDKResponseStateSuccess) {
+         //二维码
+         DLog(@"二维码");
+    
+     } url:^{
+        //链接
+        DLog(@"链接");
+     } Result:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
+        
+         if (state == SSDKResponseStateSuccess) {
             
-        }
-        
-    }];
+         }
+    
+     }];
 
 }
 
