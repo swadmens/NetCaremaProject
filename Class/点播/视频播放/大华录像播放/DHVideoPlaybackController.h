@@ -7,10 +7,32 @@
 //
 
 #import "WWViewController.h"
+//#import "Global.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+//@class VideoWnd;
 @interface DHVideoPlaybackController : WWViewController
+
+//@interface VideoViewController : UIViewController
+//
+@property (nonatomic,strong) NSString *video_id;
+//
+//
+//@property (strong, nonatomic) VideoWnd *viewPlay;
+//
+//
+////@property (nonatomic, weak) PictureTableViewController* homeView;
+//
+//
+//@property (nonatomic) LLONG lPlayHandle;
+//
+//@property (nonatomic) LONG playPort;
+//
+//
+//@property (nonatomic, retain) NSString *fname;
+//
+//-(id)initWithValue:(NSString *)value;
 
 @end
 

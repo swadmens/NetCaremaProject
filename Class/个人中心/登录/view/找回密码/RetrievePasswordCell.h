@@ -14,6 +14,6 @@
 @property (nonatomic,strong) void(^sendCodeButton)(void);
 
 
--(void)makeCellData:(NSString*)title withPlace:(NSString*)placeholder withTag:(NSInteger)tag withStyle:(NSString*)style;
+-(void)makeCellData:(NSDictionary*)dic withTag:(NSInteger)tag withStyle:(NSString*)style;
 
 @end

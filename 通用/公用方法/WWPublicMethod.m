@@ -9,8 +9,6 @@
 #import "WWPublicMethod.h"
 #import "JXActionSheet.h"
 #import "RequestSence.h"
-#import "MJPhoto.h"
-#import "MJPhotoBrowser.h"
 #import <objc/runtime.h>
 //#import "YHPhotoBrowser.h"
 #import <CoreLocation/CoreLocation.h>

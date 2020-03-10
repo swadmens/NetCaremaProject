@@ -1,0 +1,8 @@
+${PODS_ROOT}/Target Support Files/Pods-NetCamera/Pods-NetCamera-resources.sh
+${PODS_ROOT}/IQKeyboardManager/IQKeyboardManager/Resources/IQKeyboardManager.bundle
+${PODS_ROOT}/JSPatch/JSPatch/JSPatch.js
+${PODS_ROOT}/ShareSDK3/ShareSDK/Support/Required/ShareSDK.bundle
+${PODS_ROOT}/ShareSDK3/ShareSDK/Support/Optional/ShareSDKConfigFile.bundle
+${PODS_ROOT}/ShareSDK3/ShareSDK/Support/PlatformSDK/QQSDK/TencentOpenApi_IOS_Bundle.bundle
+${PODS_ROOT}/ShareSDK3/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WeiboSDK.bundle
+${PODS_ROOT}/ShareSDK3/ShareSDK/Support/Optional/ShareSDKUI.bundle

@@ -150,7 +150,7 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat width = kScreenWidth/2-21;
-    return CGSizeMake(width, width*0.8);
+    return CGSizeMake(width, width*0.85);
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -160,6 +160,12 @@
         cell.isChoosed = [[dic objectForKey:@"choose"] boolValue];
         NSDictionary *lDic = @{@"choose":@(![[dic objectForKey:@"choose"] boolValue])};
         [self.dataArray replaceObjectAtIndex:indexPath.row withObject:lDic];
+    }else{
+        if (indexPath.row == 0) {
+               [TargetEngine controller:self pushToController:PushTargetDHVideoPlayback WithTargetId:@"1"];
+           }else{
+               [TargetEngine controller:self pushToController:PushTargetHKVideoPlayback WithTargetId:@"1"];
+           }
     }
     
 }

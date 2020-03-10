@@ -20,11 +20,11 @@
 -(void)dosetup
 {
     [super dosetup];
-    self.contentView.backgroundColor = kColorBackgroundColor;
+    self.contentView.backgroundColor = [UIColor whiteColor];
     
     
     _loginButton = [UIButton new];
-    [_loginButton setBackgroundImage:UIImageWithFileName(@"add_pet_save_button") forState:UIControlStateNormal];
+    [_loginButton setBackgroundImage:UIImageWithFileName(@"login_backimage") forState:UIControlStateNormal];
     [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _loginButton.titleLabel.font = [UIFont customFontWithSize:kFontSizeEighTeen];
     _loginButton.titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -45,7 +45,7 @@
 }
 -(void)makeCellData:(NSString*)title
 {
-    [_loginButton setTitle:NSLocalizedString(title, nil) forState:UIControlStateNormal];
+    [_loginButton setTitle:title forState:UIControlStateNormal];
 
 }
 

@@ -13,7 +13,7 @@
 // 固有属性
 @property (nonatomic, readonly) BOOL isIPad;
 
-@property (nonatomic, readonly) BOOL isIPhone;
+@property (nonatomic, readonly) BOOL isIPhones;
 
 @property (nonatomic, readonly) BOOL isIPhone4;
 

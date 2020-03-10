@@ -17,7 +17,7 @@ static IOSDeviceConfig *_sharedConfig = nil;
 
 
 @synthesize isIPad = _isIPad;
-@synthesize isIPhone = _isIPhone;
+@synthesize isIPhones = _isIPhones;
 @synthesize isIPhone4 = _isIPhone4;
 @synthesize isIPhone5 = _isIPhone5;
 @synthesize isIOS7 = _isIOS7;
@@ -52,7 +52,7 @@ static IOSDeviceConfig *_sharedConfig = nil;
 	if (self = [super init])
 	{
         _isIPad = isIPad();
-        _isIPhone = isIPhone();
+        _isIPhones = isIPhone();
         _isIPhone4 = isIPhone4();
         _isIPhone5 = isIPhone5();
         _isIOS7 = isIOS7();

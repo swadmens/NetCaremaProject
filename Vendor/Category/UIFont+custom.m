@@ -12,7 +12,7 @@
 
 + (UIFont *)customFontWithSize:(CGFloat)fontSize
 {
-    UIFont *font = [UIFont fontWithName:@"PingFangTC-Light" size:fontSize];
+    UIFont *font = [UIFont fontWithName:@"PingFang-SC-Regular" size:fontSize];
     if (font == nil) {
         font = [UIFont systemFontOfSize:fontSize];
     }
@@ -21,7 +21,7 @@
 }
 + (UIFont *)customBoldFontWithSize:(CGFloat)fontSize
 {
-    UIFont *font = [UIFont fontWithName:@"PingFangTC-Light" size:fontSize];
+    UIFont *font = [UIFont fontWithName:@"PingFang-SC-Regular" size:fontSize];
     if (font == nil) {
         font = [UIFont boldSystemFontOfSize:fontSize];
     }

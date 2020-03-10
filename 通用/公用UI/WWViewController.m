@@ -244,12 +244,6 @@
 {
     
 }
-#pragma mark - 主宠改变了
-/// 主宠改变了
-- (void)mainPetDidChanged
-{
-    
-}
 
 //- (UIStoryboard *)storyboard
 //{

@@ -6,14 +6,14 @@ target 'NetCamera' do
   # use_frameworks!
 
 
-#source 'https://github.com/CocoaPods/Specs.git'
+source 'https://www.github.com/CocoaPods/Specs.git'
 #source 'https://cdn.cocoapods.org/'
 
-#pod 'ReactiveCocoa', '2.5'
+pod 'ReactiveCocoa', '2.5'
 pod 'IQKeyboardManager'
-pod 'Bugly'
-#pod 'PonyDebugger', '0.4.3'
-#pod 'JSPatchPlatform'
+#pod 'Bugly'
+pod 'PonyDebugger', '0.4.3'
+pod 'JSPatchPlatform'
 pod 'YYText'
 pod 'TYAlertController'
 pod 'LGXLayout'

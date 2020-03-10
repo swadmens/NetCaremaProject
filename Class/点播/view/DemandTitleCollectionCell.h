@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DemandTitleCollectionCell : WWCollectionViewCell
 
+-(void)makeCellData:(NSDictionary*)dic;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

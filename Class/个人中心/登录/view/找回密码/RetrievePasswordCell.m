@@ -11,7 +11,7 @@
 
 @interface  RetrievePasswordCell()<UITextFieldDelegate>
 
-@property(nonatomic,strong) UILabel *nameLabel;//名称
+@property(nonatomic,strong) UIImageView *titleImageView;//名称
 @property(nonatomic,strong) UITextField *textField;
 @property(nonatomic,strong) UIButton *codeButton;
 
@@ -23,24 +23,21 @@
     [super dosetup];
     self.contentView.backgroundColor = [UIColor whiteColor];
     
-    _nameLabel = [UILabel new];
-    _nameLabel.textColor=kColorMainTextColor;
-    _nameLabel.font=[UIFont customFontWithSize:kFontSizeSixteen];
-    [_nameLabel sizeToFit];
-    [self.contentView addSubview:_nameLabel];
-    [_nameLabel yCenterToView:self.contentView];
-    [_nameLabel leftToView:self.contentView withSpace:15];
-    [_nameLabel addWidth:60];
-    
+    _titleImageView = [UIImageView new];
+    [self.contentView addSubview:_titleImageView];
+    [_titleImageView topToView:self.contentView withSpace:42];
+    [_titleImageView leftToView:self.contentView withSpace:38];
+    [_titleImageView bottomToView:self.contentView withSpace:18];
+
     
     _textField=[UITextField new];
     _textField.textColor=kColorMainTextColor;
-    _textField.font=[UIFont customFontWithSize:kFontSizeSixteen];
+    _textField.font=[UIFont customFontWithSize:kFontSizeFourteen];
     [self.contentView addSubview:_textField];
     [_textField addHeight:40];
-    [_textField yCenterToView:self.contentView];
-    [_textField leftToView:_nameLabel withSpace:10];
-    [_textField rightToView:self.contentView withSpace:15];
+    [_textField yCenterToView:_titleImageView];
+    [_textField leftToView:self.contentView withSpace:58];
+    [_textField rightToView:self.contentView withSpace:20];
     [_textField addTarget:self action:@selector(contentDidChanged:) forControlEvents:UIControlEventEditingChanged];
     
     
@@ -50,30 +47,39 @@
     self.codeButton.layer.borderColor=kColorMainColor.CGColor;
     self.codeButton.layer.borderWidth=1.0f;
     self.codeButton.layer.cornerRadius=4;
-    [self.codeButton setTitle:NSLocalizedString(@"sendedCode", nil) forState:UIControlStateNormal];
+    [self.codeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
     [self.codeButton setTitleColor:kColorMainColor forState:UIControlStateNormal];
     self.codeButton.titleLabel.font=[UIFont customFontWithSize:kFontSizeThirteen];
     [self.codeButton addTarget:self action:@selector(sendCodeClick) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:self.codeButton];
-    [self.codeButton addHeight:30];
+    [self.codeButton addHeight:28];
     [self.codeButton addWidth:80];
     [self.codeButton lgx_makeConstraints:^(LGXLayoutMaker *make) {
-        make.rightEdge.lgx_equalTo(self.contentView.lgx_rightEdge).lgx_floatOffset(-15);
-        make.yCenter.lgx_equalTo(self.contentView.lgx_yCenter);
+        make.rightEdge.lgx_equalTo(self.contentView.lgx_rightEdge).lgx_floatOffset(-35);
+        make.yCenter.lgx_equalTo(self.titleImageView.lgx_yCenter);
     }];
     
+    
+    UILabel *nameLine = [UILabel new];
+    nameLine.backgroundColor = UIColorFromRGB(0xe6e6e6, 1);
+    [self.contentView addSubview:nameLine];
+    [nameLine leftToView:self.contentView withSpace:36];
+    [nameLine addWidth:kScreenWidth-72];
+    [nameLine addHeight:1];
+    [nameLine bottomToView:self.contentView];
+    
 }
--(void)makeCellData:(NSString *)title withPlace:(NSString *)placeholder withTag:(NSInteger)tag withStyle:(NSString*)style
+-(void)makeCellData:(NSDictionary*)dic withTag:(NSInteger)tag withStyle:(NSString*)style
 {
-    _nameLabel.text = title;
     _textField.tag = tag;
-    _textField.placeholder = placeholder;
+    _textField.placeholder = [dic objectForKey:@"title"];
+    _titleImageView.image = UIImageWithFileName([dic objectForKey:@"icon"]);
 
-    if (tag == 2) {
+    if (tag == 1) {
         self.codeButton.hidden = NO;
-    }else if (tag == 3){
+    }else if (tag == 2){
         _textField.secureTextEntry = YES;
-        [self setupConfirmEyeButton:3];
+        [self setupConfirmEyeButton:2];
     }
     
     if ([style isEqualToString:@"startSendCode"]) {
@@ -106,8 +112,8 @@
             dispatch_source_cancel(_timer);
             dispatch_async(dispatch_get_main_queue(), ^{
                 //设置界面的按钮显示 根据自己需求设置
-                [self.codeButton setTitle:NSLocalizedString(@"sendAgain", nil) forState:UIControlStateNormal];
-                
+                [self.codeButton setTitle:@"再次发送" forState:UIControlStateNormal];
+                self.codeButton.userInteractionEnabled = YES;
             });
         }else{
             //            int minutes = timeout / 60;

@@ -12,6 +12,9 @@
 
 @property (nonatomic,strong) UIButton *selectBtn;
 
+@property (nonatomic,strong) UIImageView *showImageView;
+@property (nonatomic,strong) UILabel *titleLabel;
+
 @end
 
 @implementation CarmeaVideosViewCell
@@ -22,14 +25,24 @@
     
     CGFloat width = kScreenWidth/2-21;
     
-    UIImageView *showImageView = [UIImageView new];
-    showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
-    [self.contentView addSubview:showImageView];
-    [showImageView leftToView:self.self.contentView];
-    [showImageView topToView:self.contentView];
-    [showImageView bottomToView:self.contentView withSpace:32.5];
-    [showImageView addWidth:width];
-    [showImageView addHeight:width*0.6];
+    _showImageView = [UIImageView new];
+    _showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
+    [self.contentView addSubview:_showImageView];
+    [_showImageView leftToView:self.self.contentView];
+    [_showImageView topToView:self.contentView];
+    [_showImageView bottomToView:self.contentView withSpace:32.5];
+    [_showImageView addWidth:width];
+    [_showImageView addHeight:width*0.6];
+    
+    
+    
+    _titleLabel = [UILabel new];
+    _titleLabel.text = @"测试视频";
+    _titleLabel.textColor = kColorSecondTextColor;
+    _titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
+    [self.contentView addSubview:_titleLabel];
+    [_titleLabel leftToView:self.contentView withSpace:8];
+    [_titleLabel topToView:_showImageView withSpace:10];
     
 //    button_unselect_image
 //    button_select_image
@@ -39,19 +52,24 @@
     _selectBtn.hidden = YES;
     [_selectBtn setImage:UIImageWithFileName(@"button_select_image") forState:UIControlStateSelected];
     [_selectBtn setImage:UIImageWithFileName(@"button_unselect_image") forState:UIControlStateNormal];
-    [showImageView addSubview:_selectBtn];
-    [_selectBtn bottomToView:showImageView withSpace:10];
-    [_selectBtn rightToView:showImageView withSpace:10];
+    [_showImageView addSubview:_selectBtn];
+    [_selectBtn bottomToView:_showImageView withSpace:10];
+    [_selectBtn rightToView:_showImageView withSpace:10];
 
     
 }
 -(void)setIsEdit:(BOOL)isEdit
 {
     _selectBtn.hidden = !isEdit;
-
 }
 -(void)setIsChoosed:(BOOL)isChoosed
 {
     _selectBtn.selected = !isChoosed;
 }
+//-(void)setSelected:(BOOL)selected
+//{
+//    [super setSelected:selected];
+//    _selectBtn.hidden = selected;
+//    _selectBtn.selected = selected;
+//}
 @end

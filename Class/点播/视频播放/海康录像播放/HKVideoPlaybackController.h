@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface HKVideoPlaybackController : WWViewController
+@property (nonatomic,strong) NSString *video_id;
 
 @end
 

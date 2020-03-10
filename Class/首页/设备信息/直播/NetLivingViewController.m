@@ -46,12 +46,16 @@
     CGFloat width = kScreenWidth/2-21;
     
     UIImageView *showImageView = [UIImageView new];
+    showImageView.userInteractionEnabled = YES;
     showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
     [self.view addSubview:showImageView];
     [showImageView leftToView:self.view withSpace:16];
     [showImageView topToView:topLeftLabel withSpace:10];
     [showImageView addWidth:width];
     [showImageView addHeight:width*0.6];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(goLivingClick:)];
+    [showImageView addGestureRecognizer:tap];
     
     
     
@@ -89,6 +93,14 @@
     
     
     
+}
+
+
+-(void)goLivingClick:(UITapGestureRecognizer*)tp
+{
+           
+    [TargetEngine controller:self pushToController:PushTargetDHLiving WithTargetId:@"1"];//大华直播
+//    [TargetEngine controller:self pushToController:PushTargetHKLiving WithTargetId:@"1"];//海康直播
 }
 
 /*

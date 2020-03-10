@@ -15,6 +15,7 @@
 @property (nonatomic,strong) UITextField *nameTextField;
 @property (nonatomic,strong) UITextField *passwordTextField;
 
+@property (nonatomic,strong) LGXHorizontalButton *rmButton;
 
 @end
 
@@ -106,18 +107,18 @@
     
     
     //记住密码
-    LGXHorizontalButton *rmButton = [LGXHorizontalButton new];
-    [rmButton setImage:UIImageWithFileName(@"rm_key_noselect") forState:UIControlStateNormal];
-    [rmButton setImage:UIImageWithFileName(@"rm_key_select") forState:UIControlStateSelected];
-    [rmButton setTitle:@"记住密码" forState:UIControlStateNormal];
-    [rmButton setTitleColor:UIColorFromRGB(0x808080, 1) forState:UIControlStateNormal];
-    rmButton.titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
-    [rmButton addTarget:self action:@selector(rememberKeyButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:rmButton];
-    [rmButton topToView:keyLine withSpace:6];
-    [rmButton leftToView:self.view withSpace:40];
-    [rmButton addWidth:65];
-    [rmButton addHeight:30];
+    _rmButton = [LGXHorizontalButton new];
+    [_rmButton setImage:UIImageWithFileName(@"rm_key_noselect") forState:UIControlStateNormal];
+    [_rmButton setImage:UIImageWithFileName(@"rm_key_select") forState:UIControlStateSelected];
+    [_rmButton setTitle:@"记住密码" forState:UIControlStateNormal];
+    [_rmButton setTitleColor:UIColorFromRGB(0x808080, 1) forState:UIControlStateNormal];
+    _rmButton.titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
+    [_rmButton addTarget:self action:@selector(rememberKeyButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_rmButton];
+    [_rmButton topToView:keyLine withSpace:6];
+    [_rmButton leftToView:self.view withSpace:40];
+    [_rmButton addWidth:65];
+    [_rmButton addHeight:30];
     
     
     
@@ -140,6 +141,7 @@
 -(void)forgetKeyButtonClick
 {
     DLog(@"忘记密码");
+    [TargetEngine controller:self pushToController:PushTargetRetrievePassword WithTargetId:nil];
 }
 //登陆按钮
 -(void)loginButtonClick
@@ -150,6 +152,7 @@
 -(void)rememberKeyButtonClick
 {
     DLog(@"记住密码");
+    _rmButton.selected = !_rmButton.selected;
 }
 
 

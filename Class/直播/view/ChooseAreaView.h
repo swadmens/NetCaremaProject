@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ChooseAreaView : UIView
 
+@property (nonatomic,strong) void(^chooseArea)(NSString *area_id);
+
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -142,8 +142,7 @@
 
     }else{
         //下载列表
-//        [TargetEngine controller:self pushToController:PushTargetPersonInfoView WithTargetId:nil];
-    
+        [TargetEngine controller:self pushToController:PushTargetDownloadList WithTargetId:nil];
     }
   
 }
