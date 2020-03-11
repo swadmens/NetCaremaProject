@@ -148,9 +148,12 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     UIButton *backBtn = [UIButton new];
     [backBtn setImage:UIImageWithFileName(@"icon_back_gray") forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(backButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [backBtn setBGColor:UIColorFromRGB(0xffffff, 0) forState:UIControlStateNormal];
     [self.playView addSubview:backBtn];
-    [backBtn topToView:self.playView withSpace:35];
-    [backBtn leftToView:self.playView withSpace:15];
+    [backBtn leftToView:self.playView withSpace:2];
+    [backBtn topToView:self.playView withSpace:32];
+    [backBtn addWidth:40];
+    [backBtn addHeight:40];
     
     
     //分享按钮

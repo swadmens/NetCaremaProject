@@ -286,7 +286,7 @@
         if ([self.selectIndexes count] > 0 )
         {
             int index = [[self.selectIndexes lastObject] intValue];
-            NSUInteger indexs[] = {0,index};
+            NSUInteger indexs[] = {0,static_cast<NSUInteger>(index)};
             NSIndexPath* indexPath = [NSIndexPath indexPathWithIndexes:indexs length:2];
             
             UITableViewCell* preCell = [tableView cellForRowAtIndexPath:indexPath];

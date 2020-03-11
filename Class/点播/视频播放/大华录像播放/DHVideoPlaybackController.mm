@@ -2,17 +2,18 @@
 //  DHVideoPlaybackController.m
 //  NetCamera
 //
-//  Created by 汪伟 on 2020/3/5.
+//  Created by 汪伟 on 2020/3/11.
 //  Copyright © 2020 Guangzhou Eston Trade Co.,Ltd. All rights reserved.
 //
 
 #import "DHVideoPlaybackController.h"
 #import "WWCollectionView.h"
 #import "VideoPlaybackViewCell.h"
-//#import "VideoWnd.h"
-//#import "dhplayEx.h"
-//#import <Photos/Photos.h>
-//#import "DHHudPrecess.h"
+#import "Global.h"
+#import "VideoWnd.h"
+#import "dhplayEx.h"
+#import <Photos/Photos.h>
+#import "DHHudPrecess.h"
 #import "LGXThirdEngine.h"
 #import "ShareSDKMethod.h"
 
@@ -61,23 +62,26 @@
 
 @property (nonatomic, strong) LGXShareParams *shareParams;
 
+@property (nonatomic) LLONG lPlayHandle;
+
+@property (nonatomic) LONG playPort;
 
 @end
 
 @implementation DHVideoPlaybackController
-//{
-//    DH_RealPlayType _rType;
-//}
-//
-//@synthesize viewPlay, lPlayHandle;
-//
-//-(id)initWithValue:(NSString *)value
-//{
-//    if (self = [super initWithNibName:nil bundle:nil]) {
-//        self.fname = value;
-//    }
-//    return self;
-//}
+{
+    DH_RealPlayType _rType;
+}
+
+@synthesize viewPlay, lPlayHandle;
+
+-(id)initWithValue:(NSString *)value
+{
+    if (self = [super initWithNibName:nil bundle:nil]) {
+        self.fname = value;
+    }
+    return self;
+}
 
 
 
@@ -133,21 +137,21 @@
     [self.collectionView addHeight:130];
     
     
-//    viewPlay = [[VideoWnd alloc] init];
-//    viewPlay.backgroundColor = [UIColor whiteColor];
-//    [self.playView addSubview:viewPlay];
-//    viewPlay.frame = CGRectMake(0, 0, kScreenWidth, kScreenWidth*3/4);
-//    viewPlay.center = CGPointMake(kScreenWidth*0.5, kScreenHeight*0.5);
-//
-//
-//    self.view.backgroundColor = BASE_BACKGROUND_COLOR;
-//
-//    PLAY_GetFreePort(&(_playPort));
-//    std::string strFile = [_fname UTF8String];
-//    NSLog(@"%s", strFile.c_str());
-//    PLAY_OpenFile(_playPort, (char*)strFile.c_str());
-//    PLAY_Play(_playPort, (__bridge void*)viewPlay);
-//    PLAY_PlaySoundShare(_playPort);
+    viewPlay = [[VideoWnd alloc] init];
+    viewPlay.backgroundColor = [UIColor whiteColor];
+    [self.playView addSubview:viewPlay];
+    viewPlay.frame = CGRectMake(0, 0, kScreenWidth, kScreenWidth*3/4);
+    viewPlay.center = CGPointMake(kScreenWidth*0.5, kScreenHeight*0.5);
+
+
+    self.view.backgroundColor = BASE_BACKGROUND_COLOR;
+
+    PLAY_GetFreePort(&(_playPort));
+    std::string strFile = [_fname UTF8String];
+    NSLog(@"%s", strFile.c_str());
+    PLAY_OpenFile(_playPort, (char*)strFile.c_str());
+    PLAY_Play(_playPort, (__bridge void*)viewPlay);
+    PLAY_PlaySoundShare(_playPort);
 //
 //    UIButton *btnSave = [[UIButton alloc] init];
 //    btnSave.frame = CGRectMake(0, 0, kScreenWidth/2, kScreenHeight/20);
@@ -186,9 +190,12 @@
     UIButton *backBtn = [UIButton new];
     [backBtn setImage:UIImageWithFileName(@"icon_back_gray") forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(backButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [backBtn setBGColor:UIColorFromRGB(0xffffff, 0) forState:UIControlStateNormal];
     [self.playView addSubview:backBtn];
-    [backBtn topToView:self.playView withSpace:35];
-    [backBtn leftToView:self.playView withSpace:15];
+    [backBtn leftToView:self.playView withSpace:2];
+    [backBtn topToView:self.playView withSpace:32];
+    [backBtn addWidth:40];
+    [backBtn addHeight:40];
     
     
     //分享按钮
@@ -429,6 +436,57 @@
 
 }
 
+-(void)video:(NSString *)videoPath didFinishSavingWithError:(NSError *)error contextInfo:(void*)contextInf {
+    if (error) {
+        NSLog(@"Failed: %@", error.localizedDescription);
+        MSG(@"", _L(@"Failed"), @"");
+    }
+    else {
+        NSLog(@"Success!");
+        MSG(@"", _L(@"Success"), @"");
+    }
+}
+
+
+- (void)onBtnSave {
+
+    //PHAuthorizationStatus status = [PHPhotoLibrary authorizationStatus];
+    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            switch (status) {
+                case PHAuthorizationStatusAuthorized:
+                case PHAuthorizationStatusDenied:
+                case PHAuthorizationStatusRestricted:
+                case PHAuthorizationStatusNotDetermined:
+                default:
+                    break;
+            }
+        });
+    }];
+
+
+    if (UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(_fname)) {
+        UISaveVideoAtPathToSavedPhotosAlbum(_fname, self, @selector(video:didFinishSavingWithError:contextInfo:), nil);
+    }
+
+
+}
+
+- (void)onPlay
+{
+    std::string strFile = [_fname UTF8String];
+    NSLog(@"%s", strFile.c_str());
+    PLAY_OpenFile(_playPort, (char*)strFile.c_str());
+    PLAY_Play(_playPort, (__bridge void*)viewPlay);
+}
+
+-(void) didMoveToParentViewController:(UIViewController *)parent
+{
+    if (!parent) {
+        PLAY_Stop(_playPort);
+        PLAY_CloseFile(_playPort);
+    }
+}
 
 
 
@@ -503,15 +561,5 @@
 {
     return UIEdgeInsetsMake(0, 15, 0, 15);
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
