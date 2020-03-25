@@ -110,7 +110,8 @@
 }
 -(void)makeCellData:(IndexDataModel *)model
 {
-    
+    _equipmentName.text = model.equipment_name;
+    _equipmentStates.text = model.equipment_states;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

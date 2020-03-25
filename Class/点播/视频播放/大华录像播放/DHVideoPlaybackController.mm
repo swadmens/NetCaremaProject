@@ -137,21 +137,21 @@
     [self.collectionView addHeight:130];
     
     
-    viewPlay = [[VideoWnd alloc] init];
-    viewPlay.backgroundColor = [UIColor whiteColor];
-    [self.playView addSubview:viewPlay];
-    viewPlay.frame = CGRectMake(0, 0, kScreenWidth, kScreenWidth*3/4);
-    viewPlay.center = CGPointMake(kScreenWidth*0.5, kScreenHeight*0.5);
-
-
-    self.view.backgroundColor = BASE_BACKGROUND_COLOR;
-
-    PLAY_GetFreePort(&(_playPort));
-    std::string strFile = [_fname UTF8String];
-    NSLog(@"%s", strFile.c_str());
-    PLAY_OpenFile(_playPort, (char*)strFile.c_str());
-    PLAY_Play(_playPort, (__bridge void*)viewPlay);
-    PLAY_PlaySoundShare(_playPort);
+//    viewPlay = [[VideoWnd alloc] init];
+//    viewPlay.backgroundColor = [UIColor whiteColor];
+//    [self.playView addSubview:viewPlay];
+//    viewPlay.frame = CGRectMake(0, 0, kScreenWidth, kScreenWidth*3/4);
+//    viewPlay.center = CGPointMake(kScreenWidth*0.5, kScreenHeight*0.5);
+//
+//
+//    self.view.backgroundColor = BASE_BACKGROUND_COLOR;
+//
+//    PLAY_GetFreePort(&(_playPort));
+//    std::string strFile = [_fname UTF8String];
+//    NSLog(@"%s", strFile.c_str());
+//    PLAY_OpenFile(_playPort, (char*)strFile.c_str());
+//    PLAY_Play(_playPort, (__bridge void*)viewPlay);
+//    PLAY_PlaySoundShare(_playPort);
 //
 //    UIButton *btnSave = [[UIButton alloc] init];
 //    btnSave.frame = CGRectMake(0, 0, kScreenWidth/2, kScreenHeight/20);
@@ -162,13 +162,6 @@
 //    [btnSave setTitle:@"Save" forState:UIControlStateNormal];
 //    [btnSave addTarget:self action:@selector(onBtnSave) forControlEvents:UIControlEventTouchUpInside];
 //    //[self.view addSubview:btnSave];
-    
-    
-    
-    
-    
-    
-    
     
 }
 -(void)creadVideoPlayBackView

@@ -39,6 +39,27 @@
     }
     return _language_lang;
 }
+- (NSString *)tenant_name
+{
+    if (!_tenant_name) {
+        _tenant_name = @"lpc";
+    }
+    return _tenant_name;
+}
+-(NSString*)user_name
+{
+    if (!_user_name) {
+        _user_name = @"admin";
+    }
+    return _user_name;
+}
+-(NSString*)password
+{
+    if (!_password) {
+        _password = @"admin123";
+    }
+    return _password;
+}
 -(BOOL)isTest
 {
     
@@ -112,6 +133,25 @@
 - (void)makeUserModelWithData:(NSDictionary *)uInfo
 {
     
+    self.email = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"email"]];
+    self.firstName = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"firstName"]];
+    self.lastPasswordChange = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"lastPasswordChange"]];
+    self.user_self = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"self"]];
+    self.shouldResetPassword = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"shouldResetPassword"]];
+    self.user_id = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"id"]];
+    self.user_name = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"userName"]];
+
+    [self save];
+    
+    int user_id = [[NSString stringWithFormat:@"%@",[uInfo objectForKey:@"id"]] intValue];
+    
+    // 说明没有取到用户id，则认为退出
+    if (user_id <=0) {
+        _kUserModel.isLogined = NO;
+    }
+    
+    return;
+
     self.user_name = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"user_name"]];
     self.sex = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"sex"]];
     self.integration = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"integration"]];
@@ -149,7 +189,7 @@
     NSDictionary *seller = [uInfo objectForKey:@"agent"];
     self.sellerStatus = [NSString stringWithFormat:@"%@",[seller objectForKey:@"status"]];
   
-    int user_id = [[NSString stringWithFormat:@"%@",[uInfo objectForKey:@"user_id"]] intValue];
+//    int user_id = [[NSString stringWithFormat:@"%@",[uInfo objectForKey:@"user_id"]] intValue];
     self.user_id = [NSString stringWithFormat:@"%d",user_id];
     
     [self save];
@@ -182,7 +222,9 @@
     // vip信息保存
 //    [self.vipModel save];
     
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self];
+//    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self requiringSecureCoding:YES error:nil];
+
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     [user setObject:data forKey:_kUserInfoModelKey];
     [user synchronize];
@@ -192,7 +234,9 @@
 {
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     NSData *data = [user objectForKey:_kUserInfoModelKey];
-    UserInfoModel *uInfo = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//    UserInfoModel *uInfo = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    UserInfoModel *uInfo = [NSKeyedUnarchiver unarchivedObjectOfClass:self fromData:data error:nil];
+
     
     return uInfo;
 }

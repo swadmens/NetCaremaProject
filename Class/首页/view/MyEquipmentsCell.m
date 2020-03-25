@@ -84,7 +84,9 @@
 }
 -(void)makeCellData:(MyEquipmentsModel *)model
 {
-    
+    _equipmentName.text = model.equipment_name;
+    _equipmentDeatil.text = model.equipment_Channel;
+    _equipmentStates.text = model.equipment_states;
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

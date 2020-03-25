@@ -49,25 +49,25 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[IndexTableViewCell class] forCellReuseIdentifier:[IndexTableViewCell getCellIDStr]];
-//    self.tableView.refreshEnable = YES;
-//    self.tableView.loadingMoreEnable = NO;
-//    __unsafe_unretained typeof(self) weak_self = self;
-//    self.tableView.actionHandle = ^(WWScrollingState state){
-//        switch (state) {
-//            case WWScrollingStateRefreshing:
+    self.tableView.refreshEnable = YES;
+    self.tableView.loadingMoreEnable = NO;
+    __unsafe_unretained typeof(self) weak_self = self;
+    self.tableView.actionHandle = ^(WWScrollingState state){
+        switch (state) {
+            case WWScrollingStateRefreshing:
+            {
+                [weak_self loadNewData];
+            }
+                break;
+//            case WWScrollingStateLoadingMore:
 //            {
-////                [weak_self loadNewData];
+//                [weak_self loadMoreData];
 //            }
 //                break;
-////            case WWScrollingStateLoadingMore:
-////            {
-////                [weak_self loadMoreData];
-////            }
-////                break;
-//            default:
-//                break;
-//        }
-//    };
+            default:
+                break;
+        }
+    };
 }
 - (void)setupNoDataView
 {
@@ -98,9 +98,9 @@
 
     self.title = @"我的设备";
     
-    [self setupNoDataView];
+//    [self setupNoDataView];
     [self setupTableView];
-//    [self loadNewData];
+    [self loadNewData];
 //    @weakify(self);
 //       /// 登录变化监听
 //       [RACObserve(_kUserModel, isLogined) subscribeNext:^(id x) {
@@ -111,19 +111,16 @@
 //           if (!self.isLogion) {
 //               [_kUserModel showLoginView];
 //           }else{
-//               [self setupViews];
 //               [self setupNoDataView];
 //               [self setupTableView];
 //               [self loadNewData];
 //           }
 //
 //       }];
-    
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    return self.dataArray.count;
-    return 3;
+    return self.dataArray.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -131,8 +128,8 @@
     IndexTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[IndexTableViewCell getCellIDStr] forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-//    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//    [cell makeCellData:model];
+    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    [cell makeCellData:model];
     
     return cell;
     
@@ -142,7 +139,9 @@
 //    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
     
 //    NSString *url = [NSString stringWithFormat:@"https://leo.quarkioe.com/apps/androidapp/#/device/%@/dashboard/%@",model.childId,model.wechat[0]];
-    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:nil];
+    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+
+    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
 
 }
 
@@ -164,7 +163,7 @@
     [_kHUDManager showActivityInView:nil withTitle:nil];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
-    sence.pathURL = @"inventory/managedObjects?nocache=2777024045122203&pageSize=2000&query=$filter%3D(type+eq+%27qk_project%27)+$orderby%3DcreationTime+desc&withTotalPages=true";
+    sence.pathURL = @"inventory/managedObjects?pageSize=100&fragmentType=quark_IsCameraManageDevice&currentPage=1";
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
 

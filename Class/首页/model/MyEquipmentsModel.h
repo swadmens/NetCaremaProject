@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) NSString *equipment_id;//设备id
 @property (nonatomic,strong) NSString *equipment_name;//设备名称
-@property (nonatomic,strong) NSString *equipment_address;//设备地址
+@property (nonatomic,strong) NSString *equipment_Channel;//通道
 @property (nonatomic,strong) NSString *equipment_states;//设备状态
 
 

@@ -36,10 +36,12 @@
 #ifdef DEBUG
     url = [[NSUserDefaults standardUserDefaults] objectForKey:_DEVURLKey];
     if (url == nil) {
-        url = @"http://tyuapi.fundog.cn/"; // 开发用的
+        url = @"http://ncore.iot/"; // 开发用的
+//        url = @"https://192.168.10.12:9090/outer/";
     }
 #else
-    url = @"https://api.vipet.com.cn/"; // 正式服务器
+    url = @"http://ncore.iot/"; // 正式服务器
+//    url = @"https://192.168.10.12:9090/outer/";
 #endif
     return url;
 }
@@ -72,8 +74,24 @@
         _client = [[SharedClient alloc] initWithBaseURL:baseURL
                                          sessionConfiguration:config];
         _client.responseSerializer = [AFJSONResponseSerializer serializer];
-        
+//        _client.requestSerializer = [AFHTTPRequestSerializer serializer];
+
         _client.networkStatus = AFNetworkReachabilityStatusReachableViaWiFi; // 用_client.reachabilityManager.networkReachabilityStatus;读出来不正确。
+        
+        [_client.requestSerializer setValue:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json" forHTTPHeaderField:@"Accept"];
+        [_client.requestSerializer setValue:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json" forHTTPHeaderField:@"Content-Type"];
+
+        //配置用户名 密码
+        NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+        //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+        NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+        // 设置Authorization的方法设置header
+        [_client.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+//        [_client.requestSerializer setValue:@"Basic bHBjL2FkbWluOmFkbWluMTIz" forHTTPHeaderField:@"Authorization"];
+
+        _client.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json", @"text/html",nil];
+
+        
         /// 注册网络变化
         [_client.reachabilityManager setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             _client.networkStatus = status;
@@ -129,9 +147,9 @@
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     
-    [params setObject:@"ios" forKey:@"system"];
+//    [params setObject:@"ios" forKey:@"system"];
 //    NSString *versionstr = [WWPhoneInfo getAPPVersion];
-    [params setObject:APPVersion forKey:@"version"];
+//    [params setObject:APPVersion forKey:@"version"];
 //    if ([_kUserModel.userInfo.session_id isKindOfClass:[NSString class]]) {
 //        [params setObject:_kUserModel.userInfo.session_id forKey:@"session_id"];
 //    }
@@ -207,12 +225,12 @@
         
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
         DLog(@"\n~~~~~完成请求地址:%@\n",httpResponse.URL.absoluteString);
-        if (httpResponse.statusCode == 200) {
+//        if (httpResponse.statusCode == 200) {
             completion(responseObject, nil);
-        } else {
-            NSError *err = [NSError errorWithDomain:self.baseURL.absoluteString code:httpResponse.statusCode userInfo:nil];
-            completion(nil, err);
-        }
+//        } else {
+//            NSError *err = [NSError errorWithDomain:self.baseURL.absoluteString code:httpResponse.statusCode userInfo:nil];
+//            completion(nil, err);
+//        }
         
         if ([[responseObject objectForKey:@"data"] isKindOfClass:[NSDictionary class]]) {
             [self.returnDic setValue:responseObject forKey:@"moid"];
@@ -258,12 +276,12 @@
     NSURLSessionDataTask *task = [self POST:url parameters:finalParams success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-        if (httpResponse.statusCode == 200) {
+//        if (httpResponse.statusCode == 200) {
             completion(responseObject, nil);
-        } else {
-            NSError *err = [NSError errorWithDomain:self.baseURL.absoluteString code:httpResponse.statusCode userInfo:nil];
-            completion(nil, err);
-        }
+//        } else {
+//            NSError *err = [NSError errorWithDomain:self.baseURL.absoluteString code:httpResponse.statusCode userInfo:nil];
+//            completion(nil, err);
+//        }
         DLog(@"Received: %@", responseObject);
         DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -336,23 +354,19 @@
     
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:finalParams error:nil];
     
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    // 设置请求头
+    [request setValue:@"application/vnd.com.nsn.cumulocity.managedobject+json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/vnd.com.nsn.cumulocity.managedobject+json" forHTTPHeaderField:@"Content-Type"];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
+    
     // 设置body
     [request setHTTPBody:body];
 
-    
-//    NSProgress *progress = nil;
-//    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:&progress completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-//        if (error) {
-//            // 请求失败
-//            completion(nil, error);
-//            return ;
-//        }
-//        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-//        completion(responseObject, nil);
-//    }];
-//    [task resume];
-    
     NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
@@ -365,6 +379,60 @@
         completion(responseObject, nil);
     }];
     [task resume];
+    
+    return task;
+}
+- (NSURLSessionDataTask*)requestPUTWithURLStr:(NSString *)urlStr paramDic:(NSDictionary *)paramDic Api_key:(NSString *)api_key completion:( void (^)(id results, NSError *error) )completion
+{
+//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",api_key, nil];
+//
+//    // 设置请求头
+//    [manager.requestSerializer setValue:api_key forHTTPHeaderField:@"Accept"];
+//    [manager.requestSerializer setValue:api_key forHTTPHeaderField:@"Content-Type"];
+//    //配置用户名 密码
+//    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+//    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+//    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+//    // 设置Authorization的方法设置header
+//    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+    
+    if (self.networkStatus == AFNetworkReachabilityStatusNotReachable || self.networkStatus == AFNetworkReachabilityStatusUnknown) {
+        if (completion) {
+            
+            NSError *err = [NSError errorWithDomain:self.baseURL.absoluteString code:-1001 userInfo:nil];
+            completion(nil, err);
+        }
+        return nil;
+    }
+    
+    [self shouldUploadUserLocation];
+    
+    if (paramDic == nil) {
+        paramDic = @{};
+    }
+    NSMutableDictionary *finalParams=[NSMutableDictionary dictionary];
+    finalParams = [self paramsToPublicWith:paramDic];
+
+    DLog(@"\n请求参数 = %@ \n",finalParams);
+
+
+    NSURLSessionDataTask *task = [self PUT:urlStr parameters:finalParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        //        if (httpResponse.statusCode == 200) {
+        completion(responseObject, nil);
+        //        } else {
+        //            NSError *err = [NSError errorWithDomain:self.baseURL.absoluteString code:httpResponse.statusCode userInfo:nil];
+        //            completion(nil, err);
+        //        }
+        DLog(@"Received: %@", responseObject);
+        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        // 请求失败
+        completion(nil, error);
+        
+    }];
     
     return task;
 }

@@ -100,6 +100,25 @@ NSString *_kStaticURL;
     if (self.cancelRequestWhenReuqestAgain) {
         [self cancel];
     }
+    
+    
+    [[SharedClient sharedInstance].requestSerializer setValue:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json" forHTTPHeaderField:@"Accept"];
+    [[SharedClient sharedInstance].requestSerializer setValue:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json" forHTTPHeaderField:@"Content-Type"];
+    
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [[SharedClient sharedInstance].requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+//    [[SharedClient sharedInstance].requestSerializer setValue:@"Basic bHBjL2FkbWluOmFkbWluMTIz" forHTTPHeaderField:@"Authorization"];
+    
+    
+    
+    [SharedClient sharedInstance].responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json", @"text/html",nil];
+    
+    
+    
     if ([self.requestMethod isEqual:@"GET"]) {
         
         self.task = [[SharedClient sharedInstance] requestGet:self.pathURL parameters:self.params completion:^(id results, NSError *error) {
@@ -122,6 +141,12 @@ NSString *_kStaticURL;
             DLog(@"%@",[dic objectForKey:@"errorMsg"]);
             [self handleResult:results andError:error];
         }];
+    }else if ([self.requestMethod isEqual:@"PUT"]){
+        self.task = [[SharedClient sharedInstance] requestPUTWithURLStr:self.pathURL paramDic:self.params Api_key:self.api_key completion:^(id results, NSError *error) {
+            NSDictionary *dic = results;
+            DLog(@"%@",[dic objectForKey:@"errorMsg"]);
+            [self handleResult:results andError:error];
+        }];
     }
 }
 - (void)handleResult:(id)results andError:(NSError *)error
@@ -135,38 +160,18 @@ NSString *_kStaticURL;
     }
     @try {
         
-        int errorCode = [[results objectForKey:@"code"] intValue];
-        
-        if (errorCode == -220) { // 没有登录
-            // 提示没有登录，并显示登录界面
-            _kUserModel.isLogined = NO;
-            [_kUserModel checkLoginStatus];
-            [self requestError:[self customErrorWithInfo:results]];
-            return;
-        }else if (errorCode == -221){ //被踢下线
-            [_kHUDManager hideAfter:0.1 onHide:nil];
-            
-           
-            
-            /// 清除极光推送信息
-            [JPUSHService setTags:[NSSet set] alias:@"" fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias){
-                NSLog(@"rescode: %d, \ntags: %@, \nalias: %@\n", iResCode, iTags, iAlias);
-            }];
-            
-            
-            NSString *msg = [results objectForKey:@"msg"];
-            [[TCNewAlertView shareInstance] showAlert:NSLocalizedString(@"xxtz", nil) message:msg cancelTitle:nil viewController:nil confirm:^(NSInteger buttonTag) {
-                if (buttonTag == 0) {
-                    _kUserModel.isLogined = NO;
-                    [_kUserModel checkLoginStatus];
-                }
-            } buttonTitles:NSLocalizedString(@"exitLogon", nil), nil];
-
-            return;
-        }else if (errorCode != 1) {
-            [self requestError:[self customErrorWithInfo:results]];
-            return ;
-        }
+//        int errorCode = [[results objectForKey:@"code"] intValue];
+//
+//        if (errorCode == -220) { // 没有登录
+//            // 提示没有登录，并显示登录界面
+//            _kUserModel.isLogined = NO;
+//            [_kUserModel checkLoginStatus];
+//            [self requestError:[self customErrorWithInfo:results]];
+//            return;
+//        }else if (errorCode != 1) {
+//            [self requestError:[self customErrorWithInfo:results]];
+//            return ;
+//        }
         [self requestFinished:results];
     }
     @catch (NSException *exception) {

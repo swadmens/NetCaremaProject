@@ -8,7 +8,8 @@
 
 #import "LoginViewController.h"
 #import "LGXHorizontalButton.h"
-
+#import "AFHTTPRequestOperation.h"
+#import "AFHTTPSessionManager.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
 
@@ -78,6 +79,7 @@
     _passwordTextField.textColor = kColorMainTextColor;
     _passwordTextField.font = [UIFont customFontWithSize:kFontSizeFifty];
     _passwordTextField.delegate = self;
+    _passwordTextField.secureTextEntry = YES;
     [self.view addSubview:_passwordTextField];
     [_passwordTextField yCenterToView:keyImageView];
     [_passwordTextField xCenterToView:_nameTextField];
@@ -146,7 +148,92 @@
 //登陆按钮
 -(void)loginButtonClick
 {
-    DLog(@"登陆");
+    //登录检查
+    if (![WWPublicMethod isStringEmptyText:_nameTextField.text]) {
+        [_kHUDManager showMsgInView:nil withTitle:@"请输入账户" isSuccess:YES];
+        return;
+    }
+    
+    if (![WWPublicMethod isStringEmptyText:_passwordTextField.text]) {
+        [_kHUDManager showMsgInView:nil withTitle:@"请输入密码" isSuccess:YES];
+        return;
+    }
+    
+    
+    [_kHUDManager showActivityInView:nil withTitle:@"登录中..."];
+    
+    //http的get请求地址
+    NSString *urlStr = @"192.168.10.12:9090/outer/user/currentUser";
+
+    NSURL *url = [NSURL URLWithString:urlStr];
+    //自定义的request
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    //请求过期时间
+    request.timeoutInterval = 10;
+    //get请求
+    request.HTTPMethod = @"GET";
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_nameTextField.text,_passwordTextField.text];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
+    [request setValue:@"application/vnd.com.nsn.cumulocity.currentuser+json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/vnd.com.nsn.cumulocity.currentuser+json" forHTTPHeaderField:@"Accept"];
+
+    AFHTTPRequestOperation *op=[[AFHTTPRequestOperation alloc]initWithRequest:request];
+    op.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"text/html", @"text/plain",@"application/vnd.com.nsn.cumulocity.currentuser+json",nil];
+    //设置返回数据为json数据
+    op.responseSerializer= [AFJSONResponseSerializer serializer];
+    //发送网络请求
+    [op setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *operation, id responseObject) {
+
+        NSLog(@"%@",responseObject);
+        
+        [_kUserModel makeIm_accountWithData:responseObject];
+        
+        NSDictionary *uInfo = responseObject;
+        
+        _kUserModel.userInfo.email = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"email"]];
+        _kUserModel.userInfo.firstName = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"firstName"]];
+        _kUserModel.userInfo.lastPasswordChange = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"lastPasswordChange"]];
+        _kUserModel.userInfo.user_self = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"self"]];
+        _kUserModel.userInfo.shouldResetPassword = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"shouldResetPassword"]];
+        _kUserModel.userInfo.user_id = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"id"]];
+        _kUserModel.userInfo.user_name = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"userName"]];
+        
+        _kUserModel.userInfo.user_name = self.nameTextField.text;
+        _kUserModel.userInfo.password = self.passwordTextField.text;
+        _kUserModel.userInfo.savePassword = self.rmButton.selected?self.passwordTextField.text:@"";
+        _kUserModel.userInfo.save_password = self.rmButton.selected;
+
+        [_kUserModel.userInfo save];
+        
+        _kUserModel.isLogined = YES;
+        [_kUserModel hideLoginViewWithBlock:nil];
+        
+//            // 注册推送
+//            NSString *jalias = self.nameTextField.text;
+//            NSString *jtags = self.nameTextField.text;
+//            [self setTags:jtags andAlias:jalias];
+//            //获取用户类型
+//            [self getFractionData];
+
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//        NSLog(@"%@",error);
+        DLog(@"error.userInfo == %@",error.userInfo);
+        
+        NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        
+        if ([unauthorized containsString:@"401"]) {
+            [_kHUDManager hideAfter:0.1 onHide:nil];
+            [_kHUDManager showMsgInView:nil withTitle:@"用户名或密码错误！" isSuccess:NO];
+            return ;
+        }
+        [self failedOperation];
+    }];
+    //请求完毕回到主线程
+    [[NSOperationQueue mainQueue] addOperation:op];
+   
 }
 //记住密码
 -(void)rememberKeyButtonClick
@@ -154,7 +241,11 @@
     DLog(@"记住密码");
     _rmButton.selected = !_rmButton.selected;
 }
-
+- (void)failedOperation
+{
+    [_kHUDManager hideAfter:0.1 onHide:nil];
+    [_kHUDManager showMsgInView:nil withTitle:@"请求失败" isSuccess:NO];
+}
 
 
 @end

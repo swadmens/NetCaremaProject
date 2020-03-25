@@ -40,6 +40,8 @@ typedef void(^RequestCacheBlock)(id obj);
 @property (nonatomic, strong) NSMutableDictionary *params;
 /// 请求Body
 @property (nonatomic, strong) NSData *body;
+@property (nonatomic, strong) NSString *api_key;
+
 /// 网络状态
 @property (nonatomic, readonly) AFNetworkReachabilityStatus networkStatus;
 /**

@@ -28,10 +28,7 @@ static NSString *const _kUserInfoModelKey = @"ypet.user_info";
 
 //及时通讯相关
 @property(nonatomic,strong) NSString *account_id;
-@property(nonatomic,strong) NSString *password;
 
-@property (nonatomic, strong) NSString *user_id;
-@property (nonatomic, strong) NSString *user_name;
 @property (nonatomic, strong) NSString *user_avatar;
 @property (nonatomic, strong) NSString *mobile;
 @property (nonatomic, strong) NSString *service_phone;
@@ -42,7 +39,20 @@ static NSString *const _kUserInfoModelKey = @"ypet.user_info";
 @property (nonatomic, strong) NSString *user_qrcode;//二维码
 @property (nonatomic, strong) NSString *message_num;//未读消息
 @property (nonatomic, strong) NSString *zone_number;
+
+@property (nonatomic,strong) NSString *user_permissions;//用户权限
+
 @property (nonatomic, strong) NSString *email;//邮箱
+@property (nonatomic, strong) NSString *firstName;
+@property (nonatomic, strong) NSString *lastPasswordChange;
+@property (nonatomic, strong) NSString *user_self;
+@property (nonatomic, strong) NSString *shouldResetPassword;
+@property (nonatomic, strong) NSString *user_id;
+@property (nonatomic, strong) NSString *user_name;
+@property (nonatomic, strong) NSString *tenant_name;
+@property(nonatomic,strong) NSString *password;
+@property(nonatomic,strong) NSString *savePassword;
+@property (nonatomic, assign) BOOL save_password;
 
 
 @property (nonatomic, strong) NSString *sns_wechat;

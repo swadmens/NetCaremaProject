@@ -7,6 +7,18 @@
 //
 
 #import "LiveViewCollectionViewCell.h"
+#import "LivingModel.h"
+#import <UIImageView+YYWebImage.h>
+
+@interface LiveViewCollectionViewCell ()
+
+
+@property (nonatomic,strong) UIImageView *showImageView;
+@property (nonatomic,strong) UILabel *titleLabel;
+@property (nonatomic,strong) UILabel *tagLabel;
+
+@end
+
 
 @implementation LiveViewCollectionViewCell
 
@@ -18,48 +30,55 @@
     
     CGFloat width = kScreenWidth/2 - 20;
     
-    UIImageView *showImageView = [UIImageView new];
-   showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
-   [self.contentView addSubview:showImageView];
-   [showImageView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.contentView];
-   [showImageView addWidth:width];
-   [showImageView addHeight:width*0.6];
+    
+    _showImageView = [UIImageView new];
+    _showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
+    [self.contentView addSubview:_showImageView];
+    [_showImageView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.contentView];
+    [_showImageView addWidth:width];
+    [_showImageView addHeight:width*0.6];
    
    
    
-   UIView *backView = [UIView new];
-   backView.backgroundColor = UIColorFromRGB(0x000000, 0.52);
-   [showImageView addSubview:backView];
-   [backView alignTop:@"0" leading:@"0" bottom:nil trailing:@"0" toView:showImageView];
-   [backView addHeight:15.5];
+   
+    UIView *backView = [UIView new];
+    backView.backgroundColor = UIColorFromRGB(0x000000, 0.52);
+    [_showImageView addSubview:backView];
+    [backView alignTop:@"0" leading:@"0" bottom:nil trailing:@"0" toView:_showImageView];
+    [backView addHeight:15.5];
    
    
    
-   UILabel *nameLabel = [UILabel new];
-   nameLabel.text = @"001研发中心";
-   nameLabel.textColor = [UIColor whiteColor];
-   nameLabel.font = [UIFont customFontWithSize:9];
-   [nameLabel sizeToFit];
-   [backView addSubview:nameLabel];
-   [nameLabel yCenterToView:backView];
-   [nameLabel leftToView:backView withSpace:5];
+    _titleLabel = [UILabel new];
+    _titleLabel.text = @"001研发中心";
+    _titleLabel.textColor = [UIColor whiteColor];
+    _titleLabel.font = [UIFont customFontWithSize:9];
+    [_titleLabel sizeToFit];
+    [backView addSubview:_titleLabel];
+    [_titleLabel yCenterToView:backView];
+    [_titleLabel leftToView:backView withSpace:5];
    
    
-   UILabel *tagLabel = [UILabel new];
-   tagLabel.backgroundColor = kColorMainColor;
-   tagLabel.text = @"直播中";
-   tagLabel.textColor = [UIColor whiteColor];
-   tagLabel.font = [UIFont customFontWithSize:9];
-   tagLabel.textAlignment = NSTextAlignmentCenter;
-   [tagLabel sizeToFit];
-   [backView addSubview:tagLabel];
-   [tagLabel yCenterToView:backView];
-   [tagLabel rightToView:backView];
-   [tagLabel addWidth:35.5];
-   [tagLabel addHeight:15.5];
+    _tagLabel = [UILabel new];
+    _tagLabel.backgroundColor = kColorMainColor;
+    _tagLabel.text = @"直播中";
+    _tagLabel.textColor = [UIColor whiteColor];
+    _tagLabel.font = [UIFont customFontWithSize:9];
+    _tagLabel.textAlignment = NSTextAlignmentCenter;
+    [_tagLabel sizeToFit];
+    [backView addSubview:_tagLabel];
+    [_tagLabel yCenterToView:backView];
+    [_tagLabel rightToView:backView];
+    [_tagLabel addWidth:35.5];
+    [_tagLabel addHeight:15.5];
        
     
     
+}
+-(void)makeCellData:(LivingModel*)model
+{
+//    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
+    _titleLabel.text = model.name;
 }
 
 

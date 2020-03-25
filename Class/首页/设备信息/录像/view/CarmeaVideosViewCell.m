@@ -7,6 +7,8 @@
 //
 
 #import "CarmeaVideosViewCell.h"
+#import "DemandModel.h"
+#import <UIImageView+YYWebImage.h>
 
 @interface CarmeaVideosViewCell ()
 
@@ -58,6 +60,14 @@
 
     
 }
+
+-(void)makeCellData:(DemandModel *)model
+{
+//    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] options:YYWebImageOptionProgressive];
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
+    _titleLabel.text = model.video_name;
+}
+
 -(void)setIsEdit:(BOOL)isEdit
 {
     _selectBtn.hidden = !isEdit;

@@ -13,10 +13,16 @@
 {
     MyEquipmentsModel *model = [MyEquipmentsModel new];
     
-    model.equipment_id = [NSString stringWithFormat:@"%@",[dic objectForKey:@""]];
-    model.equipment_name = [NSString stringWithFormat:@"%@",[dic objectForKey:@""]];
-    model.equipment_address = [NSString stringWithFormat:@"%@",[dic objectForKey:@""]];
-    model.equipment_states = [NSString stringWithFormat:@"%@",[dic objectForKey:@""]];
+    NSDictionary *managedObject = [dic objectForKey:@"managedObject"];
+    
+    
+    
+    model.equipment_id = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"id"]];
+    model.equipment_name = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"ClientId"]];
+    model.equipment_Channel = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"Channel"]];
+    NSDictionary *statesDic = [managedObject objectForKey:@"c8y_Availability"];
+    NSString *status = [NSString stringWithFormat:@"%@",[statesDic objectForKey:@"status"]];
+    model.equipment_states = [status isEqualToString:@"UNAVAILABLE"]?@"离线":@"在线";
 
 
     return model;

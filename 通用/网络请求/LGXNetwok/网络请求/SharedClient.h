@@ -76,5 +76,16 @@ typedef void(^NetworkChangedHandle)(AFNetworkReachabilityStatus status);
  @return NSURLSessionDataTask
  */
 - (NSURLSessionDataTask *)requestBody:(NSString *)url parameters:(NSDictionary *)params body:(NSData *)body completion:( void (^)(id results, NSError *error) )completion;
+/**
+ PUT请求
+ 
+ @param url @"xxx.html?do=xx" 或 @"xxx.html"
+ @param params 请求参数
+ @param body 请求的dateBody
+ 
+ @return NSURLSessionDataTask
+ */
+//- (NSURLSessionDataTask *)requestPUT:(NSString *)url parameters:(NSDictionary *)params body:(NSData *)body completion:( void (^)(id results, NSError *error) )completion;
+- (NSURLSessionDataTask*)requestPUTWithURLStr:(NSString *)urlStr paramDic:(NSDictionary *)paramDic Api_key:(NSString *)api_key completion:( void (^)(id results, NSError *error) )completion;
 
 @end

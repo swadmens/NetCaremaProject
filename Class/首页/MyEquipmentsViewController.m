@@ -11,6 +11,8 @@
 #import "MyEquipmentsCell.h"
 #import "RequestSence.h"
 #import "MyEquipmentsModel.h"
+#import "AFHTTPSessionManager.h"
+
 @interface MyEquipmentsViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     BOOL _isHadFirst; // 是否第一次加载了
@@ -46,25 +48,25 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[MyEquipmentsCell class] forCellReuseIdentifier:[MyEquipmentsCell getCellIDStr]];
-//    self.tableView.refreshEnable = YES;
-//    self.tableView.loadingMoreEnable = NO;
-//    __unsafe_unretained typeof(self) weak_self = self;
-//    self.tableView.actionHandle = ^(WWScrollingState state){
-//        switch (state) {
-//            case WWScrollingStateRefreshing:
+    self.tableView.refreshEnable = YES;
+    self.tableView.loadingMoreEnable = NO;
+    __unsafe_unretained typeof(self) weak_self = self;
+    self.tableView.actionHandle = ^(WWScrollingState state){
+        switch (state) {
+            case WWScrollingStateRefreshing:
+            {
+                [weak_self loadNewData];
+            }
+                break;
+//            case WWScrollingStateLoadingMore:
 //            {
-////                [weak_self loadNewData];
+//                [weak_self loadMoreData];
 //            }
 //                break;
-////            case WWScrollingStateLoadingMore:
-////            {
-////                [weak_self loadMoreData];
-////            }
-////                break;
-//            default:
-//                break;
-//        }
-//    };
+            default:
+                break;
+        }
+    };
 }
 - (void)setupNoDataView
 {
@@ -84,7 +86,7 @@
 }
 -(void)againLoadDataBtn
 {
-//    [self loadNewData];
+    [self loadNewData];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -95,12 +97,11 @@
     
     [self setupNoDataView];
     [self setupTableView];
-    
+    [self loadNewData];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    return self.dataArray.count;
-    return 3;
+    return self.dataArray.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -108,8 +109,8 @@
     MyEquipmentsCell *cell = [tableView dequeueReusableCellWithIdentifier:[MyEquipmentsCell getCellIDStr] forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-//    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//    [cell makeCellData:model];
+    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    [cell makeCellData:model];
     
     return cell;
     
@@ -119,7 +120,8 @@
 //    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
     
 //    NSString *url = [NSString stringWithFormat:@"https://leo.quarkioe.com/apps/androidapp/#/device/%@/dashboard/%@",model.childId,model.wechat[0]];
-    [TargetEngine controller:self pushToController:PushTargetEquipmentInformation WithTargetId:nil];
+    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    [TargetEngine controller:self pushToController:PushTargetEquipmentInformation WithTargetId:model.equipment_id];
 
 }
 
@@ -139,18 +141,45 @@
 - (void)startLoadDataRequest
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathURL = @"inventory/managedObjects?nocache=2777024045122203&pageSize=2000&query=$filter%3D(type+eq+%27qk_project%27)+$orderby%3DcreationTime+desc&withTotalPages=true";
+    
+//    RequestSence *sence = [[RequestSence alloc] init];
+//    sence.requestMethod = @"GET";
+//    sence.pathURL = [NSString stringWithFormat:@"inventory/managedObjects/%@/childAssets?pageSize=100&currentPage=1",self.equipment_id];
+//    __unsafe_unretained typeof(self) weak_self = self;
+//    sence.successBlock = ^(id obj) {
+//
+//        [weak_self handleObject:obj];
+//    };
+//    sence.errorBlock = ^(NSError *error) {
+//        [weak_self failedOperation];
+//    };
+//    [sence sendRequest];
+    
+    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/inventory/managedObjects/%@/childAssets?pageSize=100&currentPage=1",self.equipment_id];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+       
     __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
 
-        [weak_self handleObject:obj];
-    };
-    sence.errorBlock = ^(NSError *error) {
-        [weak_self failedOperation];
-    };
-    [sence sendRequest];
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        
+        DLog(@"Received: %@", responseObject);
+        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+        
+         [weak_self handleObject:responseObject];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error: %@", error);
+    }];
+        
 }
 - (void)failedOperation
 {
@@ -167,7 +196,7 @@
     [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
-        NSArray *data = [obj objectForKey:@"managedObjects"];
+        NSArray *data = [obj objectForKey:@"references"];
         NSMutableArray *tempArray = [NSMutableArray array];
 
         if (weak_self.page == 1) {
