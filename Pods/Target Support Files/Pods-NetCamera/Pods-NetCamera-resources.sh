@@ -97,7 +97,6 @@ EOM
   esac
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_resource "${PODS_ROOT}/IQKeyboardManager/IQKeyboardManager/Resources/IQKeyboardManager.bundle"
   install_resource "${PODS_ROOT}/JSPatch/JSPatch/JSPatch.js"
   install_resource "${PODS_ROOT}/ShareSDK3/ShareSDK/Support/Required/ShareSDK.bundle"
   install_resource "${PODS_ROOT}/ShareSDK3/ShareSDK/Support/Optional/ShareSDKConfigFile.bundle"
@@ -106,7 +105,6 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/ShareSDK3/ShareSDK/Support/Optional/ShareSDKUI.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_resource "${PODS_ROOT}/IQKeyboardManager/IQKeyboardManager/Resources/IQKeyboardManager.bundle"
   install_resource "${PODS_ROOT}/JSPatch/JSPatch/JSPatch.js"
   install_resource "${PODS_ROOT}/ShareSDK3/ShareSDK/Support/Required/ShareSDK.bundle"
   install_resource "${PODS_ROOT}/ShareSDK3/ShareSDK/Support/Optional/ShareSDKConfigFile.bundle"

@@ -12,6 +12,8 @@
 #import "CarmeaVideosViewCell.h"
 #import "AFHTTPSessionManager.h"
 #import "DemandModel.h"
+#import "HKVideoPlaybackController.h"
+
 
 @interface DemandViewController ()<UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource>
 {
@@ -212,7 +214,7 @@
                     break;
                 case WWCollectionViewStateLoadingMore:
                 {
-                    [weak_self loadMoreData];
+//                    [weak_self loadMoreData];
                 }
                     break;
                 default:
@@ -293,11 +295,24 @@
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    DemandModel *model = [self.dataArray objectAtIndex:indexPath.row];
+
     if ([collectionView isEqual:self.collectionView]) {
         if (indexPath.row == 0) {
             [TargetEngine controller:self pushToController:PushTargetDHVideoPlayback WithTargetId:@"1"];
         }else{
-            [TargetEngine controller:self pushToController:PushTargetHKVideoPlayback WithTargetId:@"1"];
+            
+            
+//            NSDictionary *dic = @{@"video":model};
+//            NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
+//
+//            [TargetEngine controller:self pushToController:PushTargetHKVideoPlayback WithTargetId:pushId];
+            
+            HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
+            vc.model = model;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+            
         }
     }
 }

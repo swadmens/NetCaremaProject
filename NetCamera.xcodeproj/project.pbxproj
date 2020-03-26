@@ -196,18 +196,6 @@
 		4A580F7624075F2D00E82675 /* DTTimePeriodCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D1124075F2B00E82675 /* DTTimePeriodCollection.m */; };
 		4A580F7724075F2D00E82675 /* DTTimePeriodChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D1324075F2B00E82675 /* DTTimePeriodChain.m */; };
 		4A580F7824075F2D00E82675 /* LGXHudManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D1624075F2B00E82675 /* LGXHudManager.m */; };
-		4A580F7924075F2D00E82675 /* JGProgressHUDIndeterminateIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D1A24075F2B00E82675 /* JGProgressHUDIndeterminateIndicatorView.m */; };
-		4A580F7A24075F2D00E82675 /* JGProgressHUDErrorIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D1B24075F2B00E82675 /* JGProgressHUDErrorIndicatorView.m */; };
-		4A580F7B24075F2D00E82675 /* JGProgressHUDAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D1D24075F2B00E82675 /* JGProgressHUDAnimation.m */; };
-		4A580F7C24075F2D00E82675 /* JGProgressHUDFadeZoomAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D2124075F2B00E82675 /* JGProgressHUDFadeZoomAnimation.m */; };
-		4A580F7D24075F2D00E82675 /* JGProgressHUD Resources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4A580D2324075F2B00E82675 /* JGProgressHUD Resources.bundle */; };
-		4A580F7E24075F2D00E82675 /* JGProgressHUDImageIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D2424075F2B00E82675 /* JGProgressHUDImageIndicatorView.m */; };
-		4A580F7F24075F2D00E82675 /* JGProgressHUDSuccessIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D2624075F2B00E82675 /* JGProgressHUDSuccessIndicatorView.m */; };
-		4A580F8024075F2D00E82675 /* JGProgressHUDIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D2824075F2B00E82675 /* JGProgressHUDIndicatorView.m */; };
-		4A580F8124075F2D00E82675 /* JGProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D2B24075F2B00E82675 /* JGProgressHUD.m */; };
-		4A580F8224075F2D00E82675 /* JGProgressHUDFadeAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D2C24075F2B00E82675 /* JGProgressHUDFadeAnimation.m */; };
-		4A580F8324075F2D00E82675 /* JGProgressHUDRingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D2E24075F2B00E82675 /* JGProgressHUDRingIndicatorView.m */; };
-		4A580F8424075F2D00E82675 /* JGProgressHUDPieIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D2F24075F2B00E82675 /* JGProgressHUDPieIndicatorView.m */; };
 		4A580F8524075F2D00E82675 /* GeneralWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D3324075F2B00E82675 /* GeneralWebViewController.m */; };
 		4A580F8624075F2D00E82675 /* LGXSMSEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D3624075F2B00E82675 /* LGXSMSEngine.m */; };
 		4A580F8724075F2D00E82675 /* GuideNewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580D3A24075F2B00E82675 /* GuideNewController.m */; };
@@ -362,6 +350,12 @@
 		4A58106524075F2E00E82675 /* SCLAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580F1524075F2D00E82675 /* SCLAlertView.m */; };
 		4A64ECC1242B506A00D30FB1 /* DemandModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ECC0242B506A00D30FB1 /* DemandModel.m */; };
 		4A64ECC4242B5A5A00D30FB1 /* LivingModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ECC3242B5A5A00D30FB1 /* LivingModel.m */; };
+		4A64ECC7242C508500D30FB1 /* PLPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ECC6242C508500D30FB1 /* PLPlayerView.m */; };
+		4A64ECD2242C547B00D30FB1 /* UIView+Alert.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ECC8242C547900D30FB1 /* UIView+Alert.m */; };
+		4A64ECD3242C547B00D30FB1 /* NSString+URLCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ECCA242C547A00D30FB1 /* NSString+URLCheck.m */; };
+		4A64ECD4242C547B00D30FB1 /* UIButton+Animate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ECCC242C547A00D30FB1 /* UIButton+Animate.m */; };
+		4A64ECD5242C547B00D30FB1 /* NSObject+Auth.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ECCE242C547A00D30FB1 /* NSObject+Auth.m */; };
+		4A64ECD6242C547B00D30FB1 /* NSDate+Covert.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ECD1242C547A00D30FB1 /* NSDate+Covert.m */; };
 		4A7007DB241766660024DFB8 /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A7007C9241766650024DFB8 /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4A7007DC241766660024DFB8 /* SendMessageToWXReq+requestWithTextOrMediaMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A7007CC241766650024DFB8 /* SendMessageToWXReq+requestWithTextOrMediaMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4A7007DD241766660024DFB8 /* WXMediaMessage+messageConstruct.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A7007CD241766650024DFB8 /* WXMediaMessage+messageConstruct.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -870,30 +864,6 @@
 		4A580D1324075F2B00E82675 /* DTTimePeriodChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTTimePeriodChain.m; sourceTree = "<group>"; };
 		4A580D1424075F2B00E82675 /* NSDate+DateTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+DateTools.h"; sourceTree = "<group>"; };
 		4A580D1624075F2B00E82675 /* LGXHudManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGXHudManager.m; sourceTree = "<group>"; };
-		4A580D1824075F2B00E82675 /* JGProgressHUDSuccessIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGProgressHUDSuccessIndicatorView.h; sourceTree = "<group>"; };
-		4A580D1924075F2B00E82675 /* JGProgressHUDImageIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGProgressHUDImageIndicatorView.h; sourceTree = "<group>"; };
-		4A580D1A24075F2B00E82675 /* JGProgressHUDIndeterminateIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGProgressHUDIndeterminateIndicatorView.m; sourceTree = "<group>"; };
-		4A580D1B24075F2B00E82675 /* JGProgressHUDErrorIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGProgressHUDErrorIndicatorView.m; sourceTree = "<group>"; };
-		4A580D1C24075F2B00E82675 /* JGProgressHUDIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGProgressHUDIndicatorView.h; sourceTree = "<group>"; };
-		4A580D1D24075F2B00E82675 /* JGProgressHUDAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGProgressHUDAnimation.m; sourceTree = "<group>"; };
-		4A580D1E24075F2B00E82675 /* JGProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGProgressHUD.h; sourceTree = "<group>"; };
-		4A580D1F24075F2B00E82675 /* JGProgressHUDPieIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGProgressHUDPieIndicatorView.h; sourceTree = "<group>"; };
-		4A580D2024075F2B00E82675 /* JGProgressHUDRingIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGProgressHUDRingIndicatorView.h; sourceTree = "<group>"; };
-		4A580D2124075F2B00E82675 /* JGProgressHUDFadeZoomAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGProgressHUDFadeZoomAnimation.m; sourceTree = "<group>"; };
-		4A580D2224075F2B00E82675 /* JGProgressHUDFadeAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGProgressHUDFadeAnimation.h; sourceTree = "<group>"; };
-		4A580D2324075F2B00E82675 /* JGProgressHUD Resources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = "JGProgressHUD Resources.bundle"; sourceTree = "<group>"; };
-		4A580D2424075F2B00E82675 /* JGProgressHUDImageIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGProgressHUDImageIndicatorView.m; sourceTree = "<group>"; };
-		4A580D2524075F2B00E82675 /* JGProgressHUD-Defines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JGProgressHUD-Defines.h"; sourceTree = "<group>"; };
-		4A580D2624075F2B00E82675 /* JGProgressHUDSuccessIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGProgressHUDSuccessIndicatorView.m; sourceTree = "<group>"; };
-		4A580D2724075F2B00E82675 /* JGProgressHUDAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGProgressHUDAnimation.h; sourceTree = "<group>"; };
-		4A580D2824075F2B00E82675 /* JGProgressHUDIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGProgressHUDIndicatorView.m; sourceTree = "<group>"; };
-		4A580D2924075F2B00E82675 /* JGProgressHUDErrorIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGProgressHUDErrorIndicatorView.h; sourceTree = "<group>"; };
-		4A580D2A24075F2B00E82675 /* JGProgressHUDIndeterminateIndicatorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGProgressHUDIndeterminateIndicatorView.h; sourceTree = "<group>"; };
-		4A580D2B24075F2B00E82675 /* JGProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGProgressHUD.m; sourceTree = "<group>"; };
-		4A580D2C24075F2B00E82675 /* JGProgressHUDFadeAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGProgressHUDFadeAnimation.m; sourceTree = "<group>"; };
-		4A580D2D24075F2B00E82675 /* JGProgressHUDFadeZoomAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JGProgressHUDFadeZoomAnimation.h; sourceTree = "<group>"; };
-		4A580D2E24075F2B00E82675 /* JGProgressHUDRingIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGProgressHUDRingIndicatorView.m; sourceTree = "<group>"; };
-		4A580D2F24075F2B00E82675 /* JGProgressHUDPieIndicatorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JGProgressHUDPieIndicatorView.m; sourceTree = "<group>"; };
 		4A580D3024075F2B00E82675 /* LGXHudManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGXHudManager.h; sourceTree = "<group>"; };
 		4A580D3324075F2B00E82675 /* GeneralWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneralWebViewController.m; sourceTree = "<group>"; };
 		4A580D3424075F2B00E82675 /* GeneralWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneralWebViewController.h; sourceTree = "<group>"; };
@@ -1220,6 +1190,19 @@
 		4A64ECC0242B506A00D30FB1 /* DemandModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemandModel.m; sourceTree = "<group>"; };
 		4A64ECC2242B5A5A00D30FB1 /* LivingModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LivingModel.h; sourceTree = "<group>"; };
 		4A64ECC3242B5A5A00D30FB1 /* LivingModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LivingModel.m; sourceTree = "<group>"; };
+		4A64ECC5242C508400D30FB1 /* PLPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLPlayerView.h; sourceTree = "<group>"; };
+		4A64ECC6242C508500D30FB1 /* PLPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLPlayerView.m; sourceTree = "<group>"; };
+		4A64ECC8242C547900D30FB1 /* UIView+Alert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Alert.m"; sourceTree = "<group>"; };
+		4A64ECC9242C547900D30FB1 /* NSObject+Auth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Auth.h"; sourceTree = "<group>"; };
+		4A64ECCA242C547A00D30FB1 /* NSString+URLCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+URLCheck.m"; sourceTree = "<group>"; };
+		4A64ECCB242C547A00D30FB1 /* NSDate+Covert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Covert.h"; sourceTree = "<group>"; };
+		4A64ECCC242C547A00D30FB1 /* UIButton+Animate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Animate.m"; sourceTree = "<group>"; };
+		4A64ECCD242C547A00D30FB1 /* UIView+Alert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Alert.h"; sourceTree = "<group>"; };
+		4A64ECCE242C547A00D30FB1 /* NSObject+Auth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Auth.m"; sourceTree = "<group>"; };
+		4A64ECCF242C547A00D30FB1 /* NSString+URLCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+URLCheck.h"; sourceTree = "<group>"; };
+		4A64ECD0242C547A00D30FB1 /* UIButton+Animate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Animate.h"; sourceTree = "<group>"; };
+		4A64ECD1242C547A00D30FB1 /* NSDate+Covert.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Covert.m"; sourceTree = "<group>"; };
+		4A64ECD7242C579400D30FB1 /* MacroDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacroDefine.h; sourceTree = "<group>"; };
 		4A7007C9241766650024DFB8 /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GetMessageFromWXResp+responseWithTextOrMediaMessage.m"; sourceTree = "<group>"; };
 		4A7007CA241766650024DFB8 /* WXMediaMessage+messageConstruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WXMediaMessage+messageConstruct.h"; sourceTree = "<group>"; };
 		4A7007CB241766650024DFB8 /* Constant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constant.h; sourceTree = "<group>"; };
@@ -2288,42 +2271,10 @@
 		4A580D1524075F2B00E82675 /* HUD */ = {
 			isa = PBXGroup;
 			children = (
-				4A580D1724075F2B00E82675 /* JGProgressHUD */,
 				4A580D3024075F2B00E82675 /* LGXHudManager.h */,
 				4A580D1624075F2B00E82675 /* LGXHudManager.m */,
 			);
 			path = HUD;
-			sourceTree = "<group>";
-		};
-		4A580D1724075F2B00E82675 /* JGProgressHUD */ = {
-			isa = PBXGroup;
-			children = (
-				4A580D1824075F2B00E82675 /* JGProgressHUDSuccessIndicatorView.h */,
-				4A580D1924075F2B00E82675 /* JGProgressHUDImageIndicatorView.h */,
-				4A580D1A24075F2B00E82675 /* JGProgressHUDIndeterminateIndicatorView.m */,
-				4A580D1B24075F2B00E82675 /* JGProgressHUDErrorIndicatorView.m */,
-				4A580D1C24075F2B00E82675 /* JGProgressHUDIndicatorView.h */,
-				4A580D1D24075F2B00E82675 /* JGProgressHUDAnimation.m */,
-				4A580D1E24075F2B00E82675 /* JGProgressHUD.h */,
-				4A580D1F24075F2B00E82675 /* JGProgressHUDPieIndicatorView.h */,
-				4A580D2024075F2B00E82675 /* JGProgressHUDRingIndicatorView.h */,
-				4A580D2124075F2B00E82675 /* JGProgressHUDFadeZoomAnimation.m */,
-				4A580D2224075F2B00E82675 /* JGProgressHUDFadeAnimation.h */,
-				4A580D2324075F2B00E82675 /* JGProgressHUD Resources.bundle */,
-				4A580D2424075F2B00E82675 /* JGProgressHUDImageIndicatorView.m */,
-				4A580D2524075F2B00E82675 /* JGProgressHUD-Defines.h */,
-				4A580D2624075F2B00E82675 /* JGProgressHUDSuccessIndicatorView.m */,
-				4A580D2724075F2B00E82675 /* JGProgressHUDAnimation.h */,
-				4A580D2824075F2B00E82675 /* JGProgressHUDIndicatorView.m */,
-				4A580D2924075F2B00E82675 /* JGProgressHUDErrorIndicatorView.h */,
-				4A580D2A24075F2B00E82675 /* JGProgressHUDIndeterminateIndicatorView.h */,
-				4A580D2B24075F2B00E82675 /* JGProgressHUD.m */,
-				4A580D2C24075F2B00E82675 /* JGProgressHUDFadeAnimation.m */,
-				4A580D2D24075F2B00E82675 /* JGProgressHUDFadeZoomAnimation.h */,
-				4A580D2E24075F2B00E82675 /* JGProgressHUDRingIndicatorView.m */,
-				4A580D2F24075F2B00E82675 /* JGProgressHUDPieIndicatorView.m */,
-			);
-			path = JGProgressHUD;
 			sourceTree = "<group>";
 		};
 		4A580D3124075F2B00E82675 /* WWLibrary */ = {
@@ -2652,6 +2603,16 @@
 		4A580DCF24075F2C00E82675 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				4A64ECCB242C547A00D30FB1 /* NSDate+Covert.h */,
+				4A64ECD1242C547A00D30FB1 /* NSDate+Covert.m */,
+				4A64ECC9242C547900D30FB1 /* NSObject+Auth.h */,
+				4A64ECCE242C547A00D30FB1 /* NSObject+Auth.m */,
+				4A64ECCF242C547A00D30FB1 /* NSString+URLCheck.h */,
+				4A64ECCA242C547A00D30FB1 /* NSString+URLCheck.m */,
+				4A64ECD0242C547A00D30FB1 /* UIButton+Animate.h */,
+				4A64ECCC242C547A00D30FB1 /* UIButton+Animate.m */,
+				4A64ECCD242C547A00D30FB1 /* UIView+Alert.h */,
+				4A64ECC8242C547900D30FB1 /* UIView+Alert.m */,
 				4A580DD024075F2C00E82675 /* UIView+animations.m */,
 				4A580DD124075F2C00E82675 /* UIView+CustomAutoLayout.h */,
 				4A580DD224075F2C00E82675 /* NSDate+Common.h */,
@@ -3181,6 +3142,9 @@
 		4AB299BB240DEDE9004CA6B5 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				4A64ECD7242C579400D30FB1 /* MacroDefine.h */,
+				4A64ECC5242C508400D30FB1 /* PLPlayerView.h */,
+				4A64ECC6242C508500D30FB1 /* PLPlayerView.m */,
 				4AB299D3240E3173004CA6B5 /* HikUtils.h */,
 				4AB299D2240E3173004CA6B5 /* HikUtils.m */,
 				4AB299BC240DEE2D004CA6B5 /* DemandTitleCollectionCell.h */,
@@ -3511,6 +3475,7 @@
 				18BC745E3880348999A3D974 /* [CP] Copy Pods Resources */,
 				4AB299C7240E2DDB004CA6B5 /* Embed Frameworks */,
 				4AB29D5224122D02004CA6B5 /* CopyFiles */,
+				E84F079620E13668C5DB01B1 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -3716,7 +3681,6 @@
 				4AB29A05240F80D1004CA6B5 /* choose_area_up_image@3x.png in Resources */,
 				4A4606FB2407C513007C209A /* new_guide_p2_img@2x.png in Resources */,
 				4A4606EE2407C513007C209A /* Tabbar-3-select@3x.png in Resources */,
-				4A580F7D24075F2D00E82675 /* JGProgressHUD Resources.bundle in Resources */,
 				4AB299B9240DE3DF004CA6B5 /* demand_download_image@3x.png in Resources */,
 				4AB299E0240E36F4004CA6B5 /* playback_play_white_image@3x.png in Resources */,
 				4A4607302407C889007C209A /* Tabbar-4-normal@2x.png in Resources */,
@@ -3794,6 +3758,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		E84F079620E13668C5DB01B1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NetCamera/Pods-NetCamera-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-NetCamera/Pods-NetCamera-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-NetCamera/Pods-NetCamera-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -3845,8 +3826,6 @@
 				4A580BEF24075D0700E82675 /* AppDelegate.mm in Sources */,
 				4ABDA70924174023003B3170 /* Global.mm in Sources */,
 				4A511941242B082D005A3065 /* AFDownloadRequestOperation.m in Sources */,
-				4A580F8324075F2D00E82675 /* JGProgressHUDRingIndicatorView.m in Sources */,
-				4A580F8424075F2D00E82675 /* JGProgressHUDPieIndicatorView.m in Sources */,
 				4A580FEE24075F2D00E82675 /* MKNetworkEngine.m in Sources */,
 				4A58103624075F2E00E82675 /* IFTTTCornerRadiusAnimation.m in Sources */,
 				4A580F3124075F2D00E82675 /* WWPublicMethod.m in Sources */,
@@ -3856,6 +3835,7 @@
 				4AB299D4240E3173004CA6B5 /* HikUtils.m in Sources */,
 				4A58100024075F2D00E82675 /* MJRefreshAutoGifFooter.m in Sources */,
 				4A58102E24075F2E00E82675 /* IFTTTMaskAnimation.m in Sources */,
+				4A64ECD2242C547B00D30FB1 /* UIView+Alert.m in Sources */,
 				4A58100924075F2D00E82675 /* MJRefreshAutoFooter.m in Sources */,
 				4AB29A2D24109764004CA6B5 /* HKVideoPlaybackController.m in Sources */,
 				4A580F2324075F2D00E82675 /* UINavigationBar+Background.m in Sources */,
@@ -3906,6 +3886,7 @@
 				4A580F8E24075F2D00E82675 /* ZYBannerCell.m in Sources */,
 				4A580FD624075F2D00E82675 /* UIImageView+InitMethod.m in Sources */,
 				4A58101B24075F2D00E82675 /* UIViewController+ADTransition.m in Sources */,
+				4A64ECC7242C508500D30FB1 /* PLPlayerView.m in Sources */,
 				4A580FF624075F2D00E82675 /* UIScrollView+MJRefresh.m in Sources */,
 				4ABDA72024174023003B3170 /* PlayStream.cpp in Sources */,
 				4A580FD924075F2D00E82675 /* UIButton+BGColor.m in Sources */,
@@ -3948,7 +3929,6 @@
 				4A580F5E24075F2D00E82675 /* TCNewAlertView.m in Sources */,
 				4A58101224075F2D00E82675 /* UIViewController+ADScaleTransition.m in Sources */,
 				4A58106024075F2E00E82675 /* SCLAlertViewResponder.m in Sources */,
-				4A580F7A24075F2D00E82675 /* JGProgressHUDErrorIndicatorView.m in Sources */,
 				4A58100D24075F2D00E82675 /* UINavigationController+FDFullscreenPopGesture.m in Sources */,
 				4A580F1C24075F2D00E82675 /* UIScrollView+SVInfiniteScrolling.m in Sources */,
 				4A580F7824075F2D00E82675 /* LGXHudManager.m in Sources */,
@@ -3960,16 +3940,15 @@
 				4ABDA75524174023003B3170 /* EncodeConfig.mm in Sources */,
 				4A580FD024075F2D00E82675 /* LoginChooseCountriesCell.m in Sources */,
 				4A58106224075F2E00E82675 /* SCLSwitchView.m in Sources */,
-				4A580F7C24075F2D00E82675 /* JGProgressHUDFadeZoomAnimation.m in Sources */,
 				4A580F6824075F2D00E82675 /* CGXStringPickerView.m in Sources */,
 				4A511944242B082D005A3065 /* AESHelper.m in Sources */,
 				4A4608762408F426007C209A /* MyEquipmentsCell.m in Sources */,
 				4A580FDC24075F2D00E82675 /* UIView+badge.m in Sources */,
 				4A580FC424075F2D00E82675 /* RegistNewModel.m in Sources */,
+				4A64ECD5242C547B00D30FB1 /* NSObject+Auth.m in Sources */,
 				4A580F2B24075F2D00E82675 /* UIColor+_Hex.m in Sources */,
 				4A580FD124075F2D00E82675 /* LoginBottomViewCell.m in Sources */,
 				4A580F2924075F2D00E82675 /* LGXNavigationController.m in Sources */,
-				4A580F8024075F2D00E82675 /* JGProgressHUDIndicatorView.m in Sources */,
 				4A51193D242B082D005A3065 /* AFURLSessionManager.m in Sources */,
 				4A4608792408F438007C209A /* MyEquipmentsModel.m in Sources */,
 				4A580F8724075F2D00E82675 /* GuideNewController.m in Sources */,
@@ -3983,16 +3962,14 @@
 				4A511937242B082D005A3065 /* UIWebView+AFNetworking.m in Sources */,
 				4A511940242B082D005A3065 /* AFHTTPRequestOperation.m in Sources */,
 				4A580FE924075F2D00E82675 /* RefreshView.m in Sources */,
-				4A580F7B24075F2D00E82675 /* JGProgressHUDAnimation.m in Sources */,
 				4A511931242B082D005A3065 /* UIProgressView+AFNetworking.m in Sources */,
 				4A511936242B082D005A3065 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				4A580F2624075F2D00E82675 /* TwoLineLabelView.m in Sources */,
+				4A64ECD4242C547B00D30FB1 /* UIButton+Animate.m in Sources */,
 				4A580F2824075F2D00E82675 /* LGXButton.m in Sources */,
 				4A58103324075F2E00E82675 /* IFTTTLayerStrokeStartAnimation.m in Sources */,
 				4A580F8A24075F2D00E82675 /* EPPageControl.m in Sources */,
-				4A580F7E24075F2D00E82675 /* JGProgressHUDImageIndicatorView.m in Sources */,
 				4A58102624075F2E00E82675 /* IFTTTEasingFunction.m in Sources */,
-				4A580F7F24075F2D00E82675 /* JGProgressHUDSuccessIndicatorView.m in Sources */,
 				4A580F2F24075F2D00E82675 /* UUIDManager.m in Sources */,
 				4A58104224075F2E00E82675 /* JXActionSheet.m in Sources */,
 				4A58103724075F2E00E82675 /* IFTTTTranslationAnimation.m in Sources */,
@@ -4005,6 +3982,7 @@
 				4A580F5C24075F2D00E82675 /* WWCollectionView.m in Sources */,
 				4A51193A242B082D005A3065 /* AFURLResponseSerialization.m in Sources */,
 				4A58102124075F2D00E82675 /* IFTTTAnimatedPagingScrollViewController.m in Sources */,
+				4A64ECD6242C547B00D30FB1 /* NSDate+Covert.m in Sources */,
 				4A7007DE241766660024DFB8 /* WXApiResponseHandler.m in Sources */,
 				4A511948242B082D005A3065 /* UploadSence.m in Sources */,
 				4A580F1824075F2D00E82675 /* RefreshRightView.m in Sources */,
@@ -4026,17 +4004,16 @@
 				4A580F8624075F2D00E82675 /* LGXSMSEngine.m in Sources */,
 				4A580FF424075F2D00E82675 /* NSAlert+MKNetworkKitAdditions.m in Sources */,
 				4A51192C242B082D005A3065 /* MyMD5.m in Sources */,
-				4A580F8224075F2D00E82675 /* JGProgressHUDFadeAnimation.m in Sources */,
 				4A58101724075F2D00E82675 /* ADFlipTransition.m in Sources */,
 				4A64ECC1242B506A00D30FB1 /* DemandModel.m in Sources */,
 				4A580F3024075F2D00E82675 /* MarginLabel.m in Sources */,
-				4A580F7924075F2D00E82675 /* JGProgressHUDIndeterminateIndicatorView.m in Sources */,
 				4A58102424075F2D00E82675 /* IFTTTAlphaAnimation.m in Sources */,
 				4A58102F24075F2E00E82675 /* IFTTTAnimatedScrollViewController.m in Sources */,
 				4A46089D24091381007C209A /* PersonInfoViewCell.m in Sources */,
 				4A580F2424075F2D00E82675 /* LGXVerticalButton.m in Sources */,
 				4A580FE124075F2D00E82675 /* PageMenuScrollView.m in Sources */,
 				4A58105F24075F2E00E82675 /* SCLAlertViewStyleKit.m in Sources */,
+				4A64ECD3242C547B00D30FB1 /* NSString+URLCheck.m in Sources */,
 				4A580F6024075F2D00E82675 /* LEEAlert.m in Sources */,
 				4A58101024075F2D00E82675 /* FTAnimationManager.m in Sources */,
 				4A580FC524075F2D00E82675 /* RegisterSence.m in Sources */,
@@ -4070,7 +4047,6 @@
 				4A580F6C24075F2D00E82675 /* LGXBadgeManager.m in Sources */,
 				4A511935242B082D005A3065 /* UIButton+AFNetworking.m in Sources */,
 				4A58100724075F2D00E82675 /* MJRefreshHeader.m in Sources */,
-				4A580F8124075F2D00E82675 /* JGProgressHUD.m in Sources */,
 				4A58101F24075F2D00E82675 /* IFTTTLayerFillColorAnimation.m in Sources */,
 				4AA2EE622407A0EE00C4F5DA /* DemandViewController.m in Sources */,
 				4A580FCE24075F2D00E82675 /* VersionUpdateView.m in Sources */,

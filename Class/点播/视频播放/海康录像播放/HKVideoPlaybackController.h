@@ -10,8 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class DemandModel;
 @interface HKVideoPlaybackController : WWViewController
 @property (nonatomic,strong) NSString *video_id;
+@property (nonatomic,strong) DemandModel *model;
 
 @end
 

@@ -15,7 +15,9 @@
 #import "VideoPlaybackViewCell.h"
 #import "LGXThirdEngine.h"
 #import "ShareSDKMethod.h"
-
+#import <PLPlayerKit/PLPlayerKit.h>
+#import "PLPlayerView.h"
+#import "DemandModel.h"
 
 #define kIndicatorViewSize 50
 static NSTimeInterval const kToastDuration = 1;
@@ -23,7 +25,8 @@ static NSTimeInterval const kToastDuration = 1;
 static CGFloat const kZoomMinScale   = 1.0f;
 static CGFloat const kZoomMaxScale   = 10.0f;
 
-@interface HKVideoPlaybackController ()<HVPPlayerDelegate, UIGestureRecognizerDelegate,UICollectionViewDelegate,UICollectionViewDataSource>
+@interface HKVideoPlaybackController ()<HVPPlayerDelegate, UIGestureRecognizerDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PLPlayerDelegate,PLPlayerViewDelegate>
+
 @property (nonatomic, strong) UIView *playView;
 @property (nonatomic, strong) UIButton *fullScreenBtn;
 @property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
@@ -62,6 +65,13 @@ static CGFloat const kZoomMaxScale   = 10.0f;
 @property (nonatomic, strong) LGXShareParams *shareParams;
 
 
+//七牛播放器
+@property (nonatomic, strong) PLPlayer  *PLPlayer;
+
+@property (nonatomic, assign) BOOL isNeedReset;
+@property (nonatomic, strong) PLPlayerView *playerView;
+
+@property (nonatomic,strong) UIButton *backBtn;//返回按钮
 
 @end
 
@@ -114,6 +124,12 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     self.FDPrefersNavigationBarHidden = YES;
+    
+//
+//    NSDictionary *dic = [WWPublicMethod objectTransFromJson:self.video_id];
+//    _model = [dic objectForKey:@"video"];
+//
+
     [self creadVideoPlayBackView];
     [self setupStartEndTime];
     [self setupOtherView];
@@ -127,6 +143,16 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     [self.collectionView alignTop:heiStr leading:@"0" bottom:nil trailing:@"0" toView:self.view];
     [self.collectionView addHeight:130];
     
+    //返回按钮
+    _backBtn = [UIButton new];
+    [_backBtn setImage:UIImageWithFileName(@"icon_back_gray") forState:UIControlStateNormal];
+    [_backBtn addTarget:self action:@selector(backButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [_backBtn setBGColor:UIColorFromRGB(0xffffff, 0) forState:UIControlStateNormal];
+    [self.view addSubview:_backBtn];
+    [_backBtn leftToView:self.view withSpace:2];
+    [_backBtn topToView:self.view withSpace:32];
+    [_backBtn addWidth:40];
+    [_backBtn addHeight:40];
     
 }
 -(void)creadVideoPlayBackView
@@ -134,92 +160,165 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     self.playView = [UIView new];
     self.playView.backgroundColor = UIColorClearColor;
     [self.view addSubview:self.playView];
-    self.playView.frame = CGRectMake(0, 0, kScreenWidth, kScreenWidth*0.6);
+    [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(self.view);
+        make.height.equalTo(kScreenWidth*0.6);
+    }];
+    
+//    PLPlayerOption *option = [PLPlayerOption defaultOption];
+//    [option setOptionValue:@15 forKey:PLPlayerOptionKeyTimeoutIntervalForMediaPackets];
+//    NSURL *url = [NSURL URLWithString:self.video_id];
+//    self.PLPlayer = [PLPlayer playerWithURL:url option:option];
+//    self.PLPlayer.delegate = self;
+//    [self.playView addSubview:self.PLPlayer.playerView];
+//    self.PLPlayer.playerView.frame = self.playView.frame;
 
     
-    UIImageView *backImageView = [UIImageView new];
-    backImageView.image = UIImageWithFileName(@"playback_back_image");
-    [self.playView addSubview:backImageView];
-    [backImageView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.playView];
+//    UIImageView *backImageView = [UIImageView new];
+//    backImageView.image = UIImageWithFileName(@"playback_back_image");
+//    [self.playView addSubview:backImageView];
+//    [backImageView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.playView];
+    
+   
+
+    
+//    //分享按钮
+//    UIButton *shareBtn = [UIButton new];
+//    [shareBtn setImage:UIImageWithFileName(@"playback_shares_image") forState:UIControlStateNormal];
+//    [shareBtn addTarget:self action:@selector(shareButtonClick) forControlEvents:UIControlEventTouchUpInside];
+//    [self.playView addSubview:shareBtn];
+//    [shareBtn yCenterToView:backBtn];
+//    [shareBtn rightToView:self.playView withSpace:15];
+//
+//    //播放按钮
+//    UIButton *playBtn = [UIButton new];
+//    [playBtn setImage:UIImageWithFileName(@"playback_play_white_image") forState:UIControlStateNormal];
+//    [playBtn addTarget:self action:@selector(playbackButtonClick) forControlEvents:UIControlEventTouchUpInside];
+//    [self.playView addSubview:playBtn];
+//    [playBtn leftToView:self.playView withSpace:15];
+//    [playBtn bottomToView:self.playView withSpace:10];
+//
+//
+//    //全屏按钮
+//    UIButton *fullBtn = [UIButton new];
+//    [fullBtn setImage:UIImageWithFileName(@"playback_full_image") forState:UIControlStateNormal];
+//    [fullBtn addTarget:self action:@selector(fullScreenButtonClick) forControlEvents:UIControlEventTouchUpInside];
+//    [self.playView addSubview:fullBtn];
+//    [fullBtn yCenterToView:playBtn];
+//    [fullBtn xCenterToView:shareBtn];
+//
+//
+//
+//    //当前播放时长
+//    _currentPlayTimeLabel = [UILabel new];
+//    _currentPlayTimeLabel.text = @"03:16";
+//    _currentPlayTimeLabel.textColor = [UIColor whiteColor];
+//    _currentPlayTimeLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
+//    _currentPlayTimeLabel.textAlignment = NSTextAlignmentCenter;
+//    [self.playView addSubview:_currentPlayTimeLabel];
+//    [_currentPlayTimeLabel yCenterToView:playBtn];
+//    [_currentPlayTimeLabel leftToView:playBtn withSpace:15];
+//
+//    //总时长
+//    _endTimeLabel = [UILabel new];
+//    _endTimeLabel.text = @"/39:31";
+//    _endTimeLabel.textColor = [UIColor whiteColor];
+//    _endTimeLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
+//    _endTimeLabel.textAlignment = NSTextAlignmentCenter;
+//    [self.playView addSubview:_endTimeLabel];
+//    [_endTimeLabel yCenterToView:playBtn];
+//    [_endTimeLabel leftToView:_currentPlayTimeLabel];
+//
+//    //进度条
+//    _progressSlider = [UISlider new];
+//    _progressSlider.minimumTrackTintColor = UIColorFromRGB(0xff3b23, 1);
+//    _progressSlider.maximumTrackTintColor = [UIColor whiteColor];
+//    _progressSlider.thumbTintColor = UIColorFromRGB(0xff3b23, 1);
+////    // 通常状态下
+////    [_progressSlider setThumbImage:[UIImage imageNamed:@"iconfont-yuandian"] forState:UIControlStateNormal];
+////    // 滑动状态下
+////    [_progressSlider setThumbImage:[UIImage imageNamed:@"iconfont-yuandian"] forState:UIControlStateHighlighted];
+//
+//    [self.playView addSubview:_progressSlider];
+//    [_progressSlider yCenterToView:playBtn];
+//    [_progressSlider leftToView:_endTimeLabel withSpace:20];
+//    [_progressSlider addWidth:kScreenWidth-210];
     
     
-    
-    //返回按钮
-    UIButton *backBtn = [UIButton new];
-    [backBtn setImage:UIImageWithFileName(@"icon_back_gray") forState:UIControlStateNormal];
-    [backBtn addTarget:self action:@selector(backButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [backBtn setBGColor:UIColorFromRGB(0xffffff, 0) forState:UIControlStateNormal];
-    [self.playView addSubview:backBtn];
-    [backBtn leftToView:self.playView withSpace:2];
-    [backBtn topToView:self.playView withSpace:32];
-    [backBtn addWidth:40];
-    [backBtn addHeight:40];
-    
-    
-    //分享按钮
-    UIButton *shareBtn = [UIButton new];
-    [shareBtn setImage:UIImageWithFileName(@"playback_shares_image") forState:UIControlStateNormal];
-    [shareBtn addTarget:self action:@selector(shareButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.playView addSubview:shareBtn];
-    [shareBtn yCenterToView:backBtn];
-    [shareBtn rightToView:self.playView withSpace:15];
-    
-    //播放按钮
-    UIButton *playBtn = [UIButton new];
-    [playBtn setImage:UIImageWithFileName(@"playback_play_white_image") forState:UIControlStateNormal];
-    [playBtn addTarget:self action:@selector(playbackButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.playView addSubview:playBtn];
-    [playBtn leftToView:self.playView withSpace:15];
-    [playBtn bottomToView:self.playView withSpace:10];
-    
-    
-    //全屏按钮
-    UIButton *fullBtn = [UIButton new];
-    [fullBtn setImage:UIImageWithFileName(@"playback_full_image") forState:UIControlStateNormal];
-    [fullBtn addTarget:self action:@selector(fullScreenButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.playView addSubview:fullBtn];
-    [fullBtn yCenterToView:playBtn];
-    [fullBtn xCenterToView:shareBtn];
-    
-    
-    
-    //当前播放时长
-    _currentPlayTimeLabel = [UILabel new];
-    _currentPlayTimeLabel.text = @"03:16";
-    _currentPlayTimeLabel.textColor = [UIColor whiteColor];
-    _currentPlayTimeLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
-    _currentPlayTimeLabel.textAlignment = NSTextAlignmentCenter;
-    [self.playView addSubview:_currentPlayTimeLabel];
-    [_currentPlayTimeLabel yCenterToView:playBtn];
-    [_currentPlayTimeLabel leftToView:playBtn withSpace:15];
-    
-    //总时长
-    _endTimeLabel = [UILabel new];
-    _endTimeLabel.text = @"/39:31";
-    _endTimeLabel.textColor = [UIColor whiteColor];
-    _endTimeLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
-    _endTimeLabel.textAlignment = NSTextAlignmentCenter;
-    [self.playView addSubview:_endTimeLabel];
-    [_endTimeLabel yCenterToView:playBtn];
-    [_endTimeLabel leftToView:_currentPlayTimeLabel];
-    
-    //进度条
-    _progressSlider = [UISlider new];
-    _progressSlider.minimumTrackTintColor = UIColorFromRGB(0xff3b23, 1);
-    _progressSlider.maximumTrackTintColor = [UIColor whiteColor];
-    _progressSlider.thumbTintColor = UIColorFromRGB(0xff3b23, 1);
-//    // 通常状态下
-//    [_progressSlider setThumbImage:[UIImage imageNamed:@"iconfont-yuandian"] forState:UIControlStateNormal];
-//    // 滑动状态下
-//    [_progressSlider setThumbImage:[UIImage imageNamed:@"iconfont-yuandian"] forState:UIControlStateHighlighted];
-    
-    [self.playView addSubview:_progressSlider];
-    [_progressSlider yCenterToView:playBtn];
-    [_progressSlider leftToView:_endTimeLabel withSpace:20];
-    [_progressSlider addWidth:kScreenWidth-210];
-    
+     
+    self.playerView = [[PLPlayerView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 200)];
+    self.playerView.delegate = self;
+    [self.playView addSubview:self.playerView];
+    self.playerView.media = _model;
+    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.playView);
+    }];
+
+    [self configureVideo:NO];
 }
 
+- (void)play {
+    [self.playerView play];
+    self.isPlaying = YES;
+}
+
+- (void)stop {
+    [self.playerView stop];
+    self.isPlaying = NO;
+}
+
+- (void)configureVideo:(BOOL)enableRender {
+    [self.playerView configureVideo:enableRender];
+}
+
+- (void)playerViewEnterFullScreen:(PLPlayerView *)playerView {
+    
+//    UIView *superView = [UIApplication sharedApplication].delegate.window.rootViewController.view;
+    UIView *superView = [[UIApplication sharedApplication] keyWindow];
+    [self.playerView removeFromSuperview];
+    [superView addSubview:self.playerView];
+    [self.playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(superView.mas_height);
+        make.height.equalTo(superView.mas_width);
+        make.center.equalTo(superView);
+    }];
+    
+    [superView setNeedsUpdateConstraints];
+    [superView updateConstraintsIfNeeded];
+
+    [UIView animateWithDuration:.3 animations:^{
+        [superView layoutIfNeeded];
+    }];
+
+    self.isFullScreen = YES;
+    _backBtn.hidden = YES;
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void)playerViewExitFullScreen:(PLPlayerView *)playerView {
+    
+    [self.playerView removeFromSuperview];
+    [self.playView addSubview:self.playerView];
+    
+    [self.playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.playView);
+    }];
+    
+    [self.view setNeedsUpdateConstraints];
+    [self.view updateConstraintsIfNeeded];
+
+    [UIView animateWithDuration:.3 animations:^{
+        [self.view layoutIfNeeded];
+    }];
+    
+    self.isFullScreen = NO;
+    _backBtn.hidden = NO;
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void)playerViewWillPlay:(PLPlayerView *)playerView {
+//    [self.playerView.delegate playerViewWillPlay:self.playerView];
+}
 -(void)setupOtherView
 {
     _videoNameLabel = [UILabel new];
@@ -306,25 +405,8 @@ static CGFloat const kZoomMaxScale   = 10.0f;
 //返回按钮
 -(void)backButtonClick
 {
-    if (self.isFullScreen) {
-        if (!self.isFullScreen) {
-            return;
-        }
-        
-        CGRect frame = [self.playerSuperView convertRect:self.playerFrame toView:[UIApplication sharedApplication].keyWindow];
-        [UIView animateWithDuration:0.3 animations:^{
-            self.playView.transform = CGAffineTransformIdentity;
-            self.playView.frame = frame;
-        } completion:^(BOOL finished) {
-            [self.playView removeFromSuperview];
-            [self.fullScreenBtn removeFromSuperview];
-            self.playView.frame = self.playerFrame;
-            [self.playerSuperView addSubview:self.playView];
-            [self.playerSuperView addSubview:self.fullScreenBtn];
-            self.isFullScreen = NO;
-//            [self.fullScreenBtn setTitle:@"切为全屏" forState:UIControlStateNormal];
-        }];
-    }else{
+    if (!self.isFullScreen) {
+        [self stop];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -364,6 +446,10 @@ static CGFloat const kZoomMaxScale   = 10.0f;
 //播放按钮
 -(void)playbackButtonClick
 {
+    [self.PLPlayer play];
+    
+    return;
+   
     
 //    if (_playbackTextField.text.length == 0) {
 //        [self.view makeToast:@"请输入回放的URL" duration:kToastDuration position:CSToastPositionCenter];
@@ -401,6 +487,23 @@ static CGFloat const kZoomMaxScale   = 10.0f;
 //        [self.view makeToast:message duration:kToastDuration position:CSToastPositionCenter];
 //    }
 }
+
+#pragma mark -PLPlayerDelegate
+// 实现 <PLPlayerDelegate> 来控制流状态的变更
+- (void)player:(nonnull PLPlayer *)player statusDidChange:(PLPlayerStatus)state {
+  // 这里会返回流的各种状态，你可以根据状态做 UI 定制及各类其他业务操作
+  // 除了 Error 状态，其他状态都会回调这个方法
+  // 开始播放，当连接成功后，将收到第一个 PLPlayerStatusCaching 状态
+  // 第一帧渲染后，将收到第一个 PLPlayerStatusPlaying 状态
+  // 播放过程中出现卡顿时，将收到 PLPlayerStatusCaching 状态
+  // 卡顿结束后，将收到 PLPlayerStatusPlaying 状态
+  // 点播结束后，将收到 PLPlayerStatusCompleted 状态
+    
+    
+    
+    
+}
+
 //分享按钮
 -(void)shareButtonClick
 {

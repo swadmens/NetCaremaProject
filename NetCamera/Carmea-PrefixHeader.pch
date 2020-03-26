@@ -14,6 +14,9 @@
 // You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
 #ifdef __OBJC__
 
+#define MAS_SHORTHAND_GLOBALS
+
+
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import "WWDefines.h"
@@ -37,10 +40,22 @@
 #import "UIColor+custom.h"
 #import "UIFont+custom.h"
 #import "UIView+badge.h"
-#import "LGXAutoLayout.h"
 #import "LGXDatePicker.h"
 #import "TCNewAlertView.h"
 #import "IQKeyboardManager.h"
 #import "GlobalDefine.h"
+
+#import <PLPlayerKit/PLPlayerKit.h>
+#import <Masonry.h>
+#import "LGXAutoLayout.h"
+
+
+// category
+#import "UIView+Alert.h"
+#import "UIButton+Animate.h"
+#import "NSString+URLCheck.h"
+#import "NSDate+Covert.h"
+#import "NSObject+Auth.h"
+#import "MacroDefine.h"
 
 #endif /* PrefixHeader_pch */

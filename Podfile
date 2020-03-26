@@ -21,6 +21,10 @@ pod 'XLPhotoBrowser+CoderXL'
 pod 'YHPhotoBrowser','~> 0.0.5'
 pod 'YYWebImage'
 pod 'SocketRocket'
+pod 'Masonry', '>= 1.0.1'
+
+pod 'MMMaterialDesignSpinner'
+pod 'JGProgressHUD'
 
 
 # 主模块(必须)
@@ -38,5 +42,9 @@ pod 'SocketRocket'
 # 使用配置文件分享模块（非必需）
  pod 'ShareSDK3/ShareSDKConfigurationFile'
 
+ #七牛云播放器
+ pod 'PLPlayerKit'
+ 
+ 
  
 end

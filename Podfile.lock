@@ -1,5 +1,6 @@
 PODS:
-  - IQKeyboardManager (6.2.0)
+  - IQKeyboardManager (6.5.5)
+  - JGProgressHUD (2.1)
   - JSPatch (1.1.3):
     - JSPatch/Core (= 1.1.3)
   - JSPatch/Core (1.1.3)
@@ -10,7 +11,11 @@ PODS:
   - LGXLayout (1.0.0):
     - Masonry
   - Masonry (1.1.0)
+  - MMMaterialDesignSpinner (0.2.5)
   - MOBFoundation (2.2.19)
+  - PLPlayerKit (3.4.3):
+    - PLPlayerKit/iphoneos (= 3.4.3)
+  - PLPlayerKit/iphoneos (3.4.3)
   - PonyDebugger (0.4.3):
     - SocketRocket
   - ReactiveCocoa (2.5):
@@ -57,9 +62,13 @@ PODS:
 
 DEPENDENCIES:
   - IQKeyboardManager
+  - JGProgressHUD
   - JSPatchPlatform
   - LGXLayout
+  - Masonry (>= 1.0.1)
+  - MMMaterialDesignSpinner
   - MOBFoundation (~> 2.2.3)
+  - PLPlayerKit
   - PonyDebugger (= 0.4.3)
   - ReactiveCocoa (= 2.5)
   - ShareSDK3 (~> 3.5.2)
@@ -79,11 +88,14 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
     - IQKeyboardManager
+    - JGProgressHUD
     - JSPatch
     - JSPatchPlatform
     - LGXLayout
     - Masonry
+    - MMMaterialDesignSpinner
     - MOBFoundation
+    - PLPlayerKit
     - PonyDebugger
     - ReactiveCocoa
     - SDWebImage
@@ -98,12 +110,15 @@ SPEC REPOS:
     - YYWebImage
 
 SPEC CHECKSUMS:
-  IQKeyboardManager: 6194101620b73af5e67900b8f89707a99de0b804
+  IQKeyboardManager: 3a8b9e603f8b0eeaf5f096a1f2b2cfcf121992ef
+  JGProgressHUD: aa403e9a5b45cae98903c4600cccdd98c0c3ec90
   JSPatch: 02cfed591cb907bbfe80a346666e5a35fc2d349d
   JSPatchPlatform: 8cc9aaebe21109d5fdfb4500384ddf38ed0990e9
   LGXLayout: c4756241405146dbd0be48cc1b5dabd4298f68ca
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MMMaterialDesignSpinner: a548042720c2e5f04212048483085d7942ac3e81
   MOBFoundation: e962b2aee79e2b8f626e2d30c2f23e9f13e5331e
+  PLPlayerKit: a44734dc78c1f8f9fb22c537fa1916612fa46b06
   PonyDebugger: 52f96f501df018dc2b7153fa18464b82553e700c
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
@@ -117,6 +132,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   YYWebImage: 5f7f36aee2ae293f016d418c7d6ba05c4863e928
 
-PODFILE CHECKSUM: 01c287a0445b44a6de31775a7d6506a99a9f2e8e
+PODFILE CHECKSUM: 45d01ecbbbc7adf9ee076a13774e6745490eeaaf
 
 COCOAPODS: 1.9.0

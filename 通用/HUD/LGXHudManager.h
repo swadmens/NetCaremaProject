@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "JGProgressHUD.h"
+#import <JGProgressHUD.h>
 
 #define _kHUDManager [LGXHudManager sharedInstance]
 
