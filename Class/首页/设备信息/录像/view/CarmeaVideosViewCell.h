@@ -10,13 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class DemandModel;
+@class CarmeaVideosModel;
 @interface CarmeaVideosViewCell : WWCollectionViewCell
 
 @property (nonatomic,assign) BOOL isEdit;
 @property (nonatomic,assign) BOOL isChoosed;
 
--(void)makeCellData:(DemandModel*)model;
+-(void)makeCellData:(CarmeaVideosModel*)model;
 
 @end
 

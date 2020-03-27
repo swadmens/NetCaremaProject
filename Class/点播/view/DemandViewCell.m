@@ -1,16 +1,16 @@
 //
-//  CarmeaVideosViewCell.m
+//  DemandViewCell.m
 //  NetCamera
 //
-//  Created by 汪伟 on 2020/3/2.
+//  Created by 汪伟 on 2020/3/27.
 //  Copyright © 2020 Guangzhou Eston Trade Co.,Ltd. All rights reserved.
 //
 
-#import "CarmeaVideosViewCell.h"
+#import "DemandViewCell.h"
+#import "DemandModel.h"
 #import <UIImageView+YYWebImage.h>
-#import "CarmeaVideosModel.h"
 
-@interface CarmeaVideosViewCell ()
+@interface DemandViewCell ()
 
 @property (nonatomic,strong) UIButton *selectBtn;
 
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation CarmeaVideosViewCell
+@implementation DemandViewCell
 -(void)doSetup
 {
     [super doSetup];
@@ -45,39 +45,13 @@
     [self.contentView addSubview:_titleLabel];
     [_titleLabel leftToView:self.contentView withSpace:8];
     [_titleLabel topToView:_showImageView withSpace:10];
-    
-//    button_unselect_image
-//    button_select_image
-    
-    
-    _selectBtn = [UIButton new];
-    _selectBtn.hidden = YES;
-    [_selectBtn setImage:UIImageWithFileName(@"button_select_image") forState:UIControlStateSelected];
-    [_selectBtn setImage:UIImageWithFileName(@"button_unselect_image") forState:UIControlStateNormal];
-    [_showImageView addSubview:_selectBtn];
-    [_selectBtn bottomToView:_showImageView withSpace:10];
-    [_selectBtn rightToView:_showImageView withSpace:10];
-
-    
 }
 
--(void)makeCellData:(CarmeaVideosModel *)model
+-(void)makeCellData:(DemandModel *)model
 {
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
+//    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] options:YYWebImageOptionProgressive];
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
     _titleLabel.text = model.video_name;
 }
--(void)setIsEdit:(BOOL)isEdit
-{
-    _selectBtn.hidden = !isEdit;
-}
--(void)setIsChoosed:(BOOL)isChoosed
-{
-    _selectBtn.selected = !isChoosed;
-}
-//-(void)setSelected:(BOOL)selected
-//{
-//    [super setSelected:selected];
-//    _selectBtn.hidden = selected;
-//    _selectBtn.selected = selected;
-//}
+
 @end

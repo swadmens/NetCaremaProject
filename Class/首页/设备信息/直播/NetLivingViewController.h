@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NetLivingViewController : WWViewController
 
+@property (nonatomic,strong) NSString *equiment_id;
+
 @end
 
 NS_ASSUME_NONNULL_END

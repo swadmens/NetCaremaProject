@@ -268,7 +268,7 @@ UIEdgeInsets scrollViewOriginalContentInsets;
         _buttonView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         _buttonView.backgroundColor = [UIColor clearColor];
         [self updateButtonTitleColor];
-        [_buttonView setTitle:NSLocalizedString(@"LoadMore", nil) forState:UIControlStateNormal];
+        [_buttonView setTitle:@"加载更多..." forState:UIControlStateNormal];
         [_buttonView addTarget:self action:@selector(action_clicked:) forControlEvents:UIControlEventTouchUpInside];
         
         [self addSubview:_buttonView];

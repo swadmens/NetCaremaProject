@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ConnectionMonitoringCell : WWTableViewCell
 
+-(void)makeCellData:(NSDictionary*)dic;
+
 @end
 
 NS_ASSUME_NONNULL_END

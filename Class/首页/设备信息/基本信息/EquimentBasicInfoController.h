@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface EquimentBasicInfoController : WWViewController
 
-
+@property (nonatomic,strong) NSString *equiment_id;
 
 
 @end

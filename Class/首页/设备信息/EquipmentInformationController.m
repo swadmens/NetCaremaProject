@@ -67,10 +67,14 @@
     
     //
     self.basicController.view.tag = 0;
+    self.basicController.equiment_id = self.equiment_id;
+    [self.basicController loadViewIfNeeded];
     
     self.liveController.view.tag = 1;
+    self.liveController.equiment_id = self.equiment_id;
     
     self.videoController.view.tag = 2;
+    self.videoController.equiment_id = self.equiment_id;
     
     self.pagesArray = @[
                         self.basicController,
@@ -183,11 +187,15 @@
 //右上角按钮点击
 -(void)right_clicked
 {
+    [self.view endEditing:YES];
     if (self.pages == 2) {
         _rightBtn.selected = !_rightBtn.selected;
         NSDictionary *dic = @{@"edit":@(_rightBtn.selected)};
         //注册通知
         [[NSNotificationCenter defaultCenter] postNotificationName:@"editStates" object:nil userInfo:dic];
+    }else if (self.pages == 0){
+        //注册通知
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"saveInfomation" object:nil userInfo:nil];
     }
     
 }

@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,assign) BOOL isEdit;//是否是编辑
 
+@property (nonatomic,strong) NSString *equiment_id;
 
 @end
 

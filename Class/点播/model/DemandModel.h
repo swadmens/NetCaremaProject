@@ -41,6 +41,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *videoUrl;
 @property (nonatomic,strong) NSString *videoCodec;
 
+
+@property (nonatomic,strong) NSString *hls;
+@property (nonatomic,strong) NSString *important;
+@property (nonatomic,strong) NSString *snap;
+@property (nonatomic,strong) NSString *start_time;
+@property (nonatomic,strong) NSString *time;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

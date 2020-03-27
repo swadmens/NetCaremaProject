@@ -97,6 +97,10 @@
     
     [self setupNoDataView];
     [self setupTableView];
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     [self loadNewData];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -121,7 +125,23 @@
     
 //    NSString *url = [NSString stringWithFormat:@"https://leo.quarkioe.com/apps/androidapp/#/device/%@/dashboard/%@",model.childId,model.wechat[0]];
     MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    [TargetEngine controller:self pushToController:PushTargetEquipmentInformation WithTargetId:model.equipment_id];
+    
+    
+    NSDictionary *dic = @{
+                          @"id":model.equipment_id,
+                          @"name":model.equipment_name,
+                          @"c8y_Notes":model.c8y_Notes,
+                          @"CameraId":model.CameraId,
+                          @"Channel":model.equipment_Channel,
+                          @"ClientId":model.ClientId,
+                          @"DeviceId":model.DeviceId,
+                          @"owner":model.owner,
+                          @"lastUpdated":model.lastUpdated,
+                          @"responseInterval":model.responseInterval,
+                         };
+    NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
+
+    [TargetEngine controller:self pushToController:PushTargetEquipmentInformation WithTargetId:pushId];
 
 }
 

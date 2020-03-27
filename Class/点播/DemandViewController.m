@@ -9,7 +9,7 @@
 #import "DemandViewController.h"
 #import "WWCollectionView.h"
 #import "DemandTitleCollectionCell.h"
-#import "CarmeaVideosViewCell.h"
+#import "DemandViewCell.h"
 #import "AFHTTPSessionManager.h"
 #import "DemandModel.h"
 #import "HKVideoPlaybackController.h"
@@ -197,7 +197,7 @@
         _collectionView = [[WWCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowlayout];
         _collectionView.backgroundColor = kColorBackgroundColor;
         // 注册
-        [_collectionView registerClass:[CarmeaVideosViewCell class] forCellWithReuseIdentifier:[CarmeaVideosViewCell getCellIDStr]];
+        [_collectionView registerClass:[DemandViewCell class] forCellWithReuseIdentifier:[DemandViewCell getCellIDStr]];
         
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
@@ -284,7 +284,8 @@
 
         return cell;
     }else{
-         CarmeaVideosViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[CarmeaVideosViewCell getCellIDStr] forIndexPath:indexPath];
+         
+        DemandViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[DemandViewCell getCellIDStr] forIndexPath:indexPath];
         DemandModel *model = [self.dataArray objectAtIndex:indexPath.row];
         [cell makeCellData:model];
        
@@ -421,6 +422,7 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error: %@", error);
+        [self failedOperation];
     }];
     
 }

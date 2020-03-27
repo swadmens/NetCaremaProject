@@ -79,6 +79,7 @@
     _equipment_name.layer.borderColor = kColorLineColor.CGColor;
     _equipment_name.layer.borderWidth = 0.5;
     _equipment_name.textColor = kColorMainTextColor;
+    _equipment_name.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [cardView addSubview:_equipment_name];
     [_equipment_name yCenterToView:nameLabel];
     [_equipment_name leftToView:nameLabel withSpace:8];
@@ -142,6 +143,7 @@
     _annotation_view.layer.borderColor = kColorLineColor.CGColor;
     _annotation_view.layer.borderWidth = 0.5;
     _annotation_view.textColor = kColorMainTextColor;
+    _annotation_view.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [cardView addSubview:_annotation_view];
     [_annotation_view topToView:lineLabel3 withSpace:10];
     [_annotation_view leftToView:explanLabel withSpace:8];
@@ -194,6 +196,27 @@
     [_timeLabel topToView:_equipment_user withSpace:7];
     
     
+}
+-(void)makeCellData:(NSDictionary *)dic
+{
+    _equipment_name.text = [dic objectForKey:@"name"];
+    _annotation_view.text = [dic objectForKey:@"c8y_Notes"];
+    _equipment_id.text = [NSString stringWithFormat:@"ID：%@",[dic objectForKey:@"id"]];
+    _equipment_user.text = [NSString stringWithFormat:@"拥有者：%@",[dic objectForKey:@"owner"]];
+    _timeLabel.text = [NSString stringWithFormat:@"最近更新：%@",[dic objectForKey:@"lastUpdated"]];
+
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if (self.textFieldName) {
+        self.textFieldName(textField.text);
+    }
+}
+-(void)textViewDidEndEditing:(UITextView *)textView
+{
+    if (self.textFieldAnnotation) {
+        self.textFieldAnnotation(textView.text);
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

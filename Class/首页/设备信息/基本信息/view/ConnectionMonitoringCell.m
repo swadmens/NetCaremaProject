@@ -137,6 +137,9 @@
     _minTextFiled.layer.borderColor = kColorLineColor.CGColor;
     _minTextFiled.layer.borderWidth = 0.5;
     _minTextFiled.textColor = kColorMainTextColor;
+    _minTextFiled.font = [UIFont customFontWithSize:kFontSizeThirteen];
+    _minTextFiled.textAlignment = NSTextAlignmentCenter;
+    [_minTextFiled setEnabled:NO];
     [cardView addSubview:_minTextFiled];
     [_minTextFiled yCenterToView:timeLabel];
     [_minTextFiled rightToView:cardView withSpace:48.5];
@@ -152,6 +155,10 @@
     [fzLabel leftToView:_minTextFiled withSpace:8];
     [fzLabel yCenterToView:_minTextFiled];
     
+}
+-(void)makeCellData:(NSDictionary *)dic
+{
+    _minTextFiled.text = [dic objectForKey:@"responseInterval"];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

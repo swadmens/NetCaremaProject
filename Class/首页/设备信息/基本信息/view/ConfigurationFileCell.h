@@ -12,6 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ConfigurationFileCell : WWTableViewCell
 
+@property (nonatomic,strong) void(^textFieldName)(NSString*text);
+@property (nonatomic,strong) void(^textFieldAnnotation)(NSString*text);
+
+
+-(void)makeCellData:(NSDictionary*)dic;
+
 @end
 
 NS_ASSUME_NONNULL_END
