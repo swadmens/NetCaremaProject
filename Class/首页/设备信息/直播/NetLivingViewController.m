@@ -8,10 +8,14 @@
 
 #import "NetLivingViewController.h"
 #import "AFHTTPSessionManager.h"
+#import "LivingModel.h"
 
 @interface NetLivingViewController ()
 
 @property (nonatomic,strong) NSMutableDictionary *dicData;
+
+@property (nonatomic,strong) LivingModel *model;
+
 
 @end
 
@@ -116,8 +120,25 @@
 -(void)goLivingClick:(UITapGestureRecognizer*)tp
 {
            
-    [TargetEngine controller:self pushToController:PushTargetDHLiving WithTargetId:@"1"];//大华直播
+    if (_model == nil) {
+        return;
+    }
+//[TargetEngine controller:self pushToController:PushTargetDHLiving WithTargetId:@"1"];//大华直播
 //    [TargetEngine controller:self pushToController:PushTargetHKLiving WithTargetId:@"1"];//海康直播
+    
+    
+    //live直播
+    NSDictionary *dic = @{@"name":_model.name,
+                          @"RTMP":_model.RTMP,
+                          @"shared":_model.shared,
+                          @"sharedLink":_model.sharedLink,
+                          @"url":_model.url,
+    };
+    NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
+    [TargetEngine controller:self pushToController:PushTargetLiveLiving WithTargetId:pushId];
+    
+    
+    
 }
 - (void)startLoadDataRequest
 {
@@ -176,7 +197,7 @@
             return ;
         }
         DLog(@"responseObject  ==  %@",responseObject);
-//        [weak_self handleObject:responseObject];
+        [weak_self handleObject:responseObject];
     }];
     [task resume];
 }
@@ -187,12 +208,14 @@
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
         NSDictionary *data = [obj objectForKey:@"data"];
-        NSArray *rows = [data objectForKey:@"rows"];
+        NSArray *rows= [data objectForKey:@"rows"];
         [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
-            
+            if (idx == 0) {
+                self.model = [LivingModel makeModelData:dic];
+            }
         }];
-       
+        
     }];
 }
 

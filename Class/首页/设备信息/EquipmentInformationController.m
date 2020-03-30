@@ -178,11 +178,6 @@
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:_rightBtn];
     [_rightBtn setTitle:@"保存" forState:UIControlStateNormal];
     [self.navigationItem setRightBarButtonItem:rightItem];
-    
-    
-    
-    
-    
 }
 //右上角按钮点击
 -(void)right_clicked
@@ -198,6 +193,13 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:@"saveInfomation" object:nil userInfo:nil];
     }
     
+}
+-(void)action_goback
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    NSDictionary *dic = @{@"edit":@(NO)};
+    //注册通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"editStates" object:nil userInfo:dic];
 }
 
 /*

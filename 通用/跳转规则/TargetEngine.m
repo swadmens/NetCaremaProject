@@ -25,7 +25,7 @@
 #import "DHVideoPlaybackController.h"//大华录像播放
 #import "RetrievePasswordController.h"//找回密码
 #import "DownloadListController.h"//下载列表
-
+#import "LiveLivingViewController.h"//live直播
 
 @interface TargetEngine ()
 //<LGXPhotoBrowserDelegate,UIWebViewDelegate>
@@ -520,6 +520,7 @@
         case PushTargetHKLiving: //海康视频直播
         {
             HKLivingViewController *controller = [[HKLivingViewController alloc] init];
+            controller.live_id = pushId;
             toController = controller;
         }
             break;
@@ -529,6 +530,13 @@
             toController = controller;
         }
             break;
+        case PushTargetLiveLiving: //live直播
+        {
+            LiveLivingViewController *controller = [[LiveLivingViewController alloc] init];
+            controller.live_id = pushId;
+            toController = controller;
+        }
+             break;
         case PushTargetRetrievePassword: //找回密码
         {
             RetrievePasswordController *controller = [[RetrievePasswordController alloc] init];
@@ -538,6 +546,7 @@
         case PushTargetDownloadList: //下载列表
         {
             DownloadListController *controller = [[DownloadListController alloc] init];
+            controller.downLoad_id = pushId;
             toController = controller;
         }
             break;

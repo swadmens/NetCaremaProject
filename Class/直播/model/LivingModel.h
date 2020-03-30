@@ -15,47 +15,47 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) NSString *actived;
 @property (nonatomic,strong) NSString *authed;
-@property (nonatomic,strong) NSString *beginat;
-@property (nonatomic,strong) NSString *clientid;
+@property (nonatomic,strong) NSString *beginAt;
+@property (nonatomic,strong) NSString *clientID;
 @property (nonatomic,strong) NSString *code;
-@property (nonatomic,strong) NSString *createat;
-@property (nonatomic,strong) NSString *customrecordplan;
-@property (nonatomic,strong) NSString *customrecordreserve;
+@property (nonatomic,strong) NSString *createAt;
+@property (nonatomic,strong) NSString *customRecordPlan;
+@property (nonatomic,strong) NSString *customRecordReserve;
 @property (nonatomic,strong) NSString *delay;
-@property (nonatomic,strong) NSString *endat;
+@property (nonatomic,strong) NSString *endAt;
 @property (nonatomic,strong) NSString *live_id;
 @property (nonatomic,strong) NSString *keeped;
 @property (nonatomic,strong) NSString *name;
-@property (nonatomic,strong) NSString *recordplan;
-@property (nonatomic,strong) NSString *recordreserve;
+@property (nonatomic,strong) NSString *recordPlan;
+@property (nonatomic,strong) NSString *recordReserve;
 @property (nonatomic,strong) NSString *serial;
 @property (nonatomic,strong) NSString *shared;
-@property (nonatomic,strong) NSString *sharedlink;
+@property (nonatomic,strong) NSString *sharedLink;
 @property (nonatomic,strong) NSString *sign;
-@property (nonatomic,strong) NSString *storepath;
+@property (nonatomic,strong) NSString *storePath;
 @property (nonatomic,strong) NSString *type;
-@property (nonatomic,strong) NSString *updateat;
+@property (nonatomic,strong) NSString *updateAt;
 @property (nonatomic,strong) NSString *url;
 
 
-@property (nonatomic,strong) NSString *application;
-@property (nonatomic,strong) NSString *audiobitrate;
-@property (nonatomic,strong) NSString *dhls;
-@property (nonatomic,strong) NSString *hls;
-@property (nonatomic,strong) NSString *httpflv;
+@property (nonatomic,strong) NSString *Application;
+@property (nonatomic,strong) NSString *AudioBitrate;
+@property (nonatomic,strong) NSString *DHLS;
+@property (nonatomic,strong) NSString *HLS;
+@property (nonatomic,strong) NSString *HTTPFLV;
 @property (nonatomic,strong) NSString *session_id;
-@property (nonatomic,strong) NSString *inbitrate;
-@property (nonatomic,strong) NSString *inbytes;
+@property (nonatomic,strong) NSString *InBitrate;
+@property (nonatomic,strong) NSString *InBytes;
 @property (nonatomic,strong) NSString *session_name;
-@property (nonatomic,strong) NSString *numoutputs;
-@property (nonatomic,strong) NSString *outbitrate;
-@property (nonatomic,strong) NSString *outbytes;
-@property (nonatomic,strong) NSString *rtmp;
-@property (nonatomic,strong) NSString *starttime;
-@property (nonatomic,strong) NSString *time;
+@property (nonatomic,strong) NSString *NumOutputs;
+@property (nonatomic,strong) NSString *OutBitrate;
+@property (nonatomic,strong) NSString *OutBytes;
+@property (nonatomic,strong) NSString *RTMP;
+@property (nonatomic,strong) NSString *StartTime;
+@property (nonatomic,strong) NSString *Time;
 @property (nonatomic,strong) NSString *session_type;
-@property (nonatomic,strong) NSString *videobitrate;
-@property (nonatomic,strong) NSString *wsflv;
+@property (nonatomic,strong) NSString *VideoBitrate;
+@property (nonatomic,strong) NSString *WSFLV;
 
 @end
 

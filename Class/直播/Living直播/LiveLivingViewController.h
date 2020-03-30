@@ -1,8 +1,8 @@
 //
-//  DownloadListController.h
+//  LiveLivingViewController.h
 //  NetCamera
 //
-//  Created by 汪伟 on 2020/3/5.
+//  Created by 汪伟 on 2020/3/30.
 //  Copyright © 2020 Guangzhou Eston Trade Co.,Ltd. All rights reserved.
 //
 
@@ -10,10 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DownloadListController : WWViewController
+@interface LiveLivingViewController : WWViewController
 
-@property (nonatomic,strong) NSString *downLoad_id;
-
+@property (nonatomic,strong) NSString *live_id;
 
 @end
 

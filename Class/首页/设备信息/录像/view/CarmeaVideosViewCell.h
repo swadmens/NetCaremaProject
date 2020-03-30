@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface CarmeaVideosViewCell : WWCollectionViewCell
 
 @property (nonatomic,assign) BOOL isEdit;
-@property (nonatomic,assign) BOOL isChoosed;
 
 -(void)makeCellData:(CarmeaVideosModel*)model;
 

@@ -16,49 +16,49 @@
 
     model.actived = [NSString stringWithFormat:@"%@",[dic objectForKey:@"actived"]];
     model.authed = [NSString stringWithFormat:@"%@",[dic objectForKey:@"authed"]];
-    model.beginat = [NSString stringWithFormat:@"%@",[dic objectForKey:@"beginat"]];
-    model.clientid = [NSString stringWithFormat:@"%@",[dic objectForKey:@"clientid"]];
+    model.beginAt = [NSString stringWithFormat:@"%@",[dic objectForKey:@"beginAt"]];
+    model.clientID = [NSString stringWithFormat:@"%@",[dic objectForKey:@"clientID"]];
     model.code = [NSString stringWithFormat:@"%@",[dic objectForKey:@"code"]];
-    model.createat = [NSString stringWithFormat:@"%@",[dic objectForKey:@"createat"]];
-    model.customrecordplan = [NSString stringWithFormat:@"%@",[dic objectForKey:@"customrecordplan"]];
-    model.customrecordreserve = [NSString stringWithFormat:@"%@",[dic objectForKey:@"customrecordreserve"]];
+    model.createAt = [NSString stringWithFormat:@"%@",[dic objectForKey:@"createAt"]];
+    model.customRecordPlan = [NSString stringWithFormat:@"%@",[dic objectForKey:@"customRecordPlan"]];
+    model.customRecordReserve = [NSString stringWithFormat:@"%@",[dic objectForKey:@"customRecordReserve"]];
     model.delay = [NSString stringWithFormat:@"%@",[dic objectForKey:@"delay"]];
-    model.endat = [NSString stringWithFormat:@"%@",[dic objectForKey:@"endat"]];
+    model.endAt = [NSString stringWithFormat:@"%@",[dic objectForKey:@"endAt"]];
     model.live_id = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
     model.keeped = [NSString stringWithFormat:@"%@",[dic objectForKey:@"keeped"]];
     model.name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
-    model.recordplan = [NSString stringWithFormat:@"%@",[dic objectForKey:@"recordplan"]];
-    model.recordreserve = [NSString stringWithFormat:@"%@",[dic objectForKey:@"recordreserve"]];
+    model.recordPlan = [NSString stringWithFormat:@"%@",[dic objectForKey:@"recordPlan"]];
+    model.recordReserve = [NSString stringWithFormat:@"%@",[dic objectForKey:@"recordReserve"]];
     model.serial = [NSString stringWithFormat:@"%@",[dic objectForKey:@"serial"]];
     model.shared = [NSString stringWithFormat:@"%@",[dic objectForKey:@"shared"]];
-    model.sharedlink = [NSString stringWithFormat:@"%@",[dic objectForKey:@"sharedlink"]];
+    model.sharedLink = [NSString stringWithFormat:@"%@",[dic objectForKey:@"sharedLink"]];
     model.sign = [NSString stringWithFormat:@"%@",[dic objectForKey:@"sign"]];
-    model.storepath = [NSString stringWithFormat:@"%@",[dic objectForKey:@"storepath"]];
+    model.storePath = [NSString stringWithFormat:@"%@",[dic objectForKey:@"storePath"]];
     model.type = [NSString stringWithFormat:@"%@",[dic objectForKey:@"type"]];
-    model.updateat = [NSString stringWithFormat:@"%@",[dic objectForKey:@"updateat"]];
+    model.updateAt = [NSString stringWithFormat:@"%@",[dic objectForKey:@"updateAt"]];
     model.url = [NSString stringWithFormat:@"%@",[dic objectForKey:@"url"]];
 
     
     NSDictionary *session = (NSDictionary*)[dic objectForKey:@"session"];
     
-    model.application = [NSString stringWithFormat:@"%@",[session objectForKey:@"application"]];
-    model.audiobitrate = [NSString stringWithFormat:@"%@",[session objectForKey:@"audiobitrate"]];
-    model.dhls = [NSString stringWithFormat:@"%@",[session objectForKey:@"dhls"]];
-    model.hls = [NSString stringWithFormat:@"%@",[session objectForKey:@"hls"]];
-    model.httpflv = [NSString stringWithFormat:@"%@",[session objectForKey:@"httpflv"]];
-    model.session_id = [NSString stringWithFormat:@"%@",[session objectForKey:@"id"]];
-    model.inbitrate = [NSString stringWithFormat:@"%@",[session objectForKey:@"inbitrate"]];
-    model.inbytes = [NSString stringWithFormat:@"%@",[session objectForKey:@"inbytes"]];
-    model.session_name = [NSString stringWithFormat:@"%@",[session objectForKey:@"name"]];
-    model.numoutputs = [NSString stringWithFormat:@"%@",[session objectForKey:@"numoutputs"]];
-    model.outbitrate = [NSString stringWithFormat:@"%@",[session objectForKey:@"outbitrate"]];
-    model.outbytes = [NSString stringWithFormat:@"%@",[session objectForKey:@"outbytes"]];
-    model.rtmp = [NSString stringWithFormat:@"%@",[session objectForKey:@"rtmp"]];
-    model.starttime = [NSString stringWithFormat:@"%@",[session objectForKey:@"starttime"]];
-    model.time = [NSString stringWithFormat:@"%@",[session objectForKey:@"time"]];
-    model.session_type = [NSString stringWithFormat:@"%@",[session objectForKey:@"type"]];
-    model.videobitrate = [NSString stringWithFormat:@"%@",[session objectForKey:@"videobitrate"]];
-    model.wsflv = [NSString stringWithFormat:@"%@",[session objectForKey:@"wsflv"]];
+    model.Application = [NSString stringWithFormat:@"%@",[session objectForKey:@"Application"]];
+    model.AudioBitrate = [NSString stringWithFormat:@"%@",[session objectForKey:@"AudioBitrate"]];
+    model.DHLS = [NSString stringWithFormat:@"%@",[session objectForKey:@"DHLS"]];
+    model.HLS = [NSString stringWithFormat:@"%@",[session objectForKey:@"HLS"]];
+    model.HTTPFLV = [NSString stringWithFormat:@"%@",[session objectForKey:@"HTTPFLV"]];
+    model.session_id = [NSString stringWithFormat:@"%@",[session objectForKey:@"Id"]];
+    model.InBitrate = [NSString stringWithFormat:@"%@",[session objectForKey:@"InBitrate"]];
+    model.InBytes = [NSString stringWithFormat:@"%@",[session objectForKey:@"InBytes"]];
+    model.session_name = [NSString stringWithFormat:@"%@",[session objectForKey:@"Name"]];
+    model.NumOutputs = [NSString stringWithFormat:@"%@",[session objectForKey:@"NumOutputs"]];
+    model.OutBitrate = [NSString stringWithFormat:@"%@",[session objectForKey:@"OutBitrate"]];
+    model.OutBytes = [NSString stringWithFormat:@"%@",[session objectForKey:@"OutBytes"]];
+    model.RTMP = [NSString stringWithFormat:@"%@",[session objectForKey:@"RTMP"]];
+    model.StartTime = [NSString stringWithFormat:@"%@",[session objectForKey:@"StartTime"]];
+    model.Time = [NSString stringWithFormat:@"%@",[session objectForKey:@"Time"]];
+    model.session_type = [NSString stringWithFormat:@"%@",[session objectForKey:@"Type"]];
+    model.VideoBitrate = [NSString stringWithFormat:@"%@",[session objectForKey:@"VideoBitrate"]];
+    model.WSFLV = [NSString stringWithFormat:@"%@",[session objectForKey:@"WSFLV"]];
 
  
     return model;

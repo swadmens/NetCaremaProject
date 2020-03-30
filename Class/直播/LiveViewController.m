@@ -26,6 +26,7 @@
 
 @property (nonatomic,strong) ChooseAreaView *areaView;
 @property (nonatomic,strong) UIView *coverView;
+
 @end
 
 @implementation LiveViewController
@@ -184,7 +185,17 @@
     if (indexPath.row == 0) {
         [TargetEngine controller:self pushToController:PushTargetDHLiving WithTargetId:@"1"];
     }else{
-        [TargetEngine controller:self pushToController:PushTargetHKLiving WithTargetId:@"1"];
+        
+        //live直播
+        LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
+        NSDictionary *dic = @{@"name":model.name,
+                              @"RTMP":model.RTMP,
+                              @"shared":model.shared,
+                              @"sharedLink":model.sharedLink,
+                              @"url":model.url,
+        };
+        NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
+        [TargetEngine controller:self pushToController:PushTargetLiveLiving WithTargetId:pushId];
     }
 }
 

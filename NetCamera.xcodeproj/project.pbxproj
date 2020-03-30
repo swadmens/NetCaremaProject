@@ -374,6 +374,7 @@
 		4A64ECFF242D89BD00D30FB1 /* SX_confirm@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A64ECF5242D89BD00D30FB1 /* SX_confirm@3x.png */; };
 		4A64ED02242DEE0000D30FB1 /* CarmeaVideosModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ED01242DEE0000D30FB1 /* CarmeaVideosModel.m */; };
 		4A64ED05242DF2E000D30FB1 /* DemandViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ED04242DF2E000D30FB1 /* DemandViewCell.m */; };
+		4A64ED0C243187E200D30FB1 /* LiveLivingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ED0B243187E200D30FB1 /* LiveLivingViewController.m */; };
 		4A7007DB241766660024DFB8 /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A7007C9241766650024DFB8 /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4A7007DC241766660024DFB8 /* SendMessageToWXReq+requestWithTextOrMediaMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A7007CC241766650024DFB8 /* SendMessageToWXReq+requestWithTextOrMediaMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4A7007DD241766660024DFB8 /* WXMediaMessage+messageConstruct.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A7007CD241766650024DFB8 /* WXMediaMessage+messageConstruct.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -1247,6 +1248,8 @@
 		4A64ED01242DEE0000D30FB1 /* CarmeaVideosModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CarmeaVideosModel.m; sourceTree = "<group>"; };
 		4A64ED03242DF2E000D30FB1 /* DemandViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemandViewCell.h; sourceTree = "<group>"; };
 		4A64ED04242DF2E000D30FB1 /* DemandViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemandViewCell.m; sourceTree = "<group>"; };
+		4A64ED0A243187E200D30FB1 /* LiveLivingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveLivingViewController.h; sourceTree = "<group>"; };
+		4A64ED0B243187E200D30FB1 /* LiveLivingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveLivingViewController.m; sourceTree = "<group>"; };
 		4A7007C9241766650024DFB8 /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GetMessageFromWXResp+responseWithTextOrMediaMessage.m"; sourceTree = "<group>"; };
 		4A7007CA241766650024DFB8 /* WXMediaMessage+messageConstruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WXMediaMessage+messageConstruct.h"; sourceTree = "<group>"; };
 		4A7007CB241766650024DFB8 /* Constant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constant.h; sourceTree = "<group>"; };
@@ -2441,6 +2444,7 @@
 		4A580D8824075F2C00E82675 /* 直播 */ = {
 			isa = PBXGroup;
 			children = (
+				4A64ED062431878E00D30FB1 /* Living直播 */,
 				4AB29A1A24108FF9004CA6B5 /* 大华直播 */,
 				4AB29A1924108FF8004CA6B5 /* 海康直播 */,
 				4AB29A06240F8587004CA6B5 /* model */,
@@ -3146,6 +3150,15 @@
 				4A64ECF5242D89BD00D30FB1 /* SX_confirm@3x.png */,
 			);
 			path = "视频录制";
+			sourceTree = "<group>";
+		};
+		4A64ED062431878E00D30FB1 /* Living直播 */ = {
+			isa = PBXGroup;
+			children = (
+				4A64ED0A243187E200D30FB1 /* LiveLivingViewController.h */,
+				4A64ED0B243187E200D30FB1 /* LiveLivingViewController.m */,
+			);
+			path = "Living直播";
 			sourceTree = "<group>";
 		};
 		4A7007C6241766650024DFB8 /* 第三方 */ = {
@@ -4035,6 +4048,7 @@
 				4A580F7824075F2D00E82675 /* LGXHudManager.m in Sources */,
 				4A580F2A24075F2D00E82675 /* CustomTabBar.m in Sources */,
 				4A580FE524075F2D00E82675 /* NSString+Common.m in Sources */,
+				4A64ED0C243187E200D30FB1 /* LiveLivingViewController.m in Sources */,
 				4A58101424075F2D00E82675 /* UICollectionViewController+ADScaleTransition.m in Sources */,
 				4A58104424075F2E00E82675 /* FontHelper.m in Sources */,
 				4A58101E24075F2D00E82675 /* IFTTTAnimator.m in Sources */,

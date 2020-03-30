@@ -64,20 +64,15 @@
 -(void)makeCellData:(CarmeaVideosModel *)model
 {
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
-    _titleLabel.text = model.video_name;
+    _titleLabel.text = model.duration;
 }
 -(void)setIsEdit:(BOOL)isEdit
 {
     _selectBtn.hidden = !isEdit;
 }
--(void)setIsChoosed:(BOOL)isChoosed
+-(void)setSelected:(BOOL)selected
 {
-    _selectBtn.selected = !isChoosed;
+    [super setSelected:selected];
+    _selectBtn.selected = selected;
 }
-//-(void)setSelected:(BOOL)selected
-//{
-//    [super setSelected:selected];
-//    _selectBtn.hidden = selected;
-//    _selectBtn.selected = selected;
-//}
 @end

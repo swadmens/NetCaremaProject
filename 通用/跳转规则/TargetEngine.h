@@ -26,6 +26,7 @@ typedef enum : NSUInteger {
     PushTargetDHVideoPlayback = 11, /// 大华录像播放
     PushTargetRetrievePassword = 12, /// 找回密码
     PushTargetDownloadList = 13, /// 下载列表
+    PushTargetLiveLiving = 14, /// live直播
 
     
     

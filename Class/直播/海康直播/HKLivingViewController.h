@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface HKLivingViewController : WWViewController
 
+@property (nonatomic,strong) NSString *live_id;
+
+
 @end
 
 NS_ASSUME_NONNULL_END
