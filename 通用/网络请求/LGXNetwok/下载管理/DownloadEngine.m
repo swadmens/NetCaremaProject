@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSString *defaultDownloadPath;
 @property (nonatomic, strong) NSString *cacheFilePath;
 @property (nonatomic, strong) NSString *tmpFilePath;
+
 @end
 
 @implementation DownloadEngine
@@ -77,8 +78,33 @@
     if (url == nil) {
         url = @"";
     }
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
-    NSProgress *progress = nil;
+    
+//    //获取视频文件总大小
+//    AVURLAsset *asset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:@"http://192.168.6.120:10080/frecord/nvr017/20200325/20200325034226/nvr017_record.m3u8"] options:nil];// url：网络视频的连接
+//    NSArray *arr = [asset tracksWithMediaType:AVMediaTypeDepthData];// 项目中是明确媒体类型为视频，其他没试过
+//    for (AVAssetTrack *track in arr) {
+//        DLog(@"track---:%@", track);
+//        DLog(@"track.totalSampleDataLength---:%lld", track.totalSampleDataLength);// 视频文件字节大小
+//    }
+
+//    __unsafe_unretained typeof(self) weak_self = self;
+
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:url]];
+    
+//    [request setHTTPMethod:@"HEAD"];
+//    // 清空Accept-Encoding请求头字段，不接受Gzip压缩
+//    [request setValue:@"" forHTTPHeaderField:@"Accept-Encoding"];
+    
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
     
     NSString *md5url = MD5(url);
     
@@ -154,19 +180,24 @@
         
     }
     task.taskDescription = md5url;
-
+    
     // 开始断点下载了
     [self.defaultManager setDownloadTaskDidResumeBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t fileOffset, int64_t expectedTotalBytes) {
         if (downloadProgress) {
-            downloadProgress(progress);
+            downloadProgress(downloadTask.progress);
         }
     }];
+    
     /// 下载进度监控
-    [self.defaultManager setDownloadTaskDidWriteDataBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
+    [self.defaultManager setDownloadTaskDidWriteDataBlock:^(NSURLSession * _Nonnull session, NSURLSessionDownloadTask * _Nonnull downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
+        
         if (downloadProgress) {
-            downloadProgress(progress);
+            downloadProgress(downloadTask.progress);
         }
+        DLog(@"totalBytesExpectedToWrite == %lld",totalBytesExpectedToWrite);
+        DLog(@"downloadTask.progress == %lld",downloadTask.progress.completedUnitCount);
     }];
+    
     // 开始下载
     [task resume];
     
@@ -186,6 +217,7 @@
             pathString = [pathString substringFromIndex:@"file:///".length];
         }
         finishBlock(pathString);
+        DLog(@"response == %lld",response.expectedContentLength);
     }
 }
 /// 取消下载
