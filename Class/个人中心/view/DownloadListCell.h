@@ -10,7 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class CarmeaVideosModel;
 @interface DownloadListCell : WWTableViewCell
+
+@property (copy, nonatomic) NSString *url;
+
+-(void)makeCellData:(CarmeaVideosModel*)model;
 
 @end
 

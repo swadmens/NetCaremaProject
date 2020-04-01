@@ -7,6 +7,9 @@
 //
 
 #import "DownloadListCell.h"
+#import "CarmeaVideosModel.h"
+#import "YBDownloadManager.h"
+#import "DownLoadSence.h"
 
 @interface DownloadListCell ()
 
@@ -19,6 +22,7 @@
 @property (nonatomic,strong) UILabel *totalDataLabel;//总下载量
 
 @property (nonatomic,strong) UIProgressView *progressView;//进度条
+@property (nonatomic,strong) CarmeaVideosModel *model;
 
 
 
@@ -40,10 +44,14 @@
     
     
     _showImageView = [UIImageView new];
+    _showImageView.userInteractionEnabled = YES;
     _showImageView.image = UIImageWithFileName(@"playback_back_image");
     [backView addSubview:_showImageView];
     [_showImageView alignTop:@"10" leading:@"10" bottom:@"10" trailing:nil toView:backView];
     [_showImageView addWidth:135];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(startDownLoad:)];
+    [_showImageView addGestureRecognizer:tap];
+    
     
     
     
@@ -105,6 +113,95 @@
     [_currentDataLabel yCenterToView:_speedLabel];
     
 }
+
+-(void)makeCellData:(CarmeaVideosModel *)model
+{
+    self.model = model;
+}
+
+- (void)setUrl:(NSString *)url
+{
+    _url = url;
+    
+    // 控制状态
+    YBFileModel *info = [[YBDownloadManager defaultManager] downloadFileModelForURL:url];
+    if (info.state == DownloadStateResumed) {
+        
+        
+        if (info.totalExpectedSize) {
+        
+            NSString *str = [NSString stringWithFormat:@"%.2f%%",1.0*info.totlalReceivedSize / info.totalExpectedSize*100];
+            NSLog(@"下载进度 ==  %@",str);
+//            self.progressLab.text = str;
+        }
+        
+    }else if (info.state == DownloadStateCompleted)
+    {
+//        self.progressLab.text = @"下载完毕";
+    }else if (info.state == DownloadStateWait)
+    {
+//        self.progressLab.text = @"等待中";
+    }
+}
+-(void)startDownLoad:(UITapGestureRecognizer*)tp
+{
+    __unsafe_unretained typeof(self) weak_self = self;
+
+    NSString *urlString = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/download/%@/%@",self.url,_model.start_time];
+    DownLoadSence *sence = [DownLoadSence new];
+    sence.filePath = @"";
+    sence.fileName = @"Video.mp4";
+    sence.fileLenth = @"690000";
+    sence.needReDownload = YES;
+    sence.url = urlString;
+    [sence startDownload];
+    sence.progressBlock = ^(float progress) {
+        DLog(@"下载进度 ==  %f",progress)
+    };
+    sence.finishedBlock = ^(NSString *filePath) {
+        DLog(@"文件路径  ==  %@",filePath);
+        NSURL *url = [NSURL URLWithString:filePath];
+        BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([url path]);
+        if (compatible)
+        {
+            //保存相册核心代码
+            UISaveVideoAtPathToSavedPhotosAlbum([url path], weak_self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
+        }
+    };
+    
+//    YBFileModel *info = [[YBDownloadManager defaultManager] downloadFileModelForURL:_model.hls];
+//
+//       if (info.state == DownloadStateResumed || info.state == DownloadStateWait) {
+//           // 暂停下载某个文件
+//           [[YBDownloadManager defaultManager] suspend:_model.hls];
+//
+//       } else {
+//           //下载文件
+//           [[YBDownloadManager defaultManager] download:_model.hls progress:^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
+//               DLog(@"totalBytesWritten == %ld",(long)totalBytesWritten);
+//               DLog(@"totalBytesExpectedToWrite == %ld",(long)totalBytesExpectedToWrite);
+//               dispatch_async(dispatch_get_main_queue(), ^{
+//                   self.url = self.url;
+//               });
+//           } state:^(DownloadState state, NSString *file, NSError *error) {
+//               DLog(@"error == %@",error);
+//               dispatch_async(dispatch_get_main_queue(), ^{
+//                   self.url = self.url;
+//               });
+//           }];
+//       }
+}
+//保存视频完成之后的回调
+- (void) savedPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError *)error contextInfo: (void *)contextInfo {
+    if (error) {
+        NSLog(@"保存视频失败%@", error.localizedDescription);
+    }
+    else {
+        NSLog(@"保存视频成功");
+       
+    }
+}
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

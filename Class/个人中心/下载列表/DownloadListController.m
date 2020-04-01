@@ -11,6 +11,10 @@
 #import "DownloadListCell.h"
 #import "DownLoadSence.h"
 #import "AFHTTPSessionManager.h"
+#import "CarmeaVideosModel.h"
+#import "YBDownloadManager.h"
+
+
 
 @interface DownloadListController ()<UITableViewDelegate,UITableViewDataSource,NSURLSessionDelegate>
 {
@@ -18,7 +22,7 @@
 }
 @property (nonatomic, strong) WWTableView *tableView;
 
-@property (nonatomic,strong) NSMutableArray *dataArray;
+@property (nonatomic,strong) NSMutableArray *lengthArray;
 
 @property(nonatomic,strong)NSURLSessionDownloadTask*downloadTask;
 
@@ -28,12 +32,12 @@
 @end
 
 @implementation DownloadListController
--(NSMutableArray*)dataArray
+-(NSMutableArray*)lengthArray
 {
-    if (!_dataArray) {
-        _dataArray = [NSMutableArray array];
+    if (!_lengthArray) {
+        _lengthArray = [NSMutableArray array];
     }
-    return _dataArray;
+    return _lengthArray;
 }
 -(void)setupTableView
 {
@@ -51,23 +55,17 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"下载列表";
+    
+    [YBDownloadManager defaultManager].maxDownloadingCount = 2;
+
+    
     [self setupTableView];
     
-    
-    NSDictionary *dic = [WWPublicMethod objectTransFromJson:self.downLoad_id];
-    NSString *ids = [dic objectForKey:@"id"];
-    NSString *period = [dic objectForKey:@"period"];
-
-    NSString *urlString = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/download/%@/%@",ids,period];
-    
-    [self downloadFileWithUrl:urlString];
-
-    
+//    [self downloadFileWithUrl:self.dataArray];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    return self.dataArray.count;
-    return 4;
+    return self.dataArray.count;
 }
 #pragma mark - UITableViewDelegate
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -76,42 +74,21 @@
     DownloadListCell *cell = [tableView dequeueReusableCellWithIdentifier:[DownloadListCell getCellIDStr] forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
+    CarmeaVideosModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    
+    [cell makeCellData:model];
+    cell.url = self.downLoad_id;
+
+        
     return cell;
 }
-///下载
-- (void)download:(UIBarButtonItem *)btnItem{
- ///初始化Session
-// _session = [XMConciseVedioPlayer getSession:_session];
-  
- ///self.hud = [MBProgressHUD showHUDAddedTo:self animated:YES];
-  
-// [self downloadFileWithUrl:self.url];
-  
-}
 ///通过url下载
-- (void)downloadFileWithUrl:(NSString *)url
+- (void)downloadFileWithUrl:(NSArray *)urlArr
 {
-    DownLoadSence *sence = [DownLoadSence new];
-    sence.url = url;
-    sence.filePath = @"";
-    sence.fileName = @"Video.mp4";
-    sence.needReDownload = YES;
-    [sence startDownload];
-    sence.progressBlock = ^(float progress) {
-        DLog(@"下载进度 ==  %f",progress)
-    };
-    sence.finishedBlock = ^(NSString *filePath) {
-    
-        DLog(@"文件路径  ==  %@",filePath);
-        NSURL *url = [NSURL URLWithString:filePath];
-        BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([url path]);
-        if (compatible)
-        {
-            //保存相册核心代码
-            UISaveVideoAtPathToSavedPhotosAlbum([url path], self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
-        }
-    };
-
+    [urlArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        CarmeaVideosModel *model = obj;
+        [self getVideoSize:model];
+    }];
 }
 //保存视频完成之后的回调
 - (void) savedPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError *)error contextInfo: (void *)contextInfo {
@@ -123,6 +100,51 @@
        
     }
 }
+
+//获取视频大小
+-(void)getVideoSize:(CarmeaVideosModel*)model
+{
+    __unsafe_unretained typeof(self) weak_self = self;
+
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    [manager.requestSerializer setValue:@"" forHTTPHeaderField:@"Accept-Encoding"];
+    [manager.requestSerializer setValue:@"" forHTTPHeaderField:@"Content-Encoding"];
+    [manager GET:model.hls parameters:@{} progress:^(NSProgress * _Nonnull downloadProgress) {
+
+    } success:^(NSURLSessionDataTask * _Nonnull task, id _Nullable responseObject) {
+
+    }failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSDictionary *dic = [(NSHTTPURLResponse *)task.response allHeaderFields];
+        CGFloat textLength = [[dic objectForKey:@"Content-Length"] floatValue];
+        DLog(@"length  =  %f",textLength);
+        NSString *lengthStr = [NSString stringWithFormat:@"%.0f",textLength];
+        
+        NSString *urlString = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/download/%@/%@",self.downLoad_id,model.start_time];
+        DownLoadSence *sence = [DownLoadSence new];
+        sence.filePath = @"";
+        sence.fileName = @"Video.mp4";
+        sence.fileLenth = lengthStr;
+        sence.needReDownload = YES;
+        sence.url = urlString;
+        [sence startDownload];
+        sence.progressBlock = ^(float progress) {
+            DLog(@"下载进度 ==  %f",progress)
+        };
+        sence.finishedBlock = ^(NSString *filePath) {
+            DLog(@"文件路径  ==  %@",filePath);
+            NSURL *url = [NSURL URLWithString:filePath];
+            BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([url path]);
+            if (compatible)
+            {
+                //保存相册核心代码
+                UISaveVideoAtPathToSavedPhotosAlbum([url path], weak_self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
+            }
+        };
+    }];
+    
+    
+}
+
 /*
 #pragma mark - Navigation
 

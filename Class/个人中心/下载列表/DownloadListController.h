@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface DownloadListController : WWViewController
 
 @property (nonatomic,strong) NSString *downLoad_id;
+@property (nonatomic,strong) NSArray *dataArray;
 
 
 @end

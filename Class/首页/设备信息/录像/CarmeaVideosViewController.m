@@ -14,6 +14,7 @@
 #import "HKVideoPlaybackController.h"
 #import "DemandModel.h"
 #import "LGXVerticalButton.h"
+#import "DownloadListController.h"
 
 @interface CarmeaVideosViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 {
@@ -510,29 +511,34 @@
 {
     [self exitTheEditStates];
     
+    NSMutableArray *tempArray = [NSMutableArray new];
     [self.selectedIndexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
         CarmeaVideosModel *model = [self.dataArray objectAtIndex:idx];
-        
-        
-        NSString *ClientId = [self.dicData objectForKey:@"ClientId"];
-       
-        NSString *DeviceId = [self.dicData objectForKey:@"DeviceId"];
-        NSString *CameraId = [self.dicData objectForKey:@"CameraId"];
-      
-        ClientId = [WWPublicMethod isStringEmptyText:ClientId]?ClientId:@"";
-        DeviceId = [WWPublicMethod isStringEmptyText:DeviceId]?DeviceId:@"";
-        CameraId = [WWPublicMethod isStringEmptyText:CameraId]?CameraId:@"";
-       
-        NSString *ids = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
-       
-        NSDictionary *finalParams = @{
-                                         @"id":ids,
-                                         @"period": model.start_time,
-                                         };
-        NSString *pushId = [WWPublicMethod jsonTransFromObject:finalParams];
-        
-        [TargetEngine controller:self pushToController:PushTargetDownloadList WithTargetId:pushId];
+//        [tempArray addObject:model.start_time];
+        [tempArray addObject:model];
     }];
+    
+    NSString *ClientId = [self.dicData objectForKey:@"ClientId"];
+    NSString *DeviceId = [self.dicData objectForKey:@"DeviceId"];
+    NSString *CameraId = [self.dicData objectForKey:@"CameraId"];
+  
+    ClientId = [WWPublicMethod isStringEmptyText:ClientId]?ClientId:@"";
+    DeviceId = [WWPublicMethod isStringEmptyText:DeviceId]?DeviceId:@"";
+    CameraId = [WWPublicMethod isStringEmptyText:CameraId]?CameraId:@"";
+  
+    NSString *ids = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
+//    NSDictionary *finalParams = @{
+//                                    @"id":ids,
+//                                    @"period": tempArray,
+//                                    };
+//    NSString *pushId = [WWPublicMethod jsonTransFromObject:finalParams];
+//    [TargetEngine controller:self pushToController:PushTargetDownloadList WithTargetId:pushId];
+    
+    
+    DownloadListController *dvc = [DownloadListController new];
+    dvc.dataArray = tempArray;
+    dvc.downLoad_id = ids;
+    [self.navigationController pushViewController:dvc animated:YES];
 }
 
 
