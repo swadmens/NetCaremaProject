@@ -149,7 +149,6 @@
     self.isEdit = [[NSString stringWithFormat:@"%@",notification.userInfo[@"edit"]] boolValue];
 
     if (!self.isEdit) {
-        [self.selectedIndexSet removeAllIndexes];
         [self exitTheEditStates];
     }else{
         [self enterTheEditStates];
@@ -406,6 +405,13 @@
 //进入编辑状态
 -(void)enterTheEditStates
 {
+    self.isEdit = YES;
+    [_collectionView reloadData];
+
+    if (self.editChangeState) {
+           self.editChangeState(YES);
+       }
+    
     if (self.editView == nil) {
         return;
     }
@@ -413,10 +419,20 @@
         self.editView.frame = CGRectMake(0, kScreenHeight-48, kScreenWidth, 48);
     }];
     
+   
+    
 }
 //退出编辑状态
 -(void)exitTheEditStates
 {
+    self.isEdit = NO;
+    [self.selectedIndexSet removeAllIndexes];
+    [_collectionView reloadData];
+    
+    if (self.editChangeState) {
+        self.editChangeState(NO);
+    }
+
     if (self.editView == nil) {
         return;
     }
@@ -424,6 +440,7 @@
         self.editView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, 48);
     }];
     
+   
 }
 //删除视频
 -(void)deleteVideoClick
@@ -509,8 +526,6 @@
 //下载视频
 -(void)downVideoClick
 {
-    [self exitTheEditStates];
-    
     NSMutableArray *tempArray = [NSMutableArray new];
     [self.selectedIndexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
         CarmeaVideosModel *model = [self.dataArray objectAtIndex:idx];
@@ -539,6 +554,9 @@
     dvc.dataArray = tempArray;
     dvc.downLoad_id = ids;
     [self.navigationController pushViewController:dvc animated:YES];
+    
+    [self exitTheEditStates];
+
 }
 
 

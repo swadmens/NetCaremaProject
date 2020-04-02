@@ -96,13 +96,6 @@
     NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     [cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
 
-    //配置成功保存cookies
-    for (NSHTTPCookie *cookie in cookieStorage.cookies) {
-        if ([cookie.name isEqualToString:@"api_auth_cookie"]) {
-            _kUserModel.userInfo.api_auth_cookie = cookie.value;
-        }
-    }
-    
     /// 引导页，判断是否是第一次
 //    [self setupGuideView];
     
@@ -113,6 +106,12 @@
 //    }else{
 //        [_kUserModel showLoginView];
 //    }
+    
+    
+    //启动定时器任务
+    [WWPublicMethod timeOneMinutesUploadDevicestatus];
+    [WWPublicMethod timeTwoMinutesUploadDevice];
+
     
     return YES;
 }
@@ -142,6 +141,9 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    DLog(@"程序被终止了")
+    _kUserModel.isLogined = _kUserModel.userInfo.save_password;
+    
 }
 
 

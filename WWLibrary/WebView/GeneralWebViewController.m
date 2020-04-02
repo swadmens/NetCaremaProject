@@ -79,7 +79,7 @@ typedef enum : NSUInteger {
     _configuration.preferences = preferences;
     
     // 将所有cookie以document.cookie = 'key=value';形式进行拼接
-    NSString *cookieValue=[NSString stringWithFormat:@"document.cookie = 'system=ios';document.cookie = 'version=%@';document.cookie = 'api_auth_cookie=%@';",APPVersion, _kUserModel.userInfo.api_auth_cookie];
+    NSString *cookieValue=[NSString stringWithFormat:@"document.cookie = 'system=ios';document.cookie = 'version=%@';document.cookie = 'api_auth_cookie=%@';",APPVersion, @"0"];
     // 加cookie给h5识别
     WKUserScript * cookieScript = [[WKUserScript alloc]initWithSource: cookieValue injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:NO];
     
@@ -158,16 +158,6 @@ typedef enum : NSUInteger {
         self.isScreen=NO;
     }
     
-    
-    NSString *strParam = [NSString stringWithFormat:@"system=%@&version=%@&session_id=%@&lang=%@",@"ios",APPVersion,_kUserModel.userInfo.session_id,_kUserModel.userInfo.language_lang];
-    
-    if ([self.url containsString:@"?"]) {
-        self.url=[NSString stringWithFormat:@"%@&%@",self.url,strParam];
-    }else{
-        self.url=[NSString stringWithFormat:@"%@?%@",self.url,strParam];
-    }
-    
-    
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:self.url]];
     [self.webView loadRequest:request];
 }
@@ -219,7 +209,7 @@ typedef enum : NSUInteger {
                 NSString *viewType = [body objectForKey:@"view"];
                 if ([viewType isEqual:@"web"]) {
                     NSMutableDictionary *resetBody = [NSMutableDictionary dictionaryWithDictionary:body];
-                    NSString *pushId =[NSString stringWithFormat:@"%@?api_auth_cookie=%@",[body objectForKey:@"pushId"],_kUserModel.userInfo.api_auth_cookie];
+                    NSString *pushId =[NSString stringWithFormat:@"%@?api_auth_cookie=%@",[body objectForKey:@"pushId"],@"0"];
                     [resetBody setObject:pushId forKey:@"pushId"];
                     NSString *newPushId=[WWPublicMethod jsonTransFromObject:resetBody];
                     [TargetEngine pushViewController:nil fromController:nil withTarget:newPushId];

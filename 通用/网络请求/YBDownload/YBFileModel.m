@@ -37,6 +37,7 @@
         
         //创建文件夹存放下载的文件
         [manager createDirectoryAtPath:YBCacheDirectory withIntermediateDirectories:YES attributes:nil error:nil];
+        
     }
     
     //文件路径
@@ -66,6 +67,18 @@
     return  _filePath;
     
 }
+
+//保存视频完成之后的回调
+- (void) savedPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError *)error contextInfo: (void *)contextInfo {
+    if (error) {
+        NSLog(@"保存视频失败%@", error.localizedDescription);
+    }
+    else {
+        NSLog(@"保存视频成功");
+       
+    }
+}
+
 
 - (NSString *)filename
 {

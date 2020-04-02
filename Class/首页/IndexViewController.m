@@ -59,11 +59,11 @@
                 [weak_self loadNewData];
             }
                 break;
-//            case WWScrollingStateLoadingMore:
-//            {
-//                [weak_self loadMoreData];
-//            }
-//                break;
+            case WWScrollingStateLoadingMore:
+            {
+                [weak_self loadMoreData];
+            }
+                break;
             default:
                 break;
         }
@@ -87,7 +87,7 @@
 }
 -(void)againLoadDataBtn
 {
-//    [self loadNewData];
+    [self loadNewData];
 }
 
 
@@ -98,25 +98,22 @@
 
     self.title = @"我的设备";
     
-//    [self setupNoDataView];
-    [self setupTableView];
-    [self loadNewData];
-//    @weakify(self);
-//       /// 登录变化监听
-//       [RACObserve(_kUserModel, isLogined) subscribeNext:^(id x) {
-//           @strongify(self);
-//
-//           self.isLogion = [x boolValue];
-//
-//           if (!self.isLogion) {
-//               [_kUserModel showLoginView];
-//           }else{
-//               [self setupNoDataView];
-//               [self setupTableView];
-//               [self loadNewData];
-//           }
-//
-//       }];
+    @weakify(self);
+       /// 登录变化监听
+       [RACObserve(_kUserModel, isLogined) subscribeNext:^(id x) {
+           @strongify(self);
+
+           self.isLogion = [x boolValue];
+
+           if (!self.isLogion) {
+               [_kUserModel showLoginView];
+           }else{
+               [self setupNoDataView];
+               [self setupTableView];
+               [self loadNewData];
+           }
+
+       }];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -152,7 +149,8 @@
 }
 - (void)loadMoreData
 {
-    [self loadData];
+//    [self loadData];
+//    [WWPublicMethod timeOneMinutesUploadDevice];
 }
 -(void)loadData
 {
@@ -212,7 +210,7 @@
             [weak_self.tableView reloadData];
             if (tempArray.count >0) {
                 weak_self.page++;
-//                weak_self.tableView.loadingMoreEnable = YES;
+                weak_self.tableView.loadingMoreEnable = YES;
             } else {
                 weak_self.tableView.loadingMoreEnable = NO;
             }

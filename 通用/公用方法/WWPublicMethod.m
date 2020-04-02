@@ -12,6 +12,7 @@
 #import <objc/runtime.h>
 //#import "YHPhotoBrowser.h"
 #import <CoreLocation/CoreLocation.h>
+#import "AFHTTPSessionManager.h"
 
 
 @implementation WWPublicMethod
@@ -612,7 +613,7 @@
         
         
         
-        　 　　CGContextRef con = UIGraphicsGetCurrentContext();
+    　　CGContextRef con = UIGraphicsGetCurrentContext();
         
         CGContextTranslateCTM(con, 0.0, size.height);
         
@@ -655,9 +656,100 @@
     
     
 }
++(void)refreshToken:(RefreshTokenSuccessBlock)tokenBlock
+{
+    NSString *url = @"http://192.168.6.120:10102/outer/account/refreshtoken";
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
 
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
+    
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        
+        DLog(@"Received: %@", responseObject);
+        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+        
+        tokenBlock(responseObject);
+        
 
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        DLog(@"error: %@", error);
+    }];
+}
 
++(void)timeOneMinutesUploadDevicestatus
+{
+    [NSTimer scheduledTimerWithTimeInterval:60 repeats:YES block:^(NSTimer * _Nonnull timer) {
+         
+//        NSDate *timeDate = [NSDate date];
+//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//        [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss"];
+//        NSString *locationString = [dateFormatter stringFromDate:timeDate];
+//
+//        DLog(@"当前时间  ==  %@",locationString);
+//
+        
+       NSString *url = @"http://192.168.6.120:10102/outer/ncore/sync/device/status";
+
+       AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+       //配置用户名 密码
+       NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+       //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+       NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+       // 设置Authorization的方法设置header
+       [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+
+       [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+       [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
+       manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
+
+        [manager POST:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            DLog(@"status.Received: %@", responseObject);
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            DLog(@"status.error: %@", error);
+        }];
+      
+    }];
+}
++(void)timeTwoMinutesUploadDevice
+{
+    [NSTimer scheduledTimerWithTimeInterval:120 repeats:YES block:^(NSTimer * _Nonnull timer) {
+         
+        NSString *url = @"http://192.168.6.120:10102/outer/ncore/sync/device";
+        
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        //配置用户名 密码
+        NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+        //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+        NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+        // 设置Authorization的方法设置header
+        [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+
+        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        
+        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
+        
+        [manager POST:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            DLog(@"device.Received: %@", responseObject);
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            DLog(@"device.error: %@", error);
+        }];
+      
+    }];
+    
+}
 
 
 

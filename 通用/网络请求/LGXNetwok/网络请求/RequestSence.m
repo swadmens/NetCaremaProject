@@ -160,7 +160,11 @@ NSString *_kStaticURL;
     }
     @try {
         
-//        int errorCode = [[results objectForKey:@"code"] intValue];
+        NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        int errorCode = [[results objectForKey:@"code"] intValue];
+        if (errorCode == 500 && [unauthorized containsString:@"401"]) {
+            [WWPublicMethod refreshToken:nil];
+        }
 //
 //        if (errorCode == -220) { // 没有登录
 //            // 提示没有登录，并显示登录界面
@@ -282,4 +286,7 @@ NSString *_kStaticURL;
 {
     return [AESHelper encryptString:str];
 }
+
+
+
 @end

@@ -10,7 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+
 @interface CarmeaVideosViewController : WWViewController
+
+@property (nonatomic,strong) void(^editChangeState)(BOOL isEdit);
 
 @property (nonatomic,assign) BOOL isEdit;//是否是编辑
 

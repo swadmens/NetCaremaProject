@@ -184,20 +184,7 @@
 /// 处理登录、注册、完善资料的数据
 - (void)setupInfoData:(id)obj
 {
-//    [_kHUDManager showActivityInView:nil withTitle:NSLocalizedString(@"dataProcessing", nil)];
     [_kHUDManager showActivityInView:nil withTitle:nil];
-
-    
-    /// 登录、注册、完善资料、第三方登录返回的是同一个
-    NSDictionary *data = [obj objectForKey:@"data"];
-    
-    NSString *token=[data objectForKey:@"token"];
-    NSString *session_id=[data objectForKey:@"session_id"];
-    NSString *saveToken = [NSString stringWithFormat:@"yubei%@",token];
-    
-    //保存用户信息
-    _kUserModel.userInfo.session_id = session_id;
-    _kUserModel.userInfo.session_token = MD5(saveToken);
     
     //更新用户信息
     [self updateUserInfo];
@@ -215,29 +202,15 @@
     return _userInfo;
 }
 /// 处理用户信息
-- (void)setupUserInfo:(NSDictionary *)uInfo
+- (void)makeIm_accountWithData:(NSDictionary *)uInfo
 {
-   
-    
-
+//    self.isLogined = YES;
+//    [self hideLoginViewWithBlock:nil];
+//
     NSDictionary *newPerData = [NSDictionary dictionaryWithDictionary:uInfo];
     if ([newPerData isEqualToDictionary:self.user_info_dic]) {
         return;
     }
-
-    // 处理用户中心列表信息
-    NSArray *item = [uInfo objectForKey:@"item"];
-    [self takecareOfItemListForUserCenter:item];
-    
-    // 处理用户中心我的宠物信息
-    NSArray *petInfo = [uInfo objectForKey:@"user_pet"];
-    [self makeMinePetInfoWithData:petInfo];
-    
-    self.sns_qq = (NSDictionary*)[uInfo objectForKey:@"sns_qq"];
-    self.sns_wechat = (NSDictionary*)[uInfo objectForKey:@"sns_wechat"];
-    self.sns_weibo = (NSDictionary*)[uInfo objectForKey:@"sns_weibo"];
-
-    
     // 处理用户信息
     [self.userInfo makeUserModelWithData:uInfo];
     self.user_info_dic = uInfo;
@@ -251,25 +224,6 @@
     }
 //    self.userCenterList = [UCenterSection getListByData:item];
 }
-//处理个人中心我的宠物信息
--(void)makeMinePetInfoWithData:(NSArray*)array
-{
-    
-
-}
-
-//处理个人中心我的account_id信息
--(void)makeIm_accountWithData:(NSDictionary*)dict
-{
-    _kUserModel.userInfo.account_id = [NSString stringWithFormat:@"%@",[dict objectForKey:@"account_id"]];
-    _kUserModel.userInfo.password = [NSString stringWithFormat:@"%@",[dict objectForKey:@"password"]];
-    
-//    [self loginTencent:_kUserModel.userInfo.account_id];
-    
-}
-
-
-
 #pragma mark - 资料
 /*
 /// 检测是否完善资料
@@ -335,10 +289,6 @@
     self.uid = @"";
     self.nickname = @"";
     self.avatar = @"";
-    
-    self.userInfo.session_id = @"";
-    self.userInfo.session_token = @"";
-    
     
 //    /// 清除极光推送信息
 //    [JPUSHService setTags:[NSSet set] alias:@"" fetchCompletionHandle:^(int iResCode, NSSet *iTags, NSString *iAlias){
@@ -447,7 +397,7 @@
     [baseSence.params setValue:[WWPublicMethod makeAlphabeticOrdering:nil] forKey:kSignKey];
     __unsafe_unretained typeof(self) weak_self = self;
     baseSence.successBlock = ^(id obj) {
-        [weak_self setupUserInfo:[obj objectForKey:@"data"]];
+        [weak_self makeIm_accountWithData:[obj objectForKey:@"data"]];
     };
     baseSence.errorBlock = ^(NSError *error) {
 //        [weak_self didLoginOut];

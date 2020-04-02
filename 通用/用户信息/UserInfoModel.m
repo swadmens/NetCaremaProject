@@ -46,20 +46,6 @@
     }
     return _tenant_name;
 }
--(NSString*)user_name
-{
-    if (!_user_name) {
-        _user_name = @"admin";
-    }
-    return _user_name;
-}
--(NSString*)password
-{
-    if (!_password) {
-        _password = @"admin123";
-    }
-    return _password;
-}
 -(BOOL)isTest
 {
     
@@ -135,6 +121,7 @@
     
     self.email = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"email"]];
     self.firstName = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"firstName"]];
+    self.lastName = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"lastName"]];
     self.lastPasswordChange = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"lastPasswordChange"]];
     self.user_self = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"self"]];
     self.shouldResetPassword = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"shouldResetPassword"]];
@@ -222,8 +209,8 @@
     // vip信息保存
 //    [self.vipModel save];
     
-//    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self];
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self requiringSecureCoding:YES error:nil];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self];
+//    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self requiringSecureCoding:NO error:nil];
 
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     [user setObject:data forKey:_kUserInfoModelKey];
@@ -234,8 +221,8 @@
 {
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     NSData *data = [user objectForKey:_kUserInfoModelKey];
-//    UserInfoModel *uInfo = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-    UserInfoModel *uInfo = [NSKeyedUnarchiver unarchivedObjectOfClass:self fromData:data error:nil];
+    UserInfoModel *uInfo = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+//    UserInfoModel *uInfo = [NSKeyedUnarchiver unarchivedObjectOfClass:self fromData:data error:nil];
 
     
     return uInfo;

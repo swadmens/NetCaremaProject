@@ -422,6 +422,11 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error: %@", error);
+        NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        int errorCode = [[error.userInfo objectForKey:@"code"] intValue];
+        if (errorCode == 500 && [unauthorized containsString:@"401"]) {
+            [WWPublicMethod refreshToken:nil];
+        }
         [self failedOperation];
     }];
     

@@ -42,15 +42,6 @@
     [dic setObject:self.region forKey:@"region"];
     [dic setObject:self.longitude forKey:@"longitude"];
     [dic setObject:self.latitude forKey:@"latitude"];
-
-    
-    
-    if ([_kUserModel.userInfo.session_id isKindOfClass:[NSString class]]) {
-        NSString *alphsetStr=[WWPublicMethod makeAlphabeticOrdering:dic];
-        [dic setObject:alphsetStr forKey:kSignKey];
-    }
- 
-    
     
     return dic;
 }

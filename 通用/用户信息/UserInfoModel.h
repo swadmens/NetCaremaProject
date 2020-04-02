@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString *const _kUserInfoModelKey = @"ypet.user_info";
+static NSString *const _kUserInfoModelKey = @"netcamera.user_info";
 
 @interface UserInfoModel : NSObject <NSCoding>
 
@@ -44,6 +44,7 @@ static NSString *const _kUserInfoModelKey = @"ypet.user_info";
 
 @property (nonatomic, strong) NSString *email;//邮箱
 @property (nonatomic, strong) NSString *firstName;
+@property (nonatomic, strong) NSString *lastName;
 @property (nonatomic, strong) NSString *lastPasswordChange;
 @property (nonatomic, strong) NSString *user_self;
 @property (nonatomic, strong) NSString *shouldResetPassword;

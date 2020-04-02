@@ -10,6 +10,7 @@
 #import "CarmeaVideosModel.h"
 #import "YBDownloadManager.h"
 #import "DownLoadSence.h"
+#import <UIImageView+YYWebImage.h>
 
 @interface DownloadListCell ()
 
@@ -117,6 +118,9 @@
 -(void)makeCellData:(CarmeaVideosModel *)model
 {
     self.model = model;
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:UIImageWithFileName(@"playback_back_image")];
+    _titleLabel.text = model.video_name;
+    _timeLabel.text = model.start_time;
 }
 
 - (void)setUrl:(NSString *)url
@@ -151,7 +155,7 @@
     DownLoadSence *sence = [DownLoadSence new];
     sence.filePath = @"";
     sence.fileName = @"Video.mp4";
-    sence.fileLenth = @"690000";
+    sence.fileLenth = @"3382";
     sence.needReDownload = YES;
     sence.url = urlString;
     [sence startDownload];

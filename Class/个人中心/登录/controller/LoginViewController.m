@@ -163,7 +163,7 @@
     [_kHUDManager showActivityInView:nil withTitle:@"登录中..."];
     
     //http的get请求地址
-    NSString *urlStr = @"192.168.10.12:9090/outer/user/currentUser";
+    NSString *urlStr = @"http://ncore.iot/user/currentUser";
 
     NSURL *url = [NSURL URLWithString:urlStr];
     //自定义的request
@@ -189,7 +189,7 @@
 
         NSLog(@"%@",responseObject);
         
-        [_kUserModel makeIm_accountWithData:responseObject];
+//        [_kUserModel makeIm_accountWithData:responseObject];
         
         NSDictionary *uInfo = responseObject;
         
@@ -209,14 +209,14 @@
         [_kUserModel.userInfo save];
         
         _kUserModel.isLogined = YES;
+        
         [_kUserModel hideLoginViewWithBlock:nil];
         
 //            // 注册推送
 //            NSString *jalias = self.nameTextField.text;
 //            NSString *jtags = self.nameTextField.text;
 //            [self setTags:jtags andAlias:jalias];
-//            //获取用户类型
-//            [self getFractionData];
+        
 
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 //        NSLog(@"%@",error);

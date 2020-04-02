@@ -76,6 +76,12 @@
     self.videoController.view.tag = 2;
     self.videoController.equiment_id = self.equiment_id;
     
+    __unsafe_unretained typeof(self) weak_self = self;
+
+    self.videoController.editChangeState = ^(BOOL isEdit) {
+        weak_self.rightBtn.selected = isEdit;
+    };
+    
     self.pagesArray = @[
                         self.basicController,
                         self.liveController,

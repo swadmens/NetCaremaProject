@@ -217,7 +217,6 @@
 		4A580FC624075F2D00E82675 /* AssociatedRegistRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580DA324075F2C00E82675 /* AssociatedRegistRequest.m */; };
 		4A580FC724075F2D00E82675 /* ResetPwdSence.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580DA524075F2C00E82675 /* ResetPwdSence.m */; };
 		4A580FC824075F2D00E82675 /* LoginSence.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580DA724075F2C00E82675 /* LoginSence.m */; };
-		4A580FC924075F2D00E82675 /* RWDummySignInService.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580DAA24075F2C00E82675 /* RWDummySignInService.m */; };
 		4A580FCA24075F2D00E82675 /* UCenterListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580DAD24075F2C00E82675 /* UCenterListItem.m */; };
 		4A580FCB24075F2D00E82675 /* RetrievePasswordCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580DB324075F2C00E82675 /* RetrievePasswordCell.m */; };
 		4A580FCC24075F2D00E82675 /* CountryAreaCodeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580DB424075F2C00E82675 /* CountryAreaCodeCell.m */; };
@@ -925,9 +924,7 @@
 		4A580DA424075F2C00E82675 /* RegistNewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegistNewModel.h; sourceTree = "<group>"; };
 		4A580DA524075F2C00E82675 /* ResetPwdSence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResetPwdSence.m; sourceTree = "<group>"; };
 		4A580DA724075F2C00E82675 /* LoginSence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginSence.m; sourceTree = "<group>"; };
-		4A580DA824075F2C00E82675 /* RWDummySignInService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RWDummySignInService.h; sourceTree = "<group>"; };
 		4A580DA924075F2C00E82675 /* LoginSence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginSence.h; sourceTree = "<group>"; };
-		4A580DAA24075F2C00E82675 /* RWDummySignInService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RWDummySignInService.m; sourceTree = "<group>"; };
 		4A580DAB24075F2C00E82675 /* loginRegModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loginRegModel.h; sourceTree = "<group>"; };
 		4A580DAD24075F2C00E82675 /* UCenterListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UCenterListItem.m; sourceTree = "<group>"; };
 		4A580DAE24075F2C00E82675 /* UCenterListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UCenterListItem.h; sourceTree = "<group>"; };
@@ -2214,11 +2211,11 @@
 		4A580CD824075F2B00E82675 /* 弹出框 */ = {
 			isa = PBXGroup;
 			children = (
-				4A580CD924075F2B00E82675 /* TCAlertView.h */,
-				4A580CDA24075F2B00E82675 /* TCNewAlertView.m */,
-				4A580CDB24075F2B00E82675 /* TCAlertView.m */,
 				4A580CDC24075F2B00E82675 /* LEEAlert */,
+				4A580CD924075F2B00E82675 /* TCAlertView.h */,
+				4A580CDB24075F2B00E82675 /* TCAlertView.m */,
 				4A580CE024075F2B00E82675 /* TCNewAlertView.h */,
+				4A580CDA24075F2B00E82675 /* TCNewAlertView.m */,
 			);
 			path = "弹出框";
 			sourceTree = "<group>";
@@ -2538,13 +2535,13 @@
 		4A580D9D24075F2C00E82675 /* 注册 */ = {
 			isa = PBXGroup;
 			children = (
-				4A580D9E24075F2C00E82675 /* RegisterSence.h */,
-				4A580D9F24075F2C00E82675 /* RegistNewModel.m */,
 				4A580DA024075F2C00E82675 /* AssociatedRegistRequest.h */,
-				4A580DA124075F2C00E82675 /* ResetPwdSence.h */,
-				4A580DA224075F2C00E82675 /* RegisterSence.m */,
 				4A580DA324075F2C00E82675 /* AssociatedRegistRequest.m */,
+				4A580D9E24075F2C00E82675 /* RegisterSence.h */,
+				4A580DA224075F2C00E82675 /* RegisterSence.m */,
 				4A580DA424075F2C00E82675 /* RegistNewModel.h */,
+				4A580D9F24075F2C00E82675 /* RegistNewModel.m */,
+				4A580DA124075F2C00E82675 /* ResetPwdSence.h */,
 				4A580DA524075F2C00E82675 /* ResetPwdSence.m */,
 			);
 			path = "注册";
@@ -2553,10 +2550,8 @@
 		4A580DA624075F2C00E82675 /* 登录 */ = {
 			isa = PBXGroup;
 			children = (
-				4A580DA724075F2C00E82675 /* LoginSence.m */,
-				4A580DA824075F2C00E82675 /* RWDummySignInService.h */,
 				4A580DA924075F2C00E82675 /* LoginSence.h */,
-				4A580DAA24075F2C00E82675 /* RWDummySignInService.m */,
+				4A580DA724075F2C00E82675 /* LoginSence.m */,
 			);
 			path = "登录";
 			sourceTree = "<group>";
@@ -2564,8 +2559,8 @@
 		4A580DAC24075F2C00E82675 /* 用户中心列表 */ = {
 			isa = PBXGroup;
 			children = (
-				4A580DAD24075F2C00E82675 /* UCenterListItem.m */,
 				4A580DAE24075F2C00E82675 /* UCenterListItem.h */,
+				4A580DAD24075F2C00E82675 /* UCenterListItem.m */,
 			);
 			path = "用户中心列表";
 			sourceTree = "<group>";
@@ -3918,7 +3913,6 @@
 				4A580F6524075F2D00E82675 /* CGXDatePickerView.m in Sources */,
 				4A580FDA24075F2D00E82675 /* PageScrollView.m in Sources */,
 				4A580FC124075F2D00E82675 /* LoginViewController.m in Sources */,
-				4A580FC924075F2D00E82675 /* RWDummySignInService.m in Sources */,
 				4A580F8B24075F2D00E82675 /* ZYBannerFooter.m in Sources */,
 				4AB29A3C2410DB59004CA6B5 /* DownloadListCell.m in Sources */,
 				4A64ECC4242B5A5A00D30FB1 /* LivingModel.m in Sources */,

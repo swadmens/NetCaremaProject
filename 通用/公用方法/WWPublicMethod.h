@@ -11,6 +11,8 @@
 #import <Photos/Photos.h>
 
 typedef void(^SaveImageCompletion)(ALAsset *asset,NSError* error);
+/// 刷新token请求完成
+typedef void(^RefreshTokenSuccessBlock)(id obj);
 //typedef void(^SaveImageCompletion)(PHAsset *asset,NSError* error);
 
 
@@ -98,6 +100,12 @@ typedef void(^SaveImageCompletion)(ALAsset *asset,NSError* error);
 +(BOOL)openLocationServiceWithBlock;
 
 
+//刷新token
++(void)refreshToken:(RefreshTokenSuccessBlock)tokenBlock;
 
+//定时一分钟同步设备
++(void)timeOneMinutesUploadDevicestatus;
+//定时二分钟同步设备
++(void)timeTwoMinutesUploadDevice;
 
 @end
