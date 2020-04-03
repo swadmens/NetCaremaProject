@@ -39,8 +39,7 @@
     [_showImageView addHeight:width*0.6];
    
    
-   
-   
+    
     UIView *backView = [UIView new];
     backView.backgroundColor = UIColorFromRGB(0x000000, 0.52);
     [_showImageView addSubview:backView];
@@ -71,14 +70,18 @@
     [_tagLabel rightToView:backView];
     [_tagLabel addWidth:35.5];
     [_tagLabel addHeight:15.5];
-       
-    
     
 }
 -(void)makeCellData:(LivingModel*)model
 {
-//    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:[UIImage imageWithColor:kColorBackSecondColor]];
     _titleLabel.text = model.name;
+    
+    if ([WWPublicMethod isStringEmptyText:model.RTMP]) {
+        _tagLabel.text = @"直播中";
+    }else{
+        _tagLabel.text = @"离线";
+    }
 }
 
 

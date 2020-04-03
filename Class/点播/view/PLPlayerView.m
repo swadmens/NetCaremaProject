@@ -42,6 +42,7 @@ UIGestureRecognizerDelegate
 @property (nonatomic, strong) PLPlayer *player;
 @property (nonatomic, strong) PLPlayerOption *playerOption;
 @property (nonatomic, assign) BOOL isNeedSetupPlayer;
+@property (nonatomic, assign) BOOL isLiving;//是否是直播
 
 @property (nonatomic, strong) NSTimer *playTimer;
 
@@ -688,7 +689,6 @@ UIGestureRecognizerDelegate
     
     NSLog(@"播放地址: %@", _media.videoUrl);
     self.thumbImageView.hidden = NO;
-//    [self.thumbImageView sd_setImageWithURL:[NSURL URLWithString:_media.snapUrl]];
     [self.thumbImageView yy_setImageWithURL:[NSURL URLWithString:_media.snapUrl] options:YYWebImageOptionProgressive];
     
     self.playerOption = [PLPlayerOption defaultOption];
@@ -696,12 +696,16 @@ UIGestureRecognizerDelegate
     NSString *urlString = _media.videoUrl.lowercaseString;
     if ([urlString hasSuffix:@"mp4"]) {
         format = kPLPLAY_FORMAT_MP4;
+        self.isLiving = NO;
     } else if ([urlString hasPrefix:@"rtmp:"]) {
         format = kPLPLAY_FORMAT_FLV;
+        self.isLiving = YES;
     } else if ([urlString hasSuffix:@".mp3"]) {
         format = kPLPLAY_FORMAT_MP3;
+        self.isLiving = NO;
     } else if ([urlString hasSuffix:@".m3u8"]) {
         format = kPLPLAY_FORMAT_M3U8;
+        self.isLiving = NO;
     }
     [self.playerOption setOptionValue:@(format) forKey:PLPlayerOptionKeyVideoPreferFormat];
     [self.playerOption setOptionValue:@(kPLLogNone) forKey:PLPlayerOptionKeyLogLevel];
@@ -721,6 +725,14 @@ UIGestureRecognizerDelegate
     [self.player.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self);
     }];
+    
+//    if (self.isLiving) {
+//        [self clickPlayButton];
+//    }
+    _slider.hidden = self.isLiving;
+    _bufferingView.hidden = _isLiving;
+    
+    
 }
 
 - (void)unsetupPlayer {

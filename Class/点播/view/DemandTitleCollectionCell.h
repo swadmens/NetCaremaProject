@@ -10,9 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class DemandSubcatalogModel;
 @interface DemandTitleCollectionCell : WWCollectionViewCell
 
--(void)makeCellData:(NSDictionary*)dic;
+-(void)makeCellData:(DemandSubcatalogModel*)model;
 
 
 @end

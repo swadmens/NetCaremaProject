@@ -58,11 +58,11 @@
                 [weak_self loadNewData];
             }
                 break;
-//            case WWScrollingStateLoadingMore:
-//            {
-//                [weak_self loadMoreData];
-//            }
-//                break;
+            case WWScrollingStateLoadingMore:
+            {
+                [weak_self loadMoreData];
+            }
+                break;
             default:
                 break;
         }
@@ -71,7 +71,7 @@
 - (void)setupNoDataView
 {
     self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"60"];
-    self.noDataView.backgroundColor = [UIColor whiteColor];
+    self.noDataView.backgroundColor = kColorBackgroundColor;
     // label
     UILabel *tipLabel = [self getNoDataTipLabel];
     
@@ -162,20 +162,7 @@
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
-//    RequestSence *sence = [[RequestSence alloc] init];
-//    sence.requestMethod = @"GET";
-//    sence.pathURL = [NSString stringWithFormat:@"inventory/managedObjects/%@/childAssets?pageSize=100&currentPage=1",self.equipment_id];
-//    __unsafe_unretained typeof(self) weak_self = self;
-//    sence.successBlock = ^(id obj) {
-//
-//        [weak_self handleObject:obj];
-//    };
-//    sence.errorBlock = ^(NSError *error) {
-//        [weak_self failedOperation];
-//    };
-//    [sence sendRequest];
-    
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/inventory/managedObjects/%@/childAssets?pageSize=100&currentPage=1",self.equipment_id];
+    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/inventory/managedObjects/%@/childAssets?pageSize=100&currentPage=%ld",self.equipment_id,(long)self.page];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
     NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
@@ -238,13 +225,10 @@
         
         [[GCDQueue mainQueue] queueBlock:^{
             
-            if (tempArray.count == 0) {
-                [_kHUDManager showMsgInView:nil withTitle:[obj objectForKey:@"msg"] isSuccess:YES];
-            }
             [weak_self.tableView reloadData];
             if (tempArray.count >0) {
                 weak_self.page++;
-//                weak_self.tableView.loadingMoreEnable = YES;
+                weak_self.tableView.loadingMoreEnable = YES;
             } else {
                 weak_self.tableView.loadingMoreEnable = NO;
             }

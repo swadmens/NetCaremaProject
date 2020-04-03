@@ -65,6 +65,9 @@
 {
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
     _titleLabel.text = model.duration;
+    
+    DLog(@"model.snap  %@",model.snap);
+    
 }
 -(void)setIsEdit:(BOOL)isEdit
 {

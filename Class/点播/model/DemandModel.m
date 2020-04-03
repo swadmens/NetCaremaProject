@@ -49,3 +49,24 @@
     return model;
 }
 @end
+
+
+@implementation DemandSubcatalogModel
+
++(DemandSubcatalogModel*)makeModelData:(NSDictionary*)dic
+{
+    DemandSubcatalogModel *model = [DemandSubcatalogModel new];
+  
+    model.createAt = [NSString stringWithFormat:@"%@",[dic objectForKey:@"createAt"]];
+    model.desc = [NSString stringWithFormat:@"%@",[dic objectForKey:@"desc"]];
+    model.folder = [NSString stringWithFormat:@"%@",[dic objectForKey:@"folder"]];
+    model.sub_id = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
+    model.name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    model.realPath = [NSString stringWithFormat:@"%@",[dic objectForKey:@"realPath"]];
+    model.sort = [NSString stringWithFormat:@"%@",[dic objectForKey:@"sort"]];
+    model.updateAt = [NSString stringWithFormat:@"%@",[dic objectForKey:@"updateAt"]];
+
+    return model;
+}
+@end
+

@@ -37,6 +37,7 @@
     model.type = [NSString stringWithFormat:@"%@",[dic objectForKey:@"type"]];
     model.updateAt = [NSString stringWithFormat:@"%@",[dic objectForKey:@"updateAt"]];
     model.url = [NSString stringWithFormat:@"%@",[dic objectForKey:@"url"]];
+    model.snapUrl = [NSString stringWithFormat:@"%@",[dic objectForKey:@"snapUrl"]];
 
     
     NSDictionary *session = (NSDictionary*)[dic objectForKey:@"session"];

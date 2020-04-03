@@ -15,6 +15,7 @@
 #import "DemandModel.h"
 #import "LGXVerticalButton.h"
 #import "DownloadListController.h"
+#import <UIImageView+YYWebImage.h>
 
 @interface CarmeaVideosViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
 {
@@ -29,6 +30,8 @@
 @property (nonatomic, strong) NSMutableIndexSet* selectedIndexSet;
 
 @property (nonatomic,strong) UIView *editView;
+
+@property (nonatomic,strong) NSString *device_id;//具体设备id
 
 
 @end
@@ -80,11 +83,11 @@
                     [weak_self loadNewData];
                 }
                     break;
-                case WWCollectionViewStateLoadingMore:
-                {
+//                case WWCollectionViewStateLoadingMore:
+//                {
 //                    [weak_self loadMoreData];
-                }
-                    break;
+//                }
+//                    break;
                 default:
                     break;
             }
@@ -131,6 +134,9 @@
     [downBtn alignTop:@"0" leading:nil bottom:@"0" trailing:@"0" toView:self.editView];
     [downBtn addWidth:kScreenWidth/2];
     [downBtn addTarget:self action:@selector(downVideoClick) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    
 
     
     //接收通知
@@ -142,6 +148,16 @@
 
     NSDictionary *data = [NSDictionary dictionaryWithDictionary:[WWPublicMethod objectTransFromJson:self.equiment_id]];
     [self.dicData addEntriesFromDictionary:data];
+    
+    NSString *ClientId = [self.dicData objectForKey:@"ClientId"];
+    NSString *DeviceId = [self.dicData objectForKey:@"DeviceId"];
+    NSString *CameraId = [self.dicData objectForKey:@"CameraId"];
+    
+    ClientId = [WWPublicMethod isStringEmptyText:ClientId]?ClientId:@"";
+    DeviceId = [WWPublicMethod isStringEmptyText:DeviceId]?DeviceId:@"";
+    CameraId = [WWPublicMethod isStringEmptyText:CameraId]?CameraId:@"";
+
+    self.device_id = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
     [self loadNewData];
 }
 - (void)takeGoHomeNotica:(NSNotification *)notification
@@ -255,19 +271,13 @@
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
-    NSString *ClientId = [self.dicData objectForKey:@"ClientId"];
-    NSString *DeviceId = [self.dicData objectForKey:@"DeviceId"];
-    NSString *CameraId = [self.dicData objectForKey:@"CameraId"];
-    
-    ClientId = [WWPublicMethod isStringEmptyText:ClientId]?ClientId:@"";
-    DeviceId = [WWPublicMethod isStringEmptyText:DeviceId]?DeviceId:@"";
-    CameraId = [WWPublicMethod isStringEmptyText:CameraId]?CameraId:@"";
+    NSString *start = [NSString stringWithFormat:@"%ld",(self.page - 1)*10];
 
-    NSString *ids = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
-    
     NSDictionary *finalParams = @{
-                                  @"id":ids,
+                                  @"id":self.device_id,
                                   @"day":@"all",
+                                  @"start":start,
+                                  @"limit":@"10",
                                   };
         
     //提交数据
@@ -354,26 +364,25 @@
             [weak_self.dataArray removeAllObjects];
         }
         NSMutableArray *modelArray = [NSMutableArray new];
-
+        
+        
         [tempArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             
             NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-            [mutDic setValue:@(NO) forKey:@"choose"];
+            NSString *startTime = [mutDic objectForKey:@"start_time"];
+            NSString *snap = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/getsnap?id=%@&period=%@",self.device_id,startTime];
+            [mutDic setValue:snap forKey:@"snap"];
             
             CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
             [modelArray addObject:model];
-            
+            [self getRecordCoverPhoto:model.start_time withData:idx];
         }];
         [weak_self.dataArray addObjectsFromArray:modelArray];
 
         [[GCDQueue mainQueue] queueBlock:^{
 
-            if (modelArray.count == 0) {
-                [_kHUDManager showMsgInView:nil withTitle:[obj objectForKey:@"msg"] isSuccess:YES];
-            }
             [weak_self.collectionView reloadData];
-            
             if (tempArray.count >0) {
                 weak_self.page++;
                 weak_self.collectionView.loadingMoreEnable = YES;
@@ -445,8 +454,6 @@
 //删除视频
 -(void)deleteVideoClick
 {
-        
-    
     [self.selectedIndexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
         CarmeaVideosModel *model = [self.dataArray objectAtIndex:idx];
         [self deleteNumbersVideo:model.start_time withInteger:idx];
@@ -454,23 +461,11 @@
 }
 -(void)deleteNumbersVideo:(NSString*)startime withInteger:(NSInteger)integer
 {
-    NSString *ClientId = [self.dicData objectForKey:@"ClientId"];
-    NSString *DeviceId = [self.dicData objectForKey:@"DeviceId"];
-    NSString *CameraId = [self.dicData objectForKey:@"CameraId"];
-   
-    ClientId = [WWPublicMethod isStringEmptyText:ClientId]?ClientId:@"";
-    DeviceId = [WWPublicMethod isStringEmptyText:DeviceId]?DeviceId:@"";
-    CameraId = [WWPublicMethod isStringEmptyText:CameraId]?CameraId:@"";
-    
-    NSString *ids = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
-    
     NSDictionary *finalParams = @{
-                                      @"id":ids,
+                                      @"id":self.device_id,
                                       @"period": startime,
                                       };
-            
-        //提交数据
-        
+    //提交数据
     NSString *url = @"http://192.168.6.120:10102/outer/liveqing/record/remove";
         
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
@@ -533,30 +528,55 @@
         [tempArray addObject:model];
     }];
     
-    NSString *ClientId = [self.dicData objectForKey:@"ClientId"];
-    NSString *DeviceId = [self.dicData objectForKey:@"DeviceId"];
-    NSString *CameraId = [self.dicData objectForKey:@"CameraId"];
-  
-    ClientId = [WWPublicMethod isStringEmptyText:ClientId]?ClientId:@"";
-    DeviceId = [WWPublicMethod isStringEmptyText:DeviceId]?DeviceId:@"";
-    CameraId = [WWPublicMethod isStringEmptyText:CameraId]?CameraId:@"";
-  
-    NSString *ids = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
-//    NSDictionary *finalParams = @{
-//                                    @"id":ids,
-//                                    @"period": tempArray,
-//                                    };
-//    NSString *pushId = [WWPublicMethod jsonTransFromObject:finalParams];
-//    [TargetEngine controller:self pushToController:PushTargetDownloadList WithTargetId:pushId];
-    
-    
     DownloadListController *dvc = [DownloadListController new];
     dvc.dataArray = tempArray;
-    dvc.downLoad_id = ids;
+    dvc.downLoad_id = self.device_id;
     [self.navigationController pushViewController:dvc animated:YES];
     
     [self exitTheEditStates];
 
+}
+
+//获取录像封面快照
+-(void)getRecordCoverPhoto:(NSString*)period withData:(NSInteger)indexInteger
+{
+    NSString *url = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.device_id,period];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
+
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+
+        DLog(@"RecordCoverPhoto.Received: %@", responseObject);
+        DLog(@"RecordCoverPhoto.Received HTTP %ld", (long)httpResponse.statusCode);
+
+        [self dealWithCoverPhoto:responseObject withData:indexInteger];
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        DLog(@"error: %@", error);
+    }];
+}
+
+-(void)dealWithCoverPhoto:(id)obj withData:(NSInteger)indexInteger
+{
+    if (obj == nil) {
+        return;
+    }
+    CarmeaVideosModel *model = [self.dataArray objectAtIndex:indexInteger];
+    model.snap = [NSString stringWithFormat:@"%@",[obj objectForKey:@"url"]];
+    [self.dataArray replaceObjectAtIndex:indexInteger withObject:model];
+    [self.collectionView reloadData];
 }
 
 

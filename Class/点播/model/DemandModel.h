@@ -51,4 +51,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+
+@interface DemandSubcatalogModel : NSObject
+
++(DemandSubcatalogModel*)makeModelData:(NSDictionary*)dic;
+
+
+@property (nonatomic,strong) NSString *createAt;
+@property (nonatomic,strong) NSString *desc;
+@property (nonatomic,strong) NSString *folder;
+@property (nonatomic,strong) NSString *sub_id;
+@property (nonatomic,strong) NSString *name;
+@property (nonatomic,strong) NSString *realPath;
+@property (nonatomic,strong) NSString *sort;
+@property (nonatomic,strong) NSString *updateAt;
+
+@end
+
+
+
 NS_ASSUME_NONNULL_END

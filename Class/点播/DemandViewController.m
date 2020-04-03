@@ -23,6 +23,9 @@
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UISearchBar *searchButton;
 @property(nonatomic,assign) NSInteger page;
+/// 没有内容
+@property (nonatomic, strong) UIView *noDataView;
+
 
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSMutableArray *searchDataSource;/**<搜索结果数据源*/
@@ -33,6 +36,9 @@
 @property (nonatomic, strong) NSMutableDictionary *cellDic;
 
 @property (nonatomic, strong) WWCollectionView *collectionView;
+
+@property (nonatomic,strong) NSString *folder;//子目录
+@property (nonatomic,assign) BOOL isClick;//是否点击过
 
 @end
 
@@ -64,6 +70,26 @@
         _titleDataArray = [NSMutableArray array];
     }
     return _titleDataArray;
+}
+- (void)setupNoDataView
+{
+    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"130"];
+    self.noDataView.backgroundColor = kColorBackgroundColor;
+    // label
+    UILabel *tipLabel = [self getNoDataTipLabel];
+    
+    UIButton *againBtn = [UIButton new];
+    [againBtn setTitle:@"暂无数据，轻触重试" forState:UIControlStateNormal];
+    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
+    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
+    [self.noDataView addSubview:againBtn];
+    [againBtn xCenterToView:self.noDataView];
+    [againBtn topToView:tipLabel withSpace:-8];
+}
+-(void)againLoadDataBtn
+{
+    [self loadNewData];
 }
 - (void)setupViews
 {
@@ -214,7 +240,7 @@
                     break;
                 case WWCollectionViewStateLoadingMore:
                 {
-//                    [weak_self loadMoreData];
+                    [weak_self loadMoreData];
                 }
                     break;
                 default:
@@ -233,10 +259,6 @@
     self.navigationItem.leftBarButtonItem=nil;
     self.FDPrefersNavigationBarHidden = YES;
     
-    NSArray *titleArr =  @[@{@"title":@"全部",@"select":@(YES)},@{@"title":@"多清晰度视频",@"select":@(NO)},@{@"title":@"点播视频111",@"select":@(NO)},@{@"title":@"点播视频222",@"select":@(NO)},@{@"title":@"点播视频333",@"select":@(NO)},@{@"title":@"点播视频444",@"select":@(NO)},];
-    [self.titleDataArray addObjectsFromArray:titleArr];
-    
-    
     [self.view addSubview:self.collectionUpView];
     [self.collectionUpView alignTop:@"85" leading:@"0" bottom:nil trailing:@"0" toView:self.view];
     [self.collectionUpView addHeight:35];
@@ -244,8 +266,12 @@
     [self.view addSubview:self.collectionView];
     [self.collectionView alignTop:@"130" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     
+    self.folder = @" ";
+    self.isClick = NO;
+    [self setupNoDataView];
     [self setupViews];
     [self loadNewData];
+    [self getSubcatalogList];
 }
 #pragma mark -- collectionDelegate
 //定义展示的Section的个数
@@ -253,7 +279,6 @@
 {
     if ([collectionView isEqual:self.collectionUpView]) {
         return self.titleDataArray.count;
-
     }else{
         return self.dataArray.count;
     }
@@ -263,25 +288,26 @@
     if ([collectionView isEqual:self.collectionUpView]) {
         
 //        __unsafe_unretained typeof(self) weak_self = self;
-//
-//        // 每次先从字典中根据IndexPath取出唯一标识符
-//        NSString *identifier = [_cellDic objectForKey:[NSString stringWithFormat:@"%@", indexPath]];
-//        // 如果取出的唯一标示符不存在，则初始化唯一标示符，并将其存入字典中，对应唯一标示符注册Cell
-//        if (identifier == nil) {
-//           identifier = [NSString stringWithFormat:@"%@%@", [DemandTitleCollectionCell getCellIDStr], [NSString stringWithFormat:@"%@", indexPath]];
-//           [_cellDic setValue:identifier forKey:[NSString stringWithFormat:@"%@", indexPath]];
-//           // 注册Cell
-//           [self.collectionUpView registerClass:[DemandTitleCollectionCell class] forCellWithReuseIdentifier:identifier];
-//        }
-//        DemandTitleCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-        DemandTitleCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[DemandTitleCollectionCell getCellIDStr] forIndexPath:indexPath];
 
-        NSDictionary *title = [self.titleDataArray objectAtIndex:indexPath.row];
-        [cell makeCellData:title];
+        // 每次先从字典中根据IndexPath取出唯一标识符
+        NSString *identifier = [_cellDic objectForKey:[NSString stringWithFormat:@"%@", indexPath]];
+        // 如果取出的唯一标示符不存在，则初始化唯一标示符，并将其存入字典中，对应唯一标示符注册Cell
+        if (identifier == nil) {
+           identifier = [NSString stringWithFormat:@"%@%@", [DemandTitleCollectionCell getCellIDStr], [NSString stringWithFormat:@"%@", indexPath]];
+           [_cellDic setValue:identifier forKey:[NSString stringWithFormat:@"%@", indexPath]];
+           // 注册Cell
+           [self.collectionUpView registerClass:[DemandTitleCollectionCell class] forCellWithReuseIdentifier:identifier];
+        }
+        DemandTitleCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+//        DemandTitleCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[DemandTitleCollectionCell getCellIDStr] forIndexPath:indexPath];
+
+        DemandSubcatalogModel *model = [self.titleDataArray objectAtIndex:indexPath.row];
+        [cell makeCellData:model];
         
-        //设置首个默认选中
-        [collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-
+        if (!self.isClick) {
+            //设置首个默认选中
+            [collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+        }
         return cell;
     }else{
          
@@ -289,16 +315,15 @@
         DemandModel *model = [self.dataArray objectAtIndex:indexPath.row];
         [cell makeCellData:model];
        
-        
         return cell;
     }
     
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    DemandModel *model = [self.dataArray objectAtIndex:indexPath.row];
 
     if ([collectionView isEqual:self.collectionView]) {
+        DemandModel *model = [self.dataArray objectAtIndex:indexPath.row];
         if (indexPath.row == 0) {
             [TargetEngine controller:self pushToController:PushTargetDHVideoPlayback WithTargetId:@"1"];
         }else{
@@ -315,18 +340,21 @@
             
             
         }
+    }else{
+        DemandSubcatalogModel *model = [self.titleDataArray objectAtIndex:indexPath.row];
+        self.folder = model.folder;
+        self.isClick = YES;
+        [self loadNewData];
     }
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
-    
     if ([collectionView isEqual:self.collectionUpView]) {
            return UIEdgeInsetsMake(0, 8, 0, 8);
        }else{
            return UIEdgeInsetsMake(0, 15, 0, 15);
        }
-    
     
 }
 //两个cell之间的间距（同一行的cell的间距）
@@ -393,43 +421,71 @@
 - (void)startLoadDataRequest
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
-
+    
+    NSString *start = [NSString stringWithFormat:@"%ld",(self.page - 1)*10];
+    
+    NSDictionary *finalParams = @{
+                                  @"start":start,
+                                  @"limit":@"10",
+                                  };
+    
+    NSMutableDictionary *mutData = [NSMutableDictionary dictionaryWithDictionary:finalParams];
+    if ([WWPublicMethod isStringEmptyText:self.folder]) {
+        [mutData setValue:self.folder forKey:@"folder"];
+    }
+    
+    //提交数据
     NSString *url = @"http://192.168.6.120:10102/outer/liveqing/vod/list";
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mutData
+                                                       options:0
+                                                         error:nil];
+    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
+    
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:nil error:nil];
+    
+    // 设置请求头
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     //配置用户名 密码
     NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
     //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
     NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
     // 设置Authorization的方法设置header
-    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
-
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
     
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
-
+    // 设置body
+    [request setHTTPBody:jsonData];
     __unsafe_unretained typeof(self) weak_self = self;
+
+    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
     
-    [manager POST:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
         
+        if (error) {
+            // 请求失败
+            DLog(@"error  ==  %@",error.userInfo);
+            NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+            int errorCode = [[error.userInfo objectForKey:@"code"] intValue];
+            if (errorCode == 500 && [unauthorized containsString:@"401"]) {
+                [WWPublicMethod refreshToken:nil];
+            }
+            [self failedOperation];
+            return ;
+        }
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+
         DLog(@"Received: %@", responseObject);
         DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-        
+
          [weak_self handleObject:responseObject];
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"error: %@", error);
-        NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
-        int errorCode = [[error.userInfo objectForKey:@"code"] intValue];
-        if (errorCode == 500 && [unauthorized containsString:@"401"]) {
-            [WWPublicMethod refreshToken:nil];
-        }
-        [self failedOperation];
     }];
     
+    [task resume];
 }
 - (void)failedOperation
 {
@@ -464,9 +520,6 @@
 
         [[GCDQueue mainQueue] queueBlock:^{
 
-            if (tempArray.count == 0) {
-                [_kHUDManager showMsgInView:nil withTitle:[obj objectForKey:@"msg"] isSuccess:YES];
-            }
             [weak_self.collectionView reloadData];
             if (tempArray.count >0) {
                 weak_self.page++;
@@ -488,12 +541,66 @@
     NSInteger count = self.dataArray.count;
     if (count == 0) {
         self.collectionView.hidden = YES;
-//        self.noDataView.hidden = NO;
+        self.noDataView.hidden = NO;
     } else {
         self.collectionView.hidden = NO;
-//        self.noDataView.hidden = YES;
+        self.noDataView.hidden = YES;
     }
     
+}
+
+//获取子目录
+-(void)getSubcatalogList
+{
+    [_kHUDManager showActivityInView:nil withTitle:nil];
+        
+    NSString *url = @"http://192.168.6.120:10102/outer/liveqing/vod/subcataloglist";
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+       
+    __unsafe_unretained typeof(self) weak_self = self;
+
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        
+        DLog(@"getSubcatalogList.Received: %@", responseObject);
+        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+        
+        [weak_self handleSubcatalogObject:responseObject];
+         
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error: %@", error);
+        [weak_self failedOperation];
+    }];
+            
+}
+- (void)handleSubcatalogObject:(id)obj
+{
+    _isHadFirst = YES;
+    [_kHUDManager hideAfter:0.1 onHide:nil];
+    __unsafe_unretained typeof(self) weak_self = self;
+    [[GCDQueue globalQueue] queueBlock:^{
+        NSDictionary *data = [obj objectForKey:@"data"];
+        NSArray *rows= [data objectForKey:@"rows"];
+        NSMutableArray *tempArray = [NSMutableArray array];
+        [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *dic = obj;
+            DemandSubcatalogModel *model = [DemandSubcatalogModel makeModelData:dic];
+            [tempArray addObject:model];
+        }];
+        [weak_self.titleDataArray addObjectsFromArray:tempArray];
+
+        [[GCDQueue mainQueue] queueBlock:^{
+            [weak_self.collectionUpView reloadData];
+        }];
+    }];
 }
 
 /*

@@ -72,7 +72,7 @@
 - (void)setupNoDataView
 {
     self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"60"];
-    self.noDataView.backgroundColor = [UIColor whiteColor];
+    self.noDataView.backgroundColor = kColorBackgroundColor;
     // label
     UILabel *tipLabel = [self getNoDataTipLabel];
     
@@ -149,8 +149,7 @@
 }
 - (void)loadMoreData
 {
-//    [self loadData];
-//    [WWPublicMethod timeOneMinutesUploadDevice];
+    [self loadData];
 }
 -(void)loadData
 {
@@ -161,7 +160,7 @@
     [_kHUDManager showActivityInView:nil withTitle:nil];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
-    sence.pathURL = @"inventory/managedObjects?pageSize=100&fragmentType=quark_IsCameraManageDevice&currentPage=1";
+    sence.pathURL = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_IsCameraManageDevice&currentPage=%ld",(long)self.page];;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
 
@@ -204,9 +203,6 @@
         
         [[GCDQueue mainQueue] queueBlock:^{
             
-            if (tempArray.count == 0) {
-                [_kHUDManager showMsgInView:nil withTitle:[obj objectForKey:@"msg"] isSuccess:YES];
-            }
             [weak_self.tableView reloadData];
             if (tempArray.count >0) {
                 weak_self.page++;

@@ -36,6 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *type;
 @property (nonatomic,strong) NSString *updateAt;
 @property (nonatomic,strong) NSString *url;
+@property (nonatomic,strong) NSString *snapUrl;
+
 
 
 @property (nonatomic,strong) NSString *Application;

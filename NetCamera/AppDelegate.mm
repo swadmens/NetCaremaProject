@@ -108,9 +108,9 @@
 //    }
     
     
-    //启动定时器任务
-    [WWPublicMethod timeOneMinutesUploadDevicestatus];
-    [WWPublicMethod timeTwoMinutesUploadDevice];
+//    //启动定时器任务
+//    [WWPublicMethod timeOneMinutesUploadDevicestatus];
+//    [WWPublicMethod timeTwoMinutesUploadDevice];
 
     
     return YES;

@@ -12,6 +12,8 @@
 #import "ChooseAreaView.h"
 #import "AFHTTPSessionManager.h"
 #import "LivingModel.h"
+#import "HKVideoPlaybackController.h"
+#import "DemandModel.h"
 
 
 @interface LiveViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
@@ -26,6 +28,8 @@
 
 @property (nonatomic,strong) ChooseAreaView *areaView;
 @property (nonatomic,strong) UIView *coverView;
+@property (nonatomic,assign) BOOL isLiving;//是否直播中
+
 
 @end
 
@@ -108,9 +112,6 @@
     _coverView.backgroundColor = UIColorFromRGB(0x000000, 0.7);
     [[UIApplication sharedApplication].keyWindow addSubview:_coverView];
 
-    
-    
-    
     [self creadLivingUI];
     [self loadNewData];
 }
@@ -182,21 +183,55 @@
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0) {
-        [TargetEngine controller:self pushToController:PushTargetDHLiving WithTargetId:@"1"];
-    }else{
-        
-        //live直播
+    LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
+
+    if ([WWPublicMethod isStringEmptyText:model.RTMP]) {
+           //live直播
+                  
         LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        NSDictionary *dic = @{@"name":model.name,
-                              @"RTMP":model.RTMP,
-                              @"shared":model.shared,
-                              @"sharedLink":model.sharedLink,
-                              @"url":model.url,
+//        NSDictionary *dic = @{@"name":model.name,
+//                              @"RTMP":model.RTMP,
+//                              @"shared":model.shared,
+//                              @"sharedLink":model.sharedLink,
+//                              @"url":model.url,
+//                              };
+//
+//        NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
+//
+//        [TargetEngine controller:self pushToController:PushTargetLiveLiving WithTargetId:pushId];
+        
+        
+        NSDictionary *dic = @{@"video_name":model.name,
+                               @"snapUrl":model.url,
+                               @"videoUrl":model.RTMP,
         };
-        NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
-        [TargetEngine controller:self pushToController:PushTargetLiveLiving WithTargetId:pushId];
+        
+         DemandModel *models = [DemandModel makeModelData:dic];
+         HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
+         vc.model = models;
+         [self.navigationController pushViewController:vc animated:YES];
+        
+    }else{
+        [_kHUDManager showMsgInView:nil withTitle:@"当前设备已离线" isSuccess:YES];
+        return;
     }
+    
+    
+//    if (indexPath.row == 0) {
+//        [TargetEngine controller:self pushToController:PushTargetDHLiving WithTargetId:@"1"];
+//    }else{
+//
+//        //live直播
+//        LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
+//        NSDictionary *dic = @{@"name":model.name,
+//                              @"RTMP":model.RTMP,
+//                              @"shared":model.shared,
+//                              @"sharedLink":model.sharedLink,
+//                              @"url":model.url,
+//        };
+//        NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
+//        [TargetEngine controller:self pushToController:PushTargetLiveLiving WithTargetId:pushId];
+//    }
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
@@ -219,42 +254,68 @@
 - (void)startLoadDataRequest
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
-
+        
+    NSString *start = [NSString stringWithFormat:@"%ld",(self.page - 1)*10];
+       
+    NSDictionary *finalParams = @{
+                                 @"start":start,
+                                 @"limit":@"10",
+                                 };
+       
+    //提交数据
     NSString *url = @"http://192.168.6.120:10102/outer/liveqing/live/list";
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
+                                                      options:0
+                                                        error:nil];
+   
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
+   
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:nil error:nil];
+   
+    // 设置请求头
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     //配置用户名 密码
     NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
     //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
     NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
     // 设置Authorization的方法设置header
-    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
-
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
-
+    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
+   
+    // 设置body
+    [request setHTTPBody:jsonData];
     __unsafe_unretained typeof(self) weak_self = self;
-    
-    [manager POST:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+
+    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+   
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+       
         [_kHUDManager hideAfter:0.1 onHide:nil];
+       
+        if (error) {
+            // 请求失败
+            DLog(@"error  ==  %@",error.userInfo);
+            NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+            int errorCode = [[error.userInfo objectForKey:@"code"] intValue];
+            if (errorCode == 500 && [unauthorized containsString:@"401"]) {
+                [WWPublicMethod refreshToken:nil];
+            }
+            [self failedOperation];
+            
+            return ;
+        }
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-        
+
         DLog(@"Received: %@", responseObject);
         DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-        
-         [weak_self handleObject:responseObject];
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
-        int errorCode = [[error.userInfo objectForKey:@"code"] intValue];
-        if (errorCode == 500 && [unauthorized containsString:@"401"]) {
-            [WWPublicMethod refreshToken:nil];
-        }
-        DLog(@"error: %@", error);
+
+        [weak_self handleObject:responseObject];
     }];
-    
+    [task resume];
+
 }
 - (void)failedOperation
 {
@@ -284,14 +345,15 @@
             NSDictionary *dic = obj;
             LivingModel *model = [LivingModel makeModelData:dic];
             [tempArray addObject:model];
+
+            if ([dic.allKeys containsObject:@"session"]) {
+                [weak_self getLivingCoverPhoto:model.live_id withIndex:idx];
+            }
         }];
         [weak_self.dataArray addObjectsFromArray:tempArray];
 
         [[GCDQueue mainQueue] queueBlock:^{
-
-            if (tempArray.count == 0) {
-                [_kHUDManager showMsgInView:nil withTitle:[obj objectForKey:@"msg"] isSuccess:YES];
-            }
+            
             [weak_self.collectionView reloadData];
             if (tempArray.count >0) {
                 weak_self.page++;
@@ -320,6 +382,55 @@
     }
     
 }
+
+//获取直播快照
+-(void)getLivingCoverPhoto:(NSString*)live_id withIndex:(NSInteger)indexPath
+{
+    NSString *url = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/snap/current?id=%@",live_id];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
+    
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        
+        DLog(@"Received: %@", responseObject);
+        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+        
+        [self dealWithCoverPhoto:responseObject withIndex:indexPath];
+    
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        DLog(@"error: %@", error);
+    }];
+}
+
+-(void)dealWithCoverPhoto:(id)obj withIndex:(NSInteger)indexPath
+{
+    if (obj == nil) {
+        return;
+    }
+    
+    NSDictionary *data = [obj objectForKey:@"data"];
+    LivingModel *model = [self.dataArray objectAtIndex:indexPath];
+    model.snapUrl = [NSString stringWithFormat:@"%@",[data objectForKey:model.live_id]];
+    [self.dataArray replaceObjectAtIndex:indexPath withObject:model];
+    [self.collectionView reloadData];
+    
+//    [_showImageView yy_setImageWithURL:[NSURL URLWithString:snapUrl] placeholder:[UIImage imageWithColor:kColorLineColor]];
+//    _nameLabel.text = self.model.name;
+//    _tagLabel.text = @"直播中";
+}
+
 
 /*
 #pragma mark - Navigation

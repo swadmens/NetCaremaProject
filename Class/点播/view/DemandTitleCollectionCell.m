@@ -7,7 +7,7 @@
 //
 
 #import "DemandTitleCollectionCell.h"
-
+#import "DemandModel.h"
 
 @interface DemandTitleCollectionCell ()
 
@@ -42,26 +42,9 @@
     [_lineImageView alignTop:nil leading:@"10" bottom:@"0" trailing:@"10" toView:self.contentView];
     [_lineImageView addHeight:2.5];
 }
-
-//- (UICollectionViewLayoutAttributes *)preferredLayoutAttributesFittingAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes
-//{
-//    UICollectionViewLayoutAttributes *attributes = [super preferredLayoutAttributesFittingAttributes:layoutAttributes];
-//    CGRect rect = [self.titleLabel.text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, 15) options:NSStringDrawingTruncatesLastVisibleLine|   NSStringDrawingUsesFontLeading |NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont customFontWithSize:kFontSizeTwelve]} context:nil];
-//    rect.size.width +=8;
-//    rect.size.height+=8;
-//
-//    attributes.frame = rect;
-//
-//    return attributes;
-//}
--(void)makeCellData:(NSDictionary *)dic
+-(void)makeCellData:(DemandSubcatalogModel*)model
 {
-    _titleLabel.text = [dic objectForKey:@"title"];
-    BOOL isSelect = [[dic objectForKey:@"select"] boolValue];
-//    if (isSelect) {
-//        _titleLabel.textColor = kColorMainColor;
-//        _lineImageView.hidden = NO;
-//    }
+    _titleLabel.text = model.name;
 }
 -(void)setSelected:(BOOL)selected
 {

@@ -9,6 +9,7 @@
 #import "NetLivingViewController.h"
 #import "AFHTTPSessionManager.h"
 #import "LivingModel.h"
+#import <UIImageView+YYWebImage.h>
 
 @interface NetLivingViewController ()
 
@@ -16,6 +17,10 @@
 
 @property (nonatomic,strong) LivingModel *model;
 
+@property (nonatomic,strong) UIImageView *showImageView;
+@property (nonatomic,strong) UILabel *nameLabel;
+@property (nonatomic,strong) UILabel *tagLabel;
+@property (nonatomic,assign) BOOL isLiving;//是否直播中
 
 @end
 
@@ -66,52 +71,53 @@
     
     CGFloat width = kScreenWidth/2-21;
     
-    UIImageView *showImageView = [UIImageView new];
-    showImageView.userInteractionEnabled = YES;
-    showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
-    [self.view addSubview:showImageView];
-    [showImageView leftToView:self.view withSpace:16];
-    [showImageView topToView:topLeftLabel withSpace:10];
-    [showImageView addWidth:width];
-    [showImageView addHeight:width*0.6];
+    _showImageView = [UIImageView new];
+    _showImageView.userInteractionEnabled = YES;
+    _showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
+    [self.view addSubview:_showImageView];
+    [_showImageView leftToView:self.view withSpace:16];
+    [_showImageView topToView:topLeftLabel withSpace:10];
+    [_showImageView addWidth:width];
+    [_showImageView addHeight:width*0.6];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(goLivingClick:)];
-    [showImageView addGestureRecognizer:tap];
+    [_showImageView addGestureRecognizer:tap];
     
     
     
     UIView *backView = [UIView new];
     backView.backgroundColor = UIColorFromRGB(0x000000, 0.52);
-    [showImageView addSubview:backView];
-    [backView alignTop:@"0" leading:@"0" bottom:nil trailing:@"0" toView:showImageView];
+    [_showImageView addSubview:backView];
+    [backView alignTop:@"0" leading:@"0" bottom:nil trailing:@"0" toView:_showImageView];
     [backView addHeight:15.5];
     
     
     
-    UILabel *nameLabel = [UILabel new];
-    nameLabel.text = @"直播一";
-    nameLabel.textColor = [UIColor whiteColor];
-    nameLabel.font = [UIFont customFontWithSize:9];
-    [nameLabel sizeToFit];
-    [backView addSubview:nameLabel];
-    [nameLabel yCenterToView:backView];
-    [nameLabel leftToView:backView withSpace:5];
+    _nameLabel = [UILabel new];
+    _nameLabel.text = @"直播一";
+    _nameLabel.textColor = [UIColor whiteColor];
+    _nameLabel.font = [UIFont customFontWithSize:9];
+    [_nameLabel sizeToFit];
+    [backView addSubview:_nameLabel];
+    [_nameLabel yCenterToView:backView];
+    [_nameLabel leftToView:backView withSpace:5];
     
     
-    UILabel *tagLabel = [UILabel new];
-    tagLabel.backgroundColor = kColorMainColor;
-    tagLabel.text = @"直播中";
-    tagLabel.textColor = [UIColor whiteColor];
-    tagLabel.font = [UIFont customFontWithSize:9];
-    tagLabel.textAlignment = NSTextAlignmentCenter;
-    [tagLabel sizeToFit];
-    [backView addSubview:tagLabel];
-    [tagLabel yCenterToView:backView];
-    [tagLabel rightToView:backView];
-    [tagLabel addWidth:35.5];
-    [tagLabel addHeight:15.5];
+    _tagLabel = [UILabel new];
+    _tagLabel.backgroundColor = kColorMainColor;
+    _tagLabel.text = @"直播中";
+    _tagLabel.textColor = [UIColor whiteColor];
+    _tagLabel.font = [UIFont customFontWithSize:9];
+    _tagLabel.textAlignment = NSTextAlignmentCenter;
+    [_tagLabel sizeToFit];
+    [backView addSubview:_tagLabel];
+    [_tagLabel yCenterToView:backView];
+    [_tagLabel rightToView:backView];
+    [_tagLabel addWidth:35.5];
+    [_tagLabel addHeight:15.5];
     
     
+    self.isLiving = YES;
     
     
 }
@@ -119,14 +125,15 @@
 
 -(void)goLivingClick:(UITapGestureRecognizer*)tp
 {
-           
+         
+    if (!_isLiving) {
+        [_kHUDManager showMsgInView:nil withTitle:@"当前设备已离线" isSuccess:YES];
+        return;
+    }
+    
     if (_model == nil) {
         return;
     }
-//[TargetEngine controller:self pushToController:PushTargetDHLiving WithTargetId:@"1"];//大华直播
-//    [TargetEngine controller:self pushToController:PushTargetHKLiving WithTargetId:@"1"];//海康直播
-    
-    
     //live直播
     NSDictionary *dic = @{@"name":_model.name,
                           @"RTMP":_model.RTMP,
@@ -136,9 +143,6 @@
     };
     NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
     [TargetEngine controller:self pushToController:PushTargetLiveLiving WithTargetId:pushId];
-    
-    
-    
 }
 - (void)startLoadDataRequest
 {
@@ -209,14 +213,81 @@
     [[GCDQueue globalQueue] queueBlock:^{
         NSDictionary *data = [obj objectForKey:@"data"];
         NSArray *rows= [data objectForKey:@"rows"];
+        if (rows.count == 0) {
+            [[GCDQueue mainQueue] queueBlock:^{
+                weak_self.showImageView.image = [UIImage imageWithColor:kColorThirdTextColor];
+                weak_self.nameLabel.text = @" ";
+                weak_self.tagLabel.text = @"离线";
+                weak_self.isLiving = NO;
+            }];
+            return ;
+        }
         [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             if (idx == 0) {
-                self.model = [LivingModel makeModelData:dic];
+                weak_self.model = [LivingModel makeModelData:dic];
+                if ([dic.allKeys containsObject:@"session"]) {
+                    [weak_self getLivingCoverPhoto:weak_self.model.live_id];
+                    [[GCDQueue mainQueue] queueBlock:^{
+                        weak_self.isLiving = YES;
+                    }];
+                }else{
+                    [[GCDQueue mainQueue] queueBlock:^{
+                        weak_self.showImageView.image = [UIImage imageWithColor:kColorThirdTextColor];
+                        weak_self.nameLabel.text = weak_self.model.name;
+                        weak_self.tagLabel.text = @"离线";
+                        weak_self.isLiving = NO;
+                    }];
+                    
+                }
             }
         }];
         
     }];
+}
+//获取直播快照
+-(void)getLivingCoverPhoto:(NSString*)live_id
+{
+    NSString *url = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/snap/current?id=%@",live_id];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
+    
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        
+        DLog(@"Received: %@", responseObject);
+        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+        
+        [self dealWithCoverPhoto:responseObject];
+    
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        DLog(@"error: %@", error);
+    }];
+}
+
+-(void)dealWithCoverPhoto:(id)obj
+{
+    if (obj == nil) {
+        return;
+    }
+    
+    NSDictionary *data = [obj objectForKey:@"data"];
+    NSString *snapUrl = [NSString stringWithFormat:@"%@",[data objectForKey:self.model.live_id]];
+    
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:snapUrl] placeholder:[UIImage imageWithColor:kColorLineColor]];
+    _nameLabel.text = self.model.name;
+    _tagLabel.text = @"直播中";
 }
 
 /*
