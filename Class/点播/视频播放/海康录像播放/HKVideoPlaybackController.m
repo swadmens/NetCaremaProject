@@ -18,6 +18,7 @@
 #import <PLPlayerKit/PLPlayerKit.h>
 #import "PLPlayerView.h"
 #import "DemandModel.h"
+#import "DownloadListController.h"
 
 #define kIndicatorViewSize 50
 static NSTimeInterval const kToastDuration = 1;
@@ -322,7 +323,7 @@ static CGFloat const kZoomMaxScale   = 10.0f;
 -(void)setupOtherView
 {
     _videoNameLabel = [UILabel new];
-    _videoNameLabel.text = @"高清延时拍摄城市路口人流车流";
+    _videoNameLabel.text = self.model.video_name;
     _videoNameLabel.textColor = kColorMainTextColor;
     _videoNameLabel.font = [UIFont customFontWithSize:kFontSizeSixteen];
     [_videoNameLabel sizeToFit];
@@ -344,7 +345,7 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     
     UIButton *downLoadBtn = [UIButton new];
     [downLoadBtn setImage:UIImageWithFileName(@"mine_download_image") forState:UIControlStateNormal];
-    [downLoadBtn addTarget:self action:@selector(deleteVideoClick) forControlEvents:UIControlEventTouchUpInside];
+    [downLoadBtn addTarget:self action:@selector(downloadVideoClick) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:downLoadBtn];
     [downLoadBtn yCenterToView:_videoNameLabel];
     [downLoadBtn rightToView:deleteBtn withSpace:5];
@@ -353,7 +354,7 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     
     
     _videoTimeLabel = [UILabel new];
-    _videoTimeLabel.text = @"2020.2.20";
+    _videoTimeLabel.text = self.model.createAt;
     _videoTimeLabel.textColor = UIColorFromRGB(0xb5b5b5, 1);
     _videoTimeLabel.font = [UIFont customFontWithSize:kFontSizeTen];
     [_videoTimeLabel sizeToFit];
@@ -395,6 +396,14 @@ static CGFloat const kZoomMaxScale   = 10.0f;
 -(void)deleteVideoClick
 {
     
+}
+//下载视频
+-(void)downloadVideoClick
+{
+    DownloadListController *vc = [DownloadListController new];
+    vc.demandModel = self.model;
+    vc.dataArray = [NSArray arrayWithObject:self.model];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 //全部视频
 -(void)allVideosClick

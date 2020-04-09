@@ -58,4 +58,7 @@
 #import "NSObject+Auth.h"
 #import "MacroDefine.h"
 
+#import "YCDownloadSession.h"
+
+
 #endif /* PrefixHeader_pch */

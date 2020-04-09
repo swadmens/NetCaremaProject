@@ -17,7 +17,7 @@
 /**
  * 增加一个普通下载
  */
-- (NSURLSessionDownloadTask *)addDownload:(NSString *)url toPath:(NSString *)downloadPath withName:(NSString *)fileName withLength:(NSString *)fileLength reDownload:(BOOL)redown onCompletion:(DownloadDidFinished)finishBlock progress:(DownloadUpdateProgress)downloadProgress;
+- (NSURLSessionDownloadTask *)addDownload:(NSString *)url toPath:(NSString *)downloadPath withName:(NSString *)fileName reDownload:(BOOL)redown onCompletion:(DownloadDidFinished)finishBlock progress:(DownloadUpdateProgress)downloadProgress;
 /// 取消下载
 - (void)cancelDownloadTask:(NSURLSessionDownloadTask *)task;
 

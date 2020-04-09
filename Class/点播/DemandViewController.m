@@ -336,9 +336,10 @@
             
             HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
             vc.model = model;
+            vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
-            
-            
+            self.hidesBottomBarWhenPushed = NO;
+
         }
     }else{
         DemandSubcatalogModel *model = [self.titleDataArray objectAtIndex:indexPath.row];

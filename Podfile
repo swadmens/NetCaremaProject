@@ -45,6 +45,12 @@ pod 'JGProgressHUD'
  #七牛云播放器
  pod 'PLPlayerKit'
  
- 
+ #腾讯云
+# pod 'TXLiteAVSDK_Professional'
+
+# #声网
+# pod 'AgoraRtcEngine_iOS'
+# 
+
  
 end

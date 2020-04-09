@@ -8,22 +8,24 @@
 
 #import "DownloadListCell.h"
 #import "CarmeaVideosModel.h"
-#import "YBDownloadManager.h"
 #import "DownLoadSence.h"
 #import <UIImageView+YYWebImage.h>
+#import "DemandModel.h"
+#import "HSDownloadManager.h"
+#import "YDDownload.h"
+
+
 
 @interface DownloadListCell ()
 
 @property (nonatomic,strong) UIImageView *showImageView;
 @property (nonatomic,strong) UILabel *titleLabel;//名称
 @property (nonatomic,strong) UILabel *timeLabel;//时间
-@property (nonatomic,strong) UILabel *speedLabel;//下载速度
-
-@property (nonatomic,strong) UILabel *currentDataLabel;//当前已下载量
 @property (nonatomic,strong) UILabel *totalDataLabel;//总下载量
 
 @property (nonatomic,strong) UIProgressView *progressView;//进度条
 @property (nonatomic,strong) CarmeaVideosModel *model;
+@property (nonatomic,strong) DemandModel *demandModel;
 
 
 
@@ -80,38 +82,22 @@
     _progressView.progressViewStyle = UIProgressViewStyleDefault;
     _progressView.progressTintColor = kColorMainColor;
     _progressView.trackTintColor = UIColorFromRGB(0xe5e5e5, 1);
-    _progressView.progress = 0.5;
+    _progressView.progress = 0.0;
     [backView addSubview:_progressView];
     [_progressView leftToView:_showImageView withSpace:10];
     [_progressView topToView:_timeLabel withSpace:8];
     [_progressView addWidth:kScreenWidth-195];
     [_progressView addHeight:0.6];
-    
- 
-    _speedLabel = [UILabel new];
-    _speedLabel.text = @"652KB/S";
-    _speedLabel.textColor = kColorThirdTextColor;
-    _speedLabel.font = [UIFont customFontWithSize:kFontSizeTen];
-    [backView addSubview:_speedLabel];
-    [_speedLabel leftToView:_showImageView withSpace:10];
-    [_speedLabel topToView:_progressView withSpace:5];
-    
+
     
     _totalDataLabel = [UILabel new];
-    _totalDataLabel.text = @"/258M";
+    _totalDataLabel.text = @"0.00M/0.00M";
     _totalDataLabel.textColor = kColorThirdTextColor;
     _totalDataLabel.font = [UIFont customFontWithSize:kFontSizeTen];
     [backView addSubview:_totalDataLabel];
     [_totalDataLabel rightToView:backView withSpace:15];
-    [_totalDataLabel yCenterToView:_speedLabel];
-    
-    _currentDataLabel = [UILabel new];
-    _currentDataLabel.text = @"129M";
-    _currentDataLabel.textColor = kColorThirdTextColor;
-    _currentDataLabel.font = [UIFont customFontWithSize:kFontSizeTen];
-    [backView addSubview:_currentDataLabel];
-    [_currentDataLabel rightToView:_totalDataLabel];
-    [_currentDataLabel yCenterToView:_speedLabel];
+    [_totalDataLabel topToView:_progressView withSpace:5];
+
     
 }
 
@@ -120,80 +106,110 @@
     self.model = model;
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:UIImageWithFileName(@"playback_back_image")];
     _titleLabel.text = model.video_name;
-    _timeLabel.text = model.start_time;
+    _timeLabel.text = model.time;
+}
+-(void)makeCellDemandData:(DemandModel *)model
+{
+    self.demandModel = model;
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:UIImageWithFileName(@"playback_back_image")];
+    _titleLabel.text = model.video_name;
+    _timeLabel.text = model.updateAt;
 }
 
-- (void)setUrl:(NSString *)url
-{
-    _url = url;
-    
-    // 控制状态
-    YBFileModel *info = [[YBDownloadManager defaultManager] downloadFileModelForURL:url];
-    if (info.state == DownloadStateResumed) {
-        
-        
-        if (info.totalExpectedSize) {
-        
-            NSString *str = [NSString stringWithFormat:@"%.2f%%",1.0*info.totlalReceivedSize / info.totalExpectedSize*100];
-            NSLog(@"下载进度 ==  %@",str);
-//            self.progressLab.text = str;
-        }
-        
-    }else if (info.state == DownloadStateCompleted)
-    {
-//        self.progressLab.text = @"下载完毕";
-    }else if (info.state == DownloadStateWait)
-    {
-//        self.progressLab.text = @"等待中";
-    }
-}
+
 -(void)startDownLoad:(UITapGestureRecognizer*)tp
 {
     __unsafe_unretained typeof(self) weak_self = self;
 
     NSString *urlString = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/download/%@/%@",self.url,_model.start_time];
-    DownLoadSence *sence = [DownLoadSence new];
-    sence.filePath = @"";
-    sence.fileName = @"Video.mp4";
-    sence.fileLenth = @"3382";
-    sence.needReDownload = YES;
-    sence.url = urlString;
-    [sence startDownload];
-    sence.progressBlock = ^(float progress) {
-        DLog(@"下载进度 ==  %f",progress)
-    };
-    sence.finishedBlock = ^(NSString *filePath) {
-        DLog(@"文件路径  ==  %@",filePath);
-        NSURL *url = [NSURL URLWithString:filePath];
-        BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([url path]);
-        if (compatible)
-        {
-            //保存相册核心代码
-            UISaveVideoAtPathToSavedPhotosAlbum([url path], weak_self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
-        }
-    };
     
-//    YBFileModel *info = [[YBDownloadManager defaultManager] downloadFileModelForURL:_model.hls];
+    if (self.model == nil) {
+        urlString = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/vod/download/%@",self.demandModel.video_id];
+    }
+    
+//    DownLoadSence *sence = [DownLoadSence new];
+//    sence.filePath = @"";
+//    sence.fileName = @"nvr017_record.mp4";
+//    sence.needReDownload = YES;
+//    sence.url = @"http://192.168.6.120:10080/record/download/nvr017/20200325034226?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY0ODk1NTAsInB3IjoiMjEyMzJmMjk3YTU3YTVhNzQzODk0YTBlNGE4MDFmYzMiLCJ0bSI6MTU4NjQwMzE1MCwidW4iOiJhZG1pbiJ9.G6tdm9KGD0bZF4UN17pdv2Ld85CQOVerunk8k-UFHF0";
+//    [sence startDownload];
+//    sence.progressBlock = ^(float progress, NSString *writeBytes) {
+//        DLog(@"下载进度 ==  %f",progress)
+//        [[GCDQueue mainQueue] queueBlock:^{
+//            weak_self.progressView.progress = progress;
+//            weak_self.totalDataLabel.text = writeBytes;
+//            if (self.downlaodProgress) {
+//                self.downlaodProgress(progress);
+//            }
+//        }];
+//    };
+//    sence.finishedBlock = ^(NSString *filePath) {
+//        DLog(@"文件路径  ==  %@",filePath);
+//        NSURL *url = [NSURL URLWithString:filePath];
+//        BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([url path]);
+//        if (compatible)
+//        {
+//            //保存相册核心代码
+//            UISaveVideoAtPathToSavedPhotosAlbum([url path], weak_self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
+//            if (self.localizedFilePath) {
+//                self.localizedFilePath(filePath);
+//            }
+//        }
+//    };
+    
+////    http://192.168.6.120:10080/record/download/nvr017/20200325034226?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODYzMzUzNjAsInB3IjoiMjEyMzJmMjk3YTU3YTVhNzQzODk0YTBlNGE4MDFmYzMiLCJ0bSI6MTU4NjI0ODk2MCwidW4iOiJhZG1pbiJ9.tVK2AV8q3MBAPZZiVNDuWmoFJrngWtDh-oYkZcFRRa8
+
+//    [[HSDownloadManager sharedInstance] deleteAllFile];
 //
-//       if (info.state == DownloadStateResumed || info.state == DownloadStateWait) {
-//           // 暂停下载某个文件
-//           [[YBDownloadManager defaultManager] suspend:_model.hls];
+//    [self download:@"http://192.168.6.120:10080/record/download/nvr017/20200325034226?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY0ODk1NTAsInB3IjoiMjEyMzJmMjk3YTU3YTVhNzQzODk0YTBlNGE4MDFmYzMiLCJ0bSI6MTU4NjQwMzE1MCwidW4iOiJhZG1pbiJ9.G6tdm9KGD0bZF4UN17pdv2Ld85CQOVerunk8k-UFHF0" progressLabel:nil progressView:self.progressView button:nil];
+
+    
+//    http://192.168.6.120:10102/outer/liveqing/vod/download/M8KKhNrZR
+    
+//    if ([sender.currentTitle isEqualToString:@"下载"]) {
+           
+           self.downloadTask = [[YDDownloadQueue defaultQueue] addDownloadTaskWithPriority:YDDownloadPriorityDefault url:self.url progressHandler:^(CGFloat progress, CGFloat speed, NSString *writeBytes) {
+               
+               self.progressView.progress = progress;
+               self.totalDataLabel.text = writeBytes;
+//               if (speed < 1024) {
+//                   self.speedLabel.text = [NSString stringWithFormat:@"%.2fB/s", speed];
+//               } else if (speed < 1024 * 1024) {
+//                   self.speedLabel.text = [NSString stringWithFormat:@"%.2fK/s", speed / 1024];
+//               } else {
+//                   self.speedLabel.text = [NSString stringWithFormat:@"%.2fM/s", speed / 1024 / 1024];
+//               }
+               
+           } completionHandler:^(NSString *filePath, NSError *error) {
+               
+//               self.speedLabel.text = nil;
+               if (error.code == -999) {
+                   self.progressView.progress = 0;
+               }
+               NSLog(@"%@", filePath);
+               NSURL *url = [NSURL URLWithString:filePath];
+               BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([url path]);
+               if (compatible)
+               {
+                   //保存相册核心代码
+                   UISaveVideoAtPathToSavedPhotosAlbum([url path], weak_self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
+                   if (self.localizedFilePath) {
+                       self.localizedFilePath(filePath);
+                   }
+               }
+           }];
+           
+//       } else if ([sender.currentTitle isEqualToString:@"继续"]) {
 //
-//       } else {
-//           //下载文件
-//           [[YBDownloadManager defaultManager] download:_model.hls progress:^(NSInteger bytesWritten, NSInteger totalBytesWritten, NSInteger totalBytesExpectedToWrite) {
-//               DLog(@"totalBytesWritten == %ld",(long)totalBytesWritten);
-//               DLog(@"totalBytesExpectedToWrite == %ld",(long)totalBytesExpectedToWrite);
-//               dispatch_async(dispatch_get_main_queue(), ^{
-//                   self.url = self.url;
-//               });
-//           } state:^(DownloadState state, NSString *file, NSError *error) {
-//               DLog(@"error == %@",error);
-//               dispatch_async(dispatch_get_main_queue(), ^{
-//                   self.url = self.url;
-//               });
-//           }];
+//           [self.downloadTask resumeTask];
+//
+//       } else if ([sender.currentTitle isEqualToString:@"暂停"] || [sender.currentTitle isEqualToString:@"等待中"]) {
+//
+//           [self.downloadTask suspendTask];
+//           self.speedLabel.text = nil;
 //       }
+    
+ 
 }
 //保存视频完成之后的回调
 - (void) savedPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError *)error contextInfo: (void *)contextInfo {
@@ -203,6 +219,73 @@
     else {
         NSLog(@"保存视频成功");
        
+    }
+}
+
+#pragma mark 开启任务下载资源
+- (void)download:(NSString *)url progressLabel:(UILabel *)progressLabel progressView:(UIProgressView *)progressView button:(UIButton *)button
+{
+    [[HSDownloadManager sharedInstance] download:url progress:^(NSInteger receivedSize, NSInteger expectedSize, CGFloat progress) {
+        
+        NSString *writeBytes = [NSString stringWithFormat:@"%ldM/%ldM",(long)receivedSize/1048576,(long)expectedSize/1048576];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+//            progressLabel.text = [NSString stringWithFormat:@"%.f%%", progress * 100];
+            self.progressView.progress = progress;
+            self.totalDataLabel.text = writeBytes;
+        });
+    } state:^(DownloadState state) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+//            [button setTitle:[self getTitleWithDownloadState:state] forState:UIControlStateNormal];
+        });
+    }];
+
+    
+}
+
+- (void)downloadTaskDidChangeStatusNotification:(NSNotification *)notify
+{
+    YDDownloadTask *downloadTask = (YDDownloadTask *)notify.object;
+    if (![downloadTask.downloadUrl isEqualToString:self.url]) {
+        return;
+    }
+    switch (downloadTask.taskStatus) {
+        case YDDownloadTaskStatusWaiting:
+        case YDDownloadTaskStatusFailed: {
+//            [_downLoadBtn setTitle:@"等待中" forState:UIControlStateNormal];
+            DLog(@"等待中");
+        }
+            break;
+        case YDDownloadTaskStatusRunning: {
+//            [_downLoadBtn setTitle:@"暂停" forState:UIControlStateNormal];
+            DLog(@"暂停");
+
+        }
+            break;
+        case YDDownloadTaskStatusSuspended: {
+//            [_downLoadBtn setTitle:@"继续" forState:UIControlStateNormal];
+            DLog(@"继续");
+
+        }
+            break;
+        case YDDownloadTaskStatusCanceled: {
+//            [_downLoadBtn setTitle:@"下载" forState:UIControlStateNormal];
+            DLog(@"下载");
+
+        }
+            break;
+        case YDDownloadTaskStatusCompleted: {
+//            [_downLoadBtn setTitle:@"已完成" forState:UIControlStateNormal];
+            DLog(@"已完成");
+
+        }
+            break;
+        default: {
+//            [_downLoadBtn setTitle:@"下载" forState:UIControlStateNormal];
+            DLog(@"下载");
+
+        }
+            break;
     }
 }
 

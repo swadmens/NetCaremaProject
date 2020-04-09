@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 typedef void(^FinishedBlock)(NSString *filePath);
-typedef void(^ProgressDidUpdateBlock)(float progress);
+typedef void(^ProgressDidUpdateBlock)(float progress,NSString *writeBytes);
 
 @interface DownLoadSence : NSObject
 
@@ -18,9 +18,6 @@ typedef void(^ProgressDidUpdateBlock)(float progress);
 @property (nonatomic, strong) NSString *filePath;
 /// 下载的文件名是什么, 需要带后缀名
 @property (nonatomic, strong) NSString *fileName;
-/// 下载的文件名长度
-@property (nonatomic, strong) NSString *fileLenth;
-
 /// 是否需要重新下载,如果YES，在取消时会删除，否则会暂时保存
 @property (nonatomic) BOOL needReDownload;
 

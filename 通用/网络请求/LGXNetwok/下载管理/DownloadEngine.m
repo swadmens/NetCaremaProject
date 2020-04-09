@@ -73,7 +73,7 @@
 /**
  * 增加一个普通下载
  */
-- (NSURLSessionDownloadTask *)addDownload:(NSString *)url toPath:(NSString *)downloadPath withName:(NSString *)fileName withLength:(NSString *)fileLength reDownload:(BOOL)redown onCompletion:(DownloadDidFinished)finishBlock progress:(DownloadUpdateProgress)downloadProgress
+- (NSURLSessionDownloadTask *)addDownload:(NSString *)url toPath:(NSString *)downloadPath withName:(NSString *)fileName reDownload:(BOOL)redown onCompletion:(DownloadDidFinished)finishBlock progress:(DownloadUpdateProgress)downloadProgress
 {
     if (url == nil) {
         url = @"";
@@ -169,18 +169,25 @@
     // 开始断点下载了
     [self.defaultManager setDownloadTaskDidResumeBlock:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, int64_t fileOffset, int64_t expectedTotalBytes) {
         if (downloadProgress) {
-            downloadProgress(@"0");
+            downloadProgress(@"0",@"0");
         }
     }];
 
     /// 下载进度监控
     [self.defaultManager setDownloadTaskDidWriteDataBlock:^(NSURLSession * _Nonnull session, NSURLSessionDownloadTask * _Nonnull downloadTask, int64_t bytesWritten, int64_t totalBytesWritten, int64_t totalBytesExpectedToWrite) {
         
-        CGFloat proValue = totalBytesWritten/[fileLength floatValue];
+        CGFloat currentBytes = totalBytesWritten;
+        CGFloat totalBytes = downloadTask.response.expectedContentLength;
+        
+        CGFloat proValue = currentBytes/totalBytes;
         NSString *proStr = [NSString stringWithFormat:@"%.2f",proValue];
-
+        
+        NSLog(@"proStr == %@",proStr);
+        
+        NSString *writeBytes = [NSString stringWithFormat:@"%fM/%fM",currentBytes/1048576,totalBytes/1048576];
+        
         if (downloadProgress) {
-            downloadProgress(proStr);
+            downloadProgress(proStr,writeBytes);
         }
     }];
     
@@ -197,6 +204,9 @@
 }
 - (void)handleCompletion:(NSURLResponse *)response atPath:(NSURL *)filePath error:(NSError *)error onCompletion:(DownloadDidFinished)finishBlock
 {
+    
+    DLog(@"filePath  ==  %@",filePath);
+    
     if (finishBlock) {
         NSString *pathString = filePath.absoluteString;
         if ([pathString hasPrefix:@"file:///"]) {
@@ -204,6 +214,7 @@
         }
         finishBlock(pathString);
     }
+    NSLog(@"downloadTask.response == %@",response);
 }
 /// 取消下载
 - (void)cancelDownloadTask:(NSURLSessionDownloadTask *)task

@@ -35,9 +35,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"个人信息";
-    NSArray *arr = @[@{@"title":@"昵称",@"describe":@"wentest"},
+    NSArray *arr = @[@{@"title":@"昵称",@"describe":_kUserModel.userInfo.user_name},
                      @{@"title":@"手机号码",@"describe":@"13162288787"},
-                     @{@"title":@"邮箱",@"describe":@"528214867@qq.com"},
+                     @{@"title":@"邮箱",@"describe":_kUserModel.userInfo.email},
                      @{@"title":@"更改密码",@"describe":@"****"},];
     self.dataArray = arr;
     [self setupTableView];

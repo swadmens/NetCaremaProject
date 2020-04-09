@@ -48,6 +48,9 @@ typedef void(^RefreshTokenSuccessBlock)(id obj);
 + (BOOL)isValidateEmail:(NSString *)email;
 //当前语言是否是中文
 + (BOOL)isCurrentLanguageChina;
+//十六进制转字符串
++ (NSString *)stringFromHexString:(NSString *)hexString;
+
 
 
 

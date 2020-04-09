@@ -21,11 +21,11 @@
 /// 开始下载
 - (void)startDownload
 {
-    self.task = [[DownloadEngine sharedInstance] addDownload:self.url toPath:self.filePath withName:self.fileName withLength:self.fileLenth reDownload:self.needReDownload onCompletion:^(NSString *filePath) {
+    self.task = [[DownloadEngine sharedInstance] addDownload:self.url toPath:self.filePath withName:self.fileName reDownload:self.needReDownload onCompletion:^(NSString *filePath) {
         if (self.finishedBlock) {
             self.finishedBlock(filePath);
         }
-    } progress:^(NSString *progress) {
+    } progress:^(NSString *progress, NSString *writeBytes) {
         if (self.progressBlock) {
             float sprogress = [progress floatValue];
 //            if (sprogress >0.99) {
@@ -33,10 +33,11 @@
 //            }
             
             dispatch_async(dispatch_get_main_queue(), ^{
-               self.progressBlock(sprogress);
+               self.progressBlock(sprogress,writeBytes);
             });
         }
-    }];    
+    }];
+    
 }
 /// 取消下载
 - (void)cancel

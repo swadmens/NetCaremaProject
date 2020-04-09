@@ -15,6 +15,6 @@
 
 /// filePath ==nil即为下载失败
 typedef void(^DownloadDidFinished)(NSString *filePath);
-typedef void(^DownloadUpdateProgress)(NSString *progress);
+typedef void(^DownloadUpdateProgress)(NSString *progress,NSString *writeBytes);
 
 #endif

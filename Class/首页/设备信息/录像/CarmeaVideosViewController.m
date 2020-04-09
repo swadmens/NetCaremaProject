@@ -136,9 +136,6 @@
     [downBtn addTarget:self action:@selector(downVideoClick) forControlEvents:UIControlEventTouchUpInside];
     
     
-    
-
-    
     //接收通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(takeGoHomeNotica:) name:@"editStates" object:nil];
 }
@@ -158,6 +155,7 @@
     CameraId = [WWPublicMethod isStringEmptyText:CameraId]?CameraId:@"";
 
     self.device_id = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
+    
     [self loadNewData];
 }
 - (void)takeGoHomeNotica:(NSNotification *)notification
@@ -369,14 +367,18 @@
         [tempArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             
+            NSString *originalSnap = [dic objectForKey:@"snap"];
+            NSString *start_time = [dic objectForKey:@"start_time"];
+
             NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
             NSString *startTime = [mutDic objectForKey:@"start_time"];
             NSString *snap = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/getsnap?id=%@&period=%@",self.device_id,startTime];
-            [mutDic setValue:snap forKey:@"snap"];
-            
+            if (![WWPublicMethod isStringEmptyText:originalSnap]) {
+                [mutDic setValue:snap forKey:@"snap"];
+                [self getRecordCoverPhoto:start_time withData:idx];
+            }
             CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
             [modelArray addObject:model];
-            [self getRecordCoverPhoto:model.start_time withData:idx];
         }];
         [weak_self.dataArray addObjectsFromArray:modelArray];
 

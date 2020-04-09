@@ -84,7 +84,7 @@
     
     
     _user_name = [UILabel new];
-    _user_name.text = @"Wentest";
+    _user_name.text = _kUserModel.userInfo.user_name;
     _user_name.textColor = kColorMainTextColor;
     _user_name.font = [UIFont customFontWithSize:kFontSizeEighTeen];
     [_user_name sizeToFit];

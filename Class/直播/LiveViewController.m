@@ -13,6 +13,7 @@
 #import "AFHTTPSessionManager.h"
 #import "LivingModel.h"
 #import "HKVideoPlaybackController.h"
+#import "DHLivingViewController.h"
 #import "DemandModel.h"
 
 
@@ -183,6 +184,13 @@
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+//
+//    DHLivingViewController *vc = [DHLivingViewController new];
+//    [self.navigationController pushViewController:vc animated:YES];
+
+    [TargetEngine controller:self pushToController:PushTargetDHLiving WithTargetId:@""];
+    return;
+    
     LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
 
     if ([WWPublicMethod isStringEmptyText:model.RTMP]) {

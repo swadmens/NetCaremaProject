@@ -9,15 +9,23 @@
 #import "DHLivingViewController.h"
 #import "LGXThirdEngine.h"
 #import "ShareSDKMethod.h"
+//#import <TXLiteAVSDK_Professional/TXLiteAVSDK.h>
 
 @interface DHLivingViewController ()
-
 @property (nonatomic, strong) UIView *playView;
 
 @property (nonatomic,strong) UILabel *titleLabel;
 
 @property (nonatomic, strong) LGXShareParams *shareParams;
 
+//@property (nonatomic, weak) id< TXLivePlayListener > delegate;
+//@property (nonatomic, weak) id< TXVideoCustomProcessDelegate > videoProcessDelegate;
+//@property (nonatomic, weak) id< TXAudioRawDataDelegate > audioRawDataDelegate;
+//@property (nonatomic, assign) BOOL enableHWAcceleration;
+//
+//@property (nonatomic, strong) TXLivePlayer *livePlayer;
+
+//@property (nonatomic, ) BOOL isAutoPlay;
 
 @end
 
@@ -27,6 +35,7 @@
     if (!_playView) {
         _playView = [[UIView alloc] init];
         _playView.backgroundColor = [UIColor redColor];
+        _playView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
     }
     return _playView;
 }
@@ -35,12 +44,17 @@
     // Do any additional setup after loading the view.
     self.FDPrefersNavigationBarHidden = YES;
     
-    
-    
     [self.view addSubview:self.playView];
-    self.playView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
     
-       
+    
+    //腾讯云
+//    TXLivePlayer *player = [[TXLivePlayer alloc]init];
+//    [player startPlay:@"rtmp://47.115.216.4:1935/live/movie" type:PLAY_TYPE_LIVE_RTMP];
+//    [player setupVideoWidget:CGRectMake(0, 0, kScreenWidth, kScreenHeight) containView:self.view insertIndex:0];
+//    player.isAutoPlay = YES;
+//    return;
+    
+
     
     UIButton *backButton = [UIButton new];
     [backButton setImage:UIImageWithFileName(@"icon_back_gray") forState:UIControlStateNormal];
@@ -80,10 +94,9 @@
     [sharaButton rightToView:self.playView withSpace:25];
     [sharaButton addWidth:33];
     [sharaButton addHeight:33];
-    
-    
-    
 }
+
+
 //返回
 -(void)goBackButtonClick
 {
