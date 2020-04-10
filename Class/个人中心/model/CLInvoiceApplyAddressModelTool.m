@@ -44,7 +44,6 @@ static NSMutableArray *_addressInfos;
     if (_addressInfos.count) {
         if (![self currentSelectedAddress]) {
             CLVoiceApplyAddressModel *info = [CLInvoiceApplyAddressModelTool allAddressInfo][0];
-//            info.state = @"1";
             [CLInvoiceApplyAddressModelTool updateInfoAtIndex:0 withInfo:info];
         }
     }
@@ -55,9 +54,6 @@ static NSMutableArray *_addressInfos;
 +(void)addInfo:(CLVoiceApplyAddressModel *)info{
     if (!_addressInfos.count) {
         _addressInfos = [NSMutableArray array];
-    }
-    for (CLVoiceApplyAddressModel *oldInfo in _addressInfos ) {
-//        oldInfo.state = @"0";
     }
     [_addressInfos insertObject:info atIndex:0];
     [self update];

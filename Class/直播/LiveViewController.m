@@ -26,6 +26,10 @@
 @property (nonatomic, strong) WWCollectionView *collectionView;
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property(nonatomic,assign) NSInteger page;
+/// 没有内容
+@property (nonatomic, strong) UIView *noDataView;
+//token刷新次数
+@property(nonatomic,assign) NSInteger refreshtoken;
 
 @property (nonatomic,strong) ChooseAreaView *areaView;
 @property (nonatomic,strong) UIView *coverView;
@@ -87,12 +91,33 @@
     }
     return _collectionView;
 }
+- (void)setupNoDataView
+{
+    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"60"];
+    self.noDataView.backgroundColor = kColorBackgroundColor;
+    // label
+    UILabel *tipLabel = [self getNoDataTipLabel];
+    
+    UIButton *againBtn = [UIButton new];
+    [againBtn setTitle:@"暂无数据，轻触重试" forState:UIControlStateNormal];
+    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
+    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
+    [self.noDataView addSubview:againBtn];
+    [againBtn xCenterToView:self.noDataView];
+    [againBtn topToView:tipLabel withSpace:-8];
+}
+-(void)againLoadDataBtn
+{
+    [self loadNewData];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"直播";
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationItem.leftBarButtonItem=nil;
+    
     
     [self.view addSubview:self.collectionView];
     [self.collectionView alignTop:@"45" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
@@ -114,6 +139,7 @@
     [[UIApplication sharedApplication].keyWindow addSubview:_coverView];
 
     [self creadLivingUI];
+    [self setupNoDataView];
     [self loadNewData];
 }
 //创建UI
@@ -305,15 +331,23 @@
        
         if (error) {
             // 请求失败
-            DLog(@"error  ==  %@",error.userInfo);
-            NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
-            int errorCode = [[error.userInfo objectForKey:@"code"] intValue];
-            if (errorCode == 500 && [unauthorized containsString:@"401"]) {
-                [WWPublicMethod refreshToken:nil];
-            }
-            [self failedOperation];
-            
-            return ;
+           DLog(@"error  ==  %@",error.userInfo);
+           DLog(@"responseObject  ==  %@",responseObject);
+           [self failedOperation];
+           
+           self.refreshtoken++;
+           if (self.refreshtoken > 1) {
+               return ;
+           }
+
+           NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+           int statusCode = [[responseObject objectForKey:@"code"] intValue];
+           if ([unauthorized containsString:@"500"] && statusCode == 401) {
+               [WWPublicMethod refreshToken:^(id obj) {
+                   [self loadNewData];
+               }];
+           }
+           return ;
         }
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
 
@@ -383,10 +417,10 @@
     NSInteger count = self.dataArray.count;
     if (count == 0) {
         self.collectionView.hidden = YES;
-//        self.noDataView.hidden = NO;
+        self.noDataView.hidden = NO;
     } else {
         self.collectionView.hidden = NO;
-//        self.noDataView.hidden = YES;
+        self.noDataView.hidden = YES;
     }
     
 }

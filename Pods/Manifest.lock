@@ -11,6 +11,7 @@ PODS:
   - LGXLayout (1.0.0):
     - Masonry
   - Masonry (1.1.0)
+  - MJExtension (3.2.1)
   - MMMaterialDesignSpinner (0.2.5)
   - MOBFoundation (2.2.19)
   - PLPlayerKit (3.4.3):
@@ -66,6 +67,7 @@ DEPENDENCIES:
   - JSPatchPlatform
   - LGXLayout
   - Masonry (>= 1.0.1)
+  - MJExtension
   - MMMaterialDesignSpinner
   - MOBFoundation (~> 2.2.3)
   - PLPlayerKit
@@ -93,6 +95,7 @@ SPEC REPOS:
     - JSPatchPlatform
     - LGXLayout
     - Masonry
+    - MJExtension
     - MMMaterialDesignSpinner
     - MOBFoundation
     - PLPlayerKit
@@ -116,6 +119,7 @@ SPEC CHECKSUMS:
   JSPatchPlatform: 8cc9aaebe21109d5fdfb4500384ddf38ed0990e9
   LGXLayout: c4756241405146dbd0be48cc1b5dabd4298f68ca
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  MJExtension: 635f2c663dcb1bf76fa4b715b2570a5710aec545
   MMMaterialDesignSpinner: a548042720c2e5f04212048483085d7942ac3e81
   MOBFoundation: e962b2aee79e2b8f626e2d30c2f23e9f13e5331e
   PLPlayerKit: a44734dc78c1f8f9fb22c537fa1916612fa46b06
@@ -132,6 +136,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   YYWebImage: 5f7f36aee2ae293f016d418c7d6ba05c4863e928
 
-PODFILE CHECKSUM: ca8acb99e73b08a2ae1d754fefb7919b3bcacef9
+PODFILE CHECKSUM: 3e0c25c49c8396793933b7d388bfabbadbaf684d
 
 COCOAPODS: 1.9.0

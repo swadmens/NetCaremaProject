@@ -23,6 +23,8 @@
 
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
+//token刷新次数
+@property(nonatomic,assign) NSInteger refreshtoken;
 
 @property (nonatomic,assign) BOOL isLogion;//是否登录
 
@@ -185,11 +187,19 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error: %@", error);
-        NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
-        int errorCode = [[error.userInfo objectForKey:@"code"] intValue];
-        if (errorCode == 500 && [unauthorized containsString:@"401"]) {
-            [WWPublicMethod refreshToken:nil];
+        [self failedOperation];
+        self.refreshtoken++;
+        if (self.refreshtoken > 1) {
+            return ;
         }
+        NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+//        int statusCode = [[task.response objectForKey:@"code"] intValue];
+        if ([unauthorized containsString:@"500"]) {
+            [WWPublicMethod refreshToken:^(id obj) {
+                [self loadNewData];
+            }];
+        }
+
     }];
         
 }

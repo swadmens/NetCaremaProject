@@ -123,7 +123,7 @@ NSString *_kStaticURL;
         
         self.task = [[SharedClient sharedInstance] requestGet:self.pathURL parameters:self.params completion:^(id results, NSError *error) {
             NSDictionary *dic = results;
-            DLog(@"%@",[dic objectForKey:@"errorMsg"]);
+            DLog(@"errorMsg == %@",[dic objectForKey:@"errorMsg"]);
             [self handleResult:results andError:error];
             
         }];
@@ -131,20 +131,21 @@ NSString *_kStaticURL;
     }else if ([self.requestMethod isEqual:@"POST"]){
      
         self.task = [[SharedClient sharedInstance] requestPost:self.pathURL parameters:self.params completion:^(id results, NSError *error) {
-            NSDictionary *dic = results;DLog(@"%@",[dic objectForKey:@"errorMsg"]);
+            NSDictionary *dic = results;
+            DLog(@"errorMsg == %@",[dic objectForKey:@"errorMsg"]);
             [self handleResult:results andError:error];
             
         }];
     }else if ([self.requestMethod isEqual:@"BODY"]){
         self.task = [[SharedClient sharedInstance] requestBody:self.pathURL parameters:self.params body:self.body completion:^(id results, NSError *error) {
             NSDictionary *dic = results;
-            DLog(@"%@",[dic objectForKey:@"errorMsg"]);
+            DLog(@"errorMsg == %@",[dic objectForKey:@"errorMsg"]);
             [self handleResult:results andError:error];
         }];
     }else if ([self.requestMethod isEqual:@"PUT"]){
         self.task = [[SharedClient sharedInstance] requestPUTWithURLStr:self.pathURL paramDic:self.params Api_key:self.api_key completion:^(id results, NSError *error) {
             NSDictionary *dic = results;
-            DLog(@"%@",[dic objectForKey:@"errorMsg"]);
+            DLog(@"errorMsg == %@",[dic objectForKey:@"errorMsg"]);
             [self handleResult:results andError:error];
         }];
     }
@@ -154,18 +155,13 @@ NSString *_kStaticURL;
     /// 调统一的target判断
 //    [GTTargetEngine pushViewController:nil fromController:nil withTarget:[results objectForKey:@"showTarget"]];
     if (error) {
+        DLog(@"\n ~~~~~~ 报错啦 : %@ \n ~~~~~~ \n",results);
         DLog(@"\n ~~~~~~ 报错啦 : %@ \n ~~~~~~ \n",error);
         [self requestError:self.customError];
         return ;
     }
     @try {
-        
-        NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
-        int errorCode = [[results objectForKey:@"code"] intValue];
-        if (errorCode == 500 && [unauthorized containsString:@"401"]) {
-            [WWPublicMethod refreshToken:nil];
-        }
-//
+    
 //        if (errorCode == -220) { // 没有登录
 //            // 提示没有登录，并显示登录界面
 //            _kUserModel.isLogined = NO;

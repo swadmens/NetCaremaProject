@@ -167,6 +167,7 @@
         [weak_self handleObject:obj];
     };
     sence.errorBlock = ^(NSError *error) {
+        
         [weak_self failedOperation];
     };
     [sence sendRequest];

@@ -22,6 +22,7 @@ pod 'YHPhotoBrowser','~> 0.0.5'
 pod 'YYWebImage'
 pod 'SocketRocket'
 pod 'Masonry', '>= 1.0.1'
+pod 'MJExtension'
 
 pod 'MMMaterialDesignSpinner'
 pod 'JGProgressHUD'

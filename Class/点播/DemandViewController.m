@@ -26,6 +26,8 @@
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
 
+//token刷新次数
+@property(nonatomic,assign) NSInteger refreshtoken;
 
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSMutableArray *searchDataSource;/**<搜索结果数据源*/
@@ -73,7 +75,7 @@
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"130"];
+    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"90"];
     self.noDataView.backgroundColor = kColorBackgroundColor;
     // label
     UILabel *tipLabel = [self getNoDataTipLabel];
@@ -470,12 +472,21 @@
         if (error) {
             // 请求失败
             DLog(@"error  ==  %@",error.userInfo);
-            NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
-            int errorCode = [[error.userInfo objectForKey:@"code"] intValue];
-            if (errorCode == 500 && [unauthorized containsString:@"401"]) {
-                [WWPublicMethod refreshToken:nil];
-            }
+            DLog(@"responseObject  ==  %@",responseObject);
             [self failedOperation];
+            
+            self.refreshtoken++;
+            if (self.refreshtoken > 1) {
+                return ;
+            }
+
+            NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+            int statusCode = [[responseObject objectForKey:@"code"] intValue];
+            if ([unauthorized containsString:@"500"] && statusCode == 401) {
+                [WWPublicMethod refreshToken:^(id obj) {
+                    [self loadNewData];
+                }];
+            }
             return ;
         }
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;

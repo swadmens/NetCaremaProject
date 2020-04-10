@@ -24,6 +24,8 @@
 @property (nonatomic, strong) WWCollectionView *collectionView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property(nonatomic,assign) NSInteger page;
+//token刷新次数
+@property(nonatomic,assign) NSInteger refreshtoken;
 
 @property (nonatomic,strong) NSMutableDictionary *dicData;
 
@@ -313,8 +315,20 @@
         if (error) {
             // 请求失败
             DLog(@"error  ==  %@",error.userInfo);
-            [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
-            [weak_self failedOperation];
+            DLog(@"responseObject  ==  %@",responseObject);
+            [self failedOperation];
+            
+            self.refreshtoken++;
+            if (self.refreshtoken > 1) {
+                return ;
+            }
+            NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+            int statusCode = [[responseObject objectForKey:@"code"] intValue];
+            if ([unauthorized containsString:@"500"] && statusCode == 401) {
+                [WWPublicMethod refreshToken:^(id obj) {
+                    [self loadNewData];
+                }];
+            }
             return ;
         }
         DLog(@"responseObject  ==  %@",responseObject);

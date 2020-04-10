@@ -11,8 +11,8 @@
 #import "DownLoadSence.h"
 #import <UIImageView+YYWebImage.h>
 #import "DemandModel.h"
-#import "HSDownloadManager.h"
 #import "YDDownload.h"
+#import "CLVoiceApplyAddressModel.h"
 
 
 
@@ -22,10 +22,13 @@
 @property (nonatomic,strong) UILabel *titleLabel;//名称
 @property (nonatomic,strong) UILabel *timeLabel;//时间
 @property (nonatomic,strong) UILabel *totalDataLabel;//总下载量
+@property (nonatomic,strong) UIButton *downLoadBtn;
 
 @property (nonatomic,strong) UIProgressView *progressView;//进度条
+
 @property (nonatomic,strong) CarmeaVideosModel *model;
 @property (nonatomic,strong) DemandModel *demandModel;
+@property (nonatomic,strong) CLVoiceApplyAddressModel *cacheModel;
 
 
 
@@ -42,7 +45,7 @@
     UIView *backView = [UIView new];
     backView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:backView];
-    [backView alignTop:@"0" leading:@"15" bottom:@"10" trailing:@"15" toView:self.contentView];
+    [backView alignTop:@"0" leading:@"0" bottom:@"10" trailing:@"0" toView:self.contentView];
     [backView addHeight:102.5];
     
     
@@ -55,9 +58,6 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(startDownLoad:)];
     [_showImageView addGestureRecognizer:tap];
     
-    
-    
-    
     _titleLabel = [UILabel new];
     _titleLabel.text = @"高清延时拍摄城市路口";
     _titleLabel.textColor = kColorMainTextColor;
@@ -66,6 +66,20 @@
     [_titleLabel leftToView:_showImageView withSpace:10];
     [_titleLabel topToView:backView withSpace:15];
     [_titleLabel addWidth:kScreenWidth-195];
+    
+    
+    _downLoadBtn = [UIButton new];
+    [_downLoadBtn setTitle:@"下载" forState:UIControlStateNormal];
+    [_downLoadBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [_downLoadBtn addTarget:self action:@selector(startDownloadClick:) forControlEvents:UIControlEventTouchUpInside];
+    _downLoadBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
+    [backView addSubview:_downLoadBtn];
+    [_downLoadBtn topToView:backView];
+    [_downLoadBtn rightToView:backView];
+    [_downLoadBtn addWidth:50];
+    [_downLoadBtn addHeight:30];
+    
+    
     
     
     _timeLabel = [UILabel new];
@@ -82,7 +96,7 @@
     _progressView.progressViewStyle = UIProgressViewStyleDefault;
     _progressView.progressTintColor = kColorMainColor;
     _progressView.trackTintColor = UIColorFromRGB(0xe5e5e5, 1);
-    _progressView.progress = 0.0;
+    _progressView.progress = 0.00;
     [backView addSubview:_progressView];
     [_progressView leftToView:_showImageView withSpace:10];
     [_progressView topToView:_timeLabel withSpace:8];
@@ -98,7 +112,20 @@
     [_totalDataLabel rightToView:backView withSpace:15];
     [_totalDataLabel topToView:_progressView withSpace:5];
 
-    
+    //接收通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downloadTaskDidChangeStatusNotification:) name:YDDownloadTaskDidChangeStatusNotification object:nil];
+}
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+-(void)setFrame:(CGRect)frame
+{
+    frame.origin.x += 15;
+    frame.origin.y += 10;
+    frame.size.height -= 10;
+    frame.size.width -= 30;
+    [super setFrame:frame];
 }
 
 -(void)makeCellData:(CarmeaVideosModel *)model
@@ -115,63 +142,42 @@
     _titleLabel.text = model.video_name;
     _timeLabel.text = model.updateAt;
 }
+-(void)makeCellCacheData:(CLVoiceApplyAddressModel*)model
+{
+    self.cacheModel = model;
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:UIImageWithFileName(@"playback_back_image")];
+    _titleLabel.text = model.name;
+    _timeLabel.text = model.time;
+    _progressView.progress = [model.progress floatValue];
+    _totalDataLabel.text = model.writeBytes;
+    if (_progressView.progress >= 1) {
+        _progressView.hidden = YES;
+        [_downLoadBtn setTitle:@"已完成" forState:UIControlStateNormal];
+    }else{
+        [_downLoadBtn setTitle:@"下载" forState:UIControlStateNormal];
+    }
+}
 
-
+//播放
 -(void)startDownLoad:(UITapGestureRecognizer*)tp
 {
+    
+}
+//下载
+-(void)startDownloadClick:(UIButton*)sender
+{
     __unsafe_unretained typeof(self) weak_self = self;
-
-    NSString *urlString = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/download/%@/%@",self.url,_model.start_time];
     
-    if (self.model == nil) {
-        urlString = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/vod/download/%@",self.demandModel.video_id];
-    }
-    
-//    DownLoadSence *sence = [DownLoadSence new];
-//    sence.filePath = @"";
-//    sence.fileName = @"nvr017_record.mp4";
-//    sence.needReDownload = YES;
-//    sence.url = @"http://192.168.6.120:10080/record/download/nvr017/20200325034226?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY0ODk1NTAsInB3IjoiMjEyMzJmMjk3YTU3YTVhNzQzODk0YTBlNGE4MDFmYzMiLCJ0bSI6MTU4NjQwMzE1MCwidW4iOiJhZG1pbiJ9.G6tdm9KGD0bZF4UN17pdv2Ld85CQOVerunk8k-UFHF0";
-//    [sence startDownload];
-//    sence.progressBlock = ^(float progress, NSString *writeBytes) {
-//        DLog(@"下载进度 ==  %f",progress)
-//        [[GCDQueue mainQueue] queueBlock:^{
-//            weak_self.progressView.progress = progress;
-//            weak_self.totalDataLabel.text = writeBytes;
-//            if (self.downlaodProgress) {
-//                self.downlaodProgress(progress);
-//            }
-//        }];
-//    };
-//    sence.finishedBlock = ^(NSString *filePath) {
-//        DLog(@"文件路径  ==  %@",filePath);
-//        NSURL *url = [NSURL URLWithString:filePath];
-//        BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([url path]);
-//        if (compatible)
-//        {
-//            //保存相册核心代码
-//            UISaveVideoAtPathToSavedPhotosAlbum([url path], weak_self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
-//            if (self.localizedFilePath) {
-//                self.localizedFilePath(filePath);
-//            }
-//        }
-//    };
-    
-////    http://192.168.6.120:10080/record/download/nvr017/20200325034226?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODYzMzUzNjAsInB3IjoiMjEyMzJmMjk3YTU3YTVhNzQzODk0YTBlNGE4MDFmYzMiLCJ0bSI6MTU4NjI0ODk2MCwidW4iOiJhZG1pbiJ9.tVK2AV8q3MBAPZZiVNDuWmoFJrngWtDh-oYkZcFRRa8
-
-//    [[HSDownloadManager sharedInstance] deleteAllFile];
-//
-//    [self download:@"http://192.168.6.120:10080/record/download/nvr017/20200325034226?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY0ODk1NTAsInB3IjoiMjEyMzJmMjk3YTU3YTVhNzQzODk0YTBlNGE4MDFmYzMiLCJ0bSI6MTU4NjQwMzE1MCwidW4iOiJhZG1pbiJ9.G6tdm9KGD0bZF4UN17pdv2Ld85CQOVerunk8k-UFHF0" progressLabel:nil progressView:self.progressView button:nil];
-
-    
-//    http://192.168.6.120:10102/outer/liveqing/vod/download/M8KKhNrZR
-    
-//    if ([sender.currentTitle isEqualToString:@"下载"]) {
+    if ([sender.currentTitle isEqualToString:@"下载"]) {
            
            self.downloadTask = [[YDDownloadQueue defaultQueue] addDownloadTaskWithPriority:YDDownloadPriorityDefault url:self.url progressHandler:^(CGFloat progress, CGFloat speed, NSString *writeBytes) {
                
-               self.progressView.progress = progress;
-               self.totalDataLabel.text = writeBytes;
+               weak_self.progressView.progress = progress;
+               weak_self.totalDataLabel.text = writeBytes;
+               NSString *strValue = [NSString stringWithFormat:@"%f",progress];
+               if (weak_self.downlaodProgress) {
+                   weak_self.downlaodProgress(strValue,writeBytes);
+               }
 //               if (speed < 1024) {
 //                   self.speedLabel.text = [NSString stringWithFormat:@"%.2fB/s", speed];
 //               } else if (speed < 1024 * 1024) {
@@ -184,32 +190,31 @@
                
 //               self.speedLabel.text = nil;
                if (error.code == -999) {
-                   self.progressView.progress = 0;
+                   weak_self.progressView.progress = 0;
                }
                NSLog(@"%@", filePath);
+               if (weak_self.localizedFilePath) {
+                   weak_self.localizedFilePath(filePath);
+               }
                NSURL *url = [NSURL URLWithString:filePath];
                BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([url path]);
                if (compatible)
                {
                    //保存相册核心代码
                    UISaveVideoAtPathToSavedPhotosAlbum([url path], weak_self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
-                   if (self.localizedFilePath) {
-                       self.localizedFilePath(filePath);
+                   if (weak_self.localizedFilePath) {
+                       weak_self.localizedFilePath(filePath);
                    }
                }
            }];
            
-//       } else if ([sender.currentTitle isEqualToString:@"继续"]) {
-//
-//           [self.downloadTask resumeTask];
-//
-//       } else if ([sender.currentTitle isEqualToString:@"暂停"] || [sender.currentTitle isEqualToString:@"等待中"]) {
-//
-//           [self.downloadTask suspendTask];
-//           self.speedLabel.text = nil;
-//       }
+       } else if ([sender.currentTitle isEqualToString:@"继续"]) {
+           [weak_self.downloadTask resumeTask];
+          
+       } else if ([sender.currentTitle isEqualToString:@"暂停"] || [sender.currentTitle isEqualToString:@"等待中"]) {
+           [weak_self.downloadTask suspendTask];
+       }
     
- 
 }
 //保存视频完成之后的回调
 - (void) savedPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError *)error contextInfo: (void *)contextInfo {
@@ -221,28 +226,6 @@
        
     }
 }
-
-#pragma mark 开启任务下载资源
-- (void)download:(NSString *)url progressLabel:(UILabel *)progressLabel progressView:(UIProgressView *)progressView button:(UIButton *)button
-{
-    [[HSDownloadManager sharedInstance] download:url progress:^(NSInteger receivedSize, NSInteger expectedSize, CGFloat progress) {
-        
-        NSString *writeBytes = [NSString stringWithFormat:@"%ldM/%ldM",(long)receivedSize/1048576,(long)expectedSize/1048576];
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-//            progressLabel.text = [NSString stringWithFormat:@"%.f%%", progress * 100];
-            self.progressView.progress = progress;
-            self.totalDataLabel.text = writeBytes;
-        });
-    } state:^(DownloadState state) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-//            [button setTitle:[self getTitleWithDownloadState:state] forState:UIControlStateNormal];
-        });
-    }];
-
-    
-}
-
 - (void)downloadTaskDidChangeStatusNotification:(NSNotification *)notify
 {
     YDDownloadTask *downloadTask = (YDDownloadTask *)notify.object;
@@ -252,38 +235,27 @@
     switch (downloadTask.taskStatus) {
         case YDDownloadTaskStatusWaiting:
         case YDDownloadTaskStatusFailed: {
-//            [_downLoadBtn setTitle:@"等待中" forState:UIControlStateNormal];
-            DLog(@"等待中");
+            [_downLoadBtn setTitle:@"等待中" forState:UIControlStateNormal];
         }
             break;
         case YDDownloadTaskStatusRunning: {
-//            [_downLoadBtn setTitle:@"暂停" forState:UIControlStateNormal];
-            DLog(@"暂停");
-
+            [_downLoadBtn setTitle:@"暂停" forState:UIControlStateNormal];
         }
             break;
         case YDDownloadTaskStatusSuspended: {
-//            [_downLoadBtn setTitle:@"继续" forState:UIControlStateNormal];
-            DLog(@"继续");
-
+            [_downLoadBtn setTitle:@"继续" forState:UIControlStateNormal];
         }
             break;
         case YDDownloadTaskStatusCanceled: {
-//            [_downLoadBtn setTitle:@"下载" forState:UIControlStateNormal];
-            DLog(@"下载");
-
+            [_downLoadBtn setTitle:@"下载" forState:UIControlStateNormal];
         }
             break;
         case YDDownloadTaskStatusCompleted: {
-//            [_downLoadBtn setTitle:@"已完成" forState:UIControlStateNormal];
-            DLog(@"已完成");
-
+            [_downLoadBtn setTitle:@"已完成" forState:UIControlStateNormal];
         }
             break;
         default: {
-//            [_downLoadBtn setTitle:@"下载" forState:UIControlStateNormal];
-            DLog(@"下载");
-
+            [_downLoadBtn setTitle:@"下载" forState:UIControlStateNormal];
         }
             break;
     }

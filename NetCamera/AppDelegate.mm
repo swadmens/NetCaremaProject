@@ -11,7 +11,7 @@
 #import "GuideNewController.h"//新的引导页
 
 #import "LGXThirdEngine.h" // 第三方管理
-#import <TXLiteAVSDK_Professional/TXLiteAVSDK.h>
+//#import <TXLiteAVSDK_Professional/TXLiteAVSDK.h>
 
 //#import "netsdk.h"
 //#import "Global.h"
@@ -115,10 +115,10 @@
     
     
     
-    NSString * const licenceURL = @"http://license.vod2.myqcloud.com/license/v1/b658adc20b7dff21c516dcb467c70349/TXLiveSDK.licence";
-    NSString * const licenceKey = @"3312d754191a835966beae0569198869";
-    //TXLiveBase 位于 "TXLiveBase.h" 头文件中
-    [TXLiveBase setLicenceURL:licenceURL key:licenceKey];
+//    NSString * const licenceURL = @"http://license.vod2.myqcloud.com/license/v1/b658adc20b7dff21c516dcb467c70349/TXLiveSDK.licence";
+//    NSString * const licenceKey = @"3312d754191a835966beae0569198869";
+//    //TXLiveBase 位于 "TXLiveBase.h" 头文件中
+//    [TXLiveBase setLicenceURL:licenceURL key:licenceKey];
     
     return YES;
 }

@@ -12,12 +12,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CLVoiceApplyAddressModel : NSObject<NSCoding>
 
-@property (nonatomic, copy) NSString *imageUrl;//图片地址
-@property (nonatomic, copy) NSString *downloadProgress;//下载进度
-@property (nonatomic, copy) NSString *video_name;//视频名称
-@property (nonatomic ,copy) NSString *video_time;//视频创建时间
-@property (nonatomic ,copy) NSString *filePath;//视频本地地址
-@property (nonatomic ,copy) NSString *download_url;//视频下载URL
+@property (nonatomic, copy) NSString *snap;//图片地址
+@property (nonatomic, copy) NSString *progress;//下载进度
+@property (nonatomic, copy) NSString *name;//视频名称
+@property (nonatomic ,copy) NSString *start_time;//视频创建时间
+@property (nonatomic ,copy) NSString *time;//视频创建时间
+@property (nonatomic ,copy) NSString *file_path;//视频本地地址
+@property (nonatomic ,copy) NSString *url;//视频下载URL
+@property (nonatomic ,copy) NSString *duration;//视频时长
+@property (nonatomic ,copy) NSString *hls;//视频播放地址
+@property (nonatomic ,copy) NSString *writeBytes;//视频下载大小
+
 
 +(instancetype)AddressModelWithDict:(NSDictionary *)dict;
 -(instancetype)initAddressModelWithDict:(NSDictionary *)dict;
