@@ -26,7 +26,7 @@
 
 static NSString *const _kdownloadListKey = @"download_video_list";
 
-@interface DownloadListController ()<UITableViewDelegate,UITableViewDataSource,NSURLSessionDelegate>
+@interface DownloadListController ()<UITableViewDelegate,UITableViewDataSource,NSURLSessionDelegate,PLLongMediaTableViewCellDelegate>
 {
     BOOL _isHadFirst; // 是否第一次加载了
 }
@@ -47,6 +47,8 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 @property (nonatomic,strong) NSMutableArray *originalData;
 
 @property (nonatomic,assign) BOOL isRecord;//是否是录像文件
+
+@property (nonatomic, assign) BOOL isFullScreen;
 
 @end
 
@@ -180,6 +182,7 @@ static NSString *const _kdownloadListKey = @"download_video_list";
         [self.tableView registerClass:[DownloadListCell class] forCellReuseIdentifier:identifier];
     }
     DownloadListCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
+    cell.delegate = self;
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -254,6 +257,16 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 - (BOOL)tableView: (UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
       return NO;
 }
+- (void)tableViewCellEnterFullScreen:(DownloadListCell *)cell {
+    self.isFullScreen = YES;
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void)tableViewCellExitFullScreen:(DownloadListCell *)cell {
+    self.isFullScreen = NO;
+    [self setNeedsStatusBarAppearanceUpdate];
+}
+
 
 - (void)startLoadDataRequest:(NSString*)start_time withInteger:(NSInteger)idx
 {

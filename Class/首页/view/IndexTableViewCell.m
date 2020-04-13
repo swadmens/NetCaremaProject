@@ -79,12 +79,7 @@
     [_equipmentAddress leftToView:backView withSpace:12];
     [_equipmentAddress addCenterY:10 toView:backView];
     
-    
-    
-    
-    
-    
-    
+
     UILabel *lineLabel = [UILabel new];
     lineLabel.backgroundColor = UIColorFromRGB(0xCCCCCC, 1);
     [backView addSubview:lineLabel];
@@ -112,6 +107,12 @@
 {
     _equipmentName.text = model.equipment_name;
     _equipmentStates.text = model.equipment_states;
+    
+    if ([model.equipment_states isEqualToString:@"离线"]) {
+        _equipmentStates.backgroundColor = UIColorFromRGB(0xAEAEAE, 1);
+    }else{
+        _equipmentStates.backgroundColor = UIColorFromRGB(0xF39700, 1);
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

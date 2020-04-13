@@ -14,7 +14,27 @@ NS_ASSUME_NONNULL_BEGIN
 @class DemandModel;
 @class YDDownloadTask;
 @class CLVoiceApplyAddressModel;
+@class DownloadListCell;
+@protocol PLLongMediaTableViewCellDelegate <NSObject>
+
+- (void)tableViewWillPlay:(DownloadListCell *)cell;
+
+- (void)tableViewCellEnterFullScreen:(DownloadListCell *)cell;
+
+- (void)tableViewCellExitFullScreen:(DownloadListCell *)cell;
+
+@end
+
 @interface DownloadListCell : WWTableViewCell
+
+@property (nonatomic, weak) id<PLLongMediaTableViewCellDelegate> delegate;
+
+- (void)play;
+
+- (void)stop;
+
+- (void)configureVideo:(BOOL)enableRender;
+
 
 @property (copy, nonatomic) NSString *url;
 

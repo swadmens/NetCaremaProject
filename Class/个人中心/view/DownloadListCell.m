@@ -14,9 +14,11 @@
 #import "YDDownload.h"
 #import "CLVoiceApplyAddressModel.h"
 
+#import <PLPlayerKit/PLPlayerKit.h>
+#import "PLPlayerView.h"
 
 
-@interface DownloadListCell ()
+@interface DownloadListCell ()<PLPlayerDelegate,PLPlayerViewDelegate>
 
 @property (nonatomic,strong) UIImageView *showImageView;
 @property (nonatomic,strong) UILabel *titleLabel;//名称
@@ -29,6 +31,17 @@
 @property (nonatomic,strong) CarmeaVideosModel *model;
 @property (nonatomic,strong) DemandModel *demandModel;
 @property (nonatomic,strong) CLVoiceApplyAddressModel *cacheModel;
+
+//七牛播放器
+@property (nonatomic, strong) PLPlayer  *PLPlayer;
+@property (nonatomic, assign) BOOL isNeedReset;
+@property (nonatomic, strong) PLPlayerView *playerView;
+@property (nonatomic, assign) BOOL isPlaying;
+
+
+@property (nonatomic,strong) NSString *video_name;
+@property (nonatomic,strong) NSString *snapUrl;
+@property (nonatomic,strong) NSString *file_path;
 
 
 
@@ -111,7 +124,8 @@
     [backView addSubview:_totalDataLabel];
     [_totalDataLabel rightToView:backView withSpace:15];
     [_totalDataLabel topToView:_progressView withSpace:5];
-
+    
+    
     //接收通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(downloadTaskDidChangeStatusNotification:) name:YDDownloadTaskDidChangeStatusNotification object:nil];
 }
@@ -134,6 +148,10 @@
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:UIImageWithFileName(@"playback_back_image")];
     _titleLabel.text = model.video_name;
     _timeLabel.text = model.time;
+    self.video_name = model.video_name;
+    self.snapUrl = model.snap;
+    self.file_path = model.hls;
+
 }
 -(void)makeCellDemandData:(DemandModel *)model
 {
@@ -141,6 +159,10 @@
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:UIImageWithFileName(@"playback_back_image")];
     _titleLabel.text = model.video_name;
     _timeLabel.text = model.updateAt;
+    self.video_name = model.video_name;
+    self.snapUrl = model.snapUrl;
+    self.file_path = model.videoUrl;
+
 }
 -(void)makeCellCacheData:(CLVoiceApplyAddressModel*)model
 {
@@ -148,6 +170,9 @@
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:UIImageWithFileName(@"playback_back_image")];
     _titleLabel.text = model.name;
     _timeLabel.text = model.time;
+    self.video_name = model.name;
+    self.snapUrl = model.snap;
+    self.file_path = model.hls;
     _progressView.progress = [model.progress floatValue];
     _totalDataLabel.text = model.writeBytes;
     if (_progressView.progress >= 1) {
@@ -156,28 +181,69 @@
     }else{
         [_downLoadBtn setTitle:@"下载" forState:UIControlStateNormal];
     }
+    
 }
 
 //播放
 -(void)startDownLoad:(UITapGestureRecognizer*)tp
 {
     
+    
+//    NSArray *filArr = [self.file_path componentsSeparatedByString:@"/"];
+//    NSString *filName = filArr.lastObject;
+//
+//    // 取得沙盒目录
+//    NSString *localPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+//    // 要检查的文件目录
+//    NSString *filePath = [localPath  stringByAppendingPathComponent:filName];
+//    NSFileManager *fileManager = [NSFileManager defaultManager];
+//    if ([fileManager fileExistsAtPath:filePath]) {
+//        NSLog(@"文件%@存在",filName);
+//    }
+//    else {
+//        NSLog(@"文件%@不存在",filName);
+//    }
+//    return;
+    
+    
+    
+     NSDictionary *dic = @{@"video_name":self.video_name,
+                           @"snapUrl":self.snapUrl,
+//                           @"videoUrl":[WWPublicMethod isStringEmptyText:self.file_path]?self.file_path:self.url,
+                           @"videoUrl":self.file_path,
+     };
+    DemandModel *models = [DemandModel makeModelData:dic];
+
+    self.playerView = [PLPlayerView new];
+    self.playerView.delegate = self;
+    [_showImageView addSubview:self.playerView];
+    self.playerView.media = models;
+    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.showImageView);
+    }];
+
+    [self configureVideo:NO];
+    [self.playerView clickEnterFullScreenButton];
+    [self.playerView play];
+    
+    [self playerViewEnterFullScreen:self.playerView];
 }
 //下载
 -(void)startDownloadClick:(UIButton*)sender
 {
     __unsafe_unretained typeof(self) weak_self = self;
     
+    NSString *testUrl = @"http://192.168.6.120:10080/record/download/nvr017/20200325034226?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY1NzE5ODgsInB3IjoiMjEyMzJmMjk3YTU3YTVhNzQzODk0YTBlNGE4MDFmYzMiLCJ0bSI6MTU4NjQ4NTU4OCwidW4iOiJhZG1pbiJ9.uRdKVTIJEuREbFAA3uCqGUDVG-W8O2e8Sr6Rrdq_i8E";
+    
     if ([sender.currentTitle isEqualToString:@"下载"]) {
-           
-           self.downloadTask = [[YDDownloadQueue defaultQueue] addDownloadTaskWithPriority:YDDownloadPriorityDefault url:self.url progressHandler:^(CGFloat progress, CGFloat speed, NSString *writeBytes) {
-               
-               weak_self.progressView.progress = progress;
-               weak_self.totalDataLabel.text = writeBytes;
-               NSString *strValue = [NSString stringWithFormat:@"%f",progress];
-               if (weak_self.downlaodProgress) {
-                   weak_self.downlaodProgress(strValue,writeBytes);
-               }
+        self.downloadTask = [[YDDownloadQueue defaultQueue] addDownloadTaskWithPriority:YDDownloadPriorityDefault url:testUrl progressHandler:^(CGFloat progress, CGFloat speed, NSString *writeBytes) {
+            
+            weak_self.progressView.progress = progress;
+            weak_self.totalDataLabel.text = writeBytes;
+            NSString *strValue = [NSString stringWithFormat:@"%f",progress];
+            if (weak_self.downlaodProgress) {
+                weak_self.downlaodProgress(strValue,writeBytes);
+            }
 //               if (speed < 1024) {
 //                   self.speedLabel.text = [NSString stringWithFormat:@"%.2fB/s", speed];
 //               } else if (speed < 1024 * 1024) {
@@ -185,35 +251,29 @@
 //               } else {
 //                   self.speedLabel.text = [NSString stringWithFormat:@"%.2fM/s", speed / 1024 / 1024];
 //               }
-               
-           } completionHandler:^(NSString *filePath, NSError *error) {
-               
+        } completionHandler:^(NSString *filePath, NSError *error) {
 //               self.speedLabel.text = nil;
-               if (error.code == -999) {
-                   weak_self.progressView.progress = 0;
-               }
-               NSLog(@"%@", filePath);
-               if (weak_self.localizedFilePath) {
-                   weak_self.localizedFilePath(filePath);
-               }
-               NSURL *url = [NSURL URLWithString:filePath];
-               BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([url path]);
-               if (compatible)
-               {
-                   //保存相册核心代码
-                   UISaveVideoAtPathToSavedPhotosAlbum([url path], weak_self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
-                   if (weak_self.localizedFilePath) {
-                       weak_self.localizedFilePath(filePath);
-                   }
-               }
-           }];
-           
-       } else if ([sender.currentTitle isEqualToString:@"继续"]) {
-           [weak_self.downloadTask resumeTask];
-          
-       } else if ([sender.currentTitle isEqualToString:@"暂停"] || [sender.currentTitle isEqualToString:@"等待中"]) {
-           [weak_self.downloadTask suspendTask];
-       }
+            DLog(@"error == %@",error);
+            if (error.code == -999) {
+                weak_self.progressView.progress = 0;
+            }
+            NSLog(@"%@", filePath);
+            self.file_path = filePath;
+            if (weak_self.localizedFilePath) {
+                weak_self.localizedFilePath(filePath);
+            }
+            NSURL *url = [NSURL URLWithString:filePath];
+            BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([url path]);
+            if (compatible){
+                //保存相册核心代码
+                UISaveVideoAtPathToSavedPhotosAlbum([url path], weak_self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
+            }
+        }];
+    } else if ([sender.currentTitle isEqualToString:@"继续"]) {
+        [weak_self.downloadTask resumeTask];
+    } else if ([sender.currentTitle isEqualToString:@"暂停"] || [sender.currentTitle isEqualToString:@"等待中"]) {
+        [weak_self.downloadTask suspendTask];
+    }
     
 }
 //保存视频完成之后的回调
@@ -260,6 +320,52 @@
             break;
     }
 }
+//播放器
+- (void)play {
+    [self.playerView play];
+    self.isPlaying = YES;
+}
+
+- (void)stop {
+    [self.playerView stop];
+    self.isPlaying = NO;
+}
+
+- (void)configureVideo:(BOOL)enableRender {
+    [self.playerView configureVideo:enableRender];
+}
+- (void)playerViewEnterFullScreen:(PLPlayerView *)playerView {
+
+   UIView *superView = [[UIApplication sharedApplication] keyWindow];
+    [self.playerView removeFromSuperview];
+    [superView addSubview:self.playerView];
+    [self.playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(superView.mas_height);
+        make.height.equalTo(superView.mas_width);
+        make.center.equalTo(superView);
+    }];
+        
+    [superView setNeedsUpdateConstraints];
+    [superView updateConstraintsIfNeeded];
+
+    [UIView animateWithDuration:.3 animations:^{
+        [superView layoutIfNeeded];
+    }];
+
+    [self.delegate tableViewCellEnterFullScreen:self];
+}
+
+- (void)playerViewExitFullScreen:(PLPlayerView *)playerView {
+    
+    [self.PLPlayer stop];
+    [self.playerView removeFromSuperview];
+    [self.delegate tableViewCellExitFullScreen:self];
+
+}
+- (void)playerViewWillPlay:(PLPlayerView *)playerView {
+//    [self.playerView.delegate playerViewWillPlay:self.playerView];
+}
+
 
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

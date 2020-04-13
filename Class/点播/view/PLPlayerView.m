@@ -43,6 +43,7 @@ UIGestureRecognizerDelegate
 @property (nonatomic, strong) PLPlayerOption *playerOption;
 @property (nonatomic, assign) BOOL isNeedSetupPlayer;
 @property (nonatomic, assign) BOOL isLiving;//是否是直播
+@property (nonatomic, assign) BOOL isFullScreen;//是否是全屏
 
 @property (nonatomic, strong) NSTimer *playTimer;
 
@@ -476,10 +477,12 @@ UIGestureRecognizerDelegate
 }
 
 - (void)clickExitFullScreenButton {
+    self.isFullScreen = NO;
     [self transformWithOrientation:UIDeviceOrientationPortrait];
 }
 
 - (void)clickEnterFullScreenButton {
+    self.isFullScreen = YES;
     if (UIDeviceOrientationLandscapeRight == [[UIDevice currentDevice]orientation]) {
         [self transformWithOrientation:UIDeviceOrientationLandscapeRight];
     } else {
@@ -1009,10 +1012,18 @@ UIGestureRecognizerDelegate
 
 - (void)player:(PLPlayer *)player stoppedWithError:(NSError *)error
 {
+    
     NSString *info = error.userInfo[@"NSLocalizedDescription"];
     [self showTip:info];
-    
+
     [self stop];
+    
+    [_kHUDManager showMsgInView:nil withTitle:@"播放错误" isSuccess:YES];
+    
+    if (self.isFullScreen) {
+        [self clickExitFullScreenButton];
+    }
+    
 }
 
 - (void)player:(nonnull PLPlayer *)player willRenderFrame:(nullable CVPixelBufferRef)frame pts:(int64_t)pts sarNumerator:(int)sarNumerator sarDenominator:(int)sarDenominator {
@@ -1051,6 +1062,7 @@ UIGestureRecognizerDelegate
     [self showTip:info];
     
     [self stop];
+   
 }
 
 - (void)player:(PLPlayer *)player loadedTimeRange:(CMTime)timeRange {

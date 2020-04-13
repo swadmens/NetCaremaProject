@@ -35,6 +35,8 @@
 - (void)resume;
 
 - (void)configureVideo:(BOOL)enableRender;
+
+-(void)clickEnterFullScreenButton;
 @end
 
 
