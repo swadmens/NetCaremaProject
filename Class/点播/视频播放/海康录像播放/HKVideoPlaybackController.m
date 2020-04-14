@@ -18,7 +18,10 @@
 #import <PLPlayerKit/PLPlayerKit.h>
 #import "PLPlayerView.h"
 #import "DemandModel.h"
+#import "CarmeaVideosModel.h"
 #import "DownloadListController.h"
+#import "AFHTTPSessionManager.h"
+
 
 #define kIndicatorViewSize 50
 static NSTimeInterval const kToastDuration = 1;
@@ -256,6 +259,9 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     }];
 
     [self configureVideo:NO];
+    if (self.isLiving) {
+        [self play];
+    }
 }
 
 - (void)play {
@@ -390,12 +396,39 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     [allButton addTarget:self action:@selector(allVideosClick) forControlEvents:UIControlEventTouchUpInside];
     
     
+    if (_isLiving) {
+        downLoadBtn.hidden = YES;
+        deleteBtn.hidden = YES;
+    }
     
 }
 //删除视频按钮
 -(void)deleteVideoClick
 {
-    
+    [[TCNewAlertView shareInstance] showAlert:nil message:@"确认删除该视频吗？" cancelTitle:@"取消" viewController:self confirm:^(NSInteger buttonTag) {
+        if (buttonTag == 0 ) {
+            
+            if (self.isPlaying) {
+                [self stop];
+            }
+            id obj = [self.allDataArray objectAtIndex:self.indexInteger+1];
+            if ([obj isKindOfClass:[DemandModel class]]) {
+                self.playerView.media = obj;
+            }else{
+                CarmeaVideosModel *model = obj;
+                NSDictionary *dic = @{ @"name":model.video_name,
+                                       @"snapUrl":model.snap,
+                                       @"videoUrl":model.hls,
+                                       @"createAt":model.time,
+                                      };
+                
+                DemandModel *models = [DemandModel makeModelData:dic];
+                self.playerView.media = models;
+            }
+            
+            [self deleteNumbersVideo];
+        }
+    } buttonTitles:@"确定", nil];
 }
 //下载视频
 -(void)downloadVideoClick
@@ -576,10 +609,10 @@ static CGFloat const kZoomMaxScale   = 10.0f;
             // 预览过程中出现异常, 可能是取流中断，可能是其他原因导致的，具体根据错误码进行区分
             // 做一些提示操作
             message = [NSString stringWithFormat:@"播放异常, 错误码是 : 0x%08lx", errorCode];
-            if (_isRecording) {
-                //如果在录像，先关闭录像
-//                [self recordVideo:_recordButton];
-            }
+//            if (_isRecording) {
+//                //如果在录像，先关闭录像
+////                [self recordVideo:_recordButton];
+//            }
             // 关闭播放
             [_player stopPlay:nil];
             _progressSlider.value = 0;
@@ -645,24 +678,145 @@ static CGFloat const kZoomMaxScale   = 10.0f;
 //定义展示的Section的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 6;
+    return self.allDataArray.count;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    VideoPlaybackViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[VideoPlaybackViewCell getCellIDStr] forIndexPath:indexPath];
 
-     VideoPlaybackViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[VideoPlaybackViewCell getCellIDStr] forIndexPath:indexPath];
-
-    return cell;
+    id objt = [self.allDataArray objectAtIndex:indexPath.row];
+    [cell makeCellData:objt];
     
+    return cell;
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+     
+    if (self.isPlaying) {
+        [self stop];
+    }
+    id obj = [self.allDataArray objectAtIndex:indexPath.row];
     
+    if ([obj isKindOfClass:[DemandModel class]]) {
+        DemandModel *model = obj;
+        self.playerView.media = obj;
+        self.playerView.media = model;
+        self.model = model;
+        self.indexInteger = indexPath.row;
+        _videoNameLabel.text = self.model.video_name;
+        _videoTimeLabel.text = self.model.createAt;
+        
+    }else{
+        CarmeaVideosModel *model = obj;
+        NSDictionary *dic = @{ @"name":model.video_name,
+                               @"snapUrl":model.snap,
+                               @"videoUrl":model.hls,
+                               @"createAt":model.time,
+                              };
+        DemandModel *models = [DemandModel makeModelData:dic];
+        self.playerView.media = models;
+        self.model = models;
+        self.indexInteger = indexPath.row;
+        _videoNameLabel.text = self.model.video_name;
+        _videoTimeLabel.text = self.model.createAt;
+   }
+
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     return UIEdgeInsetsMake(0, 15, 0, 15);
+}
+
+//删除视频
+-(void)deleteNumbersVideo
+{
+       
+    //提交数据
+    NSDictionary *finalParams;
+    NSString *url;
+    
+    if (self.isRecordFile) {
+        url = @"http://192.168.6.120:10102/outer/liveqing/record/remove";
+        finalParams = @{
+                        @"id":self.device_id,
+                        @"period": self.carmeaModel.start_time,
+                        };
+    }else{
+        url = @"http://192.168.6.120:10102/outer/liveqing/vod/remove";
+        finalParams = @{
+                        @"id":self.model.video_id,
+                        };
+    }
+        
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
+                                                       options:0
+                                                         error:nil];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
+    
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:nil error:nil];
+    
+    // 设置请求头
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
+    
+    // 设置body
+    [request setHTTPBody:jsonData];
+    
+    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        
+        if (error) {
+            // 请求失败
+            DLog(@"error  ==  %@",error.userInfo);
+            [_kHUDManager showMsgInView:nil withTitle:@"删除失败，请重试！" isSuccess:YES];
+            
+            return ;
+        }
+        DLog(@"responseObject  ==  %@",responseObject);
+        
+        [self.allDataArray removeObjectAtIndex:self.indexInteger];
+        if (self.allDataArray.count == self.indexInteger) {
+            self.indexInteger = self.allDataArray.count - 1;
+        }
+        id obj = [self.allDataArray objectAtIndex:self.indexInteger];
+        
+        if ([obj isKindOfClass:[DemandModel class]]) {
+            DemandModel *models = obj;
+            self.playerView.media = obj;
+            
+            self.videoNameLabel.text = models.video_name;
+            self.videoTimeLabel.text = models.createAt;
+        }else{
+            CarmeaVideosModel *model = obj;
+            NSDictionary *dic = @{ @"name":model.video_name,
+                                   @"snapUrl":model.snap,
+                                   @"videoUrl":model.hls,
+                                   @"createAt":model.time,
+                                  };
+            
+            DemandModel *models = [DemandModel makeModelData:dic];
+            self.playerView.media = models;
+            self.videoNameLabel.text = models.video_name;
+            self.videoTimeLabel.text = models.createAt;
+        }
+        
+        
+        [self.collectionView reloadData];
+        
+    }];
+    
+    [task resume];
 }
 
 /*

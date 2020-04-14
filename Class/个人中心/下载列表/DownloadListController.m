@@ -36,7 +36,7 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
 
-@property (nonatomic,strong) NSMutableArray *lengthArray;
+@property (nonatomic,strong) NSMutableArray *tempDataArray;
 
 @property(nonatomic,strong)NSURLSessionDownloadTask*downloadTask;
 
@@ -67,12 +67,12 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     }
     return _originalData;
 }
--(NSMutableArray*)lengthArray
+-(NSMutableArray*)tempDataArray
 {
-    if (!_lengthArray) {
-        _lengthArray = [NSMutableArray array];
+    if (!_tempDataArray) {
+        _tempDataArray = [NSMutableArray array];
     }
-    return _lengthArray;
+    return _tempDataArray;
 }
 - (void)setupNoDataView
 {
@@ -190,8 +190,9 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 
     if ([objt isKindOfClass:[CarmeaVideosModel class]]) {
         [cell makeCellData:objt];
-        NSDictionary *dic = [self.originalData objectAtIndex:indexPath.row];;
-        cell.url = [dic objectForKey:@"url"];
+//        NSDictionary *dic = [self.originalData objectAtIndex:indexPath.row];;
+//        cell.url = [dic objectForKey:@"url"];
+        cell.url = self.url;
         
     }else if ([objt isKindOfClass:[CLVoiceApplyAddressModel class]]){
         CLVoiceApplyAddressModel *models = objt;
@@ -222,11 +223,12 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 
     //删除缓存
     id obj = [self.showDataArray objectAtIndex:indexPath.row];
-     if ([obj isKindOfClass:[CLVoiceApplyAddressModel class]]) {
-//         NSInteger idx = [self.showDataArray indexOfObject:obj];
-         [CLInvoiceApplyAddressModelTool removeInfoAtIndex:indexPath.row - self.dataArray.count];
-     }
     
+     if ([obj isKindOfClass:[CLVoiceApplyAddressModel class]]) {
+         [CLInvoiceApplyAddressModelTool removeInfoAtIndex:indexPath.row - _tempDataArray.count];
+     }else{
+         [_tempDataArray removeObjectAtIndex:indexPath.row];
+     }
     
     // 删除模型
     [self.originalData removeObjectAtIndex:indexPath.row];
@@ -279,7 +281,7 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     }else{
         urlString = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/vod/download/%@",start_time];
     }
-
+    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
     NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
@@ -298,9 +300,9 @@ static NSString *const _kdownloadListKey = @"download_video_list";
         DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
         NSMutableDictionary *temp = [self.originalData objectAtIndex:idx];
         NSString *downUrl = [responseObject objectForKey:@"url"];
-         if (!weak_self.isRecord) {
-             //点播文件
-             self.url = downUrl;
+        self.url = downUrl;
+        if (!weak_self.isRecord) {
+            //点播文件
              [temp setValue:downUrl forKey:@"url"];
          }else{
              //录像文件
@@ -376,7 +378,7 @@ static NSString *const _kdownloadListKey = @"download_video_list";
                 [tempDic setValue:model.time forKey:@"start_time"];//视频时间
                 [tempDic setValue:model.video_name forKey:@"name"];//视频名称
                 [tempDic setValue:model.duration forKey:@"duration"];//视频时长
-                [tempDic setValue:model.hls forKey:@"hls"];//视频播放地址
+                [tempDic setValue:model.videoUrl forKey:@"hls"];//视频播放地址
                 
                 //点播文件下载
                 self.isRecord = NO;
@@ -386,6 +388,7 @@ static NSString *const _kdownloadListKey = @"download_video_list";
         }];
         
         [self.showDataArray addObjectsFromArray:self.dataArray];
+        [self.tempDataArray addObjectsFromArray:self.dataArray];
 
         
         //读取缓存数据

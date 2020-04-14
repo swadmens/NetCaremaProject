@@ -16,7 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *video_id;
 @property (nonatomic,strong) DemandModel *model;
 @property (nonatomic,strong) CarmeaVideosModel *carmeaModel;
-
+@property (nonatomic,strong) NSMutableArray *allDataArray;
+@property (nonatomic,assign) NSInteger indexInteger;
+@property (nonatomic, assign) BOOL isRecordFile;
+@property (nonatomic, assign) BOOL isLiving;//是否是直播
+@property (nonatomic,strong) NSString *device_id;//具体设备id
 @end
 
 NS_ASSUME_NONNULL_END

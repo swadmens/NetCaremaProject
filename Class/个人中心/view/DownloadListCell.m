@@ -17,6 +17,8 @@
 #import <PLPlayerKit/PLPlayerKit.h>
 #import "PLPlayerView.h"
 
+#import <AVKit/AVKit.h>
+
 
 @interface DownloadListCell ()<PLPlayerDelegate,PLPlayerViewDelegate>
 
@@ -43,6 +45,7 @@
 @property (nonatomic,strong) NSString *snapUrl;
 @property (nonatomic,strong) NSString *file_path;
 
+@property (nonatomic,strong) AVPlayer *avPlayer;
 
 
 @end
@@ -187,27 +190,31 @@
 //播放
 -(void)startDownLoad:(UITapGestureRecognizer*)tp
 {
-    
-    
-//    NSArray *filArr = [self.file_path componentsSeparatedByString:@"/"];
-//    NSString *filName = filArr.lastObject;
 //
-//    // 取得沙盒目录
-//    NSString *localPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-//    // 要检查的文件目录
-//    NSString *filePath = [localPath  stringByAppendingPathComponent:filName];
-//    NSFileManager *fileManager = [NSFileManager defaultManager];
-//    if ([fileManager fileExistsAtPath:filePath]) {
-//        NSLog(@"文件%@存在",filName);
-//    }
-//    else {
-//        NSLog(@"文件%@不存在",filName);
-//    }
+//    NSArray *nameArr = [self.cacheModel.file_path componentsSeparatedByString:@"/"];
+//
+//    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+//
+//    NSString *documentsDirectory = [paths objectAtIndex:0];
+//    NSString *fullPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, nameArr.lastObject];
+//
+//    NSURL *videoURL = [NSURL fileURLWithPath:fullPath];
+//
+//    self.avPlayer = [AVPlayer playerWithURL:videoURL];
+//
+//    AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
+//    //设置模式
+//    playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+//    playerLayer.contentsScale = [UIScreen mainScreen].scale;
+//
+//    playerLayer.frame = CGRectMake(0, 0, kScreenWidth, 200);
+//
+//    [self.layer addSublayer:playerLayer];
+//
 //    return;
     
     
-    
-     NSDictionary *dic = @{@"video_name":self.video_name,
+     NSDictionary *dic = @{@"name":self.video_name,
                            @"snapUrl":self.snapUrl,
 //                           @"videoUrl":[WWPublicMethod isStringEmptyText:self.file_path]?self.file_path:self.url,
                            @"videoUrl":self.file_path,
@@ -228,15 +235,32 @@
     
     [self playerViewEnterFullScreen:self.playerView];
 }
+//监听回调
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+    AVPlayerItem *playerItem = (AVPlayerItem *)object;
+    
+    if ([keyPath isEqualToString:@"loadedTimeRanges"]){
+        
+    }else if ([keyPath isEqualToString:@"status"]){
+        if (playerItem.status == AVPlayerItemStatusReadyToPlay){
+            NSLog(@"playerItem is ready");
+            [self.avPlayer play];
+        } else{
+            NSLog(@"load break");
+        }
+    }
+}
+
 //下载
 -(void)startDownloadClick:(UIButton*)sender
 {
     __unsafe_unretained typeof(self) weak_self = self;
     
-    NSString *testUrl = @"http://192.168.6.120:10080/record/download/nvr017/20200325034226?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY1NzE5ODgsInB3IjoiMjEyMzJmMjk3YTU3YTVhNzQzODk0YTBlNGE4MDFmYzMiLCJ0bSI6MTU4NjQ4NTU4OCwidW4iOiJhZG1pbiJ9.uRdKVTIJEuREbFAA3uCqGUDVG-W8O2e8Sr6Rrdq_i8E";
+//    NSString *testUrl = @"http://192.168.6.120:10080/record/download/nvr017/20200325034226?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY1NzE5ODgsInB3IjoiMjEyMzJmMjk3YTU3YTVhNzQzODk0YTBlNGE4MDFmYzMiLCJ0bSI6MTU4NjQ4NTU4OCwidW4iOiJhZG1pbiJ9.uRdKVTIJEuREbFAA3uCqGUDVG-W8O2e8Sr6Rrdq_i8E";
     
     if ([sender.currentTitle isEqualToString:@"下载"]) {
-        self.downloadTask = [[YDDownloadQueue defaultQueue] addDownloadTaskWithPriority:YDDownloadPriorityDefault url:testUrl progressHandler:^(CGFloat progress, CGFloat speed, NSString *writeBytes) {
+        self.downloadTask = [[YDDownloadQueue defaultQueue] addDownloadTaskWithPriority:YDDownloadPriorityDefault url:self.url progressHandler:^(CGFloat progress, CGFloat speed, NSString *writeBytes) {
             
             weak_self.progressView.progress = progress;
             weak_self.totalDataLabel.text = writeBytes;

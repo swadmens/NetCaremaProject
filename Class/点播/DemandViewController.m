@@ -326,9 +326,9 @@
 
     if ([collectionView isEqual:self.collectionView]) {
         DemandModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        if (indexPath.row == 0) {
-            [TargetEngine controller:self pushToController:PushTargetDHVideoPlayback WithTargetId:@"1"];
-        }else{
+//        if (indexPath.row == 0) {
+//            [TargetEngine controller:self pushToController:PushTargetDHVideoPlayback WithTargetId:@"1"];
+//        }else{
             
             
 //            NSDictionary *dic = @{@"video":model};
@@ -336,13 +336,18 @@
 //
 //            [TargetEngine controller:self pushToController:PushTargetHKVideoPlayback WithTargetId:pushId];
             
-            HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
-            vc.model = model;
-            vc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:vc animated:YES];
-            self.hidesBottomBarWhenPushed = NO;
+            
+        HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
+        vc.model = model;
+        vc.allDataArray = [NSMutableArray arrayWithArray:self.dataArray];
+        vc.indexInteger = indexPath.row;
+        vc.isRecordFile = NO;
+        vc.isLiving = NO;
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+        self.hidesBottomBarWhenPushed = NO;
 
-        }
+//        }
     }else{
         DemandSubcatalogModel *model = [self.titleDataArray objectAtIndex:indexPath.row];
         self.folder = model.folder;

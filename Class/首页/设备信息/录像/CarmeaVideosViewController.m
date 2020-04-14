@@ -237,14 +237,21 @@
     if (self.isEdit) {
         [self.selectedIndexSet addIndex:indexPath.item];
     }else{       
-        NSDictionary *dic = @{@"video_name":model.video_name,
+        NSDictionary *dic = @{@"name":model.video_name,
                               @"snapUrl":model.snap,
                               @"videoUrl":model.hls,
-        };
+                              @"createAt":model.time,
+                             };
        
         DemandModel *models = [DemandModel makeModelData:dic];
         HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
         vc.model = models;
+        vc.allDataArray = [NSMutableArray arrayWithArray:self.dataArray];
+        vc.indexInteger = indexPath.row;
+        vc.isRecordFile = YES;
+        vc.isLiving = NO;
+        vc.carmeaModel = model;
+        vc.device_id = self.device_id;
         [self.navigationController pushViewController:vc animated:YES];
     }
     
@@ -514,7 +521,7 @@
         if (error) {
             // 请求失败
             DLog(@"error  ==  %@",error.userInfo);
-            [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
+            [_kHUDManager showMsgInView:nil withTitle:@"删除失败，请重试！" isSuccess:YES];
             
             return ;
         }

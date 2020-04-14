@@ -213,9 +213,8 @@
 //
 //    DHLivingViewController *vc = [DHLivingViewController new];
 //    [self.navigationController pushViewController:vc animated:YES];
-
-    [TargetEngine controller:self pushToController:PushTargetDHLiving WithTargetId:@""];
-    return;
+//    [TargetEngine controller:self pushToController:PushTargetDHLiving WithTargetId:@""];
+//    return;
     
     LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
 
@@ -235,15 +234,18 @@
 //        [TargetEngine controller:self pushToController:PushTargetLiveLiving WithTargetId:pushId];
         
         
-        NSDictionary *dic = @{@"video_name":model.name,
+        
+        NSDictionary *dic = @{@"name":model.name,
                                @"snapUrl":model.url,
                                @"videoUrl":model.RTMP,
         };
         
-         DemandModel *models = [DemandModel makeModelData:dic];
-         HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
-         vc.model = models;
-         [self.navigationController pushViewController:vc animated:YES];
+         
+        DemandModel *models = [DemandModel makeModelData:dic];
+        HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
+        vc.model = models;
+        vc.isLiving = YES;
+        [self.navigationController pushViewController:vc animated:YES];
         
     }else{
         [_kHUDManager showMsgInView:nil withTitle:@"当前设备已离线" isSuccess:YES];

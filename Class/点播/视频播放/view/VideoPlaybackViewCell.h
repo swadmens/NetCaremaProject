@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface VideoPlaybackViewCell : WWCollectionViewCell
 
+-(void)makeCellData:(id)model;
+
 @end
 
 NS_ASSUME_NONNULL_END

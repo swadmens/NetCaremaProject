@@ -7,7 +7,9 @@
 //
 
 #import "VideoPlaybackViewCell.h"
-
+#import "DemandModel.h"
+#import "CarmeaVideosModel.h"
+#import <UIImageView+YYWebImage.h>
 
 @interface VideoPlaybackViewCell ()
 
@@ -45,5 +47,17 @@
     [_titleLabel topToView:_showImageView withSpace:10];
     
     
+}
+-(void)makeCellData:(id)model;
+{
+    if ([model isKindOfClass:[DemandModel class]]) {
+        DemandModel *models = model;
+        [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.snapUrl] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
+        _titleLabel.text = models.video_name;
+    }else{
+        CarmeaVideosModel *models = model;
+        [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.snap] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
+        _titleLabel.text = models.duration;
+    }
 }
 @end
