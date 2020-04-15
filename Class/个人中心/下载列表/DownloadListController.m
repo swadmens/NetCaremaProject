@@ -46,8 +46,6 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 
 @property (nonatomic,strong) NSMutableArray *originalData;
 
-@property (nonatomic,assign) BOOL isRecord;//是否是录像文件
-
 @property (nonatomic, assign) BOOL isFullScreen;
 
 @end
@@ -367,7 +365,6 @@ static NSString *const _kdownloadListKey = @"download_video_list";
                 [tempDic setValue:model.hls forKey:@"hls"];//视频播放地址
 
                 //录像文件下载
-                self.isRecord = YES;
                 [self startLoadDataRequest:model.start_time withInteger:idx];
             }else{
                 
@@ -381,7 +378,6 @@ static NSString *const _kdownloadListKey = @"download_video_list";
                 [tempDic setValue:model.videoUrl forKey:@"hls"];//视频播放地址
                 
                 //点播文件下载
-                self.isRecord = NO;
                 [self startLoadDataRequest:model.video_id withInteger:idx];
             }
             [self.originalData addObject:tempDic];

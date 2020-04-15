@@ -10,6 +10,8 @@
 #import "AFHTTPSessionManager.h"
 #import "LivingModel.h"
 #import <UIImageView+YYWebImage.h>
+#import "HKVideoPlaybackController.h"
+#import "DemandModel.h"
 
 @interface NetLivingViewController ()
 
@@ -21,6 +23,7 @@
 @property (nonatomic,strong) UILabel *nameLabel;
 @property (nonatomic,strong) UILabel *tagLabel;
 @property (nonatomic,assign) BOOL isLiving;//是否直播中
+@property (nonatomic,strong) NSString *device_id;
 
 @end
 
@@ -45,6 +48,15 @@
 
     NSDictionary *data = [NSDictionary dictionaryWithDictionary:[WWPublicMethod objectTransFromJson:self.equiment_id]];
     [self.dicData addEntriesFromDictionary:data];
+    NSString *ClientId = [self.dicData objectForKey:@"ClientId"];
+    NSString *DeviceId = [self.dicData objectForKey:@"DeviceId"];
+    NSString *CameraId = [self.dicData objectForKey:@"CameraId"];
+               
+    ClientId = [WWPublicMethod isStringEmptyText:ClientId]?ClientId:@"";
+    DeviceId = [WWPublicMethod isStringEmptyText:DeviceId]?DeviceId:@"";
+    CameraId = [WWPublicMethod isStringEmptyText:CameraId]?CameraId:@"";
+    self.device_id = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
+    
     [self startLoadDataRequest];
 }
 //创建UI
@@ -135,33 +147,27 @@
         return;
     }
     //live直播
-    NSDictionary *dic = @{@"name":_model.name,
-                          @"RTMP":_model.RTMP,
-                          @"shared":_model.shared,
-                          @"sharedLink":_model.sharedLink,
-                          @"url":_model.url,
-    };
-    NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
-    [TargetEngine controller:self pushToController:PushTargetLiveLiving WithTargetId:pushId];
+    NSDictionary *dic = @{ @"name":_model.name,
+                            @"snapUrl":_model.url,
+                            @"videoUrl":_model.RTMP,
+                            @"sharedLink":_model.sharedLink,
+                            @"createAt":_model.createAt,
+                          };
+    DemandModel *models = [DemandModel makeModelData:dic];
+    HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
+    vc.model = models;
+    vc.isLiving = YES;
+    vc.isRecordFile = NO;
+    vc.device_id = self.device_id;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 - (void)startLoadDataRequest
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
-    NSString *ClientId = [self.dicData objectForKey:@"ClientId"];
-    NSString *DeviceId = [self.dicData objectForKey:@"DeviceId"];
-    NSString *CameraId = [self.dicData objectForKey:@"CameraId"];
-    
-    ClientId = [WWPublicMethod isStringEmptyText:ClientId]?ClientId:@"";
-    DeviceId = [WWPublicMethod isStringEmptyText:DeviceId]?DeviceId:@"";
-    CameraId = [WWPublicMethod isStringEmptyText:CameraId]?CameraId:@"";
-
-    NSString *ids = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
-    
     NSDictionary *finalParams = @{
-                                  @"q":ids,
+                                  @"q":self.device_id,
                                   };
-        
     //提交数据
     NSString *url = @"http://192.168.6.120:10102/outer/liveqing/live/list";
     

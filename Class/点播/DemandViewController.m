@@ -23,6 +23,7 @@
 @property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UISearchBar *searchButton;
 @property(nonatomic,assign) NSInteger page;
+
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
 
@@ -31,6 +32,7 @@
 
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSMutableArray *searchDataSource;/**<搜索结果数据源*/
+@property (nonatomic,strong) NSString *searchValue;
 
 
 @property (nonatomic, strong) WWCollectionView *collectionUpView;
@@ -75,7 +77,7 @@
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"90"];
+    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"170"];
     self.noDataView.backgroundColor = kColorBackgroundColor;
     // label
     UILabel *tipLabel = [self getNoDataTipLabel];
@@ -103,7 +105,6 @@
 //    self.navigationItem.titleView = self.contentView;
     
     
-   
     self.searchButton = [UISearchBar new];
     self.searchButton.placeholder = @"搜索";
     self.searchButton.barStyle = UISearchBarStyleMinimal;
@@ -256,7 +257,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-//    self.title = @"点播";
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationItem.leftBarButtonItem=nil;
     self.FDPrefersNavigationBarHidden = YES;
@@ -289,8 +289,6 @@
 {
     if ([collectionView isEqual:self.collectionUpView]) {
         
-//        __unsafe_unretained typeof(self) weak_self = self;
-
         // 每次先从字典中根据IndexPath取出唯一标识符
         NSString *identifier = [_cellDic objectForKey:[NSString stringWithFormat:@"%@", indexPath]];
         // 如果取出的唯一标示符不存在，则初始化唯一标示符，并将其存入字典中，对应唯一标示符注册Cell
@@ -301,8 +299,7 @@
            [self.collectionUpView registerClass:[DemandTitleCollectionCell class] forCellWithReuseIdentifier:identifier];
         }
         DemandTitleCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-//        DemandTitleCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[DemandTitleCollectionCell getCellIDStr] forIndexPath:indexPath];
-
+        
         DemandSubcatalogModel *model = [self.titleDataArray objectAtIndex:indexPath.row];
         [cell makeCellData:model];
         
@@ -326,17 +323,6 @@
 
     if ([collectionView isEqual:self.collectionView]) {
         DemandModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//        if (indexPath.row == 0) {
-//            [TargetEngine controller:self pushToController:PushTargetDHVideoPlayback WithTargetId:@"1"];
-//        }else{
-            
-            
-//            NSDictionary *dic = @{@"video":model};
-//            NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
-//
-//            [TargetEngine controller:self pushToController:PushTargetHKVideoPlayback WithTargetId:pushId];
-            
-            
         HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
         vc.model = model;
         vc.allDataArray = [NSMutableArray arrayWithArray:self.dataArray];
@@ -346,8 +332,7 @@
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
-
-//        }
+        
     }else{
         DemandSubcatalogModel *model = [self.titleDataArray objectAtIndex:indexPath.row];
         self.folder = model.folder;
@@ -383,36 +368,6 @@
         return 5;
     }
 }
-//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if ([collectionView isEqual:self.collectionView]) {
-//        CGFloat width = kScreenWidth/2-21;
-//        return CGSizeMake(width, width*0.8);
-//    }else{
-//        return CGSizeZero;
-//    }
-//
-//}
-#pragma mark - UIScrollViewDelegate
-////预计出大概位置，经过精确定位获得准备位置
-//- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
-//    CGPoint targetOffset = [self nearestTargetOffsetForOffset:*targetContentOffset];
-//    targetContentOffset->x = targetOffset.x;
-//    targetContentOffset->y = targetOffset.y;
-//}
-////计算落在哪个item上
-//- (CGPoint)nearestTargetOffsetForOffset:(CGPoint)offset
-//{
-//    CGFloat item_width = 70;
-//
-//    CGFloat pageSize = 15 + item_width;
-//    //四舍五入
-//    NSInteger page = roundf(offset.x / pageSize);
-//    CGFloat targetX = pageSize * page;
-//
-//    return CGPointMake(targetX, offset.y);
-//}
-
 - (void)loadNewData
 {
     self.page = 1;
@@ -440,6 +395,10 @@
     NSMutableDictionary *mutData = [NSMutableDictionary dictionaryWithDictionary:finalParams];
     if ([WWPublicMethod isStringEmptyText:self.folder]) {
         [mutData setValue:self.folder forKey:@"folder"];
+    }
+    
+    if ([WWPublicMethod isStringEmptyText:self.searchValue]) {
+        [mutData setValue:self.searchValue forKey:@"q"];
     }
     
     //提交数据
@@ -605,19 +564,69 @@
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
         NSDictionary *data = [obj objectForKey:@"data"];
-        NSArray *rows= [data objectForKey:@"rows"];
+        NSMutableArray *rows= [NSMutableArray arrayWithArray:[data objectForKey:@"rows"]];
         NSMutableArray *tempArray = [NSMutableArray array];
+        
+        NSDictionary *allDic = @{@"createAt":@"2020-03-16 23:34:12",
+                                 @"desc":@"",
+                                 @"folder":@"",
+                                 @"id":@"",
+                                 @"name":@"全部",
+                                 @"realPath":@"",
+                                 @"sort":@"1",
+                                 @"updateAt":@"2020-03-16 23:34:12",
+                                 };
+        NSDictionary *otherDic = @{@"createAt":@"2020-03-16 23:34:12",
+                                   @"desc":@"",
+                                   @"folder":@"other",
+                                   @"id":@"",
+                                   @"name":@"其它",
+                                   @"realPath":@"",
+                                   @"sort":@"1",
+                                   @"updateAt":@"2020-03-16 23:34:12",
+                                   };
+        [rows insertObject:allDic atIndex:0];
+        [rows addObject:otherDic];
+        
         [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             DemandSubcatalogModel *model = [DemandSubcatalogModel makeModelData:dic];
             [tempArray addObject:model];
         }];
         [weak_self.titleDataArray addObjectsFromArray:tempArray];
-
+        
         [[GCDQueue mainQueue] queueBlock:^{
             [weak_self.collectionUpView reloadData];
         }];
     }];
+}
+
+//搜索处理
+#pragma mark - UISearchBarDelegate
+//- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+//
+//    if (searchText.length == 0) {
+//        self.searchValue = @"";
+//        return;
+//    }else {
+//        self.searchValue = searchText;
+//    }
+//    [self loadNewData];
+//
+//}
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
+{
+    if (searchBar.text.length == 0) {
+           self.searchValue = @"";
+       }else {
+           self.searchValue = searchBar.text;
+       }
+       [self loadNewData];
+}
+
+- (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
+    self.searchValue = @"";
+    [self loadNewData];
 }
 
 /*

@@ -199,7 +199,7 @@
     if (date == nil) {
         date = [self currentDate];
     }
-    NSString *str = [date formattedDateWithFormat:@"yyyy年MM月dd日" timeZone:_timeZone locale:_locale];
+    NSString *str = [date formattedDateWithFormat:@"yyyyMMdd" timeZone:_timeZone locale:_locale];
 //    DLog(@"\n 日期转换成年月日str=%@ \n",str);
     return str;
 }

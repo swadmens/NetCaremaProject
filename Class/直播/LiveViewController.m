@@ -210,64 +210,28 @@
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//
-//    DHLivingViewController *vc = [DHLivingViewController new];
-//    [self.navigationController pushViewController:vc animated:YES];
-//    [TargetEngine controller:self pushToController:PushTargetDHLiving WithTargetId:@""];
-//    return;
-    
     LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
-
     if ([WWPublicMethod isStringEmptyText:model.RTMP]) {
-           //live直播
-                  
+        //live直播
         LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//        NSDictionary *dic = @{@"name":model.name,
-//                              @"RTMP":model.RTMP,
-//                              @"shared":model.shared,
-//                              @"sharedLink":model.sharedLink,
-//                              @"url":model.url,
-//                              };
-//
-//        NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
-//
-//        [TargetEngine controller:self pushToController:PushTargetLiveLiving WithTargetId:pushId];
-        
-        
-        
-        NSDictionary *dic = @{@"name":model.name,
+        NSDictionary *dic = @{ @"name":model.name,
                                @"snapUrl":model.url,
                                @"videoUrl":model.RTMP,
-        };
-        
-         
+                               @"sharedLink":model.sharedLink,
+                               @"createAt":model.createAt,
+                             };
         DemandModel *models = [DemandModel makeModelData:dic];
         HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
         vc.model = models;
         vc.isLiving = YES;
+        vc.isRecordFile = NO;
+        vc.device_id = model.session_id;
         [self.navigationController pushViewController:vc animated:YES];
         
     }else{
         [_kHUDManager showMsgInView:nil withTitle:@"当前设备已离线" isSuccess:YES];
         return;
     }
-    
-    
-//    if (indexPath.row == 0) {
-//        [TargetEngine controller:self pushToController:PushTargetDHLiving WithTargetId:@"1"];
-//    }else{
-//
-//        //live直播
-//        LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//        NSDictionary *dic = @{@"name":model.name,
-//                              @"RTMP":model.RTMP,
-//                              @"shared":model.shared,
-//                              @"sharedLink":model.sharedLink,
-//                              @"url":model.url,
-//        };
-//        NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
-//        [TargetEngine controller:self pushToController:PushTargetLiveLiving WithTargetId:pushId];
-//    }
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section

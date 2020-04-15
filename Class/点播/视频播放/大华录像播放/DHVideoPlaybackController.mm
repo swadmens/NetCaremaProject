@@ -129,7 +129,7 @@
     
     
     
-    CGFloat heigt = kScreenWidth*0.6 + 110;
+    CGFloat heigt = kScreenWidth*0.65 + 110;
     NSString *heiStr = [NSString stringWithFormat:@"%f",heigt];
     
     [self.view addSubview:self.collectionView];
@@ -169,7 +169,7 @@
     self.playView = [UIView new];
     self.playView.backgroundColor = UIColorClearColor;
     [self.view addSubview:self.playView];
-    self.playView.frame = CGRectMake(0, 0, kScreenWidth, kScreenWidth*0.6);
+    self.playView.frame = CGRectMake(0, 0, kScreenWidth, kScreenWidth*0.65);
 
     
     UIImageView *backImageView = [UIImageView new];
@@ -264,7 +264,7 @@
     [_videoNameLabel sizeToFit];
     [self.view addSubview:_videoNameLabel];
     [_videoNameLabel leftToView:self.view withSpace:15];
-    [_videoNameLabel topToView:self.view withSpace:kScreenWidth*0.6+15];
+    [_videoNameLabel topToView:self.view withSpace:kScreenWidth*0.65+15];
     
     
     

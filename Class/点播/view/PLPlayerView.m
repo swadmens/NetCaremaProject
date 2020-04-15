@@ -729,12 +729,8 @@ UIGestureRecognizerDelegate
         make.edges.equalTo(self);
     }];
     
-//    if (self.isLiving) {
-//        [self clickPlayButton];
-//    }
     _slider.hidden = self.isLiving;
     _bufferingView.hidden = _isLiving;
-    
     
 }
 

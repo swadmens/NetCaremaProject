@@ -124,7 +124,6 @@
 #pragma mark - UITableViewDelegate
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     MineTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[MineTableViewCell getCellIDStr] forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
@@ -135,7 +134,6 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     if (indexPath.row == 0) {
         //个人信息
         [TargetEngine controller:self pushToController:PushTargetPersonInfoView WithTargetId:nil];
@@ -144,9 +142,7 @@
         //下载列表
         [TargetEngine controller:self pushToController:PushTargetDownloadList WithTargetId:nil];
     }
-  
 }
-
 /*
 #pragma mark - Navigation
 

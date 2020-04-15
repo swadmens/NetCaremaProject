@@ -7,10 +7,6 @@
 //
 
 #import "HKVideoPlaybackController.h"
-#import <Toast/Toast.h>
-#import <HikVideoPlayer/HVPError.h>
-#import <HikVideoPlayer/HVPPlayer.h>
-#import "HikUtils.h"
 #import "WWCollectionView.h"
 #import "VideoPlaybackViewCell.h"
 #import "LGXThirdEngine.h"
@@ -23,51 +19,20 @@
 #import "AFHTTPSessionManager.h"
 
 
-#define kIndicatorViewSize 50
-static NSTimeInterval const kToastDuration = 1;
-/// 电子放大系数
-static CGFloat const kZoomMinScale   = 1.0f;
-static CGFloat const kZoomMaxScale   = 10.0f;
-
-@interface HKVideoPlaybackController ()<HVPPlayerDelegate, UIGestureRecognizerDelegate,UICollectionViewDelegate,UICollectionViewDataSource,PLPlayerDelegate,PLPlayerViewDelegate>
+@interface HKVideoPlaybackController ()<UICollectionViewDelegate,UICollectionViewDataSource,PLPlayerDelegate,PLPlayerViewDelegate>
 
 @property (nonatomic, strong) UIView *playView;
-@property (nonatomic, strong) UIButton *fullScreenBtn;
-@property (nonatomic, strong) UIActivityIndicatorView *indicatorView;
-@property (nonatomic, strong) UISlider *progressSlider;
-@property (nonatomic, strong) UILabel *currentPlayTimeLabel;
-@property (nonatomic, strong) UILabel *endTimeLabel;
-@property (nonatomic, strong) UIButton *playButton;
-@property (nonatomic, strong) UITextField *playbackTextField;
-@property (nonatomic, strong) UIButton *recordButton;
-@property (nonatomic, strong) HVPPlayer *player;
-@property (nonatomic, assign) NSTimeInterval startTime;
-@property (nonatomic, assign) NSTimeInterval endTime;
-@property (nonatomic, assign) NSTimeInterval currentPlayTime;
-@property (nonatomic, strong) dispatch_source_t timer;
 @property (nonatomic, assign) BOOL isPlaying;
-@property (nonatomic, assign) BOOL isRecording;
-@property (nonatomic, copy) NSString *recordPath;
 
-@property (nonatomic, strong) UIView *playerSuperView;
-@property (nonatomic, assign) CGRect playerFrame;  /// 记录原始frame
 @property (nonatomic, assign) BOOL isFullScreen;   /// 是否全屏标记
-@property (nonatomic, strong) UIPinchGestureRecognizer *zoomPinchRecognizer; ///电子放大捏合手势
-@property (nonatomic, assign) CGFloat currentZoomScale;   ///当前电子放大的系数
-@property (nonatomic, assign) CGFloat previousZoomScale;  ///上次电子放大的系数
-@property (nonatomic, assign) CGRect specificRect;
-
 
 @property (nonatomic,strong) UILabel *videoNameLabel;//视频名称
 @property (nonatomic,strong) UILabel *videoTimeLabel;//视频时间
 
-
 @property (nonatomic, strong) WWCollectionView *collectionView;
 @property (strong, nonatomic) NSMutableArray *dataArray;
 
-
 @property (nonatomic, strong) LGXShareParams *shareParams;
-
 
 //七牛播放器
 @property (nonatomic, strong) PLPlayer  *PLPlayer;
@@ -76,6 +41,10 @@ static CGFloat const kZoomMaxScale   = 10.0f;
 @property (nonatomic, strong) PLPlayerView *playerView;
 
 @property (nonatomic,strong) UIButton *backBtn;//返回按钮
+@property (nonatomic,strong) UIButton *shareBtn;//分享按钮
+@property (nonatomic,strong) UIButton *downLoadBtn;//下载按钮
+@property (nonatomic,strong) UIButton *deleteBtn;//删除按钮
+
 
 @end
 
@@ -87,16 +56,6 @@ static CGFloat const kZoomMaxScale   = 10.0f;
         _dataArray = [NSMutableArray array];
     }
     return _dataArray;
-}
-- (HVPPlayer *)player {
-    if (!_player) {
-        // 创建player
-        _player = [[HVPPlayer alloc] initWithPlayView:self.playView];
-        // 或者 _player = [HVPPlayer playerWithPlayView:self.playView];
-        // 设置delegate
-        _player.delegate = self;
-    }
-    return _player;
 }
 - (WWCollectionView *)collectionView
 {
@@ -128,19 +87,12 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
     self.FDPrefersNavigationBarHidden = YES;
-    
-//
-//    NSDictionary *dic = [WWPublicMethod objectTransFromJson:self.video_id];
-//    _model = [dic objectForKey:@"video"];
-//
 
     [self creadVideoPlayBackView];
-    [self setupStartEndTime];
     [self setupOtherView];
     
     
-    
-    CGFloat heigt = kScreenWidth*0.6 + 110;
+    CGFloat heigt = kScreenWidth*0.65 + 110;
     NSString *heiStr = [NSString stringWithFormat:@"%f",heigt];
     
     [self.view addSubview:self.collectionView];
@@ -158,6 +110,23 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     [_backBtn addWidth:40];
     [_backBtn addHeight:40];
     
+    //分享按钮
+    _shareBtn = [UIButton new];
+    _shareBtn.hidden = self.isRecordFile;
+    [_shareBtn setImage:UIImageWithFileName(@"playback_shares_image") forState:UIControlStateNormal];
+    [_shareBtn addTarget:self action:@selector(shareButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [_shareBtn setBGColor:UIColorFromRGB(0xffffff, 0) forState:UIControlStateNormal];
+    [self.view addSubview:_shareBtn];
+    [_shareBtn yCenterToView:_backBtn];
+    [_shareBtn rightToView:self.view withSpace:2];
+    [_shareBtn addWidth:40];
+    [_shareBtn addHeight:40];
+    
+    //如果是直播，获取该摄像头下的录像文件
+    if (self.isLiving) {
+        [self startLoadDataRequest];
+    }
+    
 }
 -(void)creadVideoPlayBackView
 {
@@ -166,91 +135,10 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     [self.view addSubview:self.playView];
     [self.playView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.equalTo(self.view);
-        make.height.equalTo(kScreenWidth*0.6);
+        make.height.equalTo(kScreenWidth*0.65);
     }];
-    
-//    PLPlayerOption *option = [PLPlayerOption defaultOption];
-//    [option setOptionValue:@15 forKey:PLPlayerOptionKeyTimeoutIntervalForMediaPackets];
-//    NSURL *url = [NSURL URLWithString:self.video_id];
-//    self.PLPlayer = [PLPlayer playerWithURL:url option:option];
-//    self.PLPlayer.delegate = self;
-//    [self.playView addSubview:self.PLPlayer.playerView];
-//    self.PLPlayer.playerView.frame = self.playView.frame;
 
-    
-//    UIImageView *backImageView = [UIImageView new];
-//    backImageView.image = UIImageWithFileName(@"playback_back_image");
-//    [self.playView addSubview:backImageView];
-//    [backImageView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.playView];
-    
-   
-
-    
-//    //分享按钮
-//    UIButton *shareBtn = [UIButton new];
-//    [shareBtn setImage:UIImageWithFileName(@"playback_shares_image") forState:UIControlStateNormal];
-//    [shareBtn addTarget:self action:@selector(shareButtonClick) forControlEvents:UIControlEventTouchUpInside];
-//    [self.playView addSubview:shareBtn];
-//    [shareBtn yCenterToView:backBtn];
-//    [shareBtn rightToView:self.playView withSpace:15];
-//
-//    //播放按钮
-//    UIButton *playBtn = [UIButton new];
-//    [playBtn setImage:UIImageWithFileName(@"playback_play_white_image") forState:UIControlStateNormal];
-//    [playBtn addTarget:self action:@selector(playbackButtonClick) forControlEvents:UIControlEventTouchUpInside];
-//    [self.playView addSubview:playBtn];
-//    [playBtn leftToView:self.playView withSpace:15];
-//    [playBtn bottomToView:self.playView withSpace:10];
-//
-//
-//    //全屏按钮
-//    UIButton *fullBtn = [UIButton new];
-//    [fullBtn setImage:UIImageWithFileName(@"playback_full_image") forState:UIControlStateNormal];
-//    [fullBtn addTarget:self action:@selector(fullScreenButtonClick) forControlEvents:UIControlEventTouchUpInside];
-//    [self.playView addSubview:fullBtn];
-//    [fullBtn yCenterToView:playBtn];
-//    [fullBtn xCenterToView:shareBtn];
-//
-//
-//
-//    //当前播放时长
-//    _currentPlayTimeLabel = [UILabel new];
-//    _currentPlayTimeLabel.text = @"03:16";
-//    _currentPlayTimeLabel.textColor = [UIColor whiteColor];
-//    _currentPlayTimeLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
-//    _currentPlayTimeLabel.textAlignment = NSTextAlignmentCenter;
-//    [self.playView addSubview:_currentPlayTimeLabel];
-//    [_currentPlayTimeLabel yCenterToView:playBtn];
-//    [_currentPlayTimeLabel leftToView:playBtn withSpace:15];
-//
-//    //总时长
-//    _endTimeLabel = [UILabel new];
-//    _endTimeLabel.text = @"/39:31";
-//    _endTimeLabel.textColor = [UIColor whiteColor];
-//    _endTimeLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
-//    _endTimeLabel.textAlignment = NSTextAlignmentCenter;
-//    [self.playView addSubview:_endTimeLabel];
-//    [_endTimeLabel yCenterToView:playBtn];
-//    [_endTimeLabel leftToView:_currentPlayTimeLabel];
-//
-//    //进度条
-//    _progressSlider = [UISlider new];
-//    _progressSlider.minimumTrackTintColor = UIColorFromRGB(0xff3b23, 1);
-//    _progressSlider.maximumTrackTintColor = [UIColor whiteColor];
-//    _progressSlider.thumbTintColor = UIColorFromRGB(0xff3b23, 1);
-////    // 通常状态下
-////    [_progressSlider setThumbImage:[UIImage imageNamed:@"iconfont-yuandian"] forState:UIControlStateNormal];
-////    // 滑动状态下
-////    [_progressSlider setThumbImage:[UIImage imageNamed:@"iconfont-yuandian"] forState:UIControlStateHighlighted];
-//
-//    [self.playView addSubview:_progressSlider];
-//    [_progressSlider yCenterToView:playBtn];
-//    [_progressSlider leftToView:_endTimeLabel withSpace:20];
-//    [_progressSlider addWidth:kScreenWidth-210];
-    
-    
-     
-    self.playerView = [[PLPlayerView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 200)];
+    self.playerView = [[PLPlayerView alloc] init];
     self.playerView.delegate = self;
     [self.playView addSubview:self.playerView];
     self.playerView.media = _model;
@@ -299,6 +187,7 @@ static CGFloat const kZoomMaxScale   = 10.0f;
 
     self.isFullScreen = YES;
     _backBtn.hidden = YES;
+    _shareBtn.hidden = YES;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -320,6 +209,7 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     
     self.isFullScreen = NO;
     _backBtn.hidden = NO;
+    _shareBtn.hidden = NO;
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -335,28 +225,28 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     [_videoNameLabel sizeToFit];
     [self.view addSubview:_videoNameLabel];
     [_videoNameLabel leftToView:self.view withSpace:15];
-    [_videoNameLabel topToView:self.view withSpace:kScreenWidth*0.6+15];
+    [_videoNameLabel topToView:self.view withSpace:kScreenWidth*0.65+15];
+    
+    _deleteBtn = [UIButton new];
+    _deleteBtn.hidden = self.isLiving;
+    [_deleteBtn setImage:UIImageWithFileName(@"video_delete_image") forState:UIControlStateNormal];
+    [_deleteBtn addTarget:self action:@selector(deleteVideoClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_deleteBtn];
+    [_deleteBtn yCenterToView:_videoNameLabel];
+    [_deleteBtn rightToView:self.view withSpace:10];
+    [_deleteBtn addWidth:30];
+    [_deleteBtn addHeight:30];
     
     
-    
-    UIButton *deleteBtn = [UIButton new];
-    [deleteBtn setImage:UIImageWithFileName(@"video_delete_image") forState:UIControlStateNormal];
-    [deleteBtn addTarget:self action:@selector(deleteVideoClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:deleteBtn];
-    [deleteBtn yCenterToView:_videoNameLabel];
-    [deleteBtn rightToView:self.view withSpace:10];
-    [deleteBtn addWidth:30];
-    [deleteBtn addHeight:30];
-    
-    
-    UIButton *downLoadBtn = [UIButton new];
-    [downLoadBtn setImage:UIImageWithFileName(@"mine_download_image") forState:UIControlStateNormal];
-    [downLoadBtn addTarget:self action:@selector(downloadVideoClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:downLoadBtn];
-    [downLoadBtn yCenterToView:_videoNameLabel];
-    [downLoadBtn rightToView:deleteBtn withSpace:5];
-    [downLoadBtn addWidth:30];
-    [downLoadBtn addHeight:30];
+    _downLoadBtn = [UIButton new];
+    _downLoadBtn.hidden = _isLiving;
+    [_downLoadBtn setImage:UIImageWithFileName(@"mine_download_image") forState:UIControlStateNormal];
+    [_downLoadBtn addTarget:self action:@selector(downloadVideoClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:_downLoadBtn];
+    [_downLoadBtn yCenterToView:_videoNameLabel];
+    [_downLoadBtn rightToView:_deleteBtn withSpace:5];
+    [_downLoadBtn addWidth:30];
+    [_downLoadBtn addHeight:30];
     
     
     _videoTimeLabel = [UILabel new];
@@ -370,7 +260,7 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     
     
     UILabel *otherLabel = [UILabel new];
-    otherLabel.text = @"其他视频";
+    otherLabel.text = self.isLiving?@"近日录像":@"其他视频";
     otherLabel.textColor = UIColorFromRGB(0x2e2e2e, 1);
     otherLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
     [otherLabel sizeToFit];
@@ -381,6 +271,7 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     
     
     UIButton *allButton = [UIButton new];
+    allButton.hidden = YES;
     [allButton setTitle:@"全部" forState:UIControlStateNormal];
     allButton.titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
     [allButton setTitleColor:kColorThirdTextColor forState:UIControlStateNormal];
@@ -394,13 +285,6 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     [allButton yCenterToView:otherLabel];
     [allButton rightToView:self.view withSpace:25];
     [allButton addTarget:self action:@selector(allVideosClick) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-    if (_isLiving) {
-        downLoadBtn.hidden = YES;
-        deleteBtn.hidden = YES;
-    }
-    
 }
 //删除视频按钮
 -(void)deleteVideoClick
@@ -435,6 +319,7 @@ static CGFloat const kZoomMaxScale   = 10.0f;
 {
     DownloadListController *vc = [DownloadListController new];
     vc.demandModel = self.model;
+    vc.isRecord = self.isRecordFile;
     vc.dataArray = [NSArray arrayWithObject:self.model];
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -452,228 +337,32 @@ static CGFloat const kZoomMaxScale   = 10.0f;
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
-//全屏按钮
--(void)fullScreenButtonClick
-{
-    if (self.isFullScreen) {
-            return;
-        }
-        
-        self.playerSuperView = self.playView.superview;
-        self.playerFrame = self.playView.frame;
-
-        CGRect rectInWindow = [self.playView convertRect:self.playView.bounds toView:[UIApplication sharedApplication].keyWindow];
-        CGRect btnRect = [self.fullScreenBtn convertRect:self.fullScreenBtn.bounds toView:[UIApplication sharedApplication].keyWindow];
-        [self.playView removeFromSuperview];
-        [self.fullScreenBtn removeFromSuperview];
-        self.playView.frame = rectInWindow;
-        self.fullScreenBtn.frame = btnRect;
-        
-        
-        [[UIApplication sharedApplication].keyWindow addSubview:self.playView];
-        [[UIApplication sharedApplication].keyWindow addSubview:self.fullScreenBtn];
-        
-        [UIView animateWithDuration:0.3 animations:^{
-
-            self.playView.transform = CGAffineTransformMakeRotation(M_PI_2);
-            
-    //        self.fullScreenBtn.transform = CGAffineTransformMakeRotation(M_PI_2);
-            self.playView.bounds = CGRectMake(0, 0, CGRectGetHeight([UIApplication sharedApplication].keyWindow.bounds), CGRectGetWidth([UIApplication sharedApplication].keyWindow.bounds));
-            self.playView.center = CGPointMake(CGRectGetMidX([UIApplication sharedApplication].keyWindow.bounds), CGRectGetMidY([UIApplication sharedApplication].keyWindow.bounds));
-        } completion:^(BOOL finished) {
-//            [self.fullScreenBtn setTitle:@"退出全屏" forState:UIControlStateNormal];
-            self.isFullScreen = YES;
-        }];
-}
-//播放按钮
--(void)playbackButtonClick
-{
-    [self.PLPlayer play];
-    
-    return;
-   
-    
-//    if (_playbackTextField.text.length == 0) {
-//        [self.view makeToast:@"请输入回放的URL" duration:kToastDuration position:CSToastPositionCenter];
-//        return;
-//    }
-    // 开始加载动画
-    [self.indicatorView startAnimating];
-    // 为避免卡顿，开启回放可以放到子线程中，在应用中灵活处理
-    if (![self.player startPlayback:@"http://gslb.miaopai.com/stream/24fONfescp-SRz61DjJz62WO1LLIwjIQXHthNg__.mp4" startTime:_startTime endTime:_endTime]) {
-        [self.indicatorView stopAnimating];
-    }
-    
-    
-//    if (!_isPlaying) {
-//        [self.view makeToast:@"未播放视频，不能操作" duration:kToastDuration position:CSToastPositionCenter];
-//        return;
-//    }
-//    NSError *error;
-//    if ([sender.currentTitle isEqualToString:@"暂停"]) {
-//        if ([_player pause:&error]) {
-////            [sender setTitle:@"恢复" forState:UIControlStateNormal];
-//        }
-//        else {
-//            NSString *message = [NSString stringWithFormat:@"暂停失败，错误码是 0x%08lx", error.code];
-//            [self.view makeToast:message duration:kToastDuration position:CSToastPositionCenter];
-//        }
-//        return;
-//    }
-//    // 恢复
-//    if ([_player resume:&error]) {
-////        [sender setTitle:@"暂停" forState:UIControlStateNormal];
-//    }
-//    else {
-//        NSString *message = [NSString stringWithFormat:@"恢复回放失败，错误码是 0x%08lx", error.code];
-//        [self.view makeToast:message duration:kToastDuration position:CSToastPositionCenter];
-//    }
-}
-
-#pragma mark -PLPlayerDelegate
-// 实现 <PLPlayerDelegate> 来控制流状态的变更
-- (void)player:(nonnull PLPlayer *)player statusDidChange:(PLPlayerStatus)state {
-  // 这里会返回流的各种状态，你可以根据状态做 UI 定制及各类其他业务操作
-  // 除了 Error 状态，其他状态都会回调这个方法
-  // 开始播放，当连接成功后，将收到第一个 PLPlayerStatusCaching 状态
-  // 第一帧渲染后，将收到第一个 PLPlayerStatusPlaying 状态
-  // 播放过程中出现卡顿时，将收到 PLPlayerStatusCaching 状态
-  // 卡顿结束后，将收到 PLPlayerStatusPlaying 状态
-  // 点播结束后，将收到 PLPlayerStatusCompleted 状态
-    
-    
-    
-    
-}
-
 //分享按钮
 -(void)shareButtonClick
 {
     //分享里面的内容
-        
     self.shareParams = [[LGXShareParams alloc] init];
 //        [self.shareParams makeShreParamsByData:self.model.share];
             
     [ShareSDKMethod ShareTextActionWithParams:self.shareParams QRCode:^{
-        
-         //二维码
-         DLog(@"二维码");
+
+        //视频播放地址生成二维码图片
+        [self generatingTwoDimensionalCode:self.model.sharedLink];
     
      } url:^{
-        //链接
-        DLog(@"链接");
+         //链接
+         DLog(@"链接");
+         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+         pasteboard.string = self.model.sharedLink;
+         [_kHUDManager showMsgInView:nil withTitle:@"链接已复制至剪切板" isSuccess:YES];
+         
      } Result:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
         
          if (state == SSDKResponseStateSuccess) {
             
          }
-    
      }];
-
 }
-
-
-
-
-#pragma mark - HVPPlayerDelegate
-
-- (void)player:(HVPPlayer *)player playStatus:(HVPPlayStatus)playStatus errorCode:(HVPErrorCode)errorCode {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        // 如果有加载动画，结束加载动画
-        if (self.indicatorView.isAnimating) {
-            [self.indicatorView stopAnimating];
-        }
-        _isPlaying = NO;
-        NSString *message;
-        if (playStatus == HVPPlayStatusSuccess) {
-            _isPlaying = YES;
-            [_playButton setTitle:@"停止回放" forState:UIControlStateNormal];
-            // 默认开启声音
-            [_player enableSound:YES error:nil];
-            // 开启定时器更新播放进度条
-            [self startUpdatePlayProgressTimer];
-        }
-        else if (playStatus == HVPPlayStatusFailure) {
-            if (errorCode == HVPErrorCodeURLInvalid) {
-                message = @"URL输入错误请检查URL或者URL已失效请更换URL";
-            }
-            else {
-                // 提示,自己判断是start还是seek
-                message = [NSString stringWithFormat:@"开启预览失败, 错误码是 : 0x%08lx", errorCode];
-            }
-            _player = nil;
-            // 关闭播放
-            [_player stopPlay:nil];
-        }
-        else if (playStatus == HVPPlayStatusException) {
-            // 预览过程中出现异常, 可能是取流中断，可能是其他原因导致的，具体根据错误码进行区分
-            // 做一些提示操作
-            message = [NSString stringWithFormat:@"播放异常, 错误码是 : 0x%08lx", errorCode];
-//            if (_isRecording) {
-//                //如果在录像，先关闭录像
-////                [self recordVideo:_recordButton];
-//            }
-            // 关闭播放
-            [_player stopPlay:nil];
-            _progressSlider.value = 0;
-            _currentPlayTimeLabel.text = @"00:00:00";
-        }
-        else {
-            message = @"回放结束";
-        }
-        if (message) {
-            [self.view makeToast:message duration:kToastDuration position:CSToastPositionCenter];
-        }
-    });
-}
-
-#pragma mark - Private Method
-
-/**
- 每秒刷新两次
- */
-- (void)startUpdatePlayProgressTimer {
-    if (!_timer) {
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
-        dispatch_source_t timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
-        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 0.001 * NSEC_PER_SEC, 1 * NSEC_PER_SEC);
-        dispatch_source_set_event_handler(timer, ^{
-            NSError *error;
-            NSString *osdTime = [_player getOSDTime:&error];
-            if (!error) {
-                NSLog(@"osdTime : %@", osdTime);
-                _currentPlayTimeLabel.text = [osdTime componentsSeparatedByString:@" "].lastObject;
-                NSDate *date = [dateFormatter dateFromString:osdTime];
-                NSTimeInterval currentPlayTime = date.timeIntervalSince1970;
-                _currentPlayTime = currentPlayTime;
-                _progressSlider.value =  (currentPlayTime - _startTime) / (_endTime - _startTime);
-            }
-        });
-        dispatch_resume(timer);
-        _timer = timer;
-    }
-}
-- (void)setupStartEndTime {
-    // 这里startTime和endTime是测试时随便指定的(当天0点到当天23点59分59秒)，真实情况下，应该从平台获取录像片段，然后取第一个片段的开始时间和最后一个片段的结束时间
-    unsigned int unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents *dateComponents = [calendar components:unitFlags fromDate:[NSDate date]];
-    NSString *startTimeStr = [NSString stringWithFormat:@"%02ld-%02ld-%02ld 00:00:00", dateComponents.year, dateComponents.month, dateComponents.day];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
-    NSDate *startTime = [dateFormatter dateFromString:startTimeStr];
-    // 当天的0点0分0秒
-    _startTime = [startTime timeIntervalSince1970];
-    // 当天的23点59分59秒
-    _endTime = _startTime + 24 * 3600 - 1;
-    dateFormatter.dateFormat = @"HH:mm:ss";
-    startTimeStr = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:_startTime]];
-    NSString *endTimeStr = [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:_endTime]];
-    _currentPlayTimeLabel.text = startTimeStr;
-    _endTimeLabel.text = endTimeStr;
-}
-
 #pragma mark - UICollectionViewDataSourec
 //定义展示的Section的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -695,6 +384,10 @@ static CGFloat const kZoomMaxScale   = 10.0f;
     if (self.isPlaying) {
         [self stop];
     }
+    self.isLiving = NO;
+    _deleteBtn.hidden = NO;
+    _downLoadBtn.hidden = NO;
+    
     id obj = [self.allDataArray objectAtIndex:indexPath.row];
     
     if ([obj isKindOfClass:[DemandModel class]]) {
@@ -731,7 +424,6 @@ static CGFloat const kZoomMaxScale   = 10.0f;
 //删除视频
 -(void)deleteNumbersVideo
 {
-       
     //提交数据
     NSDictionary *finalParams;
     NSString *url;
@@ -810,14 +502,204 @@ static CGFloat const kZoomMaxScale   = 10.0f;
             self.videoNameLabel.text = models.video_name;
             self.videoTimeLabel.text = models.createAt;
         }
-        
-        
         [self.collectionView reloadData];
         
     }];
     
     [task resume];
 }
+//生成二维码并保存到相册
+-(void)generatingTwoDimensionalCode:(NSString *)value {
+    // 创建过滤器
+    CIFilter *filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
+    // 过滤器恢复默认
+    [filter setDefaults];
+    // 给过滤器添加数据
+    NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    [filter setValue:data forKeyPath:@"inputMessage"];
+    // 获取二维码过滤器生成的二维码
+    CIImage *image = [filter outputImage];// 此时的 image 是模糊的
+    // 高清处理：将获取到的二维码添加到 imageview
+    UIImage *images =[self createNonInterpolatedUIImageFormCIImage:image withSize:300];// withSize 大于等于视图显示的尺寸
+    UIImageWriteToSavedPhotosAlbum(images, self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), (__bridge void *)self);
+}
+//--生成高清二维码
+- (UIImage *)createNonInterpolatedUIImageFormCIImage:(CIImage *)image withSize:(CGFloat) size {
+    CGRect extent = CGRectIntegral(image.extent);
+    CGFloat scale = MIN(size/CGRectGetWidth(extent), size/CGRectGetHeight(extent));
+    // 创建 bitmap
+    size_t width = CGRectGetWidth(extent) * scale;
+    size_t height = CGRectGetHeight(extent) * scale;
+    CGColorSpaceRef cs = CGColorSpaceCreateDeviceGray();
+    CGContextRef bitmapRef = CGBitmapContextCreate(nil, width, height, 8, 0, cs, (CGBitmapInfo)kCGImageAlphaNone);
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef bitmapImage = [context createCGImage:image fromRect:extent];
+    CGContextSetInterpolationQuality(bitmapRef, kCGInterpolationNone);
+    CGContextScaleCTM(bitmapRef, scale, scale);
+    CGContextDrawImage(bitmapRef, extent, bitmapImage);
+    // 保存 bitmap 到图片
+    CGImageRef scaledImage = CGBitmapContextCreateImage(bitmapRef);
+    CGContextRelease(bitmapRef);
+    CGImageRelease(bitmapImage);
+    
+    return [UIImage imageWithCGImage:scaledImage];
+}
+//保存图片完成之后的回调
+- (void) savedPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError *)error contextInfo: (void *)contextInfo {
+    if (error) {
+        NSLog(@"保存图片失败%@", error.localizedDescription);
+    }else {
+        [_kHUDManager showMsgInView:nil withTitle:@"二维码图片已保存至您的相册" isSuccess:YES];
+    }
+}
+
+//如果是直播，获取该摄像头下的录像文件
+- (void)startLoadDataRequest
+{
+//    [_kHUDManager showActivityInView:nil withTitle:nil];
+    
+    NSDictionary *finalParams = @{
+                                  @"id":self.device_id,
+                                  @"day":[_kDatePicker dateStringWithDate:nil],
+                                  @"start":@"0",
+                                  @"limit":@"10",
+                                  };
+    //提交数据
+    NSString *url = @"http://192.168.6.120:10102/outer/liveqing/record/query_records";
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
+                                                       options:0
+                                                         error:nil];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
+    
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:nil error:nil];
+    
+    // 设置请求头
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
+    
+    // 设置body
+    [request setHTTPBody:jsonData];
+    __unsafe_unretained typeof(self) weak_self = self;
+
+    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+    
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        
+        if (error) {
+            // 请求失败
+            DLog(@"error  ==  %@",error.userInfo);
+            DLog(@"responseObject  ==  %@",responseObject);
+            [self failedOperation];
+        }
+        DLog(@"responseObject  ==  %@",responseObject);
+        [weak_self handleObject:responseObject];
+    }];
+    [task resume];
+}
+- (void)failedOperation
+{
+    [_kHUDManager hideAfter:0.1 onHide:nil];
+    [_kHUDManager showMsgInView:nil withTitle:@"请求失败" isSuccess:NO];
+}
+- (void)handleObject:(id)obj
+{
+    [_kHUDManager hideAfter:0.1 onHide:nil];
+    __unsafe_unretained typeof(self) weak_self = self;
+    [[GCDQueue globalQueue] queueBlock:^{
+        NSDictionary *data = [obj objectForKey:@"data"];
+        NSArray *months = [data objectForKey:@"months"];
+        
+        NSMutableArray *tempArray = [NSMutableArray array];
+
+        [months enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *keys = obj;
+            NSDictionary *mothsDic = [data objectForKey:keys];
+            NSArray *days = [mothsDic objectForKey:[_kDatePicker dateStringWithDate:nil]];
+            [tempArray addObjectsFromArray:days];
+        }];
+        
+        NSMutableArray *modelArray = [NSMutableArray new];
+        
+        [tempArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *dic = obj;
+            
+//            NSString *originalSnap = [dic objectForKey:@"snap"];
+//            NSString *start_time = [dic objectForKey:@"start_time"];
+//
+//            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
+//            NSString *snap = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/getsnap?id=%@&period=%@",self.device_id,start_time];
+//            if (![WWPublicMethod isStringEmptyText:originalSnap]) {
+//                [mutDic setValue:snap forKey:@"snap"];
+//                [self getRecordCoverPhoto:start_time withData:idx];
+//            }
+            CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:dic];
+            [modelArray addObject:model];
+        }];
+        [weak_self.dataArray addObjectsFromArray:modelArray];
+        weak_self.allDataArray = [NSMutableArray arrayWithArray:weak_self.dataArray];
+        
+        [[GCDQueue mainQueue] queueBlock:^{
+            [weak_self.collectionView reloadData];
+        }];
+    }];
+}
+//获取录像封面快照
+-(void)getRecordCoverPhoto:(NSString*)period withData:(NSInteger)indexInteger
+{
+    NSString *url = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.device_id,period];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
+
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+
+        DLog(@"RecordCoverPhoto.Received: %@", responseObject);
+        DLog(@"RecordCoverPhoto.Received HTTP %ld", (long)httpResponse.statusCode);
+
+        [self dealWithCoverPhoto:responseObject withData:indexInteger];
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        DLog(@"error: %@", error);
+    }];
+}
+
+-(void)dealWithCoverPhoto:(id)obj withData:(NSInteger)indexInteger
+{
+    if (obj == nil) {
+        return;
+    }
+    __unsafe_unretained typeof(self) weak_self = self;
+    CarmeaVideosModel *model = [self.dataArray objectAtIndex:indexInteger];
+    model.snap = [NSString stringWithFormat:@"%@",[obj objectForKey:@"url"]];
+    [weak_self.dataArray replaceObjectAtIndex:indexInteger withObject:model];
+    weak_self.allDataArray = [NSMutableArray arrayWithArray:weak_self.dataArray];
+//    [[GCDQueue mainQueue] queueBlock:^{
+        [weak_self.collectionView reloadData];
+//    }];
+}
+
 
 /*
 #pragma mark - Navigation

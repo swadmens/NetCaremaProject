@@ -358,7 +358,6 @@
     [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
-//        NSArray *data = [obj objectForKey:@"references"];
         NSDictionary *data = [obj objectForKey:@"data"];
         NSArray *months = [data objectForKey:@"months"];
         
@@ -554,6 +553,7 @@
     DownloadListController *dvc = [DownloadListController new];
     dvc.dataArray = tempArray;
     dvc.downLoad_id = self.device_id;
+    dvc.isRecord = YES;
     [self.navigationController pushViewController:dvc animated:YES];
     
     [self exitTheEditStates];

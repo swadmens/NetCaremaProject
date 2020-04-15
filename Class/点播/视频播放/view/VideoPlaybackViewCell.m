@@ -57,7 +57,7 @@
     }else{
         CarmeaVideosModel *models = model;
         [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.snap] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
-        _titleLabel.text = models.duration;
+        _titleLabel.text = models.video_name;
     }
 }
 @end
