@@ -36,15 +36,10 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
 
-@property (nonatomic,strong) NSMutableArray *tempDataArray;
-
 @property(nonatomic,strong)NSURLSessionDownloadTask*downloadTask;
 
 ///视频播放和下载用的url
 @property (nonatomic,strong) NSString *url;
-
-
-@property (nonatomic,strong) NSMutableArray *originalData;
 
 @property (nonatomic, assign) BOOL isFullScreen;
 
@@ -57,20 +52,6 @@ static NSString *const _kdownloadListKey = @"download_video_list";
         _showDataArray = [NSMutableArray array];
     }
     return _showDataArray;
-}
--(NSMutableArray*)originalData
-{
-    if (!_originalData) {
-        _originalData = [NSMutableArray array];
-    }
-    return _originalData;
-}
--(NSMutableArray*)tempDataArray
-{
-    if (!_tempDataArray) {
-        _tempDataArray = [NSMutableArray array];
-    }
-    return _tempDataArray;
 }
 - (void)setupNoDataView
 {
@@ -131,7 +112,6 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     [[TCNewAlertView shareInstance] showAlert:nil message:@"确认清空下载列表吗？" cancelTitle:@"取消" viewController:self confirm:^(NSInteger buttonTag) {
         if (buttonTag == 0) {
             [self.showDataArray removeAllObjects];
-            [self.originalData removeAllObjects];
             [self changeNoDataViewHiddenStatus];
             //清空所以缓存
             [CLInvoiceApplyAddressModelTool removeAllInfo];
@@ -145,17 +125,12 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 {
 //    [_kHUDManager showActivityInView:nil withTitle:@"保存信息中..."];
     
-    //缓存信息,如果是已缓存的更新缓存，如果不是就新增
+    //更新缓存信息
     [self.showDataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([obj isKindOfClass:[CLVoiceApplyAddressModel class]]) {
-            NSDictionary *dic = [self.originalData objectAtIndex:idx];
-            CLVoiceApplyAddressModel *model = [CLVoiceApplyAddressModel AddressModelWithDict:dic];
-            [CLInvoiceApplyAddressModelTool updateInfoAtIndex:idx withInfo:model];
-        }else{
-            NSDictionary *dic = [self.originalData objectAtIndex:idx];
-            CLVoiceApplyAddressModel *model = [CLVoiceApplyAddressModel AddressModelWithDict:dic];
-            [CLInvoiceApplyAddressModelTool addInfo:model];
-        }
+
+        CLVoiceApplyAddressModel *model = obj;
+        [CLInvoiceApplyAddressModelTool updateInfoAtIndex:idx withInfo:model];
+        
     }];
     
 //    [_kHUDManager hideAfter:0.1 onHide:nil];
@@ -179,38 +154,25 @@ static NSString *const _kdownloadListKey = @"download_video_list";
        // 注册Cell
         [self.tableView registerClass:[DownloadListCell class] forCellReuseIdentifier:identifier];
     }
+    
     DownloadListCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier forIndexPath:indexPath];
     cell.delegate = self;
-    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-    id objt = [self.showDataArray objectAtIndex:indexPath.row];
+    CLVoiceApplyAddressModel *model = [self.showDataArray objectAtIndex:indexPath.row];
+    [cell makeCellData:model];
 
-    if ([objt isKindOfClass:[CarmeaVideosModel class]]) {
-        [cell makeCellData:objt];
-//        NSDictionary *dic = [self.originalData objectAtIndex:indexPath.row];;
-//        cell.url = [dic objectForKey:@"url"];
-        cell.url = self.url;
-        
-    }else if ([objt isKindOfClass:[CLVoiceApplyAddressModel class]]){
-        CLVoiceApplyAddressModel *models = objt;
-        cell.url = models.url;
-        [cell makeCellCacheData:models];
-    }else{
-        cell.url = self.url;
-        [cell makeCellDemandData:objt];
-    }
-    NSMutableDictionary *temp = [self.originalData objectAtIndex:indexPath.row];
+    
     cell.downlaodProgress = ^(NSString * _Nonnull value, NSString * _Nonnull writeBytes) {
-        [temp setValue:value forKey:@"progress"];
-        [temp setValue:writeBytes forKey:@"writeBytes"];
+        model.progress = value;
+        model.writeBytes = writeBytes;
     };
     
     cell.localizedFilePath = ^(NSString * _Nonnull value) {
-        [temp setValue:value forKey:@"file_path"];
+        model.file_path = value;
     };
     
-    [self.originalData replaceObjectAtIndex:indexPath.row withObject:temp];
+    [self.showDataArray replaceObjectAtIndex:indexPath.row withObject:model];
 
     return cell;
 }
@@ -218,18 +180,9 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 // 点击了“左滑出现的Delete按钮”会调用这个方法
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
     //删除缓存
-    id obj = [self.showDataArray objectAtIndex:indexPath.row];
-    
-     if ([obj isKindOfClass:[CLVoiceApplyAddressModel class]]) {
-         [CLInvoiceApplyAddressModelTool removeInfoAtIndex:indexPath.row - _tempDataArray.count];
-     }else{
-         [_tempDataArray removeObjectAtIndex:indexPath.row];
-     }
-    
+    [CLInvoiceApplyAddressModelTool removeInfoAtIndex:indexPath.row];
     // 删除模型
-    [self.originalData removeObjectAtIndex:indexPath.row];
     [self.showDataArray removeObjectAtIndex:indexPath.row];
     // 刷新
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
@@ -296,19 +249,12 @@ static NSString *const _kdownloadListKey = @"download_video_list";
         
         DLog(@"Received: %@", responseObject);
         DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-        NSMutableDictionary *temp = [self.originalData objectAtIndex:idx];
-        NSString *downUrl = [responseObject objectForKey:@"url"];
-        self.url = downUrl;
-        if (!weak_self.isRecord) {
-            //点播文件
-             [temp setValue:downUrl forKey:@"url"];
-         }else{
-             //录像文件
-             [temp setValue:downUrl forKey:@"url"];
-         }
-        [self.originalData replaceObjectAtIndex:idx withObject:temp];
-  
-        [self.tableView reloadData];
+        
+        CLVoiceApplyAddressModel *model = [weak_self.showDataArray objectAtIndex:idx];
+        model.url = [responseObject objectForKey:@"url"];
+        [weak_self.showDataArray replaceObjectAtIndex:idx withObject:model];
+        
+        [weak_self.tableView reloadData];
 
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
@@ -344,12 +290,11 @@ static NSString *const _kdownloadListKey = @"download_video_list";
         //读取缓存数据
         NSArray *temp = CLInvoiceApplyAddressModelTool.allAddressInfo;
         [self.showDataArray addObjectsFromArray:temp];
-        NSArray *dataArr = [CLVoiceApplyAddressModel mj_keyValuesArrayWithObjectArray:temp];
-        [self.originalData addObjectsFromArray:dataArr];
-        DLog(@"self.originalData  ==  %@",self.originalData);
-           
+        
     }else{
         
+        NSMutableArray *tempModelArr = [NSMutableArray array];
+
         [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             
             NSMutableDictionary *tempDic = [NSMutableDictionary new];
@@ -372,7 +317,7 @@ static NSString *const _kdownloadListKey = @"download_video_list";
                 
                 [tempDic setValue:model.snapUrl forKey:@"snap"];//封面图片URL
                 [tempDic setValue:model.createAt forKey:@"time"];//视频时间
-                [tempDic setValue:model.time forKey:@"start_time"];//视频时间
+                [tempDic setValue:model.start_time forKey:@"start_time"];//视频时间
                 [tempDic setValue:model.video_name forKey:@"name"];//视频名称
                 [tempDic setValue:model.duration forKey:@"duration"];//视频时长
                 [tempDic setValue:model.videoUrl forKey:@"hls"];//视频播放地址
@@ -380,58 +325,67 @@ static NSString *const _kdownloadListKey = @"download_video_list";
                 //点播文件下载
                 [self startLoadDataRequest:model.video_id withInteger:idx];
             }
-            [self.originalData addObject:tempDic];
+            
+            CLVoiceApplyAddressModel *model = [CLVoiceApplyAddressModel AddressModelWithDict:tempDic];
+            [tempModelArr addObject:model];
         }];
         
-        [self.showDataArray addObjectsFromArray:self.dataArray];
-        [self.tempDataArray addObjectsFromArray:self.dataArray];
-
+        [self.showDataArray addObjectsFromArray:tempModelArr];
         
         //读取缓存数据
-       
         NSArray *temp = CLInvoiceApplyAddressModelTool.allAddressInfo;
-        if (temp.count == 0) {
-            return ;
-        }
-        
-        NSMutableArray *tempName = [NSMutableArray array];
-        [temp enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            CLVoiceApplyAddressModel *model = obj;
-            [self.originalData enumerateObjectsUsingBlock:^(id  _Nonnull objs, NSUInteger idxs, BOOL * _Nonnull stops) {
-                NSDictionary *dic = objs;
-                if ([model.time isEqualToString:[dic objectForKey:@"time"]]) {
-                    [tempName addObject:model.name];
-                    [self.originalData removeObject:dic];
-                    [self.showDataArray removeObjectAtIndex:idxs];
-                }
+        NSArray *temp_arr = [NSArray arrayWithArray:temp];
+        if (temp.count > 0) {
+            //判断下载任务是否存在
+            NSMutableArray *tempName = [NSMutableArray array];
+            [temp enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                CLVoiceApplyAddressModel *model = obj;
+                [self.showDataArray enumerateObjectsUsingBlock:^(id  _Nonnull objs, NSUInteger idxs, BOOL * _Nonnull stops) {
+                    CLVoiceApplyAddressModel *models = objs;
+                    if ([model.time isEqualToString:models.time]) {
+                        [tempName addObject:model.name];
+                        [self.showDataArray removeObjectAtIndex:idxs];
+                    }
+                }];
             }];
-        }];
-        
-        if (tempName.count > 0) {
-            NSString *mes = [NSString stringWithFormat:@"任务“%@”已存在",[tempName componentsJoinedByString:@"，"]];
-            [[TCNewAlertView shareInstance] showAlert:nil message:mes cancelTitle:nil viewController:self confirm:^(NSInteger buttonTag) {
-                       
-//                if (buttonTag == 0) {
-//
-//                }else{
-//
-//                }
-                
-            } buttonTitles:@"好的", nil];
+            
+            //提示信息
+            if (tempName.count > 0) {
+                NSString *mes = [NSString stringWithFormat:@"任务“%@”已存在",[tempName componentsJoinedByString:@"，"]];
+                [[TCNewAlertView shareInstance] showAlert:nil message:mes cancelTitle:nil viewController:self confirm:^(NSInteger buttonTag) {
+            //              if (buttonTag == 0) {
+            
+    //                }else{
+    //
+    //                }
+                } buttonTitles:@"好的", nil];
+            }
+            //新增缓存信息
+            if (self.showDataArray.count > 0) {
+                [self.showDataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    CLVoiceApplyAddressModel *model = obj;
+                    [CLInvoiceApplyAddressModelTool addInfo:model];
+                }];
+            }
+            
+            [self.showDataArray addObjectsFromArray:temp_arr];
+        }else{
+            
+            //新增缓存信息
+            if (self.showDataArray.count > 0) {
+                [self.showDataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    CLVoiceApplyAddressModel *model = obj;
+                    [CLInvoiceApplyAddressModelTool addInfo:model];
+                }];
+            }
         }
-        
-        [self.showDataArray addObjectsFromArray:temp];
-        
-        NSArray *dataArr = [CLVoiceApplyAddressModel mj_keyValuesArrayWithObjectArray:temp];
-        [self.originalData addObjectsFromArray:dataArr];
-        DLog(@"self.originalData  ==  %@",self.originalData);
     }
     
     [self changeNoDataViewHiddenStatus];
 }
 - (void)changeNoDataViewHiddenStatus
 {
-    NSInteger count = self.originalData.count;
+    NSInteger count = self.showDataArray.count;
     if (count == 0) {
         self.tableView.hidden = YES;
         self.noDataView.hidden = NO;

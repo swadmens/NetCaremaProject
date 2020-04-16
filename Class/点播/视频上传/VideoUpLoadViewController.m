@@ -20,9 +20,12 @@
 @property (nonatomic,strong) UITextField *titleTextField;
 
 @property (nonatomic,strong) UITextView *describeTextView;
-@property (nonatomic,strong) NSString *msg_content;
+@property (nonatomic,strong) NSString *msg_content;//文件描述
 @property (nonatomic,strong) UIButton *addVideoBtn;
 @property (nonatomic,strong) NSData *fileData;
+
+@property (nonatomic,strong) NSString *fileName;//文件名称
+@property (nonatomic,assign) BOOL isAddVideo;//是否添加了视频
 
 @end
 
@@ -124,18 +127,29 @@
     [_addVideoBtn addHeight:70];
     [_addVideoBtn addTarget:self action:@selector(addVedioClick) forControlEvents:UIControlEventTouchUpInside];
     
-    
-    
-    
-    
 }
-
-
 
 //上传视频
 -(void)upLoadButtonClick
 {
-    [self uploadVideo:self.fileData];
+    [self.view endEditing:YES];
+    
+    if (![WWPublicMethod isStringEmptyText:self.fileName]) {
+        [_kHUDManager showMsgInView:nil withTitle:@"视频名称不能为空" isSuccess:YES];
+        return;
+    }
+    if (!_isAddVideo) {
+        [_kHUDManager showMsgInView:nil withTitle:@"请添加一个您要上传的视频！" isSuccess:YES];
+        return;
+    }
+    
+    NSString *string = [NSString stringWithFormat:@"%@.mp4",self.fileName];
+    [self uploadVideo:self.fileData withFileName:string];
+}
+#pragma mark - UITextFieldDelegate
+-(void)textFieldDidEndEditing:(UITextField *)textField
+{
+    self.fileName = textField.text;
 }
 #pragma mark - UITextViewDelegate
 - (void)textViewDidEndEditing:(UITextView *)textView
@@ -175,27 +189,24 @@
 //选择本地视频上传
 -(void)addVedioClick
 {
-//    [[GCDQueue mainQueue] queueBlock:^{
-    
-        [self chooseLocalVideo];
-      
-//    }];
+    [self chooseLocalVideo];
 }
 
-//- (void)recordVideoNormalPath:(NSString *)path
-//{
-//    NSError *err = nil;
-//    NSData* data = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:path] options:NSDataReadingMappedIfSafe error:&err];
-//    //文件最大不超过28MB
-//    if(data.length < 28 * 1024 * 1024)
-//    {
-//        self.fileData = data;
-//
-//    }else
-//    {
-//        [_kHUDManager showMsgInView:nil withTitle:NSLocalizedString(@"fsdwjgd", nil) isSuccess:YES];
-//    }
-//}
+- (void)recordVideoNormalPath:(NSString *)path
+{
+    NSError *err = nil;
+    NSData* data = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:path] options:NSDataReadingMappedIfSafe error:&err];
+    //文件最大不超过28MB
+    if(data.length < 28 * 1024 * 1024)
+    {
+        self.fileData = data;
+        self.isAddVideo = YES;
+
+    }else
+    {
+        [_kHUDManager showMsgInView:nil withTitle:NSLocalizedString(@"fsdwjgd", nil) isSuccess:YES];
+    }
+}
 -(void)recordVideoTakeHomePath:(NSString *)path withImage:(UIImage *)image
 {
 
@@ -203,17 +214,17 @@
         [self.addVideoBtn setImage:image forState:UIControlStateNormal];
     }];
 
-//    NSError *err = nil;
-//    NSData* data = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:path] options:NSDataReadingMappedIfSafe error:&err];
-//    //文件最大不超过28MB
-//    if(data.length < 28 * 1024 * 1024)
-//    {
-//        self.fileData = data;
-//
-//    }else
-//    {
-//        [_kHUDManager showMsgInView:nil withTitle:@"发送的文件过大" isSuccess:YES];
-//    }
+    NSError *err = nil;
+    NSData* data = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:path] options:NSDataReadingMappedIfSafe error:&err];
+    //文件最大不超过28MB
+    if(data.length < 28 * 1024 * 1024)
+    {
+        self.fileData = data;
+
+    }else
+    {
+        [_kHUDManager showMsgInView:nil withTitle:@"发送的文件过大" isSuccess:YES];
+    }
 }
 
 //选择本地视频
@@ -264,7 +275,6 @@
             }];
             
         }
-//        RIButtonItem *item_cancel = [RIButtonItem itemWithLabel:@"知道了"];
         [[TCNewAlertView shareInstance] showAlert:@"" message:@"您的设备不支持拍摄或您设置了拍摄权限" cancelTitle:@"知道了" viewController:self confirm:^(NSInteger buttonTag) {
             
         } buttonTitles:nil, nil];
@@ -279,14 +289,16 @@
     picker.allowsEditing = YES;
 //    picker.delegate = self;
     [[picker rac_imageSelectedSignal] subscribeNext:^(id x) {
-//        UIImage *image = [x objectForKey:UIImagePickerControllerEditedImage];
-        
+                
         NSString *videoPath = [[x objectForKey:UIImagePickerControllerMediaURL] path];
         NSData *data = [NSData dataWithContentsOfFile:videoPath];
         
         [picker dismissViewControllerAnimated:YES completion:^{
             self.fileData = data;
+            self.isAddVideo = YES;
+            [self.addVideoBtn setImage:[self getImage:videoPath] forState:UIControlStateNormal];
         }];
+        
     }];
     
     [[picker.rac_delegateProxy signalForSelector:@selector(imagePickerControllerDidCancel:)] subscribeNext:^(id x) {
@@ -298,112 +310,69 @@
 }
 
 //上传视频
--(void)uploadVideo:(NSData*)value
+-(void)uploadVideo:(NSData*)value withFileName:(NSString*)fileName
 {
-    //将视频data转码成字符串，方便上传
-    NSData *base64Data = [value base64EncodedDataWithOptions:0];
-    NSString *baseString = [[NSString alloc]initWithData:base64Data encoding:NSUTF8StringEncoding];
-    
-    NSDictionary *finalParams = @{
-                                  @"file":baseString,
-                                  };
+    [_kHUDManager showActivityInView:nil withTitle:@"正在上传..."];
     
     //提交数据
     NSString *url = @"http://192.168.6.120:10102/outer/liveqing/vod/upload";
     
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
-                                                       options:0
-                                                         error:nil];
+//    NSDictionary *finalParams = @{@"describe":self.msg_content};
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
+//                                                       options:0
+//                                                         error:nil];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
-    
-    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:nil error:nil];
-    
-    // 设置请求头
-//    [request setValue:@"application/vnd.com.nsn.cumulocity.managedobject+json" forHTTPHeaderField:@"Accept"];
-//    [request setValue:@"application/vnd.com.nsn.cumulocity.managedobject+json" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+           
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain", @"image/jpeg",@"image/png",@"multipart/form-data", nil];
+           
     //配置用户名 密码
     NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
     //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
     NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    
     // 设置Authorization的方法设置header
-    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+           
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
-    // 设置body
-    [request setHTTPBody:jsonData];
-    
-    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+    [manager POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
-    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        [formData appendPartWithFileData:value name:@"file" fileName:fileName mimeType:@"video/mp4"];
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-        
-        if (error) {
-            // 请求失败
-            DLog(@"error  ==  %@",error.userInfo);
-            [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
-            
-            return ;
-        }
+        [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
+
         DLog(@"responseObject  ==  %@",responseObject);
+        [self.navigationController popViewControllerAnimated:YES];
         
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error  ==  %@",error);
+        [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
     }];
-    [task resume];
 }
 
-
-
-//#pragma mark - DoImagePickerControllerDelegate
-//- (void)didCancelDoImagePickerController
-//{
-//    [self dismissViewControllerAnimated:YES completion:nil];
-//}
-//
-//- (void)didSelectPhotosFromDoImagePickerController:(DoImagePickerController *)picker result:(NSArray *)aSelected
-//{
-//    [self dismissViewControllerAnimated:YES completion:^{
-//        if (picker.nResultType == DO_PICKER_RESULT_UIIMAGE)
-//        {
-//            [_kHUDManager showActivityInView:nil withTitle:NSLocalizedString(@"picProcessing", nil)];
-//            [self uploadHeaderImage:aSelected.firstObject];
-//            [_kHUDManager hideAfter:0 onHide:nil];
-//
-//            [ASSETHELPER clearData];
-//        }
-//    }];
-//}
-//- (void)uploadHeaderImage:(UIImage *)image
-//{
-//    if (image == nil) {
-//        NSString *title = [NSString stringWithFormat:@"%@%@",NSLocalizedString(@"pleaseChoose", nil),NSLocalizedString(@"HeadPortrait", nil)];
-//        [_kHUDManager showMsgInView:nil withTitle:title isSuccess:NO];
-//        return;
-//    }
-//
-//    //设置本地选择的头像
-//    _petImageView.image = image;
-//
-//    NSDictionary *files_dic = @{
-//                                @"header" : image
-//                                };
-//    [TCUploadManager uploadImages:files_dic toPosition:TCUploadPositionHeader andFullUrl:NO onCompletion:^(NSDictionary *data) {
-//         [_kHUDManager hideAfter:0.1 onHide:nil];
-//        if (data) { // 如果成功
-//            NSString *header_img = [data.allValues componentsJoinedByString:@","];
-//            self.image_path = header_img;
-//            [_kHUDManager hideAfter:0 onHide:nil];
-//        }
-//    }];
-//
-//    return;
-//}
-
-
-
-
+//根据本地视频地址获取视频缩略图
+-(UIImage *)getImage:(NSString *)videoURL
+{
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:videoURL] options:nil];
+    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    gen.appliesPreferredTrackTransform = YES;
+    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+    NSError *error = nil;
+    CMTime actualTime;
+    CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
+    CGImageRelease(image);
+    return thumb;
+}
 /*
 #pragma mark - Navigation
 

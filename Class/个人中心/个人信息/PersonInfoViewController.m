@@ -43,7 +43,8 @@
     NSArray *arr = @[@{@"title":@"昵称",@"describe":_kUserModel.userInfo.user_name},
                      @{@"title":@"手机号码",@"describe":@"13162288787"},
                      @{@"title":@"邮箱",@"describe":_kUserModel.userInfo.email},
-                     @{@"title":@"更改密码",@"describe":@"****"},];
+//                     @{@"title":@"更改密码",@"describe":@"****"},
+                     ];
     self.dataArray = arr;
     [self setupTableView];
     

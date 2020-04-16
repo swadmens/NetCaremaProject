@@ -83,13 +83,14 @@
     UILabel *tipLabel = [self getNoDataTipLabel];
     
     UIButton *againBtn = [UIButton new];
-    [againBtn setTitle:@"暂无数据，轻触重试" forState:UIControlStateNormal];
+    [againBtn setEnabled:NO];
+    [againBtn setTitle:@"暂无点播文件" forState:UIControlStateNormal];
     [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
     againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
     [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
     [self.noDataView addSubview:againBtn];
     [againBtn xCenterToView:self.noDataView];
-    [againBtn topToView:tipLabel withSpace:-8];
+    [againBtn bottomToView:tipLabel withSpace:80];
 }
 -(void)againLoadDataBtn
 {
@@ -139,6 +140,7 @@
     
     //编辑按钮
     UIButton *editBtn = [UIButton new];
+    editBtn.hidden = YES;
     [editBtn setImage:UIImageWithFileName(@"demand_edit_image") forState:UIControlStateNormal];
     [editBtn addTarget:self action:@selector(editButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:editBtn];
@@ -149,6 +151,7 @@
 
     //下载按钮
     UIButton *downLoadBtn = [UIButton new];
+    downLoadBtn.hidden = YES;
     [downLoadBtn setImage:UIImageWithFileName(@"demand_download_image") forState:UIControlStateNormal];
     [downLoadBtn addTarget:self action:@selector(downLoadButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:downLoadBtn];
@@ -344,7 +347,7 @@
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
 {
     if ([collectionView isEqual:self.collectionUpView]) {
-           return UIEdgeInsetsMake(0, 8, 0, 8);
+           return UIEdgeInsetsMake(0, 0, 0, 0);
        }else{
            return UIEdgeInsetsMake(0, 15, 0, 15);
        }

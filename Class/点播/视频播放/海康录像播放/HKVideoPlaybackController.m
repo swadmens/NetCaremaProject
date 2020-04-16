@@ -318,9 +318,8 @@
 -(void)downloadVideoClick
 {
     DownloadListController *vc = [DownloadListController new];
-    vc.demandModel = self.model;
     vc.isRecord = self.isRecordFile;
-    vc.dataArray = [NSArray arrayWithObject:self.model];
+    vc.dataArray = [NSArray arrayWithObject:self.isRecordFile?self.carmeaModel:self.model];
     [self.navigationController pushViewController:vc animated:YES];
 }
 //全部视频
@@ -401,6 +400,8 @@
         
     }else{
         CarmeaVideosModel *model = obj;
+        self.carmeaModel = model;
+        
         NSDictionary *dic = @{ @"name":model.video_name,
                                @"snapUrl":model.snap,
                                @"videoUrl":model.hls,
@@ -408,7 +409,6 @@
                               };
         DemandModel *models = [DemandModel makeModelData:dic];
         self.playerView.media = models;
-        self.model = models;
         self.indexInteger = indexPath.row;
         _videoNameLabel.text = self.model.video_name;
         _videoTimeLabel.text = self.model.createAt;

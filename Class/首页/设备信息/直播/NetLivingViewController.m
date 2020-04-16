@@ -157,7 +157,7 @@
     HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
     vc.model = models;
     vc.isLiving = YES;
-    vc.isRecordFile = NO;
+    vc.isRecordFile = YES;
     vc.device_id = self.device_id;
     [self.navigationController pushViewController:vc animated:YES];
 }

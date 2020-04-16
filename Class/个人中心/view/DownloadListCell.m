@@ -7,7 +7,6 @@
 //
 
 #import "DownloadListCell.h"
-#import "CarmeaVideosModel.h"
 #import "DownLoadSence.h"
 #import <UIImageView+YYWebImage.h>
 #import "DemandModel.h"
@@ -30,7 +29,6 @@
 
 @property (nonatomic,strong) UIProgressView *progressView;//进度条
 
-@property (nonatomic,strong) CarmeaVideosModel *model;
 @property (nonatomic,strong) DemandModel *demandModel;
 @property (nonatomic,strong) CLVoiceApplyAddressModel *cacheModel;
 
@@ -39,11 +37,6 @@
 @property (nonatomic, assign) BOOL isNeedReset;
 @property (nonatomic, strong) PLPlayerView *playerView;
 @property (nonatomic, assign) BOOL isPlaying;
-
-
-@property (nonatomic,strong) NSString *video_name;
-@property (nonatomic,strong) NSString *snapUrl;
-@property (nonatomic,strong) NSString *file_path;
 
 @property (nonatomic,strong) AVPlayer *avPlayer;
 
@@ -145,37 +138,12 @@
     [super setFrame:frame];
 }
 
--(void)makeCellData:(CarmeaVideosModel *)model
-{
-    self.model = model;
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:UIImageWithFileName(@"playback_back_image")];
-    _titleLabel.text = model.video_name;
-    _timeLabel.text = model.time;
-    self.video_name = model.video_name;
-    self.snapUrl = model.snap;
-    self.file_path = model.hls;
-
-}
--(void)makeCellDemandData:(DemandModel *)model
-{
-    self.demandModel = model;
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:UIImageWithFileName(@"playback_back_image")];
-    _titleLabel.text = model.video_name;
-    _timeLabel.text = model.updateAt;
-    self.video_name = model.video_name;
-    self.snapUrl = model.snapUrl;
-    self.file_path = model.videoUrl;
-
-}
--(void)makeCellCacheData:(CLVoiceApplyAddressModel*)model
+-(void)makeCellData:(CLVoiceApplyAddressModel *)model
 {
     self.cacheModel = model;
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:UIImageWithFileName(@"playback_back_image")];
     _titleLabel.text = model.name;
     _timeLabel.text = model.time;
-    self.video_name = model.name;
-    self.snapUrl = model.snap;
-    self.file_path = model.hls;
     _progressView.progress = [model.progress floatValue];
     _totalDataLabel.text = model.writeBytes;
     if (_progressView.progress >= 1) {
@@ -184,7 +152,7 @@
     }else{
         [_downLoadBtn setTitle:@"下载" forState:UIControlStateNormal];
     }
-    
+
 }
 
 //播放
@@ -214,10 +182,9 @@
 //    return;
     
     
-     NSDictionary *dic = @{@"name":self.video_name,
-                           @"snapUrl":self.snapUrl,
-//                           @"videoUrl":[WWPublicMethod isStringEmptyText:self.file_path]?self.file_path:self.url,
-                           @"videoUrl":self.file_path,
+     NSDictionary *dic = @{@"name":self.cacheModel.name,
+                           @"snapUrl":self.cacheModel.snap,
+                           @"videoUrl":self.cacheModel.hls,
      };
     DemandModel *models = [DemandModel makeModelData:dic];
 
@@ -259,8 +226,13 @@
     
 //    NSString *testUrl = @"http://192.168.6.120:10080/record/download/nvr017/20200325034226?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY1NzE5ODgsInB3IjoiMjEyMzJmMjk3YTU3YTVhNzQzODk0YTBlNGE4MDFmYzMiLCJ0bSI6MTU4NjQ4NTU4OCwidW4iOiJhZG1pbiJ9.uRdKVTIJEuREbFAA3uCqGUDVG-W8O2e8Sr6Rrdq_i8E";
     
+    if (![WWPublicMethod isStringEmptyText:self.cacheModel.url]) {
+        [_kHUDManager showMsgInView:nil withTitle:@"下载错误，请重试" isSuccess:YES];
+        return;
+    }
+    
     if ([sender.currentTitle isEqualToString:@"下载"]) {
-        self.downloadTask = [[YDDownloadQueue defaultQueue] addDownloadTaskWithPriority:YDDownloadPriorityDefault url:self.url progressHandler:^(CGFloat progress, CGFloat speed, NSString *writeBytes) {
+        self.downloadTask = [[YDDownloadQueue defaultQueue] addDownloadTaskWithPriority:YDDownloadPriorityDefault url:self.cacheModel.url progressHandler:^(CGFloat progress, CGFloat speed, NSString *writeBytes) {
             
             weak_self.progressView.progress = progress;
             weak_self.totalDataLabel.text = writeBytes;
@@ -282,7 +254,6 @@
                 weak_self.progressView.progress = 0;
             }
             NSLog(@"%@", filePath);
-            self.file_path = filePath;
             if (weak_self.localizedFilePath) {
                 weak_self.localizedFilePath(filePath);
             }
@@ -313,7 +284,7 @@
 - (void)downloadTaskDidChangeStatusNotification:(NSNotification *)notify
 {
     YDDownloadTask *downloadTask = (YDDownloadTask *)notify.object;
-    if (![downloadTask.downloadUrl isEqualToString:self.url]) {
+    if (![downloadTask.downloadUrl isEqualToString:self.cacheModel.url]) {
         return;
     }
     switch (downloadTask.taskStatus) {
