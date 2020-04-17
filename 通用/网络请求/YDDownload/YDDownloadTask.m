@@ -212,10 +212,14 @@ didReceiveResponse:(NSURLResponse *)response
  completionHandler:(void (^)(NSURLSessionResponseDisposition disposition))completionHandler
 {
     //创建文件
-    _filePath = [self.directoryPath stringByAppendingPathComponent:response.suggestedFilename];
+
+    //以当前时间（年月日时分秒）为文件命名
+    NSString *fileNames = [NSString stringWithFormat:@"%@.mp4",[_kDatePicker getCurrentTimes]];
+   
+    _filePath = [self.directoryPath stringByAppendingPathComponent:fileNames];
     if (![[NSFileManager defaultManager] fileExistsAtPath:_filePath]) {
         [[NSFileManager defaultManager] createFileAtPath:_filePath contents:nil attributes:nil];
-        NSDictionary *taskInfo = @{@"fileName":response.suggestedFilename, @"totalSize":@(response.expectedContentLength)};
+        NSDictionary *taskInfo = @{@"fileName":fileNames, @"totalSize":@(response.expectedContentLength)};
         [self saveTaskInfo:taskInfo forUrl:_downloadUrl];
     }
     

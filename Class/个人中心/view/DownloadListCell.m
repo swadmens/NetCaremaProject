@@ -73,7 +73,7 @@
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
     [backView addSubview:_titleLabel];
     [_titleLabel leftToView:_showImageView withSpace:10];
-    [_titleLabel topToView:backView withSpace:15];
+    [_titleLabel topToView:backView withSpace:18];
     [_titleLabel addWidth:kScreenWidth-195];
     
     
@@ -114,7 +114,7 @@
 
     
     _totalDataLabel = [UILabel new];
-    _totalDataLabel.text = @"0.00M/0.00M";
+    _totalDataLabel.text = @"0M/0M";
     _totalDataLabel.textColor = kColorThirdTextColor;
     _totalDataLabel.font = [UIFont customFontWithSize:kFontSizeTen];
     [backView addSubview:_totalDataLabel];
@@ -144,9 +144,9 @@
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:UIImageWithFileName(@"playback_back_image")];
     _titleLabel.text = model.name;
     _timeLabel.text = model.time;
-    _progressView.progress = [model.progress floatValue];
-    _totalDataLabel.text = model.writeBytes;
-    if (_progressView.progress >= 1) {
+//    _progressView.progress = [model.progress floatValue];
+    if ([model.progress floatValue] >= 1) {
+        _totalDataLabel.text = model.writeBytes;
         _progressView.hidden = YES;
         [_downLoadBtn setTitle:@"已完成" forState:UIControlStateNormal];
     }else{
@@ -158,29 +158,20 @@
 //播放
 -(void)startDownLoad:(UITapGestureRecognizer*)tp
 {
-//
-//    NSArray *nameArr = [self.cacheModel.file_path componentsSeparatedByString:@"/"];
-//
-//    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//
-//    NSString *documentsDirectory = [paths objectAtIndex:0];
-//    NSString *fullPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, nameArr.lastObject];
-//
-//    NSURL *videoURL = [NSURL fileURLWithPath:fullPath];
-//
-//    self.avPlayer = [AVPlayer playerWithURL:videoURL];
-//
-//    AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:self.avPlayer];
-//    //设置模式
-//    playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-//    playerLayer.contentsScale = [UIScreen mainScreen].scale;
-//
-//    playerLayer.frame = CGRectMake(0, 0, kScreenWidth, 200);
-//
-//    [self.layer addSublayer:playerLayer];
-//
-//    return;
     
+//    NSArray *nameArr = [self.cacheModel.file_path componentsSeparatedByString:@"/"];
+//    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+//    NSString *documentsDirectory = [paths objectAtIndex:0];
+//    NSString *fullPath = [NSString stringWithFormat:@"%@/%@/%@", documentsDirectory,@"YDDownloads", nameArr.lastObject];
+//    NSURL *videoURL = [NSURL fileURLWithPath:fullPath];
+//    AVPlayerItem *playerItem=[AVPlayerItem playerItemWithURL:videoURL];
+//    AVPlayer *player = [AVPlayer playerWithPlayerItem:playerItem];
+//    AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+//    playerLayer.frame = self.contentView.bounds;
+//    playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;//视频填充模式
+//    [self.contentView.layer addSublayer:playerLayer];
+//    [player play];
+//    return;
     
      NSDictionary *dic = @{@"name":self.cacheModel.name,
                            @"snapUrl":self.cacheModel.snap,
@@ -224,13 +215,10 @@
 {
     __unsafe_unretained typeof(self) weak_self = self;
     
-//    NSString *testUrl = @"http://192.168.6.120:10080/record/download/nvr017/20200325034226?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1ODY1NzE5ODgsInB3IjoiMjEyMzJmMjk3YTU3YTVhNzQzODk0YTBlNGE4MDFmYzMiLCJ0bSI6MTU4NjQ4NTU4OCwidW4iOiJhZG1pbiJ9.uRdKVTIJEuREbFAA3uCqGUDVG-W8O2e8Sr6Rrdq_i8E";
-    
     if (![WWPublicMethod isStringEmptyText:self.cacheModel.url]) {
         [_kHUDManager showMsgInView:nil withTitle:@"下载错误，请重试" isSuccess:YES];
         return;
     }
-    
     if ([sender.currentTitle isEqualToString:@"下载"]) {
         self.downloadTask = [[YDDownloadQueue defaultQueue] addDownloadTaskWithPriority:YDDownloadPriorityDefault url:self.cacheModel.url progressHandler:^(CGFloat progress, CGFloat speed, NSString *writeBytes) {
             
@@ -275,10 +263,10 @@
 - (void) savedPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError *)error contextInfo: (void *)contextInfo {
     if (error) {
         NSLog(@"保存视频失败%@", error.localizedDescription);
+        [_kHUDManager showMsgInView:nil withTitle:@"视频保存失败，没有足够的空间！" isSuccess:YES];
     }
     else {
         NSLog(@"保存视频成功");
-       
     }
 }
 - (void)downloadTaskDidChangeStatusNotification:(NSNotification *)notify

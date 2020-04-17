@@ -210,21 +210,22 @@
 -(void)recordVideoTakeHomePath:(NSString *)path withImage:(UIImage *)image
 {
 
+    DLog(@"path ==  %@",path);
     [[GCDQueue mainQueue] queueBlock:^{
         [self.addVideoBtn setImage:image forState:UIControlStateNormal];
     }];
 
     NSError *err = nil;
     NSData* data = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:path] options:NSDataReadingMappedIfSafe error:&err];
-    //文件最大不超过28MB
-    if(data.length < 28 * 1024 * 1024)
-    {
+//    //文件最大不超过28MB
+//    if(data.length < 28 * 1024 * 1024)
+//    {
         self.fileData = data;
 
-    }else
-    {
-        [_kHUDManager showMsgInView:nil withTitle:@"发送的文件过大" isSuccess:YES];
-    }
+//    }else
+//    {
+//        [_kHUDManager showMsgInView:nil withTitle:@"发送的文件过大" isSuccess:YES];
+//    }
 }
 
 //选择本地视频

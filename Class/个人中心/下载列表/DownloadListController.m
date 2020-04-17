@@ -86,9 +86,8 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     self.title = @"下载列表";
     
     [self setupNoDataView];
-    [self dealWithOrigineData];
     [self setupTableView];
-    
+    [self dealWithOrigineData];
     
     //查看本地相册中的视频
 //    [self getLocationInfo];
@@ -173,6 +172,8 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     };
     
     [self.showDataArray replaceObjectAtIndex:indexPath.row withObject:model];
+    //更新缓存
+    [CLInvoiceApplyAddressModelTool updateInfoAtIndex:indexPath.row withInfo:model];
 
     return cell;
 }
@@ -253,6 +254,8 @@ static NSString *const _kdownloadListKey = @"download_video_list";
         CLVoiceApplyAddressModel *model = [weak_self.showDataArray objectAtIndex:idx];
         model.url = [responseObject objectForKey:@"url"];
         [weak_self.showDataArray replaceObjectAtIndex:idx withObject:model];
+        //更新缓存
+        [CLInvoiceApplyAddressModelTool updateInfoAtIndex:idx withInfo:model];
         
         [weak_self.tableView reloadData];
 
@@ -382,6 +385,7 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     }
     
     [self changeNoDataViewHiddenStatus];
+    [self.tableView reloadData];
 }
 - (void)changeNoDataViewHiddenStatus
 {

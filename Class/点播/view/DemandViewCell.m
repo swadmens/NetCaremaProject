@@ -45,6 +45,7 @@
     [self.contentView addSubview:_titleLabel];
     [_titleLabel leftToView:self.contentView withSpace:8];
     [_titleLabel topToView:_showImageView withSpace:10];
+    [_titleLabel addWidth:width];
 }
 
 -(void)makeCellData:(DemandModel *)model

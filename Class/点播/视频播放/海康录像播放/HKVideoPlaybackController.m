@@ -319,6 +319,7 @@
 {
     DownloadListController *vc = [DownloadListController new];
     vc.isRecord = self.isRecordFile;
+    vc.downLoad_id = self.device_id;
     vc.dataArray = [NSArray arrayWithObject:self.isRecordFile?self.carmeaModel:self.model];
     [self.navigationController pushViewController:vc animated:YES];
 }

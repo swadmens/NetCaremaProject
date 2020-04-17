@@ -476,7 +476,7 @@
 //删除视频
 -(void)deleteVideoClick
 {
-    [[TCNewAlertView shareInstance] showAlert:nil message:@"确认删除选中的视频吗？" cancelTitle:@"取消" viewController:self confirm:^(NSInteger buttonTag) {
+    [[TCNewAlertView shareInstance] showAlert:nil message:@"确认删除选择的视频吗？" cancelTitle:@"取消" viewController:self confirm:^(NSInteger buttonTag) {
         if (buttonTag == 0 ) {
             [self.selectedIndexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
                 CarmeaVideosModel *model = [self.dataArray objectAtIndex:idx];

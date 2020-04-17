@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A10B91E2449379D00105B93 /* FDownLoaderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A10B9172449379C00105B93 /* FDownLoaderManager.m */; };
+		4A10B91F2449379D00105B93 /* FFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A10B9182449379C00105B93 /* FFileTool.m */; };
+		4A10B9202449379D00105B93 /* FDownLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A10B91A2449379C00105B93 /* FDownLoader.m */; };
+		4A10B9212449379D00105B93 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A10B91C2449379C00105B93 /* NSString+MD5.m */; };
 		4A1842B324187CA20052580F /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A4605FF2407BD62007C209A /* libstdc++.6.0.9.tbd */; };
 		4A4605FD2407BD34007C209A /* jcore-ios-1.1.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A580ED824075F2C00E82675 /* jcore-ios-1.1.1.a */; };
 		4A4606012407BE1D007C209A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A4606002407BE1D007C209A /* CFNetwork.framework */; };
@@ -587,6 +591,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4A10B9162449379C00105B93 /* FDownLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDownLoader.h; sourceTree = "<group>"; };
+		4A10B9172449379C00105B93 /* FDownLoaderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDownLoaderManager.m; sourceTree = "<group>"; };
+		4A10B9182449379C00105B93 /* FFileTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FFileTool.m; sourceTree = "<group>"; };
+		4A10B9192449379C00105B93 /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
+		4A10B91A2449379C00105B93 /* FDownLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FDownLoader.m; sourceTree = "<group>"; };
+		4A10B91B2449379C00105B93 /* FDownLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDownLoaderManager.h; sourceTree = "<group>"; };
+		4A10B91C2449379C00105B93 /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
+		4A10B91D2449379C00105B93 /* FFileTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFileTool.h; sourceTree = "<group>"; };
 		4A1842B2241875B20052580F /* netsdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netsdk.h; sourceTree = "<group>"; };
 		4A4605FE2407BD55007C209A /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4A4605FF2407BD62007C209A /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
@@ -1592,6 +1604,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4A10B9152449379C00105B93 /* FDownLoaderManager */ = {
+			isa = PBXGroup;
+			children = (
+				4A10B9162449379C00105B93 /* FDownLoader.h */,
+				4A10B91A2449379C00105B93 /* FDownLoader.m */,
+				4A10B91B2449379C00105B93 /* FDownLoaderManager.h */,
+				4A10B9172449379C00105B93 /* FDownLoaderManager.m */,
+				4A10B91D2449379C00105B93 /* FFileTool.h */,
+				4A10B9182449379C00105B93 /* FFileTool.m */,
+				4A10B9192449379C00105B93 /* NSString+MD5.h */,
+				4A10B91C2449379C00105B93 /* NSString+MD5.m */,
+			);
+			path = FDownLoaderManager;
+			sourceTree = "<group>";
+		};
 		4A4606BE2407C513007C209A /* Images */ = {
 			isa = PBXGroup;
 			children = (
@@ -2241,6 +2268,7 @@
 		4A580C8524075F2B00E82675 /* 网络请求 */ = {
 			isa = PBXGroup;
 			children = (
+				4A10B9152449379C00105B93 /* FDownLoaderManager */,
 				4A6D142F243F01A70069EA93 /* YDDownload */,
 				4A6D13EB243C79B00069EA93 /* HSDownloadManager */,
 				4A6D13D3243C6E110069EA93 /* YCDownloadSession */,
@@ -4052,6 +4080,7 @@
 				4A580BEF24075D0700E82675 /* AppDelegate.mm in Sources */,
 				4ABDA70924174023003B3170 /* Global.mm in Sources */,
 				4A511941242B082D005A3065 /* AFDownloadRequestOperation.m in Sources */,
+				4A10B9202449379D00105B93 /* FDownLoader.m in Sources */,
 				4A580FEE24075F2D00E82675 /* MKNetworkEngine.m in Sources */,
 				4A58103624075F2E00E82675 /* IFTTTCornerRadiusAnimation.m in Sources */,
 				4A580F3124075F2D00E82675 /* WWPublicMethod.m in Sources */,
@@ -4205,6 +4234,7 @@
 				4A64ECD4242C547B00D30FB1 /* UIButton+Animate.m in Sources */,
 				4A580F2824075F2D00E82675 /* LGXButton.m in Sources */,
 				4A58103324075F2E00E82675 /* IFTTTLayerStrokeStartAnimation.m in Sources */,
+				4A10B9212449379D00105B93 /* NSString+MD5.m in Sources */,
 				4A580F8A24075F2D00E82675 /* EPPageControl.m in Sources */,
 				4A58102624075F2E00E82675 /* IFTTTEasingFunction.m in Sources */,
 				4A580F2F24075F2D00E82675 /* UUIDManager.m in Sources */,
@@ -4242,8 +4272,10 @@
 				4A580F8624075F2D00E82675 /* LGXSMSEngine.m in Sources */,
 				4A580FF424075F2D00E82675 /* NSAlert+MKNetworkKitAdditions.m in Sources */,
 				4A51192C242B082D005A3065 /* MyMD5.m in Sources */,
+				4A10B91F2449379D00105B93 /* FFileTool.m in Sources */,
 				4A58101724075F2D00E82675 /* ADFlipTransition.m in Sources */,
 				4A64ECC1242B506A00D30FB1 /* DemandModel.m in Sources */,
+				4A10B91E2449379D00105B93 /* FDownLoaderManager.m in Sources */,
 				4A580F3024075F2D00E82675 /* MarginLabel.m in Sources */,
 				4A58102424075F2D00E82675 /* IFTTTAlphaAnimation.m in Sources */,
 				4A58102F24075F2E00E82675 /* IFTTTAnimatedScrollViewController.m in Sources */,

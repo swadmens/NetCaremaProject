@@ -21,6 +21,10 @@
 
 @property (nonatomic,strong) NSArray *dataArray;
 
+@property (strong, nonatomic)AVPlayer *myPlayer;//播放器
+@property (strong, nonatomic)AVPlayerItem *item;//播放单元
+@property (strong, nonatomic)AVPlayerLayer *playerLayer;//播放界面（layer）
+
 @end
 
 @implementation PersonInfoViewController
@@ -40,6 +44,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"个人信息";
+
     NSArray *arr = @[@{@"title":@"昵称",@"describe":_kUserModel.userInfo.user_name},
                      @{@"title":@"手机号码",@"describe":@"13162288787"},
                      @{@"title":@"邮箱",@"describe":_kUserModel.userInfo.email},
@@ -47,61 +52,6 @@
                      ];
     self.dataArray = arr;
     [self setupTableView];
-    
-    return;
-    // 这里创建一个数组, 用来存储所有的相册
-    NSMutableArray *allAlbumArray = [NSMutableArray array];
-    // 获得相机胶卷
-    // PHAssetCollectionTypeSmartAlbum = 2,  智能相册，系统自己分配和归纳的
-    // PHAssetCollectionSubtypeSmartAlbumUserLibrary = 209,  相机胶卷
-    PHAssetCollection *cameraRoll = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary options:nil].lastObject;
-    // 相机胶卷相簿存储到数组
-    [allAlbumArray addObject:cameraRoll];
-    // 获得所有的自定义相簿
-    // PHAssetCollectionTypeAlbum = 1,  相册，系统外的
-    // PHAssetCollectionSubtypeAlbumRegular = 2, 在iPhone中自己创建的相册
-    // assetCollections是一个集合, 存储自定义的相簿
-    PHFetchResult<PHAssetCollection *> *assetCollections = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
-    // 遍历所有的自定义相簿
-    for (PHAssetCollection *assetCollection in assetCollections) {
-         // 相簿存储到数组
-         [allAlbumArray addObject:assetCollection];
-    }
-    // 这里假设你的本地相簿数目超过2个, 取出一个示例相簿为albumCollection
-    PHAssetCollection *albumCollection = allAlbumArray[0];
-//    NSLog(@"相簿名:%@ 照片个数:%ld", albumCollection.localizedTitle, albumCollection.count);
-    // 获得相簿albumCollection中的所有PHAsset对象并存储在集合albumAssets中
-    PHFetchResult<PHAsset *> *albumAssets = [PHAsset fetchAssetsInAssetCollection:albumCollection options:nil];
-    
-    // 取出一个视频对象, 这里假设albumAssets集合有视频文件
-    
-    for (PHAsset *asset in albumAssets) {
-        // mediaType文件类型
-        // PHAssetMediaTypeUnknown = 0, 位置类型
-        // PHAssetMediaTypeImage   = 1, 图片
-        // PHAssetMediaTypeVideo   = 2, 视频
-        // PHAssetMediaTypeAudio   = 3, 音频
-        int fileType = asset.mediaType;
-        // 区分文件类型, 取视频文件
-        if (fileType == PHAssetMediaTypeVideo)
-        {
-            // 取出视频文件
-            // 取到一个视频对象就不再遍历, 因为这里我们只需要一个视频对象做示例
-            PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
-            options.version = PHImageRequestOptionsVersionCurrent;
-            options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
-            [[PHImageManager defaultManager]requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
-                // 获取信息 asset audioMix info
-                // 上传视频时用到data
-                AVURLAsset *urlAsset = (AVURLAsset *)asset;
-                NSData *data = [NSData dataWithContentsOfURL:urlAsset.URL];
-                DLog(@"asset  %@",asset);
-                DLog(@"data  %@",data);
-                DLog(@"info  %@",info);
-            }];
-        }
-    }
-   
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

@@ -203,6 +203,25 @@
 //    DLog(@"\n 日期转换成年月日str=%@ \n",str);
     return str;
 }
+
+//获取当前年月日时分秒（20200417104250）
+-(NSString*)getCurrentTimes
+{
+    NSDate *date = [NSDate date];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    
+    
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    
+    [formatter setDateFormat:@"YYYYMMddhhmmss"];
+    NSString *DateTime = [formatter stringFromDate:date];
+    
+    return DateTime;
+}
+
 @end
 
 

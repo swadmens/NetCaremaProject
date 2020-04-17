@@ -354,13 +354,18 @@
         [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             LivingModel *model = [LivingModel makeModelData:dic];
-            [tempArray addObject:model];
-
-            if ([dic.allKeys containsObject:@"session"]) {
-                [weak_self getLivingCoverPhoto:model.live_id withIndex:idx];
+            //只展示正在直播的设备
+            if ([WWPublicMethod isStringEmptyText:model.RTMP]) {
+                [tempArray addObject:model];
             }
         }];
         [weak_self.dataArray addObjectsFromArray:tempArray];
+        
+        //获取直播封面
+        [weak_self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            LivingModel *model = obj;
+            [weak_self getLivingCoverPhoto:model.live_id withIndex:idx];
+        }];
 
         [[GCDQueue mainQueue] queueBlock:^{
             
