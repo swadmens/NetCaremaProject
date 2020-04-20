@@ -226,6 +226,10 @@
         vc.isLiving = YES;
         vc.isRecordFile = YES;
         vc.device_id = model.session_id;
+        vc.gbs_code = model.code;
+        vc.gbs_serial = model.serial;
+        vc.live_type = model.type;
+        vc.nvr_channel = model.session_id;
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;

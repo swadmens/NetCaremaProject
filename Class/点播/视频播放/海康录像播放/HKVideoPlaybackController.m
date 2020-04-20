@@ -17,9 +17,10 @@
 #import "CarmeaVideosModel.h"
 #import "DownloadListController.h"
 #import "AFHTTPSessionManager.h"
+#import "CameraControlView.h"
 
 
-@interface HKVideoPlaybackController ()<UICollectionViewDelegate,UICollectionViewDataSource,PLPlayerDelegate,PLPlayerViewDelegate>
+@interface HKVideoPlaybackController ()<UICollectionViewDelegate,UICollectionViewDataSource,PLPlayerDelegate,PLPlayerViewDelegate,CameraControlDelete>
 
 @property (nonatomic, strong) UIView *playView;
 @property (nonatomic, assign) BOOL isPlaying;
@@ -44,7 +45,9 @@
 @property (nonatomic,strong) UIButton *shareBtn;//分享按钮
 @property (nonatomic,strong) UIButton *downLoadBtn;//下载按钮
 @property (nonatomic,strong) UIButton *deleteBtn;//删除按钮
+@property (nonatomic,strong) UIButton *moreButton;//更多操作
 
+@property (nonatomic,strong) CameraControlView *clView;
 
 @end
 
@@ -126,6 +129,12 @@
     if (self.isLiving) {
         [self startLoadDataRequest];
     }
+    
+    self.clView = [CameraControlView new];
+    self.clView.delegate = self;
+    self.clView.isLiveGBS = [self.live_type isEqualToString:@"LiveGBS"];
+    [self.view addSubview:self.clView];
+    self.clView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight - kScreenWidth*0.65);
     
 }
 -(void)creadVideoPlayBackView
@@ -248,6 +257,17 @@
     [_downLoadBtn addWidth:30];
     [_downLoadBtn addHeight:30];
     
+    //直播时更多操作
+    self.moreButton = [UIButton new];
+    self.moreButton.hidden = !_isLiving;
+    [self.moreButton setImage:[UIImage imageNamed:@"circle_content_right"] forState:(UIControlStateNormal)];
+    [self.moreButton addTarget:self action:@selector(clickMoreButton) forControlEvents:(UIControlEventTouchUpInside)];
+    [self.view addSubview:_moreButton];
+    [_moreButton yCenterToView:_videoNameLabel];
+    [_moreButton rightToView:self.view withSpace:15];
+    
+    
+    
     
     _videoTimeLabel = [UILabel new];
     _videoTimeLabel.text = self.model.createAt;
@@ -322,6 +342,15 @@
     vc.downLoad_id = self.device_id;
     vc.dataArray = [NSArray arrayWithObject:self.isRecordFile?self.carmeaModel:self.model];
     [self.navigationController pushViewController:vc animated:YES];
+}
+//更多操作
+-(void)clickMoreButton
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        //Y轴向上平移
+        self.clView.transform = CGAffineTransformMakeTranslation(0, -kScreenHeight + kScreenWidth*0.65);
+    }];
+    
 }
 //全部视频
 -(void)allVideosClick
@@ -701,6 +730,122 @@
 //    }];
 }
 
+//摄像头控制回调
+-(void)cameraControl:(CameraControlView *)CameraControlView withState:(ControlState)state
+{
+    switch (state) {
+        case ControlStateUp:
+            //上
+            [self cameraControl:@"up"];
+            break;
+            
+        case ControlStateDown:
+            //下
+            [self cameraControl:@"down"];
+            break;
+        
+        case ControlStateLeft:
+            //左
+            [self cameraControl:@"left"];
+            break;
+        
+        case ControlStaterRight:
+            //右
+            [self cameraControl:@"right"];
+            break;
+            
+        case ControlStaterStop:
+            //停
+            [self cameraControl:@"stop"];
+            break;
+            
+        case ControlStaterLeftUp:
+            //左上
+            [self cameraControl:@"upleft"];
+            break;
+            
+        case ControlStaterLeftDown:
+            //左下
+            [self cameraControl:@"downleft"];
+            break;
+            
+        case ControlStaterRightUp:
+            //右上
+            [self cameraControl:@"upright"];
+            break;
+            
+        case ControlStaterRightDown:
+            //右下
+            [self cameraControl:@"downright"];
+            break;
+            
+        case ControlStaterZoomin:
+            //缩放
+            [self cameraControl:@"zoomin"];
+            break;
+            
+        case ControlStaterZoomout:
+            //缩放
+            [self cameraControl:@"zoomout"];
+            break;
+            
+        case ControlStaterFocusin:
+            //聚焦
+            [self cameraControl:@"focusin"];
+            break;
+       
+        case ControlStaterFocusout:
+            //聚焦
+            [self cameraControl:@"focusout"];
+            break;
+        
+        case ControlStaterAperturein:
+             //光圈
+             [self cameraControl:@"aperturein"];
+             break;
+        
+         case ControlStaterApertureout:
+             //光圈
+             [self cameraControl:@"apertureout"];
+             break;
+            
+        default:
+            break;
+    }
+}
+-(void)cameraControl:(NSString*)controls
+{
+    //提交数据
+    NSString *url;
+    
+    if ([self.live_type isEqualToString:@"LiveGBS"]) {
+        url = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.gbs_serial,self.gbs_code,controls];
+    }else{
+        url = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
+    }
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
+
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+//        DLog(@"RecordCoverPhoto.Received: %@", responseObject);
+//        DLog(@"RecordCoverPhoto.Received HTTP %ld", (long)httpResponse.statusCode);
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        DLog(@"error: %@", error);
+    }];
+}
 
 /*
 #pragma mark - Navigation

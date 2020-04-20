@@ -447,7 +447,7 @@
         return;
     }
     [UIView animateWithDuration:0.3 animations:^{
-        self.editView.frame = CGRectMake(0, kScreenHeight-48, kScreenWidth, 48);
+        self.editView.transform = CGAffineTransformMakeTranslation(0, -48);
     }];
     
    
@@ -468,7 +468,7 @@
         return;
     }
     [UIView animateWithDuration:0.3 animations:^{
-        self.editView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, 48);
+        self.editView.transform = CGAffineTransformIdentity;
     }];
     
    

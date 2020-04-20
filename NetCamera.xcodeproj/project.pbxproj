@@ -11,6 +11,11 @@
 		4A10B91F2449379D00105B93 /* FFileTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A10B9182449379C00105B93 /* FFileTool.m */; };
 		4A10B9202449379D00105B93 /* FDownLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A10B91A2449379C00105B93 /* FDownLoader.m */; };
 		4A10B9212449379D00105B93 /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A10B91C2449379C00105B93 /* NSString+MD5.m */; };
+		4A10B925244D2C0900105B93 /* CameraControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A10B924244D2C0900105B93 /* CameraControlView.m */; };
+		4A10B928244D39A300105B93 /* circle_content_right@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A10B926244D39A300105B93 /* circle_content_right@3x.png */; };
+		4A10B929244D39A300105B93 /* circle_content_right@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A10B927244D39A300105B93 /* circle_content_right@2x.png */; };
+		4A10B92C244D39E200105B93 /* login_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A10B92A244D39E100105B93 /* login_close@3x.png */; };
+		4A10B92D244D39E200105B93 /* login_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A10B92B244D39E100105B93 /* login_close@2x.png */; };
 		4A1842B324187CA20052580F /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A4605FF2407BD62007C209A /* libstdc++.6.0.9.tbd */; };
 		4A4605FD2407BD34007C209A /* jcore-ios-1.1.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A580ED824075F2C00E82675 /* jcore-ios-1.1.1.a */; };
 		4A4606012407BE1D007C209A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A4606002407BE1D007C209A /* CFNetwork.framework */; };
@@ -599,6 +604,12 @@
 		4A10B91B2449379C00105B93 /* FDownLoaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDownLoaderManager.h; sourceTree = "<group>"; };
 		4A10B91C2449379C00105B93 /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
 		4A10B91D2449379C00105B93 /* FFileTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFileTool.h; sourceTree = "<group>"; };
+		4A10B923244D2C0900105B93 /* CameraControlView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CameraControlView.h; sourceTree = "<group>"; };
+		4A10B924244D2C0900105B93 /* CameraControlView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CameraControlView.m; sourceTree = "<group>"; };
+		4A10B926244D39A300105B93 /* circle_content_right@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle_content_right@3x.png"; sourceTree = "<group>"; };
+		4A10B927244D39A300105B93 /* circle_content_right@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "circle_content_right@2x.png"; sourceTree = "<group>"; };
+		4A10B92A244D39E100105B93 /* login_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_close@3x.png"; sourceTree = "<group>"; };
+		4A10B92B244D39E100105B93 /* login_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_close@2x.png"; sourceTree = "<group>"; };
 		4A1842B2241875B20052580F /* netsdk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = netsdk.h; sourceTree = "<group>"; };
 		4A4605FE2407BD55007C209A /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4A4605FF2407BD62007C209A /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
@@ -1619,9 +1630,22 @@
 			path = FDownLoaderManager;
 			sourceTree = "<group>";
 		};
+		4A10B922244D2BDA00105B93 /* 摄像头控制 */ = {
+			isa = PBXGroup;
+			children = (
+				4A10B923244D2C0900105B93 /* CameraControlView.h */,
+				4A10B924244D2C0900105B93 /* CameraControlView.m */,
+			);
+			path = "摄像头控制";
+			sourceTree = "<group>";
+		};
 		4A4606BE2407C513007C209A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4A10B92B244D39E100105B93 /* login_close@2x.png */,
+				4A10B92A244D39E100105B93 /* login_close@3x.png */,
+				4A10B927244D39A300105B93 /* circle_content_right@2x.png */,
+				4A10B926244D39A300105B93 /* circle_content_right@3x.png */,
 				4A64ECEB242D89BD00D30FB1 /* 视频录制 */,
 				4AE928F72417753300CFBBD8 /* shara_arcode_image@2x.png */,
 				4AE928F82417753400CFBBD8 /* shara_arcode_image@3x.png */,
@@ -3382,6 +3406,7 @@
 		4AB299BB240DEDE9004CA6B5 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				4A10B922244D2BDA00105B93 /* 摄像头控制 */,
 				4A64ECD7242C579400D30FB1 /* MacroDefine.h */,
 				4A64ECC5242C508400D30FB1 /* PLPlayerView.h */,
 				4A64ECC6242C508500D30FB1 /* PLPlayerView.m */,
@@ -3821,6 +3846,7 @@
 				4A46088B24090860007C209A /* mine_system_image@2x.png in Resources */,
 				4A4607322407C889007C209A /* Tabbar-1-normal@3x.png in Resources */,
 				4A46088C24090860007C209A /* mine_top_backimage@2x.png in Resources */,
+				4A10B929244D39A300105B93 /* circle_content_right@2x.png in Resources */,
 				4A46070D2407C514007C209A /* tabbar_shadow@2x.png in Resources */,
 				4A64ECF6242D89BD00D30FB1 /* cameraex_press@2x.png in Resources */,
 				4AB29A352410AC2B004CA6B5 /* password_code_image@3x.png in Resources */,
@@ -3899,6 +3925,7 @@
 				4A64ECFE242D89BD00D30FB1 /* cursor_focus@2x.png in Resources */,
 				4A580BF824075D0700E82675 /* Main.storyboard in Resources */,
 				4ABDA70624174023003B3170 /* login_remember_h@2x.png in Resources */,
+				4A10B92D244D39E200105B93 /* login_close@2x.png in Resources */,
 				4A64ECF8242D89BD00D30FB1 /* HVideo_back@3x.png in Resources */,
 				4A580F6424075F2D00E82675 /* CGXPickerView.bundle in Resources */,
 				4AE929002417753400CFBBD8 /* shara_arcode_image@3x.png in Resources */,
@@ -3911,6 +3938,7 @@
 				4AB29A342410AC2B004CA6B5 /* password_code_image@2x.png in Resources */,
 				4A4607292407C889007C209A /* Tabbar-5-normal@3x.png in Resources */,
 				4A46086F2408EB4F007C209A /* rm_key_select@3x.png in Resources */,
+				4A10B92C244D39E200105B93 /* login_close@3x.png in Resources */,
 				4A46088E24090860007C209A /* mine_system_image@3x.png in Resources */,
 				4AB299E7240E36F4004CA6B5 /* playback_shares_image@3x.png in Resources */,
 				4A4607002407C514007C209A /* new_guide_p3_text@2x.png in Resources */,
@@ -3928,6 +3956,7 @@
 				4AB29A02240F80D1004CA6B5 /* choose_area_up_image@2x.png in Resources */,
 				4AE928FA2417753400CFBBD8 /* shara_url_image@3x.png in Resources */,
 				4A64ECFC242D89BD00D30FB1 /* SX_confirm@2x.png in Resources */,
+				4A10B928244D39A300105B93 /* circle_content_right@3x.png in Resources */,
 				4AB299B5240DE3DF004CA6B5 /* demand_download_image@2x.png in Resources */,
 				4A4607092407C514007C209A /* new_guide_p4_img@2x.png in Resources */,
 				4A4607072407C514007C209A /* new_guide_p1_img@3x.png in Resources */,
@@ -4317,6 +4346,7 @@
 				4A58103424075F2E00E82675 /* IFTTTTransform3DAnimation.m in Sources */,
 				4A580FCB24075F2D00E82675 /* RetrievePasswordCell.m in Sources */,
 				4A580F6C24075F2D00E82675 /* LGXBadgeManager.m in Sources */,
+				4A10B925244D2C0900105B93 /* CameraControlView.m in Sources */,
 				4A64ECE1242D862C00D30FB1 /* StartRecordVideoController.m in Sources */,
 				4A511935242B082D005A3065 /* UIButton+AFNetworking.m in Sources */,
 				4A58100724075F2D00E82675 /* MJRefreshHeader.m in Sources */,

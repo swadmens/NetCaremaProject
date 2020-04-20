@@ -21,6 +21,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isRecordFile;
 @property (nonatomic, assign) BOOL isLiving;//是否是直播
 @property (nonatomic,strong) NSString *device_id;//具体设备id
+
+@property (nonatomic,strong) NSString *gbs_serial;
+@property (nonatomic,strong) NSString *gbs_code;
+@property (nonatomic,strong) NSString *live_type;
+@property (nonatomic,strong) NSString *nvr_channel;
+
+
+
 @end
 
 NS_ASSUME_NONNULL_END
