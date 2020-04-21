@@ -477,6 +477,9 @@ UIGestureRecognizerDelegate
 }
 
 - (void)clickExitFullScreenButton {
+    if (self.isLocalVideo) {
+        [self.player stop];
+    }
     self.isFullScreen = NO;
     [self transformWithOrientation:UIDeviceOrientationPortrait];
 }
@@ -1009,16 +1012,20 @@ UIGestureRecognizerDelegate
 - (void)player:(PLPlayer *)player stoppedWithError:(NSError *)error
 {
     
-    NSString *info = error.userInfo[@"NSLocalizedDescription"];
-    [self showTip:info];
+//    NSString *info = error.userInfo[@"NSLocalizedDescription"];
+//    [self showTip:info];
 
     [self stop];
-    
-    [_kHUDManager showMsgInView:nil withTitle:@"播放错误" isSuccess:YES];
-    
     if (self.isFullScreen) {
         [self clickExitFullScreenButton];
     }
+    
+    if (self.isLocalVideo) {
+        [self.delegate theLocalFileDoesNotExist:self];
+        return;
+    }
+    
+    [_kHUDManager showMsgInView:nil withTitle:@"播放错误" isSuccess:YES];
     
 }
 

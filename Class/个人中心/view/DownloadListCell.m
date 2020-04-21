@@ -158,24 +158,23 @@
 //播放
 -(void)startDownLoad:(UITapGestureRecognizer*)tp
 {
+    //下载完成，播放本地视频
+    NSArray *nameArr = [self.cacheModel.file_path componentsSeparatedByString:@"/"];
+    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *fullPath = [NSString stringWithFormat:@"%@/%@/%@", documentsDirectory,@"YDDownloads", nameArr.lastObject];
+    NSURL *videoURL = [NSURL fileURLWithPath:fullPath];
+    NSString *plVideoUrl = [NSString stringWithFormat:@"%@",videoURL];
+
     
-//    NSArray *nameArr = [self.cacheModel.file_path componentsSeparatedByString:@"/"];
-//    NSArray * paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-//    NSString *documentsDirectory = [paths objectAtIndex:0];
-//    NSString *fullPath = [NSString stringWithFormat:@"%@/%@/%@", documentsDirectory,@"YDDownloads", nameArr.lastObject];
-//    NSURL *videoURL = [NSURL fileURLWithPath:fullPath];
-//    AVPlayerItem *playerItem=[AVPlayerItem playerItemWithURL:videoURL];
-//    AVPlayer *player = [AVPlayer playerWithPlayerItem:playerItem];
-//    AVPlayerLayer *playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-//    playerLayer.frame = self.contentView.bounds;
-//    playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;//视频填充模式
-//    [self.contentView.layer addSublayer:playerLayer];
-//    [player play];
-//    return;
+    if (![plVideoUrl hasSuffix:@"mp4"]) {
+        //未下载时，播放在线视频
+        plVideoUrl = self.cacheModel.hls;
+    }
     
      NSDictionary *dic = @{@"name":self.cacheModel.name,
                            @"snapUrl":self.cacheModel.snap,
-                           @"videoUrl":self.cacheModel.hls,
+                           @"videoUrl":plVideoUrl,
      };
     DemandModel *models = [DemandModel makeModelData:dic];
 
@@ -183,6 +182,7 @@
     self.playerView.delegate = self;
     [_showImageView addSubview:self.playerView];
     self.playerView.media = models;
+    self.playerView.isLocalVideo = YES;
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.showImageView);
     }];
@@ -193,23 +193,6 @@
     
     [self playerViewEnterFullScreen:self.playerView];
 }
-//监听回调
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
-{
-    AVPlayerItem *playerItem = (AVPlayerItem *)object;
-    
-    if ([keyPath isEqualToString:@"loadedTimeRanges"]){
-        
-    }else if ([keyPath isEqualToString:@"status"]){
-        if (playerItem.status == AVPlayerItemStatusReadyToPlay){
-            NSLog(@"playerItem is ready");
-            [self.avPlayer play];
-        } else{
-            NSLog(@"load break");
-        }
-    }
-}
-
 //下载
 -(void)startDownloadClick:(UIButton*)sender
 {
@@ -348,9 +331,19 @@
 - (void)playerViewWillPlay:(PLPlayerView *)playerView {
 //    [self.playerView.delegate playerViewWillPlay:self.playerView];
 }
+-(void)theLocalFileDoesNotExist:(PLPlayerView *)playerView
+{
+    __unsafe_unretained typeof(self) weak_self = self;
+    [[TCNewAlertView shareInstance] showAlert:nil message:@"该文件已删除，是否重新下载？" cancelTitle:@"取消" viewController:nil confirm:^(NSInteger buttonTag) {
+        if (buttonTag == 0) {
+            [weak_self.downLoadBtn setTitle:@"下载" forState:UIControlStateNormal];
+            [weak_self startDownloadClick:weak_self.downLoadBtn];
+            weak_self.progressView.hidden = NO;
+        }
+        
+    } buttonTitles:@"好的", nil];
 
-
-
+}
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

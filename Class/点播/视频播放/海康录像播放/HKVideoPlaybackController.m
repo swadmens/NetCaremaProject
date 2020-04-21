@@ -151,6 +151,7 @@
     self.playerView.delegate = self;
     [self.playView addSubview:self.playerView];
     self.playerView.media = _model;
+    self.playerView.isLocalVideo = NO;
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.playView);
     }];
@@ -416,6 +417,7 @@
     self.isLiving = NO;
     _deleteBtn.hidden = NO;
     _downLoadBtn.hidden = NO;
+    _moreButton.hidden = YES;
     
     id obj = [self.allDataArray objectAtIndex:indexPath.row];
     

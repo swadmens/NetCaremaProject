@@ -103,8 +103,22 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     [rightBtn setTitle:@"清空" forState:UIControlStateNormal];
     [self.navigationItem setRightBarButtonItem:rightItem];
     
+    
+    //接收通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(takeGoHomeNotica:) name:@"saveDownloadList" object:nil];
+    
 }
+- (void)takeGoHomeNotica:(NSNotification *)notification
+{
+    //更新缓存信息
+    [self.showDataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 
+        CLVoiceApplyAddressModel *model = obj;
+        [CLInvoiceApplyAddressModelTool updateInfoAtIndex:idx withInfo:model];
+        
+    }];
+    
+}
 //右上角按钮点击
 -(void)right_clicked
 {

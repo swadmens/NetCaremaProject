@@ -18,6 +18,8 @@
 
 - (void)playerViewWillPlay:(PLPlayerView *)playerView;
 
+- (void)theLocalFileDoesNotExist:(PLPlayerView *)playerView;
+
 @end
 
 @interface PLPlayerView : UIView
@@ -25,6 +27,9 @@
 @property (nonatomic, weak) id<PLPlayerViewDelegate> delegate;
 
 @property (nonatomic, strong) DemandModel *media;
+
+@property (nonatomic,assign) BOOL isLocalVideo;//是否是本地视频
+
 
 - (void)play;
 
