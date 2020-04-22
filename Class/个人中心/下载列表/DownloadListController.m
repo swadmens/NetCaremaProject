@@ -43,6 +43,9 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 
 @property (nonatomic, assign) BOOL isFullScreen;
 
+@property (nonatomic,strong) NSMutableArray *localVideoArray;
+
+
 @end
 
 @implementation DownloadListController
@@ -52,6 +55,13 @@ static NSString *const _kdownloadListKey = @"download_video_list";
         _showDataArray = [NSMutableArray array];
     }
     return _showDataArray;
+}
+-(NSMutableArray*)localVideoArray
+{
+    if (!_localVideoArray) {
+        _localVideoArray = [NSMutableArray array];
+    }
+    return _localVideoArray;
 }
 - (void)setupNoDataView
 {
@@ -89,8 +99,6 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     [self setupTableView];
     [self dealWithOrigineData];
     
-    //查看本地相册中的视频
-//    [self getLocationInfo];
     
     //右上角按钮
     UIButton *rightBtn = [UIButton new];
@@ -106,6 +114,15 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     
     //接收通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(takeGoHomeNotica:) name:@"saveDownloadList" object:nil];
+    
+    
+    //获取本地相册所有视频信息
+    [self getLoaclVideos:^(NSString *url, NSUInteger length) {
+        NSMutableDictionary *dicts = [NSMutableDictionary dictionary];
+        [dicts setObject:url forKey:@"url"];
+        [dicts setObject:@(length) forKey:@"length"];
+        [self.localVideoArray addObject:dicts];
+    }];
     
 }
 - (void)takeGoHomeNotica:(NSNotification *)notification
@@ -174,6 +191,7 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 
     CLVoiceApplyAddressModel *model = [self.showDataArray objectAtIndex:indexPath.row];
     [cell makeCellData:model];
+    cell.localVideoArr = self.localVideoArray;
 
     
     cell.downlaodProgress = ^(NSString * _Nonnull value, NSString * _Nonnull writeBytes) {
@@ -279,24 +297,6 @@ static NSString *const _kdownloadListKey = @"download_video_list";
         
     }];
         
-}
-
-//获取本地相册视频信息
--(void)getLocationInfo
-{
-    PHFetchOptions *options = [PHFetchOptions new];
-    PHFetchResult *result = [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeVideo options:options];
-    NSMutableArray *sourceArray = [NSMutableArray arrayWithCapacity:result.count];
-    for (PHAsset *assets in result) {
-        NSArray *assetResources = [PHAssetResource assetResourcesForAsset:assets];
-        PHAssetResource *assetRes = [assetResources firstObject];
-        NSLog(@"originalFilename %@", assetRes.originalFilename);
-        NSLog(@"uniformTypeIdentifier %@", assetRes.uniformTypeIdentifier);
-        NSLog(@"assetLocalIdentifier %@", assetRes.assetLocalIdentifier);
-        [sourceArray addObject:assetRes];
-    }
-    DLog(@"sourceArray == %@",sourceArray);
-
 }
 
 //处理原始数据
@@ -414,7 +414,66 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     
 }
 
-
+//获取本地相册的所有视频信息
+//获取本地相册中的视频测试
+-(void)getLoaclVideos:(void (^)(NSString *url,NSUInteger length))ChooseRelultBlock;
+{
+    // 这里创建一个数组, 用来存储所有的相册
+    NSMutableArray *allAlbumArray = [NSMutableArray array];
+    // 获得相机胶卷
+    // PHAssetCollectionTypeSmartAlbum = 2,  智能相册，系统自己分配和归纳的
+    // PHAssetCollectionSubtypeSmartAlbumUserLibrary = 209,  相机胶卷
+    PHAssetCollection *cameraRoll = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeSmartAlbumUserLibrary options:nil].lastObject;
+    // 相机胶卷相簿存储到数组
+    [allAlbumArray addObject:cameraRoll];
+    // 获得所有的自定义相簿
+    // PHAssetCollectionTypeAlbum = 1,  相册，系统外的
+    // PHAssetCollectionSubtypeAlbumRegular = 2, 在iPhone中自己创建的相册
+    // assetCollections是一个集合, 存储自定义的相簿
+    PHFetchResult<PHAssetCollection *> *assetCollections = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+    // 遍历所有的自定义相簿
+    for (PHAssetCollection *assetCollection in assetCollections) {
+         // 相簿存储到数组
+         [allAlbumArray addObject:assetCollection];
+    }
+    
+    // 遍历本地相簿
+    [allAlbumArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+       
+        PHAssetCollection *albumCollection = obj;
+        PHFetchResult<PHAsset *> *albumAssets = [PHAsset fetchAssetsInAssetCollection:albumCollection options:nil];
+        // 取出一个视频对象, 这里假设albumAssets集合有视频文件
+        for (PHAsset *asset in albumAssets) {
+            // mediaType文件类型
+            // PHAssetMediaTypeUnknown = 0, 位置类型
+            // PHAssetMediaTypeImage   = 1, 图片
+            // PHAssetMediaTypeVideo   = 2, 视频
+            // PHAssetMediaTypeAudio   = 3, 音频
+            
+            int fileType = asset.mediaType;
+            // 区分文件类型, 取视频文件
+            if (fileType == PHAssetMediaTypeVideo)
+            {
+                // 取出视频文件
+                // 取到一个视频对象就不再遍历, 因为这里我们只需要一个视频对象做示例
+                PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+                options.version = PHImageRequestOptionsVersionCurrent;
+                options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;
+                [[PHImageManager defaultManager] requestAVAssetForVideo:asset options:options resultHandler:^(AVAsset * _Nullable asset, AVAudioMix * _Nullable audioMix, NSDictionary * _Nullable info) {
+                    // 获取信息 asset audioMix info
+                    // 上传视频时用到data
+                    AVURLAsset *urlAsset = (AVURLAsset *)asset;
+                    NSString *url = [NSString stringWithFormat:@"%@",urlAsset.URL];
+                    NSData *data = [NSData dataWithContentsOfURL:urlAsset.URL options:NSDataReadingMappedIfSafe error:nil];
+                    ChooseRelultBlock(url,data.length);
+                    
+                }];
+            }
+            
+        }
+    }];
+    
+}
 
 /*
 #pragma mark - Navigation

@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) YDDownloadTask *downloadTask;
 @property (nonatomic, strong) NSIndexPath *indexPath;
+@property (nonatomic, strong) NSArray *localVideoArr;
 
 -(void)makeCellData:(CLVoiceApplyAddressModel*)model;
 

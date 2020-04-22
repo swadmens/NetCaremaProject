@@ -10,11 +10,6 @@
 #import "WWTableView.h"
 #import "PersonInfoViewCell.h"
 
-#import <AVFoundation/AVCaptureDevice.h>
-#import <AVFoundation/AVMediaFormat.h>
-#import <Photos/Photos.h>
-#import <AssetsLibrary/AssetsLibrary.h>
-
 @interface PersonInfoViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) WWTableView *tableView;
@@ -24,6 +19,9 @@
 @property (strong, nonatomic)AVPlayer *myPlayer;//播放器
 @property (strong, nonatomic)AVPlayerItem *item;//播放单元
 @property (strong, nonatomic)AVPlayerLayer *playerLayer;//播放界面（layer）
+
+@property (nonatomic, copy) void (^completionHandler)(NSString *value);
+
 
 @end
 
@@ -74,7 +72,6 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     //    [TargetEngine controller:nil pushToController:PushTargetMyFriendsView WithTargetId:nil];
     if (indexPath.row == 0) {
         //昵称
@@ -88,10 +85,7 @@
     }else{
         //更改密码
     }
-    
-    
 }
-
 
 /*
 #pragma mark - Navigation

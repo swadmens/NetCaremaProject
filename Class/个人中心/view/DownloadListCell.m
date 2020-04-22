@@ -16,9 +16,6 @@
 #import <PLPlayerKit/PLPlayerKit.h>
 #import "PLPlayerView.h"
 
-#import <AVKit/AVKit.h>
-
-
 @interface DownloadListCell ()<PLPlayerDelegate,PLPlayerViewDelegate>
 
 @property (nonatomic,strong) UIImageView *showImageView;
@@ -29,6 +26,8 @@
 
 @property (nonatomic,strong) UIProgressView *progressView;//进度条
 
+@property (nonatomic,strong) NSString *filePath;//下载保存路径
+
 @property (nonatomic,strong) DemandModel *demandModel;
 @property (nonatomic,strong) CLVoiceApplyAddressModel *cacheModel;
 
@@ -37,6 +36,7 @@
 @property (nonatomic, assign) BOOL isNeedReset;
 @property (nonatomic, strong) PLPlayerView *playerView;
 @property (nonatomic, assign) BOOL isPlaying;
+@property (nonatomic, assign) BOOL isLocalVideo;//本地视频是否存在
 
 @property (nonatomic,strong) AVPlayer *avPlayer;
 
@@ -159,28 +159,49 @@
 -(void)startDownLoad:(UITapGestureRecognizer*)tp
 {
     //下载完成，播放本地视频
-    NSArray *nameArr = [self.cacheModel.file_path componentsSeparatedByString:@"/"];
+    NSString *localFilePath = [WWPublicMethod isStringEmptyText:self.filePath]?self.filePath:self.cacheModel.file_path;
+    
+    NSArray *nameArr = [localFilePath componentsSeparatedByString:@"/"];
     NSArray * paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
     NSString *fullPath = [NSString stringWithFormat:@"%@/%@/%@", documentsDirectory,@"YDDownloads", nameArr.lastObject];
     NSURL *videoURL = [NSURL fileURLWithPath:fullPath];
     NSString *plVideoUrl = [NSString stringWithFormat:@"%@",videoURL];
-
     
-    if (![plVideoUrl hasSuffix:@"mp4"]) {
-        //未下载时，播放在线视频
-        plVideoUrl = self.cacheModel.hls;
-    }
+     if (![plVideoUrl hasSuffix:@"mp4"]) {
+         //未下载时
+         [_kHUDManager showMsgInView:nil withTitle:@"视频下载未完成！" isSuccess:YES];
+         return;
+     }
+    [self startPlayVideo:plVideoUrl];
     
-     NSDictionary *dic = @{@"name":self.cacheModel.name,
-                           @"snapUrl":self.cacheModel.snap,
-                           @"videoUrl":plVideoUrl,
-     };
+//    NSData *data = [NSData dataWithContentsOfURL:videoURL options:NSDataReadingMappedIfSafe error:nil];
+//    [self.localVideoArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        NSDictionary *dic = obj;
+//        if ([[dic objectForKey:@"length"] integerValue] == data.length) {
+//            DLog(@"本地视频存在");
+//            self.isLocalVideo = YES;
+//        }
+//    }];
+//
+//    if (self.isLocalVideo) {
+//        [self startPlayVideo:plVideoUrl];
+//    }else{
+//        [self theLocalFileDoesNotExist:self.playerView];
+//    }
+}
+//视频播放
+-(void)startPlayVideo:(NSString*)fil_path
+{
+    NSDictionary *dic = @{@"name":self.cacheModel.name,
+                          @"snapUrl":self.cacheModel.snap,
+                          @"videoUrl":fil_path,
+                          };
     DemandModel *models = [DemandModel makeModelData:dic];
 
     self.playerView = [PLPlayerView new];
     self.playerView.delegate = self;
-    [_showImageView addSubview:self.playerView];
+    [self.showImageView addSubview:self.playerView];
     self.playerView.media = models;
     self.playerView.isLocalVideo = YES;
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -193,6 +214,7 @@
     
     [self playerViewEnterFullScreen:self.playerView];
 }
+
 //下载
 -(void)startDownloadClick:(UIButton*)sender
 {
@@ -225,6 +247,7 @@
                 weak_self.progressView.progress = 0;
             }
             NSLog(@"%@", filePath);
+            self.filePath = filePath;
             if (weak_self.localizedFilePath) {
                 weak_self.localizedFilePath(filePath);
             }
@@ -344,6 +367,7 @@
     } buttonTitles:@"好的", nil];
 
 }
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
