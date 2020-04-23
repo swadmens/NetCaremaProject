@@ -531,7 +531,6 @@
 //获取子目录
 -(void)getSubcatalogList
 {
-    [_kHUDManager showActivityInView:nil withTitle:nil];
         
     NSString *url = @"http://192.168.6.120:10102/outer/liveqing/vod/subcataloglist";
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -556,7 +555,37 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error: %@", error);
-        [weak_self failedOperation];
+        
+        NSArray *rows= @[@{@"createAt":@"2020-03-16 23:34:12",
+                           @"desc":@"",
+                           @"folder":@"",
+                           @"id":@"",
+                           @"name":@"全部",
+                           @"realPath":@"",
+                           @"sort":@"1",
+                           @"updateAt":@"2020-03-16 23:34:12",
+                         },
+                        @{@"createAt":@"2020-03-16 23:34:12",
+                          @"desc":@"",
+                          @"folder":@"other",
+                          @"id":@"",
+                          @"name":@"其它",
+                          @"realPath":@"",
+                          @"sort":@"1",
+                          @"updateAt":@"2020-03-16 23:34:12",
+                          }];
+        NSMutableArray *tempArray = [NSMutableArray array];
+        [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *dic = obj;
+            DemandSubcatalogModel *model = [DemandSubcatalogModel makeModelData:dic];
+            [tempArray addObject:model];
+        }];
+        [weak_self.titleDataArray addObjectsFromArray:tempArray];
+        
+        [[GCDQueue mainQueue] queueBlock:^{
+            [weak_self.collectionUpView reloadData];
+        }];
+        
     }];
             
 }
@@ -590,6 +619,8 @@
                                    };
         [rows insertObject:allDic atIndex:0];
         [rows addObject:otherDic];
+        
+        [weak_self.titleDataArray removeAllObjects];
         
         [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;

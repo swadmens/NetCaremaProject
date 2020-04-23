@@ -133,8 +133,8 @@
     };
     
     _coverView = [UIView new];
-    _coverView.hidden = YES;
-    _coverView.frame = CGRectMake(0, 450, kScreenWidth, kScreenHeight-450);
+//    _coverView.hidden = YES;
+    _coverView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight-450);
     _coverView.backgroundColor = UIColorFromRGB(0x000000, 0.7);
     [[UIApplication sharedApplication].keyWindow addSubview:_coverView];
 
@@ -173,20 +173,18 @@
 -(void)chooseAreaClick
 {
     _chooseBtn.selected = !_chooseBtn.selected;
-    
     __weak __typeof(self)weakself = self;
     
     if (_chooseBtn.selected) {
-        _coverView.hidden = NO;
-        _areaView.hidden = NO;
-        [UIView animateWithDuration:0.5 animations:^{
-            weakself.areaView.frame = CGRectMake(0, 100, kScreenWidth, 350);
+       
+        [UIView animateWithDuration:0.35 animations:^{
+            weakself.areaView.transform = CGAffineTransformMakeTranslation(0, kScreenHeight+100);
+            weakself.coverView.transform = CGAffineTransformMakeTranslation(0, -kScreenHeight+450);
         }];
     }else{
-        _coverView.hidden = YES;
-        _areaView.hidden = YES;
-        [UIView animateWithDuration:0.5 animations:^{
-            weakself.areaView.frame = CGRectMake(0, -kScreenHeight, kScreenWidth, 350);
+        [UIView animateWithDuration:0.35 animations:^{
+            weakself.areaView.transform = CGAffineTransformIdentity;
+            weakself.coverView.transform = CGAffineTransformIdentity;
         }];
     }
     

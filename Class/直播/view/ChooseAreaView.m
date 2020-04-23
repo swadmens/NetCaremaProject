@@ -68,8 +68,6 @@
         NSDictionary *dic = @{@"first":@(0),@"second":@(0),@"three":@(0)};
         [self.dataDic  addEntriesFromDictionary:dic];
         
-        
-        
         //UI视图
         [self creadAreaUI];
     }
