@@ -140,7 +140,7 @@
     if (self.titleStr) {
         self.titleLabel.text = self.titleStr;
     } else{
-        NSString *title = [NSString stringWithFormat:@"%@%@",NSLocalizedString(@"pleaseChoose", nil),NSLocalizedString(@"citys", nil)];
+        NSString *title = [NSString stringWithFormat:@"%@%@",@"请选择",@"城市"];
         self.titleLabel.text = title;
     }
     // 添加时间选择器

@@ -132,7 +132,7 @@
         }
         return;
     }
-    [_kHUDManager showActivityInView:nil withTitle:NSLocalizedString(@"obtaining", nil)];
+    [_kHUDManager showActivityInView:nil withTitle:@"正在获取"];
 
     RequestSence *sence = [[RequestSence alloc] init];
     sence.pathURL = @"phonecode";
@@ -206,18 +206,18 @@
 - (BOOL)checkWithUName:(NSString *)uname andYanzheng:(NSString *)code andPassword:(NSString*)password
 {
     if ([WWPublicMethod isStringEmptyText:uname] == NO) {
-        [_kHUDManager showMsgInView:nil withTitle:NSLocalizedString(@"phoneNumError", nil) isSuccess:NO];
+        [_kHUDManager showMsgInView:nil withTitle:@"手机号码有误，请重新填写" isSuccess:NO];
         
         return NO;
     }
     
     if ([WWPublicMethod isStringEmptyText:code] == NO) {
-        [_kHUDManager showMsgInView:nil withTitle:NSLocalizedString(@"fillCode", nil) isSuccess:NO];
+        [_kHUDManager showMsgInView:nil withTitle:@"请输入验证码" isSuccess:NO];
         return NO;
     }
     
     if ([WWPublicMethod isStringEmptyText:password] == NO || password.length < 6) { // 密码要求6位
-        [_kHUDManager showMsgInView:nil withTitle:NSLocalizedString(@"keyLastSix", nil) isSuccess:NO];
+        [_kHUDManager showMsgInView:nil withTitle:@"请输入不小于6位数的密码" isSuccess:NO];
         return NO;
     }
     
@@ -229,7 +229,7 @@
 #pragma mark - 重置密码
 - (void)resetPasswordWithUName:(NSString *)uname pwd:(NSString *)upwd
 {
-    [_kHUDManager showActivityInView:nil withTitle:NSLocalizedString(@"submission", nil)];
+    [_kHUDManager showActivityInView:nil withTitle:@"提交中"];
     self.resetSence.phone = uname;
     self.resetSence.token = self.token;
     self.resetSence.password = upwd;

@@ -27,7 +27,7 @@
         _titleSize = 16;
         _titleLabelBGColor = [UIColor whiteColor];
         
-        _rightBtnTitle = NSLocalizedString(@"sure", nil);
+        _rightBtnTitle = @"确定";
         _rightBtnBGColor =  [UIColor whiteColor];
         _rightBtnTitleSize = 16;
         _rightBtnTitleColor = kColorMainTextColor;
@@ -36,7 +36,7 @@
 //        _rightBtnCornerRadius = 6;
 //        _rightBtnBorderWidth = 1;
         
-        _leftBtnTitle = NSLocalizedString(@"cancel", nil);
+        _leftBtnTitle = @"取消";
         _leftBtnBGColor =  [UIColor whiteColor];
         _leftBtnTitleSize = 16;
         _leftBtnTitleColor = kColorMainTextColor;

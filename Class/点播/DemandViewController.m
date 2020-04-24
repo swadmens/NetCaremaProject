@@ -125,13 +125,11 @@
     searchField1.layer.masksToBounds=YES;
     NSMutableAttributedString *arrStr = [[NSMutableAttributedString alloc]initWithString:searchField1.placeholder attributes:@{NSForegroundColorAttributeName:kColorMainViceTextColor,NSFontAttributeName:[UIFont customFontWithSize:kFontSizeFourteen]}];
     searchField1.attributedPlaceholder = arrStr;
-    //    searchField1.placeholder = NSLocalizedString(@"searching", nil);
     [self.searchButton setTintColor:kColorMainViceTextColor];
     [self.contentView addSubview:self.searchButton];
     UIImage *image=[UIImage imageWithColor:[UIColor whiteColor]];
     UIImage *searchBGImage = [image resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 30.0, 0.0, 40.0) resizingMode:UIImageResizingModeStretch];
     [self.searchButton setBackgroundImage:searchBGImage];
-//    self.searchButton.frame=CGRectMake(78, 8, kScreenWidth-160, 25);
     [self.searchButton addCenterY:10 toView:self.contentView];
     [self.searchButton leftToView:self.contentView withSpace:78];
     [self.searchButton addWidth:kScreenWidth-160];

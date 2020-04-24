@@ -51,7 +51,7 @@
     self.codeButton.layer.borderColor=kColorMainColor.CGColor;
     self.codeButton.layer.borderWidth=1.0f;
     self.codeButton.layer.cornerRadius=4;
-    [self.codeButton setTitle:NSLocalizedString(@"sendedCode", nil) forState:UIControlStateNormal];
+    [self.codeButton setTitle:@"发送验证码" forState:UIControlStateNormal];
     [self.codeButton setTitleColor:kColorMainColor forState:UIControlStateNormal];
     self.codeButton.titleLabel.font=[UIFont customFontWithSize:kFontSizeThirteen];
     [self.codeButton addTarget:self action:@selector(sendCodeClick) forControlEvents:UIControlEventTouchUpInside];
@@ -175,7 +175,7 @@
     __block int timeout = 60; //倒计时时间
     if (open == NO) {
         timeout = 0;
-        [self.codeButton setTitle:NSLocalizedString(@"sendedCode", nil) forState:UIControlStateNormal];
+        [self.codeButton setTitle:@"发送验证码" forState:UIControlStateNormal];
         return;
     }
     
@@ -187,7 +187,7 @@
             dispatch_source_cancel(_timer);
             dispatch_async(dispatch_get_main_queue(), ^{
                 //设置界面的按钮显示 根据自己需求设置
-                [self.codeButton setTitle:NSLocalizedString(@"sendAgain", nil) forState:UIControlStateNormal];
+                [self.codeButton setTitle:@"重新发送" forState:UIControlStateNormal];
                 self.codeButton.userInteractionEnabled = YES;
 
             });

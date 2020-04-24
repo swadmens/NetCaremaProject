@@ -43,7 +43,7 @@
     
     
     UILabel *vuLabel = [UILabel new];
-    vuLabel.text = NSLocalizedString(@"bbgx", nil);
+    vuLabel.text = @"版本更新";
     vuLabel.textColor = kColorMainTextColor;
     vuLabel.font = [UIFont customFontWithSize:20];
     [vuLabel sizeToFit];
@@ -73,7 +73,7 @@
     
     UIButton *noUpdateBtn = [UIButton new];
     [noUpdateBtn addRightLineByColor:kColorLineColor];
-    [noUpdateBtn setTitle:NSLocalizedString(@"jump", nil) forState:UIControlStateNormal];
+    [noUpdateBtn setTitle:@"跳过" forState:UIControlStateNormal];
     [noUpdateBtn setTitleColor:kColorMainViceTextColor forState:UIControlStateNormal];
     noUpdateBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEighTeen];
     [noUpdateBtn addTarget:self action:@selector(noNeedUpdateClick) forControlEvents:UIControlEventTouchUpInside];
@@ -84,7 +84,7 @@
     
     
     UIButton *needUpdateBtn = [UIButton new];
-    [needUpdateBtn setTitle:NSLocalizedString(@"goUpdate", nil) forState:UIControlStateNormal];
+    [needUpdateBtn setTitle:@"去更新" forState:UIControlStateNormal];
     [needUpdateBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
     needUpdateBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEighTeen];
     [needUpdateBtn addTarget:self action:@selector(needUpdateClick) forControlEvents:UIControlEventTouchUpInside];
@@ -97,7 +97,7 @@
     
     _updateBtn = [UIButton new];
     [_updateBtn addTopLineByColor:kColorLineColor];
-    [_updateBtn setTitle:NSLocalizedString(@"goUpdate", nil) forState:UIControlStateNormal];
+    [_updateBtn setTitle:@"去更新" forState:UIControlStateNormal];
     [_updateBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
     _updateBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEighTeen];
     [_updateBtn addTarget:self action:@selector(needUpdateClick) forControlEvents:UIControlEventTouchUpInside];

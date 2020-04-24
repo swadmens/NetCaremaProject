@@ -18,7 +18,7 @@
     /// 找回
     UIButton *forgetButton=[UIButton new];
     [forgetButton setTitleColor:kColorMainColor forState:UIControlStateNormal];
-    [forgetButton setTitle:NSLocalizedString(@"forgetPassword", nil) forState:UIControlStateNormal];
+    [forgetButton setTitle:@"忘记密码" forState:UIControlStateNormal];
     forgetButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [forgetButton addTarget:self action:@selector(resetPassword) forControlEvents:UIControlEventTouchUpInside];
     forgetButton.titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
@@ -32,7 +32,7 @@
     /// 立即注册
     UIButton *registerButton=[UIButton new];
     [registerButton addTarget:self action:@selector(gotoRegisterController) forControlEvents:UIControlEventTouchUpInside];
-    [registerButton setTitle:NSLocalizedString(@"quickReg", nil) forState:UIControlStateNormal];
+    [registerButton setTitle:@"立即注册" forState:UIControlStateNormal];
     [registerButton setTitleColor:kColorMainColor forState:UIControlStateNormal];
     registerButton.titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
     [self.contentView addSubview:registerButton];
@@ -42,7 +42,7 @@
    
     
     UILabel *label1=[UILabel new];
-    label1.text = NSLocalizedString(@"oterWayLogin", nil);
+    label1.text = @"其它登录方式";
     label1.textColor=kColorMainViceTextColor;
     label1.font=[UIFont customFontWithSize:kFontSizeFifty];
     label1.textAlignment = NSTextAlignmentCenter;

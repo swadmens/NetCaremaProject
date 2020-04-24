@@ -450,12 +450,11 @@ static NSString *const _kdownloadListKey = @"download_video_list";
             // PHAssetMediaTypeVideo   = 2, 视频
             // PHAssetMediaTypeAudio   = 3, 音频
             
-            int fileType = asset.mediaType;
+            NSInteger fileType = asset.mediaType;
             // 区分文件类型, 取视频文件
             if (fileType == PHAssetMediaTypeVideo)
             {
                 // 取出视频文件
-                // 取到一个视频对象就不再遍历, 因为这里我们只需要一个视频对象做示例
                 PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
                 options.version = PHImageRequestOptionsVersionCurrent;
                 options.deliveryMode = PHVideoRequestOptionsDeliveryModeAutomatic;

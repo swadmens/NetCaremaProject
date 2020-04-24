@@ -116,7 +116,7 @@ typedef enum : NSUInteger {
     //    [self.view addSubview:self.progressView];
     [self.progressView alignTop:@"0" leading:@"0" bottom:nil trailing:@"0" toView:self.view];
     
-    self.title = NSLocalizedString(@"loading", nil);
+    self.title = @"加载中...";
 }
 - (void)action_back:(id)sender
 {

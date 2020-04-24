@@ -135,17 +135,17 @@
     //分享栏中添加自己的功能，比如拉黑、举报之类的
     if (isReport) {
         [imagesArr addObject:[UIImage imageNamed:@"jubao_image"]];
-        [titleNameArr addObject:NSLocalizedString(@"jubao", nil)];
+        [titleNameArr addObject:@"举报"];
     }
     
     if (isBlack) {
         [imagesArr addObject:[UIImage imageNamed:@"shield_image"]];
-        [titleNameArr addObject:NSLocalizedString(@"shield", nil)];
+        [titleNameArr addObject:@"拉黑"];
     }
   
     if (isDelete) {
         [imagesArr addObject:[UIImage imageNamed:@"pet_circle_delete"]];
-        [titleNameArr addObject:NSLocalizedString(@"delete", nil)];
+        [titleNameArr addObject:@"删除"];
     }
     
     

@@ -79,7 +79,7 @@
     }
     // 确定操作
     if (!titleArray || titleArray.count == 0) {
-        UIAlertAction  *confirmAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"sure", nil)
+        UIAlertAction  *confirmAction = [UIAlertAction actionWithTitle:@"确定"
                                                                  style:UIAlertActionStyleDefault
                                                                handler:^(UIAlertAction * _Nonnull action) {
                                                                    if (confirm)confirm(0);

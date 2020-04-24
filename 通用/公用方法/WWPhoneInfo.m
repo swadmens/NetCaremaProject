@@ -180,11 +180,11 @@ static NSString *_bundleSeedID = @"";
             isAllow = YES;
             break;
         case ALAuthorizationStatusRestricted: //  此应用程序没有被授权访问的照片数据。可能是家长控制权限。
-            msg = NSLocalizedString(@"haveNoAuthority", nil);
+            msg = @"没有权限";
             break;
         case ALAuthorizationStatusDenied: // 用户已经明确否认了这一照片数据的应用程序访问.
             
-            msg = [NSString stringWithFormat:NSLocalizedString(@"allowAccessAlbums", nil),name];
+            msg = [NSString stringWithFormat:@"允许%@访问相册",name];
             break;
         case ALAuthorizationStatusAuthorized: // 允许
             isAllow = YES;
@@ -195,7 +195,7 @@ static NSString *_bundleSeedID = @"";
             break;
     }
     if (isAllow == NO && show) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"accessRestricted", nil) message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"knowing", nil) otherButtonTitles: nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"访问受限" message:msg delegate:nil cancelButtonTitle:@"知道了" otherButtonTitles: nil];
         [alert show];
         alert = nil;
     }
@@ -206,13 +206,13 @@ static NSString *_bundleSeedID = @"";
 {
     BOOL isAllow = YES;
     NSString *name = [WWPhoneInfo getAPPName];
-    NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"allowSendNoticon", nil),name];
+    NSString *msg = [NSString stringWithFormat:@"允许%@发送通知",name];
     if ([[UIApplication sharedApplication] enabledRemoteNotificationTypes] == UIRemoteNotificationTypeNone) {
         isAllow = NO;
     }
     
     if (isAllow == NO && show) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"pushRestricted", nil) message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"knowing", nil) otherButtonTitles: nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"发送通知受限" message:msg delegate:nil cancelButtonTitle:@"知道了" otherButtonTitles: nil];
         [alert show];
         alert = nil;
     }

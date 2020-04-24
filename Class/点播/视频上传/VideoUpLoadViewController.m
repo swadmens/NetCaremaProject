@@ -196,16 +196,15 @@
 {
     NSError *err = nil;
     NSData* data = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:path] options:NSDataReadingMappedIfSafe error:&err];
-    //文件最大不超过28MB
-    if(data.length < 28 * 1024 * 1024)
-    {
+//    //文件最大不超过28MB
+//    if(data.length < 28 * 1024 * 1024)
+//    {
         self.fileData = data;
         self.isAddVideo = YES;
 
-    }else
-    {
-        [_kHUDManager showMsgInView:nil withTitle:NSLocalizedString(@"fsdwjgd", nil) isSuccess:YES];
-    }
+//    }else{
+//        [_kHUDManager showMsgInView:nil withTitle:@"发送的文件过大" isSuccess:YES];
+//    }
 }
 -(void)recordVideoTakeHomePath:(NSString *)path withImage:(UIImage *)image
 {
@@ -221,6 +220,7 @@
 //    if(data.length < 28 * 1024 * 1024)
 //    {
         self.fileData = data;
+        self.isAddVideo = YES;
 
 //    }else
 //    {

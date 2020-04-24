@@ -70,7 +70,7 @@
     [iconImage addHeight:51];
     
     UILabel *nameLabel=[UILabel new];
-    nameLabel.text = NSLocalizedString(@"yubei", nil);
+    nameLabel.text = @"NetCamera";
     nameLabel.textColor=kColorMainTextColor;
     nameLabel.font=[UIFont customFontWithSize:30];
     [nameLabel sizeToFit];
@@ -141,7 +141,7 @@
     
     UIColor *bgcolor=UIColorFromRGB(0x333333, 0.3);
     
-    NSString *title = [NSString stringWithFormat:@"3 %@",NSLocalizedString(@"jump", nil)];
+    NSString *title = [NSString stringWithFormat:@"3 %@",@"跳过"];
     
     _jumpBtn=[UIButton new];
     _jumpBtn.clipsToBounds=YES;
@@ -177,7 +177,7 @@
             NSString *strTime = [NSString stringWithFormat:@"%d", seconds];
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                NSString *timerStr=[NSString stringWithFormat:@"%@ %@",strTime,NSLocalizedString(@"jump", nil)];
+                NSString *timerStr=[NSString stringWithFormat:@"%@ %@",strTime,@"跳过"];
                 [_jumpBtn setTitle:timerStr forState:UIControlStateNormal];
                 
                 timeout--;

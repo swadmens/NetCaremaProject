@@ -245,13 +245,9 @@
 - (void)loadNewData
 {
     self.page = 1;
-    [self loadData];
+    [self startLoadDataRequest];
 }
 - (void)loadMoreData
-{
-    [self loadData];
-}
--(void)loadData
 {
     [self startLoadDataRequest];
 }
@@ -442,10 +438,6 @@
     model.snapUrl = [NSString stringWithFormat:@"%@",[data objectForKey:model.live_id]];
     [self.dataArray replaceObjectAtIndex:indexPath withObject:model];
     [self.collectionView reloadData];
-    
-//    [_showImageView yy_setImageWithURL:[NSURL URLWithString:snapUrl] placeholder:[UIImage imageWithColor:kColorLineColor]];
-//    _nameLabel.text = self.model.name;
-//    _tagLabel.text = @"直播中";
 }
 
 

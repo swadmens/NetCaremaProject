@@ -96,7 +96,7 @@
     self.yanButton.layer.borderColor=kColorMainColor.CGColor;
     self.yanButton.layer.borderWidth=1.0f;
     self.yanButton.layer.cornerRadius=4;
-    [self.yanButton setTitle:NSLocalizedString(@"sendedCode", nil) forState:UIControlStateNormal];
+    [self.yanButton setTitle:@"发送验证码" forState:UIControlStateNormal];
     [self.yanButton setTitleColor:kColorMainColor forState:UIControlStateNormal];
     self.yanButton.titleLabel.font=[UIFont customFontWithSize:kFontSizeThirteen];
     [self addSubview:self.yanButton];

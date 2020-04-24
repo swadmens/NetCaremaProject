@@ -162,7 +162,7 @@
 
 + (NSString *)showSelectAddressProvince_id:(NSString *)province_id City_id:(NSString *)city_id
 {
-    NSString *mulStr = NSLocalizedString(@"unlimited", nil);
+    NSString *mulStr = @"无限";
     NSMutableArray *arrData = [NSMutableArray array];
     NSString *strResourcesBundle = [[NSBundle mainBundle] pathForResource:@"CGXPickerView" ofType:@"bundle"];
     NSString *filePath = [[NSBundle bundleWithPath:strResourcesBundle] pathForResource:@"CGXAddressCity" ofType:@"plist"];

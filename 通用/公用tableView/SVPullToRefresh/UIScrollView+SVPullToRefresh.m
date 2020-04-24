@@ -8,9 +8,9 @@
 //
 
 
-//static NSString *const _refreshTipOfNormal = NSLocalizedString(@"DropdownRefresh", nil);
-//static NSString *const _refreshTipOfLoading = NSLocalizedString(@"lifeLoading", nil);
-//static NSString *const _refreshTipOfGo = NSLocalizedString(@"flushRefresh", nil);
+//static NSString *const _refreshTipOfNormal = @"下拉开始刷新";
+//static NSString *const _refreshTipOfLoading = @"玩命加载中...";
+//static NSString *const _refreshTipOfGo = @"刷新完成";
 
 #import <QuartzCore/QuartzCore.h>
 #import "UIScrollView+SVPullToRefresh.h"
@@ -321,10 +321,7 @@ static char UICBottomView;
         self.textColor = [UIColor darkGrayColor];
         
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        self.titles = [NSMutableArray arrayWithObjects:NSLocalizedString(@"DropdownRefresh", nil),
-                             NSLocalizedString(@"flushRefresh", nil),
-                             NSLocalizedString(@"lifeLoading", nil),
-                                nil];
+        self.titles = [NSMutableArray arrayWithObjects:@"下拉开始刷新...",@"刷新完成",@"玩命加载中...",nil];
         
         self.state = SVPullToRefreshStateStopped;
         self.subtitles = [NSMutableArray arrayWithObjects:@"", @"", @"", @"", nil];
@@ -602,7 +599,7 @@ static char UICBottomView;
 - (UILabel *)titleLabel {
     if(!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
-        _titleLabel.text = NSLocalizedString(@"DropdownRefresh", nil);
+        _titleLabel.text = @"下拉开始刷新";
         _titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
         _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.textColor = textColor;

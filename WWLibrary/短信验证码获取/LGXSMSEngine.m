@@ -25,13 +25,13 @@
     NSString *theString = [phoneNumber stringByReplacingOccurrencesOfString:@" " withString:@""];
 //    if (theString.length != 11) { // 不是电话号码
     if ([WWPublicMethod isNumberString:theString] == NO) { // 不是电话号码
-        [_kHUDManager showFailedInView:nil withTitle:NSLocalizedString(@"phoneNumError", nil) hideAfter:_kHUDDefaultHideTime onHide:nil];
+        [_kHUDManager showFailedInView:nil withTitle:@"手机号码有误，请重新填写" hideAfter:_kHUDDefaultHideTime onHide:nil];
         if (result) {
             result(NO);
         }
         return;
     }
-    [_kHUDManager showActivityInView:nil withTitle:NSLocalizedString(@"obtaining", nil)];
+    [_kHUDManager showActivityInView:nil withTitle:@"正在获取"];
     RequestSence *sence = [[RequestSence alloc] init];
     switch (vType) {
         case VerificationRegister:
@@ -54,7 +54,7 @@
     };
     sence.errorBlock = ^(NSError *error){
         if (error.userInfo == nil) {
-            [_kHUDManager showFailedInView:nil withTitle:NSLocalizedString(@"sendCodeFailed", nil) hideAfter:_kHUDDefaultHideTime onHide:nil];
+            [_kHUDManager showFailedInView:nil withTitle:@"验证码发送失败" hideAfter:_kHUDDefaultHideTime onHide:nil];
         } else {
             [_kHUDManager showFailedInView:nil withTitle:[error.userInfo objectForKey:@"msg"] hideAfter:_kHUDDefaultHideTime onHide:nil];
         }
@@ -66,7 +66,7 @@
     
     
     /** shareSDK
-    [_kHUDManager showActivityInView:nil withTitle:NSLocalizedString(@"obtaining", nil)];
+    [_kHUDManager showActivityInView:nil withTitle:@"正在获取"];
     [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:phoneNumber zone:@"86" customIdentifier:nil result:^(NSError *error) {
         
         if (error == nil) {
@@ -88,14 +88,14 @@
 {
     NSString *theString = [phoneNumber stringByReplacingOccurrencesOfString:@" " withString:@""];
     if ([WWPublicMethod isNumberString:theString] == NO) { // 不是电话号码
-        [_kHUDManager showFailedInView:nil withTitle:NSLocalizedString(@"phoneNumError", nil) hideAfter:_kHUDDefaultHideTime onHide:nil];
+        [_kHUDManager showFailedInView:nil withTitle:@"手机号码有误，请重新填写" hideAfter:_kHUDDefaultHideTime onHide:nil];
         if (result) {
             result(NO);
         }
         return;
     }
     if ([code stringByReplacingOccurrencesOfString:@" " withString:@""].length <=0) {
-        [_kHUDManager showFailedInView:nil withTitle:NSLocalizedString(@"fillCode", nil) hideAfter:_kHUDDefaultHideTime onHide:nil];
+        [_kHUDManager showFailedInView:nil withTitle:@"请输入验证码" hideAfter:_kHUDDefaultHideTime onHide:nil];
         if (result) {
             result(NO);
         }

@@ -109,7 +109,7 @@
 - (NSString *)idleTitle
 {
     if (!_idleTitle) {
-        _idleTitle = NSLocalizedString(@"dragLookDetail", nil); // default
+        _idleTitle = @"拖动查看详情"; // default
     }
     return _idleTitle;
 }
@@ -126,7 +126,7 @@
 - (NSString *)triggerTitle
 {
     if (!_triggerTitle) {
-        _triggerTitle = NSLocalizedString(@"releaseLookDetail", nil); // default
+        _triggerTitle = @"释放查看详情"; // default
     }
     return _triggerTitle;
 }

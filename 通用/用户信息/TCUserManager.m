@@ -125,7 +125,7 @@
         return;
     }
 
-    [_kHUDManager showActivityInView:nil withTitle:NSLocalizedString(@"logining", nil)];
+    [_kHUDManager showActivityInView:nil withTitle:@"登录中..."];
 
     self.loginSence.user_id = [dict objectForKey:@"user_id"];
     self.loginSence.ec_salt = [dict objectForKey:@"ec_salt"];
@@ -163,7 +163,7 @@
     if (msg) {
         [_kHUDManager showMsgInView:nil withTitle:msg isSuccess:NO];
     } else {
-        [_kHUDManager showMsgInView:nil withTitle:NSLocalizedString(@"loginFailed", nil) isSuccess:NO];
+        [_kHUDManager showMsgInView:nil withTitle:@"登录失败" isSuccess:NO];
     }
 }
 
@@ -272,7 +272,7 @@
         if (msg) {
             [_kHUDManager showMsgInView:nil withTitle:msg isSuccess:NO];
         } else {
-            [_kHUDManager showMsgInView:nil withTitle:NSLocalizedString(@"outingFailed", nil) isSuccess:NO];
+            [_kHUDManager showMsgInView:nil withTitle:@"退出登录失败" isSuccess:NO];
         }
     };
     [_outSence sendRequest];
@@ -454,9 +454,9 @@
     BOOL need_update = [[NSString stringWithFormat:@"%@",[data objectForKey:@"need_update"]] boolValue];
     NSString *download_url = [data objectForKey:@"download_url"];
     
-    NSArray *buttons = @[NSLocalizedString(@"goUpdate", nil), NSLocalizedString(@"jump", nil)];
+    NSArray *buttons = @[@"去更新", @"跳过"];
     if (need_update) {
-        buttons = @[NSLocalizedString(@"updateVersion", nil)];
+        buttons = @[@"更新版本"];
     }
     
     UIImage *image = UIImageWithFileName(@"version_update_image");

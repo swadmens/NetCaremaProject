@@ -146,7 +146,7 @@
 + (void)reportArticle:(NSString *)aid
 {
     NSArray *reportArr = @[@"广告或垃圾信息", @"色情、淫秽等内容", @"骚扰或人身攻击", @"激进等敏感内容", @"其他"];
-    JXActionSheet *sheet = [[JXActionSheet alloc] initWithTitle:@"选择举报原因" cancelTitle:NSLocalizedString(@"cancel", nil) otherTitles:reportArr];
+    JXActionSheet *sheet = [[JXActionSheet alloc] initWithTitle:@"选择举报原因" cancelTitle:@"取消" otherTitles:reportArr];
     [sheet showView];
     [sheet dismissForCompletionHandle:^(NSInteger clickedIndex, BOOL isCancel) {
         if (isCancel) {
@@ -166,7 +166,7 @@
 + (void)reportPerson:(NSString *)uid
 {
     NSArray *reportArr = @[@"头像违规", @"昵称违规", @"发布内容违规", @"私信骚扰",@"其他"];
-    JXActionSheet *sheet = [[JXActionSheet alloc] initWithTitle:@"选择举报原因" cancelTitle:NSLocalizedString(@"cancel", nil) otherTitles:reportArr];
+    JXActionSheet *sheet = [[JXActionSheet alloc] initWithTitle:@"选择举报原因" cancelTitle:@"取消" otherTitles:reportArr];
     [sheet showView];
     [sheet dismissForCompletionHandle:^(NSInteger clickedIndex, BOOL isCancel) {
         if (isCancel) {

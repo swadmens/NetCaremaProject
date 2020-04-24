@@ -214,9 +214,9 @@
                 finishedBlock(YES,user);
             }else{
                 if (state == SSDKResponseStateFail ) {
-                    [_kHUDManager showMsgInView:nil withTitle:NSLocalizedString(@"privilegeFailed", nil) isSuccess:NO];
+                    [_kHUDManager showMsgInView:nil withTitle:@"授权失败" isSuccess:NO];
                 } else if (state == SSDKResponseStateCancel){
-                    [_kHUDManager showMsgInView:nil withTitle:NSLocalizedString(@"cancelPrivilege", nil) isSuccess:NO];
+                    [_kHUDManager showMsgInView:nil withTitle:@"取消授权" isSuccess:NO];
                 }
                 
                 finishedBlock(NO,user);
@@ -427,7 +427,7 @@
     switch (state) {
         case SSDKResponseStateSuccess:
         {
-            [_kHUDManager showMsgInView:nil withTitle:NSLocalizedString(@"sharaSuccess", nil) isSuccess:YES];
+            [_kHUDManager showMsgInView:nil withTitle:@"分享成功" isSuccess:YES];
             if (params.eventData) { // 如果有分享事件
                 
                 [TargetEngine pushViewController:nil fromController:nil withTarget:params.eventData];
@@ -438,7 +438,7 @@
         }
         case SSDKResponseStateFail:
         {
-            [_kHUDManager showMsgInView:nil withTitle:NSLocalizedString(@"sharaFailed", nil) isSuccess:NO];
+            [_kHUDManager showMsgInView:nil withTitle:@"分享失败" isSuccess:NO];
             break;
         }
         case SSDKResponseStateCancel:

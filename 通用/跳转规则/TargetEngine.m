@@ -119,7 +119,7 @@
     NSURL *OPENURL = [NSURL URLWithString:url];
     BOOL succ =  [[UIApplication sharedApplication] canOpenURL:OPENURL];
     if (succ == NO) {
-        [_kHUDManager showFailedInView:nil withTitle:NSLocalizedString(@"dkpgsdsb", nil) hideAfter:_kHUDDefaultHideTime onHide:nil];
+        [_kHUDManager showFailedInView:nil withTitle:@"打开苹果商店失败" hideAfter:_kHUDDefaultHideTime onHide:nil];
         return;
     }
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url] options:[NSDictionary new] completionHandler:nil];
@@ -582,7 +582,7 @@
     
     NSString *title = [NSString stringWithFormat:@"呼叫客服电话\n%@",pushId];
 
-//    [[TCNewAlertView shareInstance] showAlert:nil message:title cancelTitle:NSLocalizedString(@"cancel", nil) viewController:nil confirm:^(NSInteger buttonTag) {
+//    [[TCNewAlertView shareInstance] showAlert:nil message:title cancelTitle:@"取消" viewController:nil confirm:^(NSInteger buttonTag) {
 //        if (buttonTag==0) {
 //
 //            NSString *telURL = [NSString stringWithFormat:@"tel://%@",pushId]; // telprompt
