@@ -52,6 +52,9 @@
     [self.tableView registerClass:[MyEquipmentsCell class] forCellReuseIdentifier:[MyEquipmentsCell getCellIDStr]];
     self.tableView.refreshEnable = YES;
     self.tableView.loadingMoreEnable = NO;
+    
+//    [self.tableView setEditing:YES animated:YES];//进入编辑状态
+
     __unsafe_unretained typeof(self) weak_self = self;
     self.tableView.actionHandle = ^(WWScrollingState state){
         switch (state) {
@@ -144,6 +147,25 @@
     NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
 
     [TargetEngine controller:self pushToController:PushTargetEquipmentInformation WithTargetId:pushId];
+
+}
+#pragma mark 选择编辑模式，添加模式很少用,默认是删除
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleNone;
+}
+-(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+-(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    // 取出要拖动的模型数据
+    MyEquipmentsModel *model = [self.dataArray objectAtIndex:sourceIndexPath.row];
+       //删除之前行的数据
+    [self.dataArray removeObject:model];
+       // 插入数据到新的位置
+    [self.dataArray insertObject:model atIndex:destinationIndexPath.row];
 
 }
 

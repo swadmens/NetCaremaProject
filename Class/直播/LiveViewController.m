@@ -118,6 +118,8 @@
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationItem.leftBarButtonItem=nil;
     
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
+
     
     [self.view addSubview:self.collectionView];
     [self.collectionView alignTop:@"45" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];

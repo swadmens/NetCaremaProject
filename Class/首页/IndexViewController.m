@@ -11,10 +11,10 @@
 #import "IndexTableViewCell.h"
 #import "RequestSence.h"
 #import "IndexDataModel.h"
+#import "IndexTopView.h"
 
 
-
-@interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource,IndexTopDelegate>
 {
     BOOL _isHadFirst; // 是否第一次加载了
 }
@@ -45,7 +45,7 @@
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 60;
-    [self.tableView alignTop:@"10" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
+    [self.tableView alignTop:@"110" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[IndexTableViewCell class] forCellReuseIdentifier:[IndexTableViewCell getCellIDStr]];
@@ -71,7 +71,7 @@
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"60"];
+    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"140"];
     self.noDataView.backgroundColor = kColorBackgroundColor;
     // label
     UILabel *tipLabel = [self getNoDataTipLabel];
@@ -94,9 +94,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = kColorBackgroundColor;
-    self.navigationItem.leftBarButtonItem=nil;
+    self.navigationItem.leftBarButtonItem = nil;
+    self.FDPrefersNavigationBarHidden = YES;
+    
+//    self.title = @"我的设备";
+    
+    IndexTopView *topView = [IndexTopView new];
+    topView.delegate = self;
+    topView.frame = CGRectMake(0, 0, kScreenWidth, 105);
+    [self.view addSubview:topView];
 
-    self.title = @"我的设备";
     
     @weakify(self);
        /// 登录变化监听
@@ -114,7 +121,28 @@
            }
 
        }];
+    
+//    [self setNeedsStatusBarAppearanceUpdate];
+    
 }
+//- (UIStatusBarStyle)preferredStatusBarStyle
+//{
+//    return UIStatusBarStyleDefault;
+//}
+//- (BOOL)prefersStatusBarHidden
+//{
+//    return NO;
+//}
+//-(void)viewWillAppear:(BOOL)animated
+//{
+//    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+//}
+//-(void)viewWillDisappear:(BOOL)animated
+//{
+//    [super viewWillDisappear:animated];
+//    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+//}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.dataArray.count;
@@ -133,13 +161,10 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    
 //    NSString *url = [NSString stringWithFormat:@"https://leo.quarkioe.com/apps/androidapp/#/device/%@/dashboard/%@",model.childId,model.wechat[0]];
     IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
 
     [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
-
 }
 
 - (void)loadNewData
@@ -232,6 +257,17 @@
     }
     
 }
+#pragma IndexTopDelegate
+-(void)collectionSelect:(NSInteger)index
+{
+    DLog(@"选择了  ==  %ld",index);
+}
+-(void)searchValue:(NSString *)value
+{
+    DLog(@"搜索  ==  %@",value);
+
+}
+
 /*
 #pragma mark - Navigation
 

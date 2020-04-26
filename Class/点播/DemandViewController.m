@@ -100,10 +100,10 @@
 {
     /// 顶部搜索的
     self.contentView = [[UIView alloc] init];
-    self.contentView.backgroundColor = kColorBackSecondColor;
-    self.contentView.frame = CGRectMake(0, 0, kScreenWidth, 80);
-    [self.view addSubview:self.contentView];
-//    self.navigationItem.titleView = self.contentView;
+    self.contentView.backgroundColor = [UIColor clearColor];
+    self.contentView.frame = CGRectMake(0, 0, kScreenWidth, 60);
+//    [self.view addSubview:self.contentView];
+    self.navigationItem.titleView = self.contentView;
     
     
     self.searchButton = [UISearchBar new];
@@ -130,7 +130,7 @@
     UIImage *image=[UIImage imageWithColor:[UIColor whiteColor]];
     UIImage *searchBGImage = [image resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 30.0, 0.0, 40.0) resizingMode:UIImageResizingModeStretch];
     [self.searchButton setBackgroundImage:searchBGImage];
-    [self.searchButton addCenterY:10 toView:self.contentView];
+    [self.searchButton yCenterToView:self.contentView];
     [self.searchButton leftToView:self.contentView withSpace:78];
     [self.searchButton addWidth:kScreenWidth-160];
     [self.searchButton addHeight:25];
@@ -167,7 +167,7 @@
     upLoadBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
     [upLoadBtn addTarget:self action:@selector(upLoadButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView addSubview:upLoadBtn];
-    [upLoadBtn yCenterToView:editBtn];
+    [upLoadBtn yCenterToView:self.contentView];
     [upLoadBtn rightToView:self.contentView withSpace:15];
     
 }
@@ -259,15 +259,18 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = kColorBackgroundColor;
-    self.navigationItem.leftBarButtonItem=nil;
-    self.FDPrefersNavigationBarHidden = YES;
+    self.navigationItem.leftBarButtonItem = nil;
+//    self.FDPrefersNavigationBarHidden = YES;
+    
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
+
     
     [self.view addSubview:self.collectionUpView];
-    [self.collectionUpView alignTop:@"85" leading:@"0" bottom:nil trailing:@"0" toView:self.view];
+    [self.collectionUpView alignTop:@"25" leading:@"0" bottom:nil trailing:@"0" toView:self.view];
     [self.collectionUpView addHeight:35];
     
     [self.view addSubview:self.collectionView];
-    [self.collectionView alignTop:@"130" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
+    [self.collectionView alignTop:@"70" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     
     self.folder = @" ";
     self.isClick = NO;

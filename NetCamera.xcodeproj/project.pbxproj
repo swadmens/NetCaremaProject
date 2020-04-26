@@ -383,6 +383,8 @@
 		4A64ED02242DEE0000D30FB1 /* CarmeaVideosModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ED01242DEE0000D30FB1 /* CarmeaVideosModel.m */; };
 		4A64ED05242DF2E000D30FB1 /* DemandViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ED04242DF2E000D30FB1 /* DemandViewCell.m */; };
 		4A64ED0C243187E200D30FB1 /* LiveLivingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A64ED0B243187E200D30FB1 /* LiveLivingViewController.m */; };
+		4A68691D24555EA30036355E /* IndexTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A68691C24555EA30036355E /* IndexTopView.m */; };
+		4A686920245587480036355E /* IndexTopCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A68691F245587480036355E /* IndexTopCollectionViewCell.m */; };
 		4A6D13CF243C63B80069EA93 /* CLVoiceApplyAddressModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6D13CE243C63B80069EA93 /* CLVoiceApplyAddressModel.m */; };
 		4A6D13D2243C63F50069EA93 /* CLInvoiceApplyAddressModelTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6D13D1243C63F50069EA93 /* CLInvoiceApplyAddressModelTool.m */; };
 		4A6D13E2243C6E110069EA93 /* YCDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6D13D4243C6E110069EA93 /* YCDownloadManager.m */; };
@@ -1286,6 +1288,10 @@
 		4A64ED04242DF2E000D30FB1 /* DemandViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemandViewCell.m; sourceTree = "<group>"; };
 		4A64ED0A243187E200D30FB1 /* LiveLivingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveLivingViewController.h; sourceTree = "<group>"; };
 		4A64ED0B243187E200D30FB1 /* LiveLivingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveLivingViewController.m; sourceTree = "<group>"; };
+		4A68691B24555EA30036355E /* IndexTopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexTopView.h; sourceTree = "<group>"; };
+		4A68691C24555EA30036355E /* IndexTopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexTopView.m; sourceTree = "<group>"; };
+		4A68691E245587480036355E /* IndexTopCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IndexTopCollectionViewCell.h; sourceTree = "<group>"; };
+		4A68691F245587480036355E /* IndexTopCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IndexTopCollectionViewCell.m; sourceTree = "<group>"; };
 		4A6D13CD243C63B80069EA93 /* CLVoiceApplyAddressModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLVoiceApplyAddressModel.h; sourceTree = "<group>"; };
 		4A6D13CE243C63B80069EA93 /* CLVoiceApplyAddressModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CLVoiceApplyAddressModel.m; sourceTree = "<group>"; };
 		4A6D13D0243C63F50069EA93 /* CLInvoiceApplyAddressModelTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLInvoiceApplyAddressModelTool.h; sourceTree = "<group>"; };
@@ -1782,6 +1788,10 @@
 				4A46086B2408E7C6007C209A /* IndexTableViewCell.m */,
 				4A4608742408F426007C209A /* MyEquipmentsCell.h */,
 				4A4608752408F426007C209A /* MyEquipmentsCell.m */,
+				4A68691B24555EA30036355E /* IndexTopView.h */,
+				4A68691C24555EA30036355E /* IndexTopView.m */,
+				4A68691E245587480036355E /* IndexTopCollectionViewCell.h */,
+				4A68691F245587480036355E /* IndexTopCollectionViewCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -4073,6 +4083,7 @@
 				4A58102724075F2E00E82675 /* IFTTTTextColorAnimation.m in Sources */,
 				4A580F6524075F2D00E82675 /* CGXDatePickerView.m in Sources */,
 				4A580FDA24075F2D00E82675 /* PageScrollView.m in Sources */,
+				4A686920245587480036355E /* IndexTopCollectionViewCell.m in Sources */,
 				4A580FC124075F2D00E82675 /* LoginViewController.m in Sources */,
 				4A580F8B24075F2D00E82675 /* ZYBannerFooter.m in Sources */,
 				4AB29A3C2410DB59004CA6B5 /* DownloadListCell.m in Sources */,
@@ -4128,6 +4139,7 @@
 				4A580F2024075F2D00E82675 /* ThemeEngine.m in Sources */,
 				4A511934242B082D005A3065 /* UIImageView+AFNetworking.m in Sources */,
 				4A580F6A24075F2D00E82675 /* JSBadgeView.m in Sources */,
+				4A68691D24555EA30036355E /* IndexTopView.m in Sources */,
 				4A580FDB24075F2D00E82675 /* NSObject+PropertyListing.m in Sources */,
 				4A58101324075F2D00E82675 /* UITableViewController+ADScaleTransititon.m in Sources */,
 				4A64ECE4242D869D00D30FB1 /* UIView+Additions.m in Sources */,

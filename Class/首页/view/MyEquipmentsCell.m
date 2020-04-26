@@ -37,10 +37,10 @@
     backView.layer.cornerRadius = 5;
     [self.contentView addSubview:backView];
     [backView topToView:self.contentView withSpace:0];
-    [backView leftToView:self.contentView withSpace:14];
+    [backView leftToView:self.contentView withSpace:15];
     [backView bottomToView:self.contentView withSpace:10];
     [backView addHeight:53.5];
-    [backView addWidth:kScreenWidth-28];
+    [backView addWidth:kScreenWidth-30];
     
     
     _equipmentName = [UILabel new];
@@ -82,6 +82,14 @@
     
     
 }
+//-(void)setFrame:(CGRect)frame
+//{
+//    frame.origin.x += 15;
+//    frame.origin.y += 10;
+//    frame.size.height -= 10;
+//    frame.size.width -= 30;
+//    [super setFrame:frame];
+//}
 -(void)makeCellData:(MyEquipmentsModel *)model
 {
     _equipmentName.text = model.equipment_name;

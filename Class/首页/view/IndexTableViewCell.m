@@ -37,7 +37,7 @@
     backView.layer.cornerRadius = 5;
     [self.contentView addSubview:backView];
     [backView topToView:self.contentView withSpace:0];
-    [backView leftToView:self.contentView withSpace:14];
+    [backView leftToView:self.contentView withSpace:0];
     [backView bottomToView:self.contentView withSpace:10];
     [backView addHeight:65.5];
     [backView addWidth:kScreenWidth-28];
@@ -96,12 +96,15 @@
     [backView addSubview:detailLabel];
     [detailLabel yCenterToView:backView];
     [detailLabel leftToView:lineLabel withSpace:12];
-    
-    
-    
-    
-    
-    
+      
+}
+-(void)setFrame:(CGRect)frame
+{
+    frame.origin.x += 15;
+    frame.origin.y += 10;
+    frame.size.height -= 10;
+    frame.size.width -= 30;
+    [super setFrame:frame];
 }
 -(void)makeCellData:(IndexDataModel *)model
 {
