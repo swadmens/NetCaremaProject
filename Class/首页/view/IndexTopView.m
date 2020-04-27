@@ -117,6 +117,16 @@
     [self.collectionUpView addHeight:35];
     
     
+    
+    UIButton *addBtn = [UIButton new];
+    [addBtn setTitle:@"添加" forState:UIControlStateNormal];
+    [addBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
+    [self addSubview:addBtn];
+    [addBtn yCenterToView:nameLabel];
+    [addBtn rightToView:self withSpace:5];
+    [addBtn addTarget:self action:@selector(addGroupClick) forControlEvents:UIControlEventTouchUpInside];
+    
+    
 }
 #pragma mark -- collectionDelegate
 //定义展示的Section的个数
@@ -199,6 +209,10 @@
     self.searchValue = @"";
 }
 
+-(void)addGroupClick
+{
+    [TargetEngine controller:nil pushToController:PushTargetAllGroups WithTargetId:nil];
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

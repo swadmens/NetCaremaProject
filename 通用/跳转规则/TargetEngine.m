@@ -26,6 +26,7 @@
 #import "RetrievePasswordController.h"//找回密码
 #import "DownloadListController.h"//下载列表
 #import "LiveLivingViewController.h"//live直播
+#import "AllGroupsViewController.h"//全部分组
 
 @interface TargetEngine ()
 //<LGXPhotoBrowserDelegate,UIWebViewDelegate>
@@ -547,6 +548,12 @@
         {
             DownloadListController *controller = [[DownloadListController alloc] init];
             controller.downLoad_id = pushId;
+            toController = controller;
+        }
+            break;
+        case PushTargetAllGroups: //全部分组
+        {
+            AllGroupsViewController *controller = [[AllGroupsViewController alloc] init];
             toController = controller;
         }
             break;

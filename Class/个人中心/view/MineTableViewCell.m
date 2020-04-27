@@ -29,7 +29,7 @@
     
     UIView *backView = [UIView new];
     backView.backgroundColor = [UIColor whiteColor];
-    backView.clipsToBounds = YES;
+//    backView.clipsToBounds = YES;
     backView.layer.cornerRadius = 5;
     backView.layer.shadowColor = UIColorFromRGB(0xB0E5E4, 1).CGColor;
     backView.layer.shadowOffset = CGSizeMake(0,3);

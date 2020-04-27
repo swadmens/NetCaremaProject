@@ -12,9 +12,11 @@
 #import "RequestSence.h"
 #import "IndexDataModel.h"
 #import "IndexTopView.h"
+#import "SingleCarmeraCell.h"
+#import "MoreCarmerasCell.h"
+#import "IndexBottomView.h"
 
-
-@interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource,IndexTopDelegate>
+@interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource,IndexTopDelegate,IndexBottomDelegate>
 {
     BOOL _isHadFirst; // 是否第一次加载了
 }
@@ -24,6 +26,8 @@
 
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
+@property (nonatomic, strong) IndexBottomView *bottomView;
+@property (nonatomic,strong) UIView *coverView;
 
 @property (nonatomic,assign) BOOL isLogion;//是否登录
 
@@ -49,6 +53,10 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[IndexTableViewCell class] forCellReuseIdentifier:[IndexTableViewCell getCellIDStr]];
+    [self.tableView registerClass:[SingleCarmeraCell class] forCellReuseIdentifier:[SingleCarmeraCell getCellIDStr]];
+    [self.tableView registerClass:[MoreCarmerasCell class] forCellReuseIdentifier:[MoreCarmerasCell getCellIDStr]];
+
+    
     self.tableView.refreshEnable = YES;
     self.tableView.loadingMoreEnable = NO;
     __unsafe_unretained typeof(self) weak_self = self;
@@ -103,6 +111,19 @@
     topView.delegate = self;
     topView.frame = CGRectMake(0, 0, kScreenWidth, 105);
     [self.view addSubview:topView];
+    
+     
+    _coverView = [UIView new];
+    _coverView.hidden = YES;
+    _coverView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
+    _coverView.backgroundColor = UIColorFromRGB(0x000000, 0.7);
+    [[UIApplication sharedApplication].keyWindow addSubview:_coverView];
+    
+    
+    _bottomView = [[IndexBottomView alloc]initWithFrame:CGRectMake(0, kScreenHeight, kScreenWidth, 190)];
+    _bottomView.delegate = self;
+    [_coverView addSubview:_bottomView];
+    
 
     
     @weakify(self);
@@ -150,13 +171,33 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    IndexTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[IndexTableViewCell getCellIDStr] forIndexPath:indexPath];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    IndexTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[IndexTableViewCell getCellIDStr] forIndexPath:indexPath];
     
-    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    [cell makeCellData:model];
+    if (indexPath.row == 0) {
+        MoreCarmerasCell *cell = [tableView dequeueReusableCellWithIdentifier:[MoreCarmerasCell getCellIDStr] forIndexPath:indexPath];
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+        [cell makeCellData:model];
+        
+        return cell;
+        
+    }else{
+        SingleCarmeraCell *cell = [tableView dequeueReusableCellWithIdentifier:[SingleCarmeraCell getCellIDStr] forIndexPath:indexPath];
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        
+        
+        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+        [cell makeCellData:model];
+        
+        return cell;
+    }
     
-    return cell;
+    
+    
     
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -261,12 +302,26 @@
 -(void)collectionSelect:(NSInteger)index
 {
     DLog(@"选择了  ==  %ld",index);
+    
+   [UIView animateWithDuration:0.3 animations:^{
+       self.bottomView.transform = CGAffineTransformMakeTranslation(0, -190);
+       self.coverView.hidden = NO;
+   }];
+    
 }
 -(void)searchValue:(NSString *)value
 {
     DLog(@"搜索  ==  %@",value);
 
 }
+#pragma IndexBottomDelegate
+-(void)clickCancelBtn
+{
+    
+    self.bottomView.transform = CGAffineTransformIdentity;
+    self.coverView.hidden = YES;
+}
+
 
 /*
 #pragma mark - Navigation
