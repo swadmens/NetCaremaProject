@@ -62,6 +62,14 @@
     [_titleLabel addWidth:width];
     
     
+    UIButton *moreBtn = [UIButton new];
+    [moreBtn setImage:UIImageWithFileName(@"index_more_image") forState:UIControlStateNormal];
+    [moreBtn addTarget:self action:@selector(moreButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [backView addSubview:moreBtn];
+    [moreBtn rightToView:backView];
+    [moreBtn yCenterToView:_titleLabel];
+    [moreBtn addWidth:35];
+    [moreBtn addHeight:25];
     
     
     _coverView = [UIView new];
@@ -109,6 +117,14 @@
 }
 -(void)checkHelpClick
 {
-    _coverView.hidden = YES;
+    //设备离线，查看帮助
+    [TargetEngine controller:nil pushToController:PushTargetEquipmentOffline WithTargetId:nil];
+}
+-(void)moreButtonClick
+{
+    if (self.moreBtnClick) {
+        self.moreBtnClick();
+    }
+    
 }
 @end

@@ -80,6 +80,18 @@
     [_equipmentAddress topToView:_equipmentName withSpace:5];
  
     
+    
+    UIButton *moreBtn = [UIButton new];
+    [moreBtn setImage:UIImageWithFileName(@"index_more_image") forState:UIControlStateNormal];
+    [moreBtn addTarget:self action:@selector(moreButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [backView addSubview:moreBtn];
+    [moreBtn rightToView:backView withSpace:2];
+    [moreBtn topToView:backView withSpace:20];
+    [moreBtn addWidth:35];
+    [moreBtn addHeight:25];
+    
+    
+    
     _showImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 70, kScreenWidth-30, backHeight-70)];
     _showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
     // 绘制圆角 需设置的圆角 使用"|"来组合
@@ -93,24 +105,6 @@
     _showImageView.layer.mask = maskLayer;
     [backView addSubview:_showImageView];
     
-
-//    UILabel *lineLabel = [UILabel new];
-//    lineLabel.backgroundColor = UIColorFromRGB(0xCCCCCC, 1);
-//    [backView addSubview:lineLabel];
-//    [lineLabel yCenterToView:backView];
-//    [lineLabel rightToView:backView withSpace:70];
-//    [lineLabel addWidth:1];
-//    [lineLabel addHeight:33.5];
-//
-//
-//    UILabel *detailLabel = [UILabel new];
-//    detailLabel.text = @"查看详情";
-//    detailLabel.textColor = kColorMainColor;
-//    detailLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
-//    [backView addSubview:detailLabel];
-//    [detailLabel yCenterToView:backView];
-//    [detailLabel leftToView:lineLabel withSpace:12];
-      
 }
 -(void)makeCellData:(IndexDataModel *)model
 {
@@ -123,7 +117,12 @@
         _equipmentStates.backgroundColor = UIColorFromRGB(0xF39700, 1);
     }
 }
-
+-(void)moreButtonClick
+{
+    if (self.moreClick) {
+        self.moreClick();
+    }
+}
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

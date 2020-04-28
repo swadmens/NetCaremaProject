@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface MoreCarmerasCollectionViewCell : WWCollectionViewCell
 
+@property (nonatomic,copy) void(^moreBtnClick)(void);
+
 @end
 
 NS_ASSUME_NONNULL_END

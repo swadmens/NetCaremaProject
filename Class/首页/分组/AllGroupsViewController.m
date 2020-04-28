@@ -29,6 +29,9 @@
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
 
+@property (nonatomic,strong) UILabel *groupNameLabel;
+
+
 @end
 
 @implementation AllGroupsViewController
@@ -42,13 +45,38 @@
 - (void)setupTableView
 {
     
+    UIView *backView = [UIView new];
+    backView.backgroundColor = [UIColor whiteColor];
+    backView.clipsToBounds = YES;
+    backView.layer.cornerRadius = 5;
+    [self.view addSubview:backView];
+    [backView alignTop:@"10" leading:@"15" bottom:nil trailing:@"15" toView:self.view];
+    [backView addHeight:45];
+    
+    
+    _groupNameLabel = [UILabel new];
+    _groupNameLabel.text = @"设备";
+    _groupNameLabel.textColor = kColorMainTextColor;
+    _groupNameLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
+    [backView addSubview:_groupNameLabel];
+    [_groupNameLabel yCenterToView:backView];
+    [_groupNameLabel leftToView:backView withSpace:15];
+    
+    UILabel *markLabel = [UILabel new];
+    markLabel.backgroundColor = kColorMainColor;
+    [self.view addSubview:markLabel];
+    [markLabel topToView:backView withSpace:15];
+    [markLabel leftToView:self.view withSpace:15];
+    [markLabel addWidth:1.5];
+    [markLabel addHeight:12];
+    
     UILabel *title = [UILabel new];
     title.text = @"我创建的分组";
     title.textColor = kColorMainTextColor;
     title.font = [UIFont customFontWithSize:kFontSizeFourteen];
     [self.view addSubview:title];
-    [title topToView:self.view withSpace:15];
-    [title leftToView:self.view withSpace:15];
+    [title yCenterToView:markLabel];
+    [title leftToView:markLabel withSpace:5];
     
     
     self.tableView = [[WWTableView alloc] init];
@@ -56,7 +84,7 @@
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 60;
-    [self.tableView alignTop:@"40" leading:@"0" bottom:@"58" trailing:@"0" toView:self.view];
+    [self.tableView alignTop:@"95" leading:@"0" bottom:@"58" trailing:@"0" toView:self.view];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[AllGroupsTableViewCell class] forCellReuseIdentifier:[AllGroupsTableViewCell getCellIDStr]];
@@ -103,7 +131,7 @@
 }
 -(void)addGroupClick
 {
-    
+    [TargetEngine controller:nil pushToController:PushTargetAddNewGroup WithTargetId:nil];
 }
 - (void)setupNoDataView
 {

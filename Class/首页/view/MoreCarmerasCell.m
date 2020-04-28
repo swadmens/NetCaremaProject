@@ -147,6 +147,12 @@
 {
    
     MoreCarmerasCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MoreCarmerasCollectionViewCell getCellIDStr] forIndexPath:indexPath];
+    
+    cell.moreBtnClick = ^{
+        if (self.moreDealClick) {
+            self.moreDealClick();
+        }
+    };
 
     return cell;
     

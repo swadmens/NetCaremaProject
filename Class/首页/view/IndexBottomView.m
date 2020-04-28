@@ -100,7 +100,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.lineHidden = NO;
     
-    NSArray *Arr = @[@"全部录像",@"设备共享",@"设备详情"];
+    NSArray *Arr = @[@"消息设置",@"全部录像",@"设备共享",@"设备详情"];
     cell.titleLabel.text = [Arr objectAtIndex:indexPath.row];
   
     

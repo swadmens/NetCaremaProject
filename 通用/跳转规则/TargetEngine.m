@@ -27,6 +27,8 @@
 #import "DownloadListController.h"//下载列表
 #import "LiveLivingViewController.h"//live直播
 #import "AllGroupsViewController.h"//全部分组
+#import "EquipmentOfflineController.h"//设备离线
+#import "AddNewGroupController.h"//添加分组
 
 @interface TargetEngine ()
 //<LGXPhotoBrowserDelegate,UIWebViewDelegate>
@@ -557,6 +559,19 @@
             toController = controller;
         }
             break;
+        case PushTargetEquipmentOffline: //设备离线
+        {
+            EquipmentOfflineController *controller = [[EquipmentOfflineController alloc] init];
+            toController = controller;
+        }
+            break;
+        case PushTargetAddNewGroup: //添加分组
+        {
+            AddNewGroupController *controller = [[AddNewGroupController alloc] init];
+            toController = controller;
+        }
+            break;
+          
             
             
         

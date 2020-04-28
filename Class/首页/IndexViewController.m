@@ -142,28 +142,8 @@
            }
 
        }];
-    
-//    [self setNeedsStatusBarAppearanceUpdate];
-    
+        
 }
-//- (UIStatusBarStyle)preferredStatusBarStyle
-//{
-//    return UIStatusBarStyleDefault;
-//}
-//- (BOOL)prefersStatusBarHidden
-//{
-//    return NO;
-//}
-//-(void)viewWillAppear:(BOOL)animated
-//{
-//    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-//}
-//-(void)viewWillDisappear:(BOOL)animated
-//{
-//    [super viewWillDisappear:animated];
-//    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-//}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.dataArray.count;
@@ -175,23 +155,28 @@
     
     if (indexPath.row == 0) {
         MoreCarmerasCell *cell = [tableView dequeueReusableCellWithIdentifier:[MoreCarmerasCell getCellIDStr] forIndexPath:indexPath];
-        
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
         [cell makeCellData:model];
+        
+        cell.moreDealClick = ^{
+            [self collectionSelect:indexPath.row];
+        };
         
         return cell;
         
     }else{
         SingleCarmeraCell *cell = [tableView dequeueReusableCellWithIdentifier:[SingleCarmeraCell getCellIDStr] forIndexPath:indexPath];
-        
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        
         
         IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
         [cell makeCellData:model];
+        
+        cell.moreClick = ^{
+            [self collectionSelect:indexPath.row];
+        };
+        
         
         return cell;
     }
@@ -301,8 +286,6 @@
 #pragma IndexTopDelegate
 -(void)collectionSelect:(NSInteger)index
 {
-    DLog(@"选择了  ==  %ld",index);
-    
    [UIView animateWithDuration:0.3 animations:^{
        self.bottomView.transform = CGAffineTransformMakeTranslation(0, -190);
        self.coverView.hidden = NO;
@@ -312,12 +295,10 @@
 -(void)searchValue:(NSString *)value
 {
     DLog(@"搜索  ==  %@",value);
-
 }
 #pragma IndexBottomDelegate
 -(void)clickCancelBtn
 {
-    
     self.bottomView.transform = CGAffineTransformIdentity;
     self.coverView.hidden = YES;
 }
