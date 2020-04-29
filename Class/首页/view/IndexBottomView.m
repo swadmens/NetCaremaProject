@@ -92,7 +92,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return 4;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -101,7 +101,9 @@
     cell.lineHidden = NO;
     
     NSArray *Arr = @[@"消息设置",@"全部录像",@"设备共享",@"设备详情"];
+    NSArray *iconArr = @[@"index_message_image",@"index_all_video_image",@"index_equiment_shara_image",@"index_channel_detail_image"];
     cell.titleLabel.text = [Arr objectAtIndex:indexPath.row];
+    cell.iconImageView.image = UIImageWithFileName([iconArr objectAtIndex:indexPath.row]);
   
     
     return cell;
@@ -109,6 +111,11 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self.delegate clickCancelBtn];
+    
+    if (indexPath.row == 1) {
+        [TargetEngine controller:nil pushToController:PushTargetLocalVideo WithTargetId:nil];
+    }
     
 }
 

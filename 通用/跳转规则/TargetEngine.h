@@ -30,6 +30,7 @@ typedef enum : NSUInteger {
     PushTargetAllGroups = 15, /// 全部分组
     PushTargetEquipmentOffline = 16, /// 设备离线
     PushTargetAddNewGroup = 17, /// 添加分组
+    PushTargetLocalVideo = 18, /// 本地录像
 
     
     

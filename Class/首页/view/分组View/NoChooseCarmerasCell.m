@@ -23,6 +23,7 @@
 
 @property (nonatomic,strong) WWTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic,strong) NSMutableArray *isExpandArray;//记录section是否展开
 
 @end
 
@@ -98,6 +99,10 @@
 {
     [self.dataArray removeAllObjects];
     [self.dataArray addObjectsFromArray:array];
+    self.isExpandArray = [NSMutableArray array];
+       for (NSInteger i = 0; i < array.count; i++) {
+           [self.isExpandArray addObject:@"1"];//0:没展开 1:展开
+       }
     [self.tableView reloadData];
 }
 
@@ -107,8 +112,12 @@
 }
 #pragma mark 返回每组行数
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    NSArray *array = [self.dataArray[section] objectForKey:@"content"];
-    return array.count;
+    if ([_isExpandArray[section]isEqualToString:@"1"]) {
+        NSArray *array = [self.dataArray[section] objectForKey:@"content"];
+        return array.count;
+    }else{
+        return 0;
+    }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -134,23 +143,50 @@
     UIView *headerView = [UIView new];
     headerView.backgroundColor = [UIColor whiteColor];
     
-    UIButton *addBtn = [UIButton new];
-    [addBtn setTitle:@"添加" forState:UIControlStateNormal];
-    [addBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
-    addBtn.tag = section;
-    [headerView addSubview:addBtn];
-    [addBtn yCenterToView:headerView];
-    [addBtn leftToView:headerView withSpace:15];
-    [addBtn addTarget:self action:@selector(addEquimentClick:) forControlEvents:UIControlEventTouchUpInside];
+    UIImageView *iconImageView = [UIImageView new];
+    iconImageView.image = UIImageWithFileName(@"group_header_image");
+    [headerView addSubview:iconImageView];
+    [iconImageView yCenterToView:headerView];
+    [iconImageView leftToView:headerView withSpace:15];
     
-    
+
     UILabel *titleLabel = [UILabel new];
     titleLabel.text = [self.dataArray[section] objectForKey:@"title"];
     titleLabel.textColor = kColorMainTextColor;
     titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [headerView addSubview:titleLabel];
     [titleLabel yCenterToView:headerView];
-    [titleLabel leftToView:addBtn withSpace:15];
+    [titleLabel leftToView:iconImageView withSpace:15];
+    
+    
+    UIButton *dealBtn = [UIButton new];
+    [dealBtn setImage:UIImageWithFileName(@"group_down_image") forState:UIControlStateNormal];
+    [dealBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
+    dealBtn.tag = section;
+    [headerView addSubview:dealBtn];
+    [dealBtn yCenterToView:headerView];
+    [dealBtn leftToView:titleLabel];
+    [dealBtn addWidth:30];
+    [dealBtn addHeight:30];
+    [dealBtn addTarget:self action:@selector(dealWithButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    if ([_isExpandArray[section] isEqualToString:@"0"]) {
+        //未展开
+        [dealBtn setImage:UIImageWithFileName(@"group_up_image") forState:UIControlStateNormal];
+    }else{
+        //展开
+        [dealBtn setImage:UIImageWithFileName(@"group_down_image") forState:UIControlStateNormal];
+    }
+    
+    
+    
+    UIButton *addBtn = [UIButton new];
+    [addBtn setImage:UIImageWithFileName(@"group_add_image") forState:UIControlStateNormal];
+    [addBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
+    addBtn.tag = section;
+    [headerView addSubview:addBtn];
+    [addBtn yCenterToView:headerView];
+    [addBtn rightToView:headerView withSpace:15];
+    [addBtn addTarget:self action:@selector(addEquimentClick:) forControlEvents:UIControlEventTouchUpInside];
     
     
     return headerView;
@@ -174,6 +210,18 @@
 {
     [self.delegate noSelectedIndexSection:sender.tag];
 }
+-(void)dealWithButtonClick:(UIButton*)sender
+{
+    if ([_isExpandArray[sender.tag] isEqualToString:@"0"]) {
+        //关闭 => 展开
+        [_isExpandArray replaceObjectAtIndex:sender.tag withObject:@"1"];
+    }else{
+        //展开 => 关闭
+        [_isExpandArray replaceObjectAtIndex:sender.tag withObject:@"0"];
+    }
+    NSIndexSet *set = [NSIndexSet indexSetWithIndex:sender.tag];
+    [self.tableView reloadSections:set withRowAnimation:UITableViewRowAnimationFade];
+}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
@@ -192,6 +240,11 @@
     [super dosetup];
     self.contentView.backgroundColor = [UIColor whiteColor];
     
+    UIImageView *iconImageView = [UIImageView new];
+    iconImageView.image = UIImageWithFileName(@"group_row_image");
+    [self.contentView addSubview:iconImageView];
+    [iconImageView yCenterToView:self.contentView];
+    [iconImageView leftToView:self.contentView withSpace:40];
     
     _titleLabel = [UILabel new];
     _titleLabel.text = @"866262045665618";
@@ -199,7 +252,7 @@
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [self.contentView addSubview:_titleLabel];
     [_titleLabel yCenterToView:self.contentView];
-    [_titleLabel leftToView:self.contentView withSpace:80];
+    [_titleLabel leftToView:iconImageView withSpace:5];
     
 }
 

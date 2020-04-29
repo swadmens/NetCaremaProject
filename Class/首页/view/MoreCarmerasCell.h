@@ -13,7 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface MoreCarmerasCell : WWTableViewCell
 
 @property (nonatomic,copy) void(^moreDealClick)(void);
--(void)makeCellData:(IndexDataModel*)model;
+@property (nonatomic,copy) void(^rightBtnClick)(void);
+
+-(void)makeCellData:(IndexDataModel*)model withData:(NSArray*)array;
 
 @end
 

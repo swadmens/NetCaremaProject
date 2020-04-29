@@ -94,30 +94,42 @@
     [_equipmentStates addWidth:30];
     [_equipmentStates addHeight:16];
     
+    
+    UIImageView *addressView = [UIImageView new];
+    addressView.image = UIImageWithFileName(@"index_address_image");
+    [backView addSubview:addressView];
+    [addressView leftToView:backView withSpace:12];
+    [addressView topToView:_equipmentName withSpace:5];
+    
     _equipmentAddress = [UILabel new];
     _equipmentAddress.text = @"广东省广州市天河区信息港A座11层";
     _equipmentAddress.textColor = kColorThirdTextColor;
     _equipmentAddress.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [backView addSubview:_equipmentAddress];
-    [_equipmentAddress leftToView:backView withSpace:12];
-    [_equipmentAddress topToView:_equipmentName withSpace:5];
-
-//    UILabel *lineLabel = [UILabel new];
-//    lineLabel.backgroundColor = UIColorFromRGB(0xCCCCCC, 1);
-//    [backView addSubview:lineLabel];
-//    [lineLabel yCenterToView:backView];
-//    [lineLabel rightToView:backView withSpace:70];
-//    [lineLabel addWidth:1];
-//    [lineLabel addHeight:33.5];
-//
-//
-//    UILabel *detailLabel = [UILabel new];
-//    detailLabel.text = @"查看详情";
-//    detailLabel.textColor = kColorMainColor;
-//    detailLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
-//    [backView addSubview:detailLabel];
-//    [detailLabel yCenterToView:backView];
-//    [detailLabel leftToView:lineLabel withSpace:12];
+    [_equipmentAddress leftToView:addressView withSpace:2];
+    [_equipmentAddress yCenterToView:addressView];
+    
+    
+    UIButton *rightBtn = [UIButton new];
+    [rightBtn setImage:UIImageWithFileName(@"index_right_image") forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(rightButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [backView addSubview:rightBtn];
+    [rightBtn rightToView:backView withSpace:8];
+    [rightBtn topToView:backView withSpace:20];
+    [rightBtn addWidth:15];
+    [rightBtn addHeight:25];
+    
+    
+    UIButton *playBtn = [UIButton new];
+    [playBtn setImage:UIImageWithFileName(@"index_allplay_image") forState:UIControlStateNormal];
+    [playBtn addTarget:self action:@selector(playAllButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [backView addSubview:playBtn];
+    [playBtn rightToView:rightBtn withSpace:10];
+    [playBtn yCenterToView:rightBtn];
+    [playBtn addWidth:15];
+    [playBtn addHeight:25];
+    
+    
     
     
     [backView addSubview:self.collectionView];
@@ -125,7 +137,7 @@
     
       
 }
--(void)makeCellData:(IndexDataModel *)model
+-(void)makeCellData:(IndexDataModel *)model withData:(nonnull NSArray *)array
 {
     _equipmentName.text = model.equipment_name;
     _equipmentStates.text = model.equipment_states;
@@ -184,6 +196,18 @@
 {
     CGFloat width = (kScreenWidth-55)/2;
     return CGSizeMake(width, width*0.625+30);
+}
+
+-(void)rightButtonClick
+{
+    if (self.rightBtnClick) {
+        self.rightBtnClick();
+    }
+
+}
+-(void)playAllButtonClick
+{
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

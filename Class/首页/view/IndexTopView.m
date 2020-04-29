@@ -112,18 +112,18 @@
     
     [self addSubview:self.collectionUpView];
     [self.collectionUpView yCenterToView:nameLabel];
-    [self.collectionUpView leftToView:nameLabel withSpace:15];
-    [self.collectionUpView addWidth:kScreenWidth-170];
+    [self.collectionUpView leftToView:nameLabel withSpace:10];
+    [self.collectionUpView addWidth:kScreenWidth-155];
     [self.collectionUpView addHeight:35];
     
     
     
     UIButton *addBtn = [UIButton new];
-    [addBtn setTitle:@"添加" forState:UIControlStateNormal];
+    [addBtn setImage:UIImageWithFileName(@"index_add_image") forState:UIControlStateNormal];
     [addBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
     [self addSubview:addBtn];
     [addBtn yCenterToView:nameLabel];
-    [addBtn rightToView:self withSpace:5];
+    [addBtn rightToView:self withSpace:15];
     [addBtn addTarget:self action:@selector(addGroupClick) forControlEvents:UIControlEventTouchUpInside];
     
     

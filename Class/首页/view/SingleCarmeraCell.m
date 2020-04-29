@@ -71,13 +71,19 @@
     [_equipmentStates addWidth:30];
     [_equipmentStates addHeight:16];
     
+    UIImageView *addressView = [UIImageView new];
+    addressView.image = UIImageWithFileName(@"index_address_image");
+    [backView addSubview:addressView];
+    [addressView leftToView:backView withSpace:12];
+    [addressView topToView:_equipmentName withSpace:5];
+    
     _equipmentAddress = [UILabel new];
     _equipmentAddress.text = @"广东省广州市天河区信息港A座11层";
     _equipmentAddress.textColor = kColorThirdTextColor;
     _equipmentAddress.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [backView addSubview:_equipmentAddress];
-    [_equipmentAddress leftToView:backView withSpace:12];
-    [_equipmentAddress topToView:_equipmentName withSpace:5];
+    [_equipmentAddress leftToView:addressView withSpace:2];
+    [_equipmentAddress yCenterToView:addressView];
  
     
     

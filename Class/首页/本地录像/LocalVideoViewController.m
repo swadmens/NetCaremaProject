@@ -1,45 +1,29 @@
 //
-//  IndexViewController.m
-//  YanGang
+//  LocalVideoViewController.m
+//  NetCamera
 //
-//  Created by 汪伟 on 2018/11/7.
-//  Copyright © 2018年 Guangzhou YouPin Trade Co.,Ltd. All rights reserved.
+//  Created by 汪伟 on 2020/4/29.
+//  Copyright © 2020 Guangzhou Eston Trade Co.,Ltd. All rights reserved.
 //
 
-#import "IndexViewController.h"
+#import "LocalVideoViewController.h"
 #import "WWTableView.h"
-#import "IndexTableViewCell.h"
+#import "LocalVideoCell.h"
 #import "RequestSence.h"
-#import "IndexDataModel.h"
-#import "IndexTopView.h"
-#import "SingleCarmeraCell.h"
-#import "MoreCarmerasCell.h"
-#import "IndexBottomView.h"
-#import "ShowCarmerasViewController.h"
-#import "MyEquipmentsModel.h"
 
-
-
-@interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource,IndexTopDelegate,IndexBottomDelegate,showCarmeraDelegate>
+@interface LocalVideoViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     BOOL _isHadFirst; // 是否第一次加载了
 }
 @property (nonatomic,strong) WWTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property(nonatomic,assign) NSInteger page;
-
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
-@property (nonatomic, strong) IndexBottomView *bottomView;
-@property (nonatomic,strong) UIView *coverView;
-
-@property (nonatomic,assign) BOOL isLogion;//是否登录
-
 
 @end
 
-@implementation IndexViewController
-
+@implementation LocalVideoViewController
 -(NSMutableArray*)dataArray
 {
     if (!_dataArray) {
@@ -54,14 +38,10 @@
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 60;
-    [self.tableView alignTop:@"110" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
+    [self.tableView alignTop:@"10" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerClass:[IndexTableViewCell class] forCellReuseIdentifier:[IndexTableViewCell getCellIDStr]];
-    [self.tableView registerClass:[SingleCarmeraCell class] forCellReuseIdentifier:[SingleCarmeraCell getCellIDStr]];
-    [self.tableView registerClass:[MoreCarmerasCell class] forCellReuseIdentifier:[MoreCarmerasCell getCellIDStr]];
-
-    
+    [self.tableView registerClass:[LocalVideoCell class] forCellReuseIdentifier:[LocalVideoCell getCellIDStr]];
     self.tableView.refreshEnable = YES;
     self.tableView.loadingMoreEnable = NO;
     __unsafe_unretained typeof(self) weak_self = self;
@@ -82,15 +62,19 @@
         }
     };
 }
+-(void)addGroupClick
+{
+    [TargetEngine controller:nil pushToController:PushTargetAddNewGroup WithTargetId:nil];
+}
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"140"];
+    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"90"];
     self.noDataView.backgroundColor = kColorBackgroundColor;
     // label
     UILabel *tipLabel = [self getNoDataTipLabel];
     
     UIButton *againBtn = [UIButton new];
-    [againBtn setTitle:@"暂无数据，轻触重试" forState:UIControlStateNormal];
+    [againBtn setTitle:@"暂无分组，轻触重试" forState:UIControlStateNormal];
     [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
     againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
     [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
@@ -102,106 +86,50 @@
 {
     [self loadNewData];
 }
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    self.title = @"本地录像";
     self.view.backgroundColor = kColorBackgroundColor;
-    self.navigationItem.leftBarButtonItem = nil;
-    self.FDPrefersNavigationBarHidden = YES;
-    
-//    self.title = @"我的设备";
-    
-    IndexTopView *topView = [IndexTopView new];
-    topView.delegate = self;
-    topView.frame = CGRectMake(0, 0, kScreenWidth, 105);
-    [self.view addSubview:topView];
-    
-     
-    _coverView = [UIView new];
-    _coverView.hidden = YES;
-    _coverView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
-    _coverView.backgroundColor = UIColorFromRGB(0x000000, 0.7);
-    [[UIApplication sharedApplication].keyWindow addSubview:_coverView];
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
+   
+    [self setupTableView];
     
     
-    _bottomView = [[IndexBottomView alloc]initWithFrame:CGRectMake(0, kScreenHeight, kScreenWidth, 190)];
-    _bottomView.delegate = self;
-    [_coverView addSubview:_bottomView];
+//
+    //右上角按钮
+    UIButton *rightBtn = [UIButton new];
+    [rightBtn setImage:UIImageWithFileName(@"local_right_image") forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(right_clicked:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    [self.navigationItem setRightBarButtonItem:rightItem];
     
-
     
-    @weakify(self);
-       /// 登录变化监听
-       [RACObserve(_kUserModel, isLogined) subscribeNext:^(id x) {
-           @strongify(self);
-
-           self.isLogion = [x boolValue];
-
-           if (!self.isLogion) {
-               [_kUserModel showLoginView];
-           }else{
-               [self setupNoDataView];
-               [self setupTableView];
-               [self loadNewData];
-           }
-
-       }];
-        
+    
+}
+-(void)right_clicked
+{
+    
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.dataArray.count;
+    return 4;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-//    IndexTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[IndexTableViewCell getCellIDStr] forIndexPath:indexPath];
+    LocalVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:[LocalVideoCell getCellIDStr] forIndexPath:indexPath];
     
-    if (indexPath.row == 0) {
-        MoreCarmerasCell *cell = [tableView dequeueReusableCellWithIdentifier:[MoreCarmerasCell getCellIDStr] forIndexPath:indexPath];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        [cell makeCellData:model withData:@[@"01",@"02"]];
-        
-        cell.moreDealClick = ^{
-            [self collectionSelect:indexPath.row];
-        };
-        cell.rightBtnClick = ^{
-            ShowCarmerasViewController *vc = [ShowCarmerasViewController new];
-            vc.equipment_id = model.equipment_id;
-            vc.delegate = self;
-            [self.navigationController pushViewController:vc animated:YES];
-        };
-        
-        return cell;
-        
-    }else{
-        SingleCarmeraCell *cell = [tableView dequeueReusableCellWithIdentifier:[SingleCarmeraCell getCellIDStr] forIndexPath:indexPath];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        [cell makeCellData:model];
-        
-        cell.moreClick = ^{
-            [self collectionSelect:indexPath.row];
-        };
-        
-        
-        return cell;
-    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
+//        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+//        [cell makeCellData:model];
     
-    
-    
+    return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSString *url = [NSString stringWithFormat:@"https://leo.quarkioe.com/apps/androidapp/#/device/%@/dashboard/%@",model.childId,model.wechat[0]];
-//    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//
-//    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
+    
 }
 
 - (void)loadNewData
@@ -258,8 +186,8 @@
 
         [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
-            IndexDataModel *model = [IndexDataModel makeModelData:dic];
-            [tempArray addObject:model];
+//            IndexDataModel *model = [IndexDataModel makeModelData:dic];
+//            [tempArray addObject:model];
         }];
         [weak_self.dataArray addObjectsFromArray:tempArray];
         
@@ -294,32 +222,6 @@
     }
     
 }
-#pragma IndexTopDelegate
--(void)collectionSelect:(NSInteger)index
-{
-   [UIView animateWithDuration:0.3 animations:^{
-       self.bottomView.transform = CGAffineTransformMakeTranslation(0, -190);
-       self.coverView.hidden = NO;
-   }];
-    
-}
--(void)searchValue:(NSString *)value
-{
-    DLog(@"搜索  ==  %@",value);
-}
-#pragma IndexBottomDelegate
--(void)clickCancelBtn
-{
-    self.bottomView.transform = CGAffineTransformIdentity;
-    self.coverView.hidden = YES;
-}
-#pragma showCarmeraDelegate
--(void)getNewArray:(NSArray *)array
-{
-    MyEquipmentsModel *model = array.firstObject;
-    DLog(@"调整后的 ===   %@",model.CameraId);
-}
-
 
 /*
 #pragma mark - Navigation

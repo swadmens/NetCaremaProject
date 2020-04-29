@@ -29,6 +29,7 @@
 #import "AllGroupsViewController.h"//全部分组
 #import "EquipmentOfflineController.h"//设备离线
 #import "AddNewGroupController.h"//添加分组
+#import "LocalVideoViewController.h"//本地录像
 
 @interface TargetEngine ()
 //<LGXPhotoBrowserDelegate,UIWebViewDelegate>
@@ -568,6 +569,12 @@
         case PushTargetAddNewGroup: //添加分组
         {
             AddNewGroupController *controller = [[AddNewGroupController alloc] init];
+            toController = controller;
+        }
+            break;
+        case PushTargetLocalVideo: //本地录像
+        {
+            LocalVideoViewController *controller = [[LocalVideoViewController alloc] init];
             toController = controller;
         }
             break;
