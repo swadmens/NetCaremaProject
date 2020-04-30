@@ -115,6 +115,13 @@
     
     if (indexPath.row == 1) {
         [TargetEngine controller:nil pushToController:PushTargetLocalVideo WithTargetId:nil];
+    }else if (indexPath.row == 0){
+        [TargetEngine controller:nil pushToController:PushTargetMessageNoticesDeal WithTargetId:nil];
+    }else if (indexPath.row == 3){
+        [TargetEngine controller:nil pushToController:PushTargetChannelDetail WithTargetId:nil];
+    }else{
+        //设备共享
+        [TargetEngine controller:nil pushToController:PushTargetEquimentShared WithTargetId:nil];
     }
     
 }

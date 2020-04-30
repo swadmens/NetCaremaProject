@@ -431,6 +431,19 @@
 		4A686998245975660036355E /* LocalVideoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A686997245975660036355E /* LocalVideoCell.m */; };
 		4A68699B24597C250036355E /* local_right_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A68699924597C240036355E /* local_right_image@3x.png */; };
 		4A68699C24597C250036355E /* local_right_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A68699A24597C250036355E /* local_right_image@2x.png */; };
+		4A68699F245A5C0C0036355E /* CarmeraDetailInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A68699E245A5C0C0036355E /* CarmeraDetailInfoController.m */; };
+		4A6869A2245A67B80036355E /* CarmeraMoreSystemController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6869A1245A67B80036355E /* CarmeraMoreSystemController.m */; };
+		4A6869A5245A74FE0036355E /* carmera_info_address_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A6869A3245A74FD0036355E /* carmera_info_address_image@2x.png */; };
+		4A6869A6245A74FE0036355E /* carmera_info_address_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A6869A4245A74FE0036355E /* carmera_info_address_image@3x.png */; };
+		4A6869A9245AA33A0036355E /* AddCarmeraAddressController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6869A8245AA33A0036355E /* AddCarmeraAddressController.m */; };
+		4A6869AC245AAB940036355E /* button_back_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A6869AA245AAB930036355E /* button_back_image@2x.png */; };
+		4A6869AD245AAB940036355E /* button_back_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A6869AB245AAB940036355E /* button_back_image@3x.png */; };
+		4A6869B1245AB67E0036355E /* MessageNoticesDealController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6869B0245AB67E0036355E /* MessageNoticesDealController.m */; };
+		4A6869B5245AB9B90036355E /* ChannelDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6869B4245AB9B90036355E /* ChannelDetailController.m */; };
+		4A6869B8245AC0310036355E /* ChannelMoreSystemController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6869B7245AC0310036355E /* ChannelMoreSystemController.m */; };
+		4A6869BC245ACB930036355E /* EquimentSharedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6869BB245ACB930036355E /* EquimentSharedViewController.m */; };
+		4A6869BF245ACEB10036355E /* share_add_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A6869BD245ACEB00036355E /* share_add_image@2x.png */; };
+		4A6869C0245ACEB10036355E /* share_add_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A6869BE245ACEB00036355E /* share_add_image@3x.png */; };
 		4A6D13CF243C63B80069EA93 /* CLVoiceApplyAddressModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6D13CE243C63B80069EA93 /* CLVoiceApplyAddressModel.m */; };
 		4A6D13D2243C63F50069EA93 /* CLInvoiceApplyAddressModelTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6D13D1243C63F50069EA93 /* CLInvoiceApplyAddressModelTool.m */; };
 		4A6D13E2243C6E110069EA93 /* YCDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6D13D4243C6E110069EA93 /* YCDownloadManager.m */; };
@@ -1398,6 +1411,26 @@
 		4A686997245975660036355E /* LocalVideoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocalVideoCell.m; sourceTree = "<group>"; };
 		4A68699924597C240036355E /* local_right_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "local_right_image@3x.png"; sourceTree = "<group>"; };
 		4A68699A24597C250036355E /* local_right_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "local_right_image@2x.png"; sourceTree = "<group>"; };
+		4A68699D245A5C0C0036355E /* CarmeraDetailInfoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarmeraDetailInfoController.h; sourceTree = "<group>"; };
+		4A68699E245A5C0C0036355E /* CarmeraDetailInfoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CarmeraDetailInfoController.m; sourceTree = "<group>"; };
+		4A6869A0245A67B80036355E /* CarmeraMoreSystemController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CarmeraMoreSystemController.h; sourceTree = "<group>"; };
+		4A6869A1245A67B80036355E /* CarmeraMoreSystemController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CarmeraMoreSystemController.m; sourceTree = "<group>"; };
+		4A6869A3245A74FD0036355E /* carmera_info_address_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "carmera_info_address_image@2x.png"; sourceTree = "<group>"; };
+		4A6869A4245A74FE0036355E /* carmera_info_address_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "carmera_info_address_image@3x.png"; sourceTree = "<group>"; };
+		4A6869A7245AA33A0036355E /* AddCarmeraAddressController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddCarmeraAddressController.h; sourceTree = "<group>"; };
+		4A6869A8245AA33A0036355E /* AddCarmeraAddressController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddCarmeraAddressController.m; sourceTree = "<group>"; };
+		4A6869AA245AAB930036355E /* button_back_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_back_image@2x.png"; sourceTree = "<group>"; };
+		4A6869AB245AAB940036355E /* button_back_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "button_back_image@3x.png"; sourceTree = "<group>"; };
+		4A6869AF245AB67E0036355E /* MessageNoticesDealController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageNoticesDealController.h; sourceTree = "<group>"; };
+		4A6869B0245AB67E0036355E /* MessageNoticesDealController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageNoticesDealController.m; sourceTree = "<group>"; };
+		4A6869B3245AB9B90036355E /* ChannelDetailController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChannelDetailController.h; sourceTree = "<group>"; };
+		4A6869B4245AB9B90036355E /* ChannelDetailController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChannelDetailController.m; sourceTree = "<group>"; };
+		4A6869B6245AC0310036355E /* ChannelMoreSystemController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChannelMoreSystemController.h; sourceTree = "<group>"; };
+		4A6869B7245AC0310036355E /* ChannelMoreSystemController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChannelMoreSystemController.m; sourceTree = "<group>"; };
+		4A6869BA245ACB930036355E /* EquimentSharedViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EquimentSharedViewController.h; sourceTree = "<group>"; };
+		4A6869BB245ACB930036355E /* EquimentSharedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EquimentSharedViewController.m; sourceTree = "<group>"; };
+		4A6869BD245ACEB00036355E /* share_add_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_add_image@2x.png"; sourceTree = "<group>"; };
+		4A6869BE245ACEB00036355E /* share_add_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_add_image@3x.png"; sourceTree = "<group>"; };
 		4A6D13CD243C63B80069EA93 /* CLVoiceApplyAddressModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLVoiceApplyAddressModel.h; sourceTree = "<group>"; };
 		4A6D13CE243C63B80069EA93 /* CLVoiceApplyAddressModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CLVoiceApplyAddressModel.m; sourceTree = "<group>"; };
 		4A6D13D0243C63F50069EA93 /* CLInvoiceApplyAddressModelTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLInvoiceApplyAddressModelTool.h; sourceTree = "<group>"; };
@@ -1754,6 +1787,12 @@
 		4A4606BE2407C513007C209A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4A6869BD245ACEB00036355E /* share_add_image@2x.png */,
+				4A6869BE245ACEB00036355E /* share_add_image@3x.png */,
+				4A6869AA245AAB930036355E /* button_back_image@2x.png */,
+				4A6869AB245AAB940036355E /* button_back_image@3x.png */,
+				4A6869A3245A74FD0036355E /* carmera_info_address_image@2x.png */,
+				4A6869A4245A74FE0036355E /* carmera_info_address_image@3x.png */,
 				4A68699A24597C250036355E /* local_right_image@2x.png */,
 				4A68699924597C240036355E /* local_right_image@3x.png */,
 				4A68698724595A430036355E /* all_mark_image@2x.png */,
@@ -2012,6 +2051,8 @@
 				4A4608B3240C9F36007C209A /* view */,
 				4A4608A9240C9AB5007C209A /* EquimentBasicInfoController.h */,
 				4A4608AA240C9AB5007C209A /* EquimentBasicInfoController.m */,
+				4A6869A7245AA33A0036355E /* AddCarmeraAddressController.h */,
+				4A6869A8245AA33A0036355E /* AddCarmeraAddressController.m */,
 			);
 			path = "基本信息";
 			sourceTree = "<group>";
@@ -2676,6 +2717,9 @@
 		4A580D7924075F2C00E82675 /* 首页 */ = {
 			isa = PBXGroup;
 			children = (
+				4A6869B9245ACB680036355E /* 设备共享 */,
+				4A6869B2245AB9970036355E /* 通道详情 */,
+				4A6869AE245AB5A10036355E /* 消息通知 */,
 				4A68698B245973210036355E /* 本地录像 */,
 				4A68692D2456C2BF0036355E /* 分组 */,
 				4A46089E240C90EA007C209A /* 设备信息 */,
@@ -3468,6 +3512,10 @@
 			children = (
 				4A686980245951E80036355E /* ShowCarmerasViewController.h */,
 				4A686981245951E80036355E /* ShowCarmerasViewController.m */,
+				4A68699D245A5C0C0036355E /* CarmeraDetailInfoController.h */,
+				4A68699E245A5C0C0036355E /* CarmeraDetailInfoController.m */,
+				4A6869A0245A67B80036355E /* CarmeraMoreSystemController.h */,
+				4A6869A1245A67B80036355E /* CarmeraMoreSystemController.m */,
 			);
 			path = "设备展示";
 			sourceTree = "<group>";
@@ -3497,6 +3545,35 @@
 				4A686997245975660036355E /* LocalVideoCell.m */,
 			);
 			path = "本地录像view";
+			sourceTree = "<group>";
+		};
+		4A6869AE245AB5A10036355E /* 消息通知 */ = {
+			isa = PBXGroup;
+			children = (
+				4A6869AF245AB67E0036355E /* MessageNoticesDealController.h */,
+				4A6869B0245AB67E0036355E /* MessageNoticesDealController.m */,
+			);
+			path = "消息通知";
+			sourceTree = "<group>";
+		};
+		4A6869B2245AB9970036355E /* 通道详情 */ = {
+			isa = PBXGroup;
+			children = (
+				4A6869B3245AB9B90036355E /* ChannelDetailController.h */,
+				4A6869B4245AB9B90036355E /* ChannelDetailController.m */,
+				4A6869B6245AC0310036355E /* ChannelMoreSystemController.h */,
+				4A6869B7245AC0310036355E /* ChannelMoreSystemController.m */,
+			);
+			path = "通道详情";
+			sourceTree = "<group>";
+		};
+		4A6869B9245ACB680036355E /* 设备共享 */ = {
+			isa = PBXGroup;
+			children = (
+				4A6869BA245ACB930036355E /* EquimentSharedViewController.h */,
+				4A6869BB245ACB930036355E /* EquimentSharedViewController.m */,
+			);
+			path = "设备共享";
 			sourceTree = "<group>";
 		};
 		4A6D13D3243C6E110069EA93 /* YCDownloadSession */ = {
@@ -4081,6 +4158,7 @@
 				4A46088C24090860007C209A /* mine_top_backimage@2x.png in Resources */,
 				4A10B929244D39A300105B93 /* circle_content_right@2x.png in Resources */,
 				4A46070D2407C514007C209A /* tabbar_shadow@2x.png in Resources */,
+				4A6869C0245ACEB10036355E /* share_add_image@3x.png in Resources */,
 				4A64ECF6242D89BD00D30FB1 /* cameraex_press@2x.png in Resources */,
 				4A68696524591CE00036355E /* group_add_image@2x.png in Resources */,
 				4AB29A352410AC2B004CA6B5 /* password_code_image@3x.png in Resources */,
@@ -4154,6 +4232,7 @@
 				4A580FF824075F2D00E82675 /* MJRefresh.bundle in Resources */,
 				4ABDA71924174023003B3170 /* Selected.png in Resources */,
 				4AB299E3240E36F4004CA6B5 /* playback_shares_image@2x.png in Resources */,
+				4A6869AC245AAB940036355E /* button_back_image@2x.png in Resources */,
 				4A46072A2407C889007C209A /* Tabbar-2-normal@2x.png in Resources */,
 				4A46085C2408B825007C209A /* login_name_image@2x.png in Resources */,
 				4A4608602408B825007C209A /* login_key_image@2x.png in Resources */,
@@ -4182,6 +4261,7 @@
 				4AB29A04240F80D1004CA6B5 /* choose_area_down_image@2x.png in Resources */,
 				4A580F7124075F2D00E82675 /* DateTools.bundle in Resources */,
 				4A68699C24597C250036355E /* local_right_image@2x.png in Resources */,
+				4A6869BF245ACEB10036355E /* share_add_image@2x.png in Resources */,
 				4A68699B24597C250036355E /* local_right_image@3x.png in Resources */,
 				4A68698A24595A440036355E /* all_mark_image@3x.png in Resources */,
 				4A4607052407C514007C209A /* new_guide_p3_img@2x.png in Resources */,
@@ -4216,6 +4296,7 @@
 				4A68695524590B050036355E /* index_equiment_shara_image@2x.png in Resources */,
 				4A10B928244D39A300105B93 /* circle_content_right@3x.png in Resources */,
 				4A68697124591E7B0036355E /* index_message_image@3x.png in Resources */,
+				4A6869A5245A74FE0036355E /* carmera_info_address_image@2x.png in Resources */,
 				4AB299B5240DE3DF004CA6B5 /* demand_download_image@2x.png in Resources */,
 				4A4607092407C514007C209A /* new_guide_p4_img@2x.png in Resources */,
 				4A68696A24591CE00036355E /* group_row_image@3x.png in Resources */,
@@ -4224,6 +4305,7 @@
 				4AB299B4240DE3DF004CA6B5 /* demand_edit_image@2x.png in Resources */,
 				4AB29A05240F80D1004CA6B5 /* choose_area_up_image@3x.png in Resources */,
 				4A4606FB2407C513007C209A /* new_guide_p2_img@2x.png in Resources */,
+				4A6869A6245A74FE0036355E /* carmera_info_address_image@3x.png in Resources */,
 				4A4606EE2407C513007C209A /* Tabbar-3-select@3x.png in Resources */,
 				4AB299B9240DE3DF004CA6B5 /* demand_download_image@3x.png in Resources */,
 				4AB299E0240E36F4004CA6B5 /* playback_play_white_image@3x.png in Resources */,
@@ -4237,6 +4319,7 @@
 				4A46088A24090860007C209A /* mine_download_image@3x.png in Resources */,
 				4A46088224090633007C209A /* mine_right_arrows@3x.png in Resources */,
 				4A68697B2459272D0036355E /* index_address_image@2x.png in Resources */,
+				4A6869AD245AAB940036355E /* button_back_image@3x.png in Resources */,
 				4A46085E2408B825007C209A /* login_name_image@3x.png in Resources */,
 				4ABDA75624174023003B3170 /* DHNetSDK_dev.mobileprovision in Resources */,
 				4A4608632408E54C007C209A /* rm_key_noselect@3x.png in Resources */,
@@ -4407,6 +4490,7 @@
 				4A6D13CF243C63B80069EA93 /* CLVoiceApplyAddressModel.m in Sources */,
 				4A7007DD241766660024DFB8 /* WXMediaMessage+messageConstruct.m in Sources */,
 				4A580FCD24075F2D00E82675 /* PhoneKeyView.m in Sources */,
+				4A68699F245A5C0C0036355E /* CarmeraDetailInfoController.m in Sources */,
 				4ABDA6FF24174023003B3170 /* CABasicAnimation+Category.mm in Sources */,
 				4A580F5D24075F2D00E82675 /* WWCollectionViewCell.m in Sources */,
 				4A58103524075F2E00E82675 /* IFTTTFrameAnimation.m in Sources */,
@@ -4432,6 +4516,7 @@
 				4A580FC224075F2D00E82675 /* BindPhoneSence.m in Sources */,
 				4A58106324075F2E00E82675 /* SCLButton.m in Sources */,
 				4A64ECE7242D875B00D30FB1 /* TCNavigationController.m in Sources */,
+				4A6869B5245AB9B90036355E /* ChannelDetailController.m in Sources */,
 				4A58101124075F2D00E82675 /* FTUtils+NSObject.m in Sources */,
 				4A511939242B082D005A3065 /* AFImageDownloader.m in Sources */,
 				4A58100B24075F2D00E82675 /* UIColor+MLPFlatColors.m in Sources */,
@@ -4467,6 +4552,7 @@
 				4A58100124075F2D00E82675 /* MJRefreshAutoNormalFooter.m in Sources */,
 				4AB29A1D24109012004CA6B5 /* HKLivingViewController.m in Sources */,
 				4A6869232456644C0036355E /* SingleCarmeraCell.m in Sources */,
+				4A6869A2245A67B80036355E /* CarmeraMoreSystemController.m in Sources */,
 				4A68693E2457C8850036355E /* SelectedCarmeraCell.m in Sources */,
 				4A58101924075F2D00E82675 /* UITableViewController+ADFlipTransition.m in Sources */,
 				4A580FCF24075F2D00E82675 /* LoginButtonCell.m in Sources */,
@@ -4515,15 +4601,19 @@
 				4A4608762408F426007C209A /* MyEquipmentsCell.m in Sources */,
 				4A580FDC24075F2D00E82675 /* UIView+badge.m in Sources */,
 				4A580FC424075F2D00E82675 /* RegistNewModel.m in Sources */,
+				4A6869A9245AA33A0036355E /* AddCarmeraAddressController.m in Sources */,
+				4A6869B8245AC0310036355E /* ChannelMoreSystemController.m in Sources */,
 				4A64ECD5242C547B00D30FB1 /* NSObject+Auth.m in Sources */,
 				4A580F2B24075F2D00E82675 /* UIColor+_Hex.m in Sources */,
 				4A580FD124075F2D00E82675 /* LoginBottomViewCell.m in Sources */,
 				4A68693B2457C8530036355E /* AddGroupTopViewCell.m in Sources */,
+				4A6869BC245ACB930036355E /* EquimentSharedViewController.m in Sources */,
 				4A580F2924075F2D00E82675 /* LGXNavigationController.m in Sources */,
 				4A51193D242B082D005A3065 /* AFURLSessionManager.m in Sources */,
 				4A4608792408F438007C209A /* MyEquipmentsModel.m in Sources */,
 				4A580F8724075F2D00E82675 /* GuideNewController.m in Sources */,
 				4AB299BE240DEE2D004CA6B5 /* DemandTitleCollectionCell.m in Sources */,
+				4A6869B1245AB67E0036355E /* MessageNoticesDealController.m in Sources */,
 				4A580C0024075D0D00E82675 /* main.m in Sources */,
 				4A580F1724075F2D00E82675 /* WWTableViewCell.m in Sources */,
 				4A511945242B082D005A3065 /* NSData+AES128.m in Sources */,

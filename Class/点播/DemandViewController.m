@@ -387,7 +387,7 @@
 }
 - (void)startLoadDataRequest
 {
-    [_kHUDManager showActivityInView:nil withTitle:nil];
+    [_kHUDManager showActivityInView:self.view withTitle:nil];
     
     NSString *start = [NSString stringWithFormat:@"%ld",(self.page - 1)*10];
     

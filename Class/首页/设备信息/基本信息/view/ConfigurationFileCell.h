@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) void(^textFieldName)(NSString*text);
 @property (nonatomic,strong) void(^textFieldAnnotation)(NSString*text);
+@property (nonatomic,strong) void(^addAddressClick)(void);
 
 
 -(void)makeCellData:(NSDictionary*)dic;

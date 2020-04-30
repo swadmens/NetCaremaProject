@@ -31,6 +31,13 @@ typedef enum : NSUInteger {
     PushTargetEquipmentOffline = 16, /// 设备离线
     PushTargetAddNewGroup = 17, /// 添加分组
     PushTargetLocalVideo = 18, /// 本地录像
+    PushTargetCarmeraDetailInfo = 19, /// 设备详情
+    PushTargetCarmeraMoreSystem = 20, /// 更多设置
+    PushTargetEquimentBasicInfo = 21, /// 设备基本信息
+    PushTargetMessageNoticesDeal = 22, /// 消息通知
+    PushTargetChannelDetail = 23, /// 通道详情
+    PushTargetChannelMoreSystem = 24, /// 更多设置
+    PushTargetEquimentShared = 25, /// 设备共享
 
     
     

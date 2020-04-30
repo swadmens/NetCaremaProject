@@ -62,6 +62,13 @@
     [lineLabel alignTop:@"0" leading:@"15" bottom:nil trailing:@"15" toView:self.contentView];
     [lineLabel addHeight:1];
     
+    
+    UIImageView *rightImageView = [UIImageView new];
+    rightImageView.image = UIImageWithFileName(@"mine_right_arrows");
+    [self.contentView addSubview:rightImageView];
+    [rightImageView yCenterToView:self.contentView];
+    [rightImageView rightToView:self.contentView withSpace:10];
+    
 }
 -(void)makeCellData:(MyEquipmentsModel *)model
 {

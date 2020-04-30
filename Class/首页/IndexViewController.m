@@ -143,7 +143,7 @@
            }else{
                [self setupNoDataView];
                [self setupTableView];
-               [self loadNewData];
+//               [self loadNewData];
            }
 
        }];
@@ -151,7 +151,8 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.dataArray.count;
+//    return self.dataArray.count;
+    return 4;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -162,17 +163,19 @@
         MoreCarmerasCell *cell = [tableView dequeueReusableCellWithIdentifier:[MoreCarmerasCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        [cell makeCellData:model withData:@[@"01",@"02"]];
+//        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+//        [cell makeCellData:model withData:@[@"01",@"02"]];
         
         cell.moreDealClick = ^{
             [self collectionSelect:indexPath.row];
         };
         cell.rightBtnClick = ^{
             ShowCarmerasViewController *vc = [ShowCarmerasViewController new];
-            vc.equipment_id = model.equipment_id;
+//            vc.equipment_id = model.equipment_id;
             vc.delegate = self;
+            vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
+            self.hidesBottomBarWhenPushed = NO;
         };
         
         return cell;
@@ -181,8 +184,8 @@
         SingleCarmeraCell *cell = [tableView dequeueReusableCellWithIdentifier:[SingleCarmeraCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        [cell makeCellData:model];
+//        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+//        [cell makeCellData:model];
         
         cell.moreClick = ^{
             [self collectionSelect:indexPath.row];
@@ -219,7 +222,8 @@
 }
 - (void)startLoadDataRequest
 {
-    [_kHUDManager showActivityInView:nil withTitle:nil];
+    [_kHUDManager showActivityInView:self.view withTitle:nil];
+    
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathURL = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_IsCameraManageDevice&currentPage=%ld",(long)self.page];;

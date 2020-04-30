@@ -30,6 +30,17 @@
 #import "EquipmentOfflineController.h"//设备离线
 #import "AddNewGroupController.h"//添加分组
 #import "LocalVideoViewController.h"//本地录像
+#import "CarmeraDetailInfoController.h"//设备详情
+#import "CarmeraMoreSystemController.h"//更多设置
+#import "EquimentBasicInfoController.h"//设备基本信息
+#import "MessageNoticesDealController.h"//消息通知
+#import "ChannelDetailController.h"//通道详情
+#import "ChannelMoreSystemController.h"//更多设置
+#import "EquimentSharedViewController.h"//设备共享
+
+
+
+
 
 @interface TargetEngine ()
 //<LGXPhotoBrowserDelegate,UIWebViewDelegate>
@@ -578,6 +589,56 @@
             toController = controller;
         }
             break;
+        case PushTargetCarmeraDetailInfo: //设备详情
+        {
+            CarmeraDetailInfoController *controller = [[CarmeraDetailInfoController alloc] init];
+            toController = controller;
+        }
+            break;
+            
+        case PushTargetCarmeraMoreSystem: //更多设置
+        {
+            CarmeraMoreSystemController *controller = [[CarmeraMoreSystemController alloc] init];
+            toController = controller;
+        }
+            break;
+        case PushTargetEquimentBasicInfo: //更多设置
+        {
+            EquimentBasicInfoController *controller = [[EquimentBasicInfoController alloc] init];
+            controller.equiment_id = pushId;
+            toController = controller;
+        }
+            break;
+        case PushTargetMessageNoticesDeal: //消息通知
+        {
+            MessageNoticesDealController *controller = [[MessageNoticesDealController alloc] init];
+            toController = controller;
+        }
+            break;
+        case PushTargetChannelDetail: //通道详情
+        {
+            ChannelDetailController *controller = [[ChannelDetailController alloc] init];
+            toController = controller;
+        }
+            break;
+        case PushTargetChannelMoreSystem: //更多设置
+        {
+            ChannelMoreSystemController *controller = [[ChannelMoreSystemController alloc] init];
+            toController = controller;
+        }
+            break;
+        case PushTargetEquimentShared: //设备共享
+        {
+            EquimentSharedViewController *controller = [[EquimentSharedViewController alloc] init];
+            toController = controller;
+        }
+            break;
+            
+            
+            
+            
+            
+        
           
             
             

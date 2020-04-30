@@ -11,9 +11,10 @@
 #import "ConfigurationFileCell.h"
 #import "ConnectionMonitoringCell.h"
 #import "AFHTTPSessionManager.h"
+#import "AddCarmeraAddressController.h"
 
 
-@interface EquimentBasicInfoController ()<UITableViewDelegate,UITableViewDataSource>
+@interface EquimentBasicInfoController ()<UITableViewDelegate,UITableViewDataSource,AddCarmeraAddressDelegate>
 
 @property (nonatomic,strong) WWTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -42,7 +43,7 @@
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 60;
-    [self.tableView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
+    [self.tableView alignTop:@"10" leading:@"0" bottom:@"10" trailing:@"0" toView:self.view];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[ConfigurationFileCell class] forCellReuseIdentifier:[ConfigurationFileCell getCellIDStr]];
@@ -52,8 +53,26 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.title = @"我的设备";
+    self.view.backgroundColor = kColorBackgroundColor;
+
+    
     [self setupTableView];
     self.isSave = NO;
+    
+    
+    //右上角按钮
+    UIButton *rightBtn = [UIButton new];
+    [rightBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    rightBtn.titleLabel.font=[UIFont customFontWithSize:kFontSizeFourteen];
+    [rightBtn.titleLabel setTextAlignment: NSTextAlignmentRight];
+    rightBtn.frame = CGRectMake(0, 0, 65, 40);
+    [rightBtn addTarget:self action:@selector(right_clicked) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    [rightBtn setTitle:@"保存" forState:UIControlStateNormal];
+    [self.navigationItem setRightBarButtonItem:rightItem];
+    
+    
     //接收通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadInfoNotica:) name:@"saveInfomation" object:nil];
 }
@@ -91,6 +110,11 @@
         cell.textFieldAnnotation = ^(NSString * _Nonnull text) {
             self.c8y_Notes = text;
         };
+        cell.addAddressClick = ^{
+            AddCarmeraAddressController *vc = [AddCarmeraAddressController new];
+            vc.delegate = self;
+            [self.navigationController pushViewController:vc animated:YES];
+        };
        return cell;
     }else{
         
@@ -100,6 +124,12 @@
         [cell makeCellData:self.dicData];
        return cell;
     }
+    
+}
+
+-(void)right_clicked
+{
+    //上传保存
     
 }
 
@@ -163,6 +193,14 @@
         
     }];
     [task resume];
+}
+
+#pragma AddCarmeraAddressDelegate
+-(void)addNewAddress:(NSString *)address
+{
+//    DLog(@"选择的地址 ==  %@",address);
+    [self.dicData setObject:address forKey:@"address"];
+    [self.tableView reloadData];
 }
 
 

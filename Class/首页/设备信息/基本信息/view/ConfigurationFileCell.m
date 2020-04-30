@@ -8,12 +8,12 @@
 
 #import "ConfigurationFileCell.h"
 
-
 @interface ConfigurationFileCell ()<UITextFieldDelegate,UITextViewDelegate>
 
 @property (nonatomic,strong) UITextField *equipment_name;
 @property (nonatomic,strong) UITextView *annotation_view;
 
+@property (nonatomic,strong) UILabel *addressLabel;
 @property (nonatomic,strong) UILabel *statesLabel;
 @property (nonatomic,strong) UILabel *equipment_id;
 @property (nonatomic,strong) UILabel *equipment_user;
@@ -34,7 +34,7 @@
     cardView.layer.cornerRadius = 10;
     [self.contentView addSubview:cardView];
     [cardView alignTop:@"5" leading:@"15" bottom:@"5" trailing:@"15" toView:self.contentView];
-    [cardView addHeight:378];
+    [cardView addHeight:423];
     
     
     UILabel *topLeftLabel = [UILabel new];
@@ -86,11 +86,61 @@
     [_equipment_name addWidth:kScreenWidth-100];
     [_equipment_name addHeight:25];
     
+    
+    UILabel *lineAddLabel = [UILabel new];
+    lineAddLabel.backgroundColor = kColorLineColor;
+    [cardView addSubview:lineAddLabel];
+    [lineAddLabel leftToView:cardView withSpace:16.5];
+    [lineAddLabel topToView:lineLabel1 withSpace:45];
+    [lineAddLabel addWidth:kScreenWidth-63];
+    [lineAddLabel addHeight:1];
+    
+    
+    UILabel *dzLabel1 = [UILabel new];
+    dzLabel1.text = @"地址";
+    dzLabel1.textColor = kColorMainTextColor;
+    dzLabel1.font = [UIFont customFontWithSize:kFontSizeThirteen];
+    [dzLabel1 sizeToFit];
+    [cardView addSubview:dzLabel1];
+    [dzLabel1 topToView:lineAddLabel withSpace:13];
+    [dzLabel1 xCenterToView:nameLabel];
+    
+    UIView *addressView = [UIView new];
+    addressView.userInteractionEnabled = YES;
+    addressView.clipsToBounds = YES;
+    addressView.layer.cornerRadius = 4;
+    addressView.layer.borderColor = kColorLineColor.CGColor;
+    addressView.layer.borderWidth = 0.5;
+    [cardView addSubview:addressView];
+    [addressView yCenterToView:dzLabel1];
+    [addressView leftToView:dzLabel1 withSpace:8];
+    [addressView addWidth:kScreenWidth-100];
+    [addressView addHeight:25];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(chooseAddressClick:)];
+    [addressView addGestureRecognizer:tap];
+    
+        
+    UIImageView *dwImage = [UIImageView new];
+    dwImage.image = UIImageWithFileName(@"carmera_info_address_image");
+    [addressView addSubview:dwImage];
+    [dwImage yCenterToView:addressView];
+    [dwImage leftToView:addressView withSpace:10];
+    
+    
+    _addressLabel = [UILabel new];
+    _addressLabel.text = @"广东省广州市天河区信息港A座11层";
+    _addressLabel.textColor = kColorMainTextColor;
+    _addressLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
+    [addressView addSubview:_addressLabel];
+    [_addressLabel yCenterToView:addressView];
+    [_addressLabel leftToView:dwImage withSpace:5];
+    
+
     UILabel *lineLabel2 = [UILabel new];
     lineLabel2.backgroundColor = kColorLineColor;
     [cardView addSubview:lineLabel2];
     [lineLabel2 leftToView:cardView withSpace:16.5];
-    [lineLabel2 topToView:lineLabel1 withSpace:45];
+    [lineLabel2 topToView:lineAddLabel withSpace:45];
     [lineLabel2 addWidth:kScreenWidth-63];
     [lineLabel2 addHeight:1];
     
@@ -204,7 +254,8 @@
     _equipment_id.text = [NSString stringWithFormat:@"ID：%@",[dic objectForKey:@"id"]];
     _equipment_user.text = [NSString stringWithFormat:@"拥有者：%@",[dic objectForKey:@"owner"]];
     _timeLabel.text = [NSString stringWithFormat:@"最近更新：%@",[dic objectForKey:@"lastUpdated"]];
-
+    _addressLabel.text = [dic objectForKey:@"address"];
+    
 }
 -(void)textFieldDidEndEditing:(UITextField *)textField
 {
@@ -217,6 +268,15 @@
     if (self.textFieldAnnotation) {
         self.textFieldAnnotation(textView.text);
     }
+}
+//选择地址
+-(void)chooseAddressClick:(UITapGestureRecognizer*)tp
+{
+    
+    if (self.addAddressClick) {
+        self.addAddressClick();
+    }
+  
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
