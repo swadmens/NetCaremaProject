@@ -1,25 +1,17 @@
 //
-//  AllGroupsViewController.m
+//  DeleteGroupsViewController.m
 //  NetCamera
 //
-//  Created by 汪伟 on 2020/4/27.
+//  Created by 汪伟 on 2020/5/6.
 //  Copyright © 2020 Guangzhou Eston Trade Co.,Ltd. All rights reserved.
 //
 
-#import "AllGroupsViewController.h"
+#import "DeleteGroupsViewController.h"
 #import "WWTableView.h"
-#import "WWTableViewCell.h"
+#import "DeleteGroupsTableViewCell.h"
 #import "RequestSence.h"
 
-@interface AllGroupsTableViewCell : WWTableViewCell
-
-@property (nonatomic,strong) UILabel *titleLabel;
-
-@end
-
-
-
-@interface AllGroupsViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface DeleteGroupsViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     BOOL _isHadFirst; // 是否第一次加载了
 }
@@ -31,10 +23,13 @@
 
 @property (nonatomic,strong) UILabel *groupNameLabel;
 
+@property (nonatomic,assign) BOOL isClick;//是否点击过
+
+@property (nonatomic, strong) NSMutableIndexSet *selectedIndexSet;
 
 @end
 
-@implementation AllGroupsViewController
+@implementation DeleteGroupsViewController
 -(NSMutableArray*)dataArray
 {
     if (!_dataArray) {
@@ -42,71 +37,25 @@
     }
     return _dataArray;
 }
+-(NSMutableIndexSet*)selectedIndexSet
+{
+    if (!_selectedIndexSet) {
+        _selectedIndexSet = [NSMutableIndexSet new];
+    }
+    return _selectedIndexSet;
+}
 - (void)setupTableView
 {
-    
-    UIView *backView = [UIView new];
-    backView.backgroundColor = [UIColor whiteColor];
-    backView.clipsToBounds = YES;
-    backView.layer.cornerRadius = 5;
-    [self.view addSubview:backView];
-    [backView alignTop:@"10" leading:@"15" bottom:nil trailing:@"15" toView:self.view];
-    [backView addHeight:45];
-    
-    
-    _groupNameLabel = [UILabel new];
-    _groupNameLabel.text = @"设备";
-    _groupNameLabel.textColor = kColorMainTextColor;
-    _groupNameLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
-    [backView addSubview:_groupNameLabel];
-    [_groupNameLabel yCenterToView:backView];
-    [_groupNameLabel leftToView:backView withSpace:15];
-    
-    UILabel *markLabel = [UILabel new];
-    markLabel.backgroundColor = kColorMainColor;
-    [self.view addSubview:markLabel];
-    [markLabel topToView:backView withSpace:15];
-    [markLabel leftToView:self.view withSpace:15];
-    [markLabel addWidth:1.5];
-    [markLabel addHeight:12];
-    
-    UILabel *title = [UILabel new];
-    title.text = @"我创建的分组";
-    title.textColor = kColorMainTextColor;
-    title.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [self.view addSubview:title];
-    [title yCenterToView:markLabel];
-    [title leftToView:markLabel withSpace:5];
-    
-    
     self.tableView = [[WWTableView alloc] init];
     self.tableView.backgroundColor = kColorBackgroundColor;
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 60;
-    [self.tableView alignTop:@"95" leading:@"0" bottom:@"58" trailing:@"0" toView:self.view];
+    [self.tableView alignTop:@"10" leading:@"0" bottom:@"58" trailing:@"0" toView:self.view];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerClass:[AllGroupsTableViewCell class] forCellReuseIdentifier:[AllGroupsTableViewCell getCellIDStr]];
-//    self.tableView.refreshEnable = YES;
-//    self.tableView.loadingMoreEnable = NO;
-//    __unsafe_unretained typeof(self) weak_self = self;
-//    self.tableView.actionHandle = ^(WWScrollingState state){
-//        switch (state) {
-//            case WWScrollingStateRefreshing:
-//            {
-//                [weak_self loadNewData];
-//            }
-//                break;
-//            case WWScrollingStateLoadingMore:
-//            {
-//                [weak_self loadMoreData];
-//            }
-//                break;
-//            default:
-//                break;
-//        }
-//    };
+    [self.tableView registerClass:[DeleteGroupsTableViewCell class] forCellReuseIdentifier:[DeleteGroupsTableViewCell getCellIDStr]];
+
     
     UIView *bottomView = [UIView new];
     bottomView.backgroundColor = [UIColor whiteColor];
@@ -115,23 +64,26 @@
     [bottomView addHeight:58];
     
     
-    UIButton *addBtn = [UIButton new];
-    addBtn.clipsToBounds = YES;
-    addBtn.layer.cornerRadius = 19;
-    [addBtn setTitle:@"添加分组" forState:UIControlStateNormal];
-    [addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [addBtn setBGColor:kColorMainColor forState:UIControlStateNormal];
-    addBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
-    [addBtn addTarget:self action:@selector(addGroupClick) forControlEvents:UIControlEventTouchUpInside];
-    [bottomView addSubview:addBtn];
-    [addBtn centerToView:bottomView];
-    [addBtn addWidth:kScreenWidth-30];
-    [addBtn addHeight:38];
+    UIButton *deleteBtn = [UIButton new];
+    deleteBtn.clipsToBounds = YES;
+    deleteBtn.layer.cornerRadius = 19;
+    [deleteBtn setTitle:@"删除分组" forState:UIControlStateNormal];
+    [deleteBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [deleteBtn setBGColor:kColorMainColor forState:UIControlStateNormal];
+    deleteBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
+    [deleteBtn addTarget:self action:@selector(deleteGroupClick) forControlEvents:UIControlEventTouchUpInside];
+    [bottomView addSubview:deleteBtn];
+    [deleteBtn centerToView:bottomView];
+    [deleteBtn addWidth:kScreenWidth-30];
+    [deleteBtn addHeight:38];
     
 }
--(void)addGroupClick
+-(void)deleteGroupClick
 {
-    [TargetEngine controller:nil pushToController:PushTargetAddNewGroup WithTargetId:nil];
+    //删除分组
+    [self.dataArray removeObjectsAtIndexes:self.selectedIndexSet];
+    [self.tableView reloadData];
+    
 }
 - (void)setupNoDataView
 {
@@ -162,39 +114,67 @@
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     
     [self setupTableView];
+
+    
+    NSArray *arr = @[@{@"select":@(NO)},@{@"select":@(NO)},@{@"select":@(NO)},@{@"select":@(NO)},@{@"select":@(NO)},@{@"select":@(NO)},@{@"select":@(NO)},@{@"select":@(NO)},];
+    [self.dataArray addObjectsFromArray:arr];
+    
+    
+    
     
     //右上角按钮
     UIButton *rightBtn = [UIButton new];
-    [rightBtn setImage:UIImageWithFileName(@"share_delete_image") forState:UIControlStateNormal];
+    [rightBtn setImage:UIImageWithFileName(@"group_chooses_image") forState:UIControlStateNormal];
     [rightBtn addTarget:self action:@selector(right_clicked) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     [self.navigationItem setRightBarButtonItem:rightItem];
     
 }
-//删除分组
 -(void)right_clicked
 {
-    [TargetEngine controller:self pushToController:PushTargetDeleteGroups WithTargetId:nil];
+//    [self.tableView setEditing:YES animated:NO];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2;
+    return self.dataArray.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
-    AllGroupsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[AllGroupsTableViewCell getCellIDStr] forIndexPath:indexPath];
-    
+    DeleteGroupsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[DeleteGroupsTableViewCell getCellIDStr] forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-//        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//        [cell makeCellData:model];
+    NSDictionary *model = [self.dataArray objectAtIndex:indexPath.row];
+    [cell makeCellData:model];
+    
+
+//    //设置首个默认选中
+//    [tableView selectRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
+    
     
     return cell;
 }
+// 选中
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+//
     
+    NSDictionary *model = [self.dataArray objectAtIndex:indexPath.row];
+    BOOL selected = [[model objectForKey:@"select"] boolValue];
+    if (selected) {
+        NSDictionary *dic = @{@"select":@(NO)};
+        [self.dataArray replaceObjectAtIndex:indexPath.row withObject:dic];
+        [self.selectedIndexSet removeIndex:indexPath.item];
+    }else{
+        NSDictionary *dic = @{@"select":@(YES)};
+        [self.dataArray replaceObjectAtIndex:indexPath.row withObject:dic];
+        [self.selectedIndexSet addIndex:indexPath.item];
+    }
+
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    
+    
+//    [self.tableView reloadData];
 }
 
 - (void)loadNewData
@@ -297,41 +277,5 @@
     // Pass the selected object to the new view controller.
 }
 */
-
-@end
-
-
-
-@implementation AllGroupsTableViewCell
-
--(void)dosetup
-{
-    [super dosetup];
-    self.contentView.backgroundColor = kColorBackgroundColor;
-    
-    UIView *backView = [UIView new];
-    backView.backgroundColor = [UIColor whiteColor];
-    backView.clipsToBounds = YES;
-    backView.layer.cornerRadius = 5;
-    [self.contentView addSubview:backView];
-    [backView alignTop:@"0" leading:@"15" bottom:@"10" trailing:@"15" toView:self.contentView];
-    [backView addHeight:45];
-    
-    
-    _titleLabel = [UILabel new];
-    _titleLabel.text = @"公司";
-    _titleLabel.textColor = kColorMainTextColor;
-    _titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
-    [backView addSubview:_titleLabel];
-    [_titleLabel yCenterToView:backView];
-    [_titleLabel leftToView:backView withSpace:15];
-    
-    UIImageView *rightImageView = [UIImageView new];
-    rightImageView.image = UIImageWithFileName(@"mine_right_arrows");
-    [backView addSubview:rightImageView];
-    [rightImageView yCenterToView:backView];
-    [rightImageView rightToView:backView withSpace:15];
-    
-}
 
 @end

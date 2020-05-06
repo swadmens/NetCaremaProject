@@ -82,6 +82,20 @@
     
     [self setupTableView];
     
+    
+    //右上角按钮
+    UIButton *rightBtn = [UIButton new];
+    [rightBtn setImage:UIImageWithFileName(@"group_save_image") forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(right_clicked) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    [self.navigationItem setRightBarButtonItem:rightItem];
+    
+    
+}
+//保存分组
+-(void)right_clicked
+{
+    
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

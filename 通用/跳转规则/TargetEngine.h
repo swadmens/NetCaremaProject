@@ -38,6 +38,8 @@ typedef enum : NSUInteger {
     PushTargetChannelDetail = 23, /// 通道详情
     PushTargetChannelMoreSystem = 24, /// 更多设置
     PushTargetEquimentShared = 25, /// 设备共享
+    PushTargetAddNewFriends = 26, /// 添加好友
+    PushTargetDeleteGroups = 27, /// 删除分组
 
     
     

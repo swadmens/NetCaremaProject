@@ -164,7 +164,7 @@
 //    self.folder = model.folder;
     self.isClick = YES;
 //    [self loadNewData];
-    [self.delegate collectionSelect:indexPath.row];
+//    [self.delegate collectionSelect:indexPath.row];
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section

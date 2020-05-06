@@ -100,12 +100,9 @@
     //右上角按钮
     UIButton *rightBtn = [UIButton new];
     [rightBtn setImage:UIImageWithFileName(@"local_right_image") forState:UIControlStateNormal];
-    [rightBtn addTarget:self action:@selector(right_clicked:) forControlEvents:UIControlEventTouchUpInside];
+    [rightBtn addTarget:self action:@selector(right_clicked) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     [self.navigationItem setRightBarButtonItem:rightItem];
-    
-    
-    
 }
 -(void)right_clicked
 {

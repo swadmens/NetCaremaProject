@@ -37,8 +37,8 @@
 #import "ChannelDetailController.h"//通道详情
 #import "ChannelMoreSystemController.h"//更多设置
 #import "EquimentSharedViewController.h"//设备共享
-
-
+#import "AddNewFriendsController.h"//添加好友
+#import "DeleteGroupsViewController.h"//删除分组
 
 
 
@@ -633,7 +633,20 @@
             toController = controller;
         }
             break;
+        case PushTargetAddNewFriends: //添加好友
+        {
+            AddNewFriendsController *controller = [[AddNewFriendsController alloc] init];
+            toController = controller;
+        }
+            break;
+        case PushTargetDeleteGroups: //删除分组
+        {
+            DeleteGroupsViewController *controller = [[DeleteGroupsViewController alloc] init];
+            toController = controller;
+        }
+            break;
             
+        
             
             
             
