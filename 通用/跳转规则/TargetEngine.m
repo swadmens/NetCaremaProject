@@ -39,8 +39,8 @@
 #import "EquimentSharedViewController.h"//设备共享
 #import "AddNewFriendsController.h"//添加好友
 #import "DeleteGroupsViewController.h"//删除分组
-
-
+#import "GlobalSearchViewController.h"//全局搜索
+#import "SuperPlayerViewController.h"//播放器
 
 @interface TargetEngine ()
 //<LGXPhotoBrowserDelegate,UIWebViewDelegate>
@@ -645,6 +645,20 @@
             toController = controller;
         }
             break;
+        case PushTargetGlobalSearch: //全局搜索
+        {
+            GlobalSearchViewController *controller = [[GlobalSearchViewController alloc] init];
+            toController = controller;
+        }
+            break;
+        case PushTargetSuperPlayer: //播放器
+        {
+            SuperPlayerViewController *controller = [[SuperPlayerViewController alloc] init];
+            toController = controller;
+        }
+            break;
+            
+            
             
         
             

@@ -40,6 +40,8 @@ typedef enum : NSUInteger {
     PushTargetEquimentShared = 25, /// 设备共享
     PushTargetAddNewFriends = 26, /// 添加好友
     PushTargetDeleteGroups = 27, /// 删除分组
+    PushTargetGlobalSearch = 28, /// 全局搜索
+    PushTargetSuperPlayer = 29, /// 播放器
 
     
     

@@ -208,6 +208,10 @@
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     self.searchValue = @"";
 }
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    [TargetEngine controller:nil pushToController:PushTargetGlobalSearch WithTargetId:nil];
+}
 
 -(void)addGroupClick
 {

@@ -193,11 +193,7 @@
         
         
         return cell;
-    }
-    
-    
-    
-    
+    }  
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -205,6 +201,11 @@
 //    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
 //
 //    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
+    
+    if (indexPath.row > 1) {
+        [TargetEngine controller:self pushToController:PushTargetSuperPlayer WithTargetId:nil];
+    }
+    
 }
 
 - (void)loadNewData
