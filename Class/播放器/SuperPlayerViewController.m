@@ -31,6 +31,7 @@
 - (void)setupTableView
 {
     self.tableView = [[WWTableView alloc] init];
+    [self.tableView setScrollEnabled:NO];
     self.tableView.backgroundColor = kColorBackgroundColor;
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;

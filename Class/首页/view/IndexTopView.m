@@ -88,8 +88,15 @@
     [self.searchButton setBackgroundImage:searchBGImage];
     [self.searchButton bottomToView:self];
     [self.searchButton leftToView:self withSpace:15];
-    [self.searchButton addWidth:kScreenWidth-30];
+    [self.searchButton addWidth:kScreenWidth-60];
     [self.searchButton addHeight:25];
+        
+    
+    UIButton *allPlayBtn = [UIButton new];
+    [allPlayBtn setImage:UIImageWithFileName(@"index_search_player_image") forState:UIControlStateNormal];
+    [self addSubview:allPlayBtn];
+    [allPlayBtn yCenterToView:self.searchButton];
+    [allPlayBtn rightToView:self withSpace:15];
     
     
     

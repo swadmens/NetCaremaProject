@@ -40,7 +40,8 @@
     self.FDPrefersNavigationBarHidden = YES;
     
     NSArray *arr = @[@{@"icon":@"mine_system_image",@"title":@"用户设置",@"describe":@""},
-                     @{@"icon":@"mine_download_image",@"title":@"我的下载",@"describe":@""},];
+                     @{@"icon":@"mine_download_image",@"title":@"我的下载",@"describe":@""},
+                     @{@"icon":@"mine_download_image",@"title":@"我的消息",@"describe":@""},];
     [self.dataArray addObjectsFromArray:arr];
         
     [self creadTopView];
@@ -138,9 +139,11 @@
         //个人信息
         [TargetEngine controller:self pushToController:PushTargetPersonInfoView WithTargetId:nil];
 
-    }else{
+    }else if (indexPath.row == 1){
         //下载列表
         [TargetEngine controller:self pushToController:PushTargetDownloadList WithTargetId:nil];
+    }else{
+        //我的消息
     }
 }
 /*
