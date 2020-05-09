@@ -12,6 +12,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SuperPlayerViewController : WWViewController
 
+@property (nonatomic,strong) NSString *gbs_serial;
+@property (nonatomic,strong) NSString *gbs_code;
+@property (nonatomic,strong) NSString *live_type;
+@property (nonatomic,strong) NSString *nvr_channel;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

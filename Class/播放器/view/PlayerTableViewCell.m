@@ -13,7 +13,7 @@
 #import "PlayerTopCollectionViewCell.h"
 
 
-#define KDeleteHeight 70
+#define KDeleteHeight 60
 
 @interface PlayerTableViewCell ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -76,7 +76,7 @@
     // Initialization code
     self.contentView.backgroundColor = [UIColor whiteColor];
     
-    CGFloat height = kScreenWidth * 0.68+1;
+    CGFloat height = kScreenWidth * 0.68 + 1;
     
     NSArray *arr = @[@"player_hoder_image",@"player_hoder_image",@"player_hoder_image",@"Player_add_video_image",];
     [self.dataArray addObjectsFromArray:arr];
@@ -144,6 +144,7 @@
     CGPoint point = [sender locationInView:sender.view];
     NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
     
+    
     if (indexPath.row == 3) {
         return;
     }
@@ -151,14 +152,14 @@
     switch (sender.state) {
     
         case UIGestureRecognizerStateBegan: {
-        
             if (self.showDeleteView) {
-            
                 [self showDeleteViewAnimation];
             }
-          if (indexPath) {
-            [self.collectionView beginInteractiveMovementForItemAtIndexPath:indexPath];
-          }
+          
+            if (indexPath) {
+                [self.collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+                [self.collectionView beginInteractiveMovementForItemAtIndexPath:indexPath];
+            }
           break;
         }
         case UIGestureRecognizerStateChanged: {
@@ -167,7 +168,7 @@
             NSLog(@"当前视图在View的位置:%@",NSStringFromCGPoint(point));
             
             if (self.showDeleteView) {
-                if (point.y  <  KDeleteHeight) {
+                if (point.y  <  50) {
                     [self setDeleteViewDeleteState];
                 }else {
                     [self setDeleteViewNormalState];
@@ -181,7 +182,7 @@
           [self.collectionView endInteractiveMovement];
             if (self.showDeleteView) {
                 [self hiddenDeleteViewAnimation];
-                if (point.y  <  KDeleteHeight) {
+                if (point.y  <  50) {
                     //删除
                     [self.dataArray replaceObjectAtIndex:indexPath.row withObject:@"Player_add_video_image"];
                     [self.collectionView reloadData];

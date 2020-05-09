@@ -21,7 +21,9 @@
 {
     [super doSetup];
     self.contentView.backgroundColor = [UIColor whiteColor];
-    
+    self.contentView.clipsToBounds = YES;
+    self.contentView.layer.borderColor = [UIColor clearColor].CGColor;
+    self.contentView.layer.borderWidth = 1;
     CGFloat width = (kScreenWidth-1)/2;
     
     
@@ -45,12 +47,6 @@
     [_titleImageView xCenterToView:backView];
     [_titleImageView yCenterToView:backView];
     
-    
-    
-    
-    
-    
-    
 }
 -(void)makeCellData:(NSString*)icon
 {
@@ -61,7 +57,7 @@
 -(void)setSelected:(BOOL)selected
 {
     [super setSelected:selected];
-//    _titleImageView.layer.borderColor = selected?UIColorFromRGB(0xFF7000, 1).CGColor:[UIColor clearColor].CGColor;
+    self.contentView.layer.borderColor = selected?UIColorFromRGB(0xFF7000, 1).CGColor:[UIColor clearColor].CGColor;
 }
 
 

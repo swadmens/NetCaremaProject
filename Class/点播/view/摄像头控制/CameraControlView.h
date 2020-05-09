@@ -31,6 +31,7 @@ typedef enum {
 @protocol CameraControlDelete <NSObject>
 
 -(void)cameraControl:(CameraControlView *_Nullable)CameraControlView withState:(ControlState)state;
+-(void)cameraColseControl:(CameraControlView *_Nullable)CameraControlView;
 
 @end
 

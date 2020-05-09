@@ -10,8 +10,6 @@
 #define GlobalDefine_h
 
 //MARK: - 屏幕尺寸
-#define kScreenWidth            [UIScreen mainScreen].bounds.size.width
-#define kScreenHeight           [UIScreen mainScreen].bounds.size.height
 #define kScreenBounds           [UIScreen mainScreen].bounds
 
 // 苹果X宽高
