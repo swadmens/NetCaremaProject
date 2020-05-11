@@ -17,10 +17,11 @@
 #import "IndexBottomView.h"
 #import "ShowCarmerasViewController.h"
 #import "MyEquipmentsModel.h"
+#import "WMZDialog.h"
+#import "QRCodeViewController.h"//二维码
 
 
-
-@interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource,IndexTopDelegate,IndexBottomDelegate,showCarmeraDelegate>
+@interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource,IndexTopDelegate,IndexBottomDelegate,showCarmeraDelegate,QRCodeViewControllerDelegate>
 {
     BOOL _isHadFirst; // 是否第一次加载了
 }
@@ -311,6 +312,31 @@
 -(void)searchValue:(NSString *)value
 {
     DLog(@"搜索  ==  %@",value);
+}
+-(void)navPopView:(NSInteger)value
+{
+    
+    if (value == 0) {
+        
+        QRCodeViewController *qrVc = [[QRCodeViewController alloc] init];
+        qrVc.delegate = self;
+        qrVc.isPushIn=YES;
+        qrVc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:qrVc animated:YES];
+        self.hidesBottomBarWhenPushed = NO;
+            
+    }else{
+        [TargetEngine controller:nil pushToController:PushTargetAllGroups WithTargetId:nil];
+    }
+}
+//扫描结果代理回调
+- (void)reader:(QRCodeViewController *)reader didScanResult:(NSString *)result
+{
+//    NSString *resStr = [WWPublicMethod dencodeBase64:result];
+//    [TargetEngine pushViewController:nil fromController:nil withTarget:resStr];
+    
+    DLog(@"扫描结果  ==  %@",result);
+    
 }
 #pragma IndexBottomDelegate
 -(void)clickCancelBtn

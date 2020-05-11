@@ -9,6 +9,9 @@
 #import "IndexTopView.h"
 #import "WWCollectionView.h"
 #import "IndexTopCollectionViewCell.h"
+#import "WMZDialog.h"
+#import "WBPopMenuModel.h"
+#import "WBPopMenuSingleton.h"
 
 @interface IndexTopView ()<UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -131,7 +134,7 @@
     [self addSubview:addBtn];
     [addBtn yCenterToView:nameLabel];
     [addBtn rightToView:self withSpace:15];
-    [addBtn addTarget:self action:@selector(addGroupClick) forControlEvents:UIControlEventTouchUpInside];
+    [addBtn addTarget:self action:@selector(addGroupClick:) forControlEvents:UIControlEventTouchUpInside];
     
     
 }
@@ -220,10 +223,42 @@
     [TargetEngine controller:nil pushToController:PushTargetGlobalSearch WithTargetId:nil];
 }
 
--(void)addGroupClick
+-(void)addGroupClick:(UIButton*)sender
 {
-    [TargetEngine controller:nil pushToController:PushTargetAllGroups WithTargetId:nil];
+    
+    
+    
+    NSMutableArray *obj = [NSMutableArray array];
+     
+     for (NSInteger i = 0; i < [self titles].count; i++) {
+         
+         WBPopMenuModel * info = [WBPopMenuModel new];
+         info.image = [self images][i];
+         info.title = [self titles][i];
+         [obj addObject:info];
+     }
+    
+     [[WBPopMenuSingleton shareManager]showPopMenuSelecteWithFrame:100
+                                                              item:obj
+                                                            action:^(NSInteger index) {
+         NSLog(@"index:%ld",(long)index);
+         
+         [self.delegate navPopView:index];
+        
+     }];
+    
+
 }
+- (NSArray *) titles {
+    return @[@"扫一扫",
+             @"添加分组"];
+}
+
+- (NSArray *) images {
+    return @[@"index_scan_image",
+             @"index_add_group_image"];
+}
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

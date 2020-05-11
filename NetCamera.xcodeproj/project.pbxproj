@@ -556,6 +556,64 @@
 		4AB50A32246685E60064BF82 /* player_control_select_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50A2C246685E50064BF82 /* player_control_select_image@3x.png */; };
 		4AB50A33246685E60064BF82 /* player_control_select_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50A2D246685E50064BF82 /* player_control_select_image@2x.png */; };
 		4AB50A34246685E60064BF82 /* player_screenshots_select_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50A2E246685E50064BF82 /* player_screenshots_select_image@3x.png */; };
+		4AB50A972468EDF40064BF82 /* WMZDialog+NaviMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A392468EDF40064BF82 /* WMZDialog+NaviMenu.m */; };
+		4AB50A982468EDF40064BF82 /* WMZDialog+Write.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A3B2468EDF40064BF82 /* WMZDialog+Write.m */; };
+		4AB50A992468EDF40064BF82 /* WMZDialog+Loading.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A3E2468EDF40064BF82 /* WMZDialog+Loading.m */; };
+		4AB50A9A2468EDF40064BF82 /* WMZDialog+TabbarMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A402468EDF40064BF82 /* WMZDialog+TabbarMenu.m */; };
+		4AB50A9B2468EDF40064BF82 /* WMZDialog+AutoDisappear.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A432468EDF40064BF82 /* WMZDialog+AutoDisappear.m */; };
+		4AB50A9C2468EDF40064BF82 /* WMZDialog+Down.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A472468EDF40064BF82 /* WMZDialog+Down.m */; };
+		4AB50A9D2468EDF40064BF82 /* WMZDialog+Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A492468EDF40064BF82 /* WMZDialog+Location.m */; };
+		4AB50A9E2468EDF40064BF82 /* WMZDialog+DatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A4C2468EDF40064BF82 /* WMZDialog+DatePicker.m */; };
+		4AB50A9F2468EDF40064BF82 /* WMZDialog+PopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A4F2468EDF40064BF82 /* WMZDialog+PopView.m */; };
+		4AB50AA02468EDF40064BF82 /* WMZDialog+Pay.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A532468EDF40064BF82 /* WMZDialog+Pay.m */; };
+		4AB50AA12468EDF40064BF82 /* WMZDialog+Calander.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A572468EDF40064BF82 /* WMZDialog+Calander.m */; };
+		4AB50AA22468EDF40064BF82 /* CalanderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A582468EDF40064BF82 /* CalanderModel.m */; };
+		4AB50AA32468EDF40064BF82 /* WMZDialog+time.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A5A2468EDF40064BF82 /* WMZDialog+time.m */; };
+		4AB50AA42468EDF40064BF82 /* WMZDialog+MenusSelect.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A5E2468EDF40064BF82 /* WMZDialog+MenusSelect.m */; };
+		4AB50AA52468EDF40064BF82 /* WMZDialog+CardPresent.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A612468EDF40064BF82 /* WMZDialog+CardPresent.m */; };
+		4AB50AA62468EDF40064BF82 /* WMZDialog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50A622468EDF40064BF82 /* WMZDialog.bundle */; };
+		4AB50AA72468EDF40064BF82 /* WMZDialog+PickView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A652468EDF40064BF82 /* WMZDialog+PickView.m */; };
+		4AB50AA82468EDF40064BF82 /* WMZDialogShareView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A6A2468EDF40064BF82 /* WMZDialogShareView.m */; };
+		4AB50AA92468EDF40064BF82 /* WMZDialogTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A6C2468EDF40064BF82 /* WMZDialogTool.m */; };
+		4AB50AAA2468EDF40064BF82 /* WMZDialogTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A6D2468EDF40064BF82 /* WMZDialogTableView.m */; };
+		4AB50AAB2468EDF40064BF82 /* NSDate+WMZCalendarDate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A6E2468EDF40064BF82 /* NSDate+WMZCalendarDate.m */; };
+		4AB50AAC2468EDF40064BF82 /* WMZDialogAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A702468EDF40064BF82 /* WMZDialogAnimation.m */; };
+		4AB50AAD2468EDF40064BF82 /* WMZDialog+BuyCar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A722468EDF40064BF82 /* WMZDialog+BuyCar.m */; };
+		4AB50AAE2468EDF40064BF82 /* WMZDialog+Normal.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A752468EDF40064BF82 /* WMZDialog+Normal.m */; };
+		4AB50AAF2468EDF40064BF82 /* WMZDialog+Advertisement.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A782468EDF40064BF82 /* WMZDialog+Advertisement.m */; };
+		4AB50AB02468EDF40064BF82 /* WMZDialog+Select.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A7B2468EDF40064BF82 /* WMZDialog+Select.m */; };
+		4AB50AB12468EDF40064BF82 /* WMZDialog+Sheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A7E2468EDF40064BF82 /* WMZDialog+Sheet.m */; };
+		4AB50AB22468EDF40064BF82 /* WMZDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A812468EDF40064BF82 /* WMZDialog.m */; };
+		4AB50AB32468EDF50064BF82 /* WMZDiaLogBase.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A852468EDF40064BF82 /* WMZDiaLogBase.m */; };
+		4AB50AB42468EDF50064BF82 /* WMZDialog+Share.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A872468EDF40064BF82 /* WMZDialog+Share.m */; };
+		4AB50AB52468EDF50064BF82 /* WMZTagsTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A8C2468EDF40064BF82 /* WMZTagsTool.m */; };
+		4AB50AB62468EDF50064BF82 /* WMZTagParam.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A8D2468EDF40064BF82 /* WMZTagParam.m */; };
+		4AB50AB72468EDF50064BF82 /* WMZTagBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A912468EDF40064BF82 /* WMZTagBtn.m */; };
+		4AB50AB82468EDF50064BF82 /* tagOneCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A922468EDF40064BF82 /* tagOneCell.m */; };
+		4AB50AB92468EDF50064BF82 /* WMZTags.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A932468EDF40064BF82 /* WMZTags.m */; };
+		4AB50ABA2468EDF50064BF82 /* WMZTagCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50A952468EDF40064BF82 /* WMZTagCell.m */; };
+		4AB50ABF2468EF610064BF82 /* index_add_group_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50ABB2468EF600064BF82 /* index_add_group_image@3x.png */; };
+		4AB50AC02468EF610064BF82 /* index_scan_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50ABC2468EF600064BF82 /* index_scan_image@2x.png */; };
+		4AB50AC12468EF610064BF82 /* index_scan_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50ABD2468EF610064BF82 /* index_scan_image@3x.png */; };
+		4AB50AC22468EF610064BF82 /* index_add_group_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50ABE2468EF610064BF82 /* index_add_group_image@2x.png */; };
+		4AB50AD02468FB240064BF82 /* WBTableViewDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50AC42468FB240064BF82 /* WBTableViewDataSource.m */; };
+		4AB50AD12468FB240064BF82 /* WBPopMenuSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50AC52468FB240064BF82 /* WBPopMenuSingleton.m */; };
+		4AB50AD22468FB240064BF82 /* WBPopMenuModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50AC62468FB240064BF82 /* WBPopMenuModel.m */; };
+		4AB50AD32468FB240064BF82 /* WBPopMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50AC82468FB240064BF82 /* WBPopMenuView.m */; };
+		4AB50AD42468FB240064BF82 /* WBTableViewDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50AC92468FB240064BF82 /* WBTableViewDelegate.m */; };
+		4AB50AD52468FB240064BF82 /* WBTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50ACC2468FB240064BF82 /* WBTableViewCell.m */; };
+		4AB50AD82468FEA40064BF82 /* index_popview_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AD62468FEA30064BF82 /* index_popview_image@3x.png */; };
+		4AB50AD92468FEA40064BF82 /* index_popview_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AD72468FEA40064BF82 /* index_popview_image@2x.png */; };
+		4AB50ADF246928290064BF82 /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50ADB246928290064BF82 /* beep.wav */; };
+		4AB50AE1246928290064BF82 /* QRCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50ADD246928290064BF82 /* QRCodeViewController.m */; };
+		4AB50AE424692A3F0064BF82 /* icon_back_screen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AE224692A3F0064BF82 /* icon_back_screen@2x.png */; };
+		4AB50AE524692A3F0064BF82 /* icon_back_screen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AE324692A3F0064BF82 /* icon_back_screen@3x.png */; };
+		4AB50AEA246932190064BF82 /* qrcode_light_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AE6246932180064BF82 /* qrcode_light_image@2x.png */; };
+		4AB50AEB246932190064BF82 /* qrcode_xiangce_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AE7246932180064BF82 /* qrcode_xiangce_image@3x.png */; };
+		4AB50AEC246932190064BF82 /* qrcode_xiangce_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AE8246932180064BF82 /* qrcode_xiangce_image@2x.png */; };
+		4AB50AED246932190064BF82 /* qrcode_light_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AE9246932180064BF82 /* qrcode_light_image@3x.png */; };
+		4AB50AF02469464C0064BF82 /* qrcode_light_close_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AEE2469464B0064BF82 /* qrcode_light_close_image@2x.png */; };
+		4AB50AF12469464C0064BF82 /* qrcode_light_close_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AEF2469464B0064BF82 /* qrcode_light_close_image@3x.png */; };
 		4ABDA6FF24174023003B3170 /* CABasicAnimation+Category.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4ABDA65C24174022003B3170 /* CABasicAnimation+Category.mm */; };
 		4ABDA70024174023003B3170 /* DHOptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4ABDA65D24174022003B3170 /* DHOptionViewController.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4ABDA70124174023003B3170 /* ScanViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4ABDA65F24174022003B3170 /* ScanViewController.mm */; };
@@ -1638,6 +1696,108 @@
 		4AB50A2C246685E50064BF82 /* player_control_select_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_control_select_image@3x.png"; sourceTree = "<group>"; };
 		4AB50A2D246685E50064BF82 /* player_control_select_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_control_select_image@2x.png"; sourceTree = "<group>"; };
 		4AB50A2E246685E50064BF82 /* player_screenshots_select_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_screenshots_select_image@3x.png"; sourceTree = "<group>"; };
+		4AB50A382468EDF40064BF82 /* WMZDialog+NaviMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+NaviMenu.h"; sourceTree = "<group>"; };
+		4AB50A392468EDF40064BF82 /* WMZDialog+NaviMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+NaviMenu.m"; sourceTree = "<group>"; };
+		4AB50A3A2468EDF40064BF82 /* WMZDialog+Write.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+Write.h"; sourceTree = "<group>"; };
+		4AB50A3B2468EDF40064BF82 /* WMZDialog+Write.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+Write.m"; sourceTree = "<group>"; };
+		4AB50A3E2468EDF40064BF82 /* WMZDialog+Loading.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+Loading.m"; sourceTree = "<group>"; };
+		4AB50A3F2468EDF40064BF82 /* WMZDialog+Loading.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+Loading.h"; sourceTree = "<group>"; };
+		4AB50A402468EDF40064BF82 /* WMZDialog+TabbarMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+TabbarMenu.m"; sourceTree = "<group>"; };
+		4AB50A412468EDF40064BF82 /* WMZDialog+TabbarMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+TabbarMenu.h"; sourceTree = "<group>"; };
+		4AB50A432468EDF40064BF82 /* WMZDialog+AutoDisappear.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+AutoDisappear.m"; sourceTree = "<group>"; };
+		4AB50A442468EDF40064BF82 /* WMZDialog+AutoDisappear.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+AutoDisappear.h"; sourceTree = "<group>"; };
+		4AB50A462468EDF40064BF82 /* WMZDialog+Down.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+Down.h"; sourceTree = "<group>"; };
+		4AB50A472468EDF40064BF82 /* WMZDialog+Down.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+Down.m"; sourceTree = "<group>"; };
+		4AB50A492468EDF40064BF82 /* WMZDialog+Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+Location.m"; sourceTree = "<group>"; };
+		4AB50A4A2468EDF40064BF82 /* WMZDialog+Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+Location.h"; sourceTree = "<group>"; };
+		4AB50A4C2468EDF40064BF82 /* WMZDialog+DatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+DatePicker.m"; sourceTree = "<group>"; };
+		4AB50A4D2468EDF40064BF82 /* WMZDialog+DatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+DatePicker.h"; sourceTree = "<group>"; };
+		4AB50A4F2468EDF40064BF82 /* WMZDialog+PopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+PopView.m"; sourceTree = "<group>"; };
+		4AB50A502468EDF40064BF82 /* WMZDialog+PopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+PopView.h"; sourceTree = "<group>"; };
+		4AB50A522468EDF40064BF82 /* WMZDialog+Pay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+Pay.h"; sourceTree = "<group>"; };
+		4AB50A532468EDF40064BF82 /* WMZDialog+Pay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+Pay.m"; sourceTree = "<group>"; };
+		4AB50A552468EDF40064BF82 /* WMZDialog+Calander.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+Calander.h"; sourceTree = "<group>"; };
+		4AB50A562468EDF40064BF82 /* CalanderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalanderModel.h; sourceTree = "<group>"; };
+		4AB50A572468EDF40064BF82 /* WMZDialog+Calander.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+Calander.m"; sourceTree = "<group>"; };
+		4AB50A582468EDF40064BF82 /* CalanderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalanderModel.m; sourceTree = "<group>"; };
+		4AB50A5A2468EDF40064BF82 /* WMZDialog+time.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+time.m"; sourceTree = "<group>"; };
+		4AB50A5B2468EDF40064BF82 /* WMZDialog+time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+time.h"; sourceTree = "<group>"; };
+		4AB50A5D2468EDF40064BF82 /* WMZDialog+MenusSelect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+MenusSelect.h"; sourceTree = "<group>"; };
+		4AB50A5E2468EDF40064BF82 /* WMZDialog+MenusSelect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+MenusSelect.m"; sourceTree = "<group>"; };
+		4AB50A602468EDF40064BF82 /* WMZDialog+CardPresent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+CardPresent.h"; sourceTree = "<group>"; };
+		4AB50A612468EDF40064BF82 /* WMZDialog+CardPresent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+CardPresent.m"; sourceTree = "<group>"; };
+		4AB50A622468EDF40064BF82 /* WMZDialog.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = WMZDialog.bundle; sourceTree = "<group>"; };
+		4AB50A642468EDF40064BF82 /* WMZDialog+PickView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+PickView.h"; sourceTree = "<group>"; };
+		4AB50A652468EDF40064BF82 /* WMZDialog+PickView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+PickView.m"; sourceTree = "<group>"; };
+		4AB50A672468EDF40064BF82 /* WMZDialogTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZDialogTableView.h; sourceTree = "<group>"; };
+		4AB50A682468EDF40064BF82 /* WMZDialogTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZDialogTool.h; sourceTree = "<group>"; };
+		4AB50A692468EDF40064BF82 /* NSDate+WMZCalendarDate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+WMZCalendarDate.h"; sourceTree = "<group>"; };
+		4AB50A6A2468EDF40064BF82 /* WMZDialogShareView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMZDialogShareView.m; sourceTree = "<group>"; };
+		4AB50A6B2468EDF40064BF82 /* WMZDialogAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZDialogAnimation.h; sourceTree = "<group>"; };
+		4AB50A6C2468EDF40064BF82 /* WMZDialogTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMZDialogTool.m; sourceTree = "<group>"; };
+		4AB50A6D2468EDF40064BF82 /* WMZDialogTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMZDialogTableView.m; sourceTree = "<group>"; };
+		4AB50A6E2468EDF40064BF82 /* NSDate+WMZCalendarDate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+WMZCalendarDate.m"; sourceTree = "<group>"; };
+		4AB50A6F2468EDF40064BF82 /* WMZDialogShareView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZDialogShareView.h; sourceTree = "<group>"; };
+		4AB50A702468EDF40064BF82 /* WMZDialogAnimation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMZDialogAnimation.m; sourceTree = "<group>"; };
+		4AB50A722468EDF40064BF82 /* WMZDialog+BuyCar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+BuyCar.m"; sourceTree = "<group>"; };
+		4AB50A732468EDF40064BF82 /* WMZDialog+BuyCar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+BuyCar.h"; sourceTree = "<group>"; };
+		4AB50A752468EDF40064BF82 /* WMZDialog+Normal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+Normal.m"; sourceTree = "<group>"; };
+		4AB50A762468EDF40064BF82 /* WMZDialog+Normal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+Normal.h"; sourceTree = "<group>"; };
+		4AB50A782468EDF40064BF82 /* WMZDialog+Advertisement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+Advertisement.m"; sourceTree = "<group>"; };
+		4AB50A792468EDF40064BF82 /* WMZDialog+Advertisement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+Advertisement.h"; sourceTree = "<group>"; };
+		4AB50A7B2468EDF40064BF82 /* WMZDialog+Select.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+Select.m"; sourceTree = "<group>"; };
+		4AB50A7C2468EDF40064BF82 /* WMZDialog+Select.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+Select.h"; sourceTree = "<group>"; };
+		4AB50A7E2468EDF40064BF82 /* WMZDialog+Sheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+Sheet.m"; sourceTree = "<group>"; };
+		4AB50A7F2468EDF40064BF82 /* WMZDialog+Sheet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+Sheet.h"; sourceTree = "<group>"; };
+		4AB50A812468EDF40064BF82 /* WMZDialog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMZDialog.m; sourceTree = "<group>"; };
+		4AB50A822468EDF40064BF82 /* WMZDiaLogBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZDiaLogBase.h; sourceTree = "<group>"; };
+		4AB50A832468EDF40064BF82 /* WMZDialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZDialog.h; sourceTree = "<group>"; };
+		4AB50A842468EDF40064BF82 /* WMZDialogMacro.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZDialogMacro.h; sourceTree = "<group>"; };
+		4AB50A852468EDF40064BF82 /* WMZDiaLogBase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMZDiaLogBase.m; sourceTree = "<group>"; };
+		4AB50A872468EDF40064BF82 /* WMZDialog+Share.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WMZDialog+Share.m"; sourceTree = "<group>"; };
+		4AB50A882468EDF40064BF82 /* WMZDialog+Share.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WMZDialog+Share.h"; sourceTree = "<group>"; };
+		4AB50A8A2468EDF40064BF82 /* WMZTagBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZTagBtn.h; sourceTree = "<group>"; };
+		4AB50A8B2468EDF40064BF82 /* WMZTagConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZTagConfig.h; sourceTree = "<group>"; };
+		4AB50A8C2468EDF40064BF82 /* WMZTagsTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMZTagsTool.m; sourceTree = "<group>"; };
+		4AB50A8D2468EDF40064BF82 /* WMZTagParam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMZTagParam.m; sourceTree = "<group>"; };
+		4AB50A8E2468EDF40064BF82 /* WMZTagCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZTagCell.h; sourceTree = "<group>"; };
+		4AB50A8F2468EDF40064BF82 /* WMZTags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZTags.h; sourceTree = "<group>"; };
+		4AB50A902468EDF40064BF82 /* tagOneCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tagOneCell.h; sourceTree = "<group>"; };
+		4AB50A912468EDF40064BF82 /* WMZTagBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMZTagBtn.m; sourceTree = "<group>"; };
+		4AB50A922468EDF40064BF82 /* tagOneCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = tagOneCell.m; sourceTree = "<group>"; };
+		4AB50A932468EDF40064BF82 /* WMZTags.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMZTags.m; sourceTree = "<group>"; };
+		4AB50A942468EDF40064BF82 /* WMZTagParam.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZTagParam.h; sourceTree = "<group>"; };
+		4AB50A952468EDF40064BF82 /* WMZTagCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMZTagCell.m; sourceTree = "<group>"; };
+		4AB50A962468EDF40064BF82 /* WMZTagsTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMZTagsTool.h; sourceTree = "<group>"; };
+		4AB50ABB2468EF600064BF82 /* index_add_group_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "index_add_group_image@3x.png"; sourceTree = "<group>"; };
+		4AB50ABC2468EF600064BF82 /* index_scan_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "index_scan_image@2x.png"; sourceTree = "<group>"; };
+		4AB50ABD2468EF610064BF82 /* index_scan_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "index_scan_image@3x.png"; sourceTree = "<group>"; };
+		4AB50ABE2468EF610064BF82 /* index_add_group_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "index_add_group_image@2x.png"; sourceTree = "<group>"; };
+		4AB50AC42468FB240064BF82 /* WBTableViewDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBTableViewDataSource.m; sourceTree = "<group>"; };
+		4AB50AC52468FB240064BF82 /* WBPopMenuSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBPopMenuSingleton.m; sourceTree = "<group>"; };
+		4AB50AC62468FB240064BF82 /* WBPopMenuModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBPopMenuModel.m; sourceTree = "<group>"; };
+		4AB50AC72468FB240064BF82 /* WBTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBTableViewCell.h; sourceTree = "<group>"; };
+		4AB50AC82468FB240064BF82 /* WBPopMenuView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBPopMenuView.m; sourceTree = "<group>"; };
+		4AB50AC92468FB240064BF82 /* WBTableViewDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBTableViewDelegate.m; sourceTree = "<group>"; };
+		4AB50ACA2468FB240064BF82 /* WBPopMenuSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBPopMenuSingleton.h; sourceTree = "<group>"; };
+		4AB50ACB2468FB240064BF82 /* WBTableViewDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBTableViewDataSource.h; sourceTree = "<group>"; };
+		4AB50ACC2468FB240064BF82 /* WBTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBTableViewCell.m; sourceTree = "<group>"; };
+		4AB50ACD2468FB240064BF82 /* WBPopMenuModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBPopMenuModel.h; sourceTree = "<group>"; };
+		4AB50ACE2468FB240064BF82 /* WBPopMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBPopMenuView.h; sourceTree = "<group>"; };
+		4AB50ACF2468FB240064BF82 /* WBTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBTableViewDelegate.h; sourceTree = "<group>"; };
+		4AB50AD62468FEA30064BF82 /* index_popview_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "index_popview_image@3x.png"; sourceTree = "<group>"; };
+		4AB50AD72468FEA40064BF82 /* index_popview_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "index_popview_image@2x.png"; sourceTree = "<group>"; };
+		4AB50ADB246928290064BF82 /* beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep.wav; sourceTree = "<group>"; };
+		4AB50ADD246928290064BF82 /* QRCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeViewController.m; sourceTree = "<group>"; };
+		4AB50ADE246928290064BF82 /* QRCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeViewController.h; sourceTree = "<group>"; };
+		4AB50AE224692A3F0064BF82 /* icon_back_screen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_back_screen@2x.png"; sourceTree = "<group>"; };
+		4AB50AE324692A3F0064BF82 /* icon_back_screen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_back_screen@3x.png"; sourceTree = "<group>"; };
+		4AB50AE6246932180064BF82 /* qrcode_light_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qrcode_light_image@2x.png"; sourceTree = "<group>"; };
+		4AB50AE7246932180064BF82 /* qrcode_xiangce_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qrcode_xiangce_image@3x.png"; sourceTree = "<group>"; };
+		4AB50AE8246932180064BF82 /* qrcode_xiangce_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qrcode_xiangce_image@2x.png"; sourceTree = "<group>"; };
+		4AB50AE9246932180064BF82 /* qrcode_light_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qrcode_light_image@3x.png"; sourceTree = "<group>"; };
+		4AB50AEE2469464B0064BF82 /* qrcode_light_close_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qrcode_light_close_image@2x.png"; sourceTree = "<group>"; };
+		4AB50AEF2469464B0064BF82 /* qrcode_light_close_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qrcode_light_close_image@3x.png"; sourceTree = "<group>"; };
 		4ABDA65B24174022003B3170 /* GlobalDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalDefine.h; sourceTree = "<group>"; };
 		4ABDA65C24174022003B3170 /* CABasicAnimation+Category.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "CABasicAnimation+Category.mm"; sourceTree = "<group>"; };
 		4ABDA65D24174022003B3170 /* DHOptionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DHOptionViewController.mm; sourceTree = "<group>"; };
@@ -1915,6 +2075,20 @@
 		4A4606BE2407C513007C209A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4AB50AEE2469464B0064BF82 /* qrcode_light_close_image@2x.png */,
+				4AB50AEF2469464B0064BF82 /* qrcode_light_close_image@3x.png */,
+				4AB50AE6246932180064BF82 /* qrcode_light_image@2x.png */,
+				4AB50AE9246932180064BF82 /* qrcode_light_image@3x.png */,
+				4AB50AE8246932180064BF82 /* qrcode_xiangce_image@2x.png */,
+				4AB50AE7246932180064BF82 /* qrcode_xiangce_image@3x.png */,
+				4AB50AE224692A3F0064BF82 /* icon_back_screen@2x.png */,
+				4AB50AE324692A3F0064BF82 /* icon_back_screen@3x.png */,
+				4AB50AD72468FEA40064BF82 /* index_popview_image@2x.png */,
+				4AB50AD62468FEA30064BF82 /* index_popview_image@3x.png */,
+				4AB50ABE2468EF610064BF82 /* index_add_group_image@2x.png */,
+				4AB50ABB2468EF600064BF82 /* index_add_group_image@3x.png */,
+				4AB50ABC2468EF600064BF82 /* index_scan_image@2x.png */,
+				4AB50ABD2468EF610064BF82 /* index_scan_image@3x.png */,
 				4AB50A2D246685E50064BF82 /* player_control_select_image@2x.png */,
 				4AB50A2C246685E50064BF82 /* player_control_select_image@3x.png */,
 				4AB50A29246685E40064BF82 /* player_screenshots_select_image@2x.png */,
@@ -2691,6 +2865,9 @@
 		4A580CD824075F2B00E82675 /* 弹出框 */ = {
 			isa = PBXGroup;
 			children = (
+				4AB50AC32468FB240064BF82 /* PopMenuView */,
+				4AB50A352468EDF40064BF82 /* WMZDialog */,
+				4AB50A892468EDF40064BF82 /* WMZTags */,
 				4A6869422457D2BD0036355E /* LEEAlert */,
 				4A580CD924075F2B00E82675 /* TCAlertView.h */,
 				4A580CDB24075F2B00E82675 /* TCAlertView.m */,
@@ -2802,6 +2979,7 @@
 		4A580D3124075F2B00E82675 /* WWLibrary */ = {
 			isa = PBXGroup;
 			children = (
+				4AB50ADA246928290064BF82 /* 二维码扫描 */,
 				4A64ECD8242D862C00D30FB1 /* 视频录制 */,
 				4A580D3224075F2B00E82675 /* WebView */,
 				4A580D3524075F2B00E82675 /* 短信验证码获取 */,
@@ -4024,6 +4202,306 @@
 			path = "下载列表";
 			sourceTree = "<group>";
 		};
+		4AB50A352468EDF40064BF82 /* WMZDialog */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A362468EDF40064BF82 /* Write */,
+				4AB50A3C2468EDF40064BF82 /* TabbarMenu */,
+				4AB50A422468EDF40064BF82 /* AutoDisappear */,
+				4AB50A452468EDF40064BF82 /* Dowm */,
+				4AB50A482468EDF40064BF82 /* Location */,
+				4AB50A4B2468EDF40064BF82 /* DatePicker */,
+				4AB50A4E2468EDF40064BF82 /* PopView */,
+				4AB50A512468EDF40064BF82 /* Pay */,
+				4AB50A542468EDF40064BF82 /* Calander */,
+				4AB50A592468EDF40064BF82 /* Time */,
+				4AB50A5C2468EDF40064BF82 /* MenusSelect */,
+				4AB50A5F2468EDF40064BF82 /* CardPresent */,
+				4AB50A622468EDF40064BF82 /* WMZDialog.bundle */,
+				4AB50A632468EDF40064BF82 /* PickView */,
+				4AB50A662468EDF40064BF82 /* WMZDialogTool */,
+				4AB50A712468EDF40064BF82 /* BuyCar */,
+				4AB50A742468EDF40064BF82 /* Normal */,
+				4AB50A772468EDF40064BF82 /* Advertisement */,
+				4AB50A7A2468EDF40064BF82 /* Select */,
+				4AB50A7D2468EDF40064BF82 /* Sheet */,
+				4AB50A802468EDF40064BF82 /* Main */,
+				4AB50A862468EDF40064BF82 /* Share */,
+			);
+			path = WMZDialog;
+			sourceTree = "<group>";
+		};
+		4AB50A362468EDF40064BF82 /* Write */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A372468EDF40064BF82 /* NaviMenu */,
+				4AB50A3A2468EDF40064BF82 /* WMZDialog+Write.h */,
+				4AB50A3B2468EDF40064BF82 /* WMZDialog+Write.m */,
+			);
+			path = Write;
+			sourceTree = "<group>";
+		};
+		4AB50A372468EDF40064BF82 /* NaviMenu */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A382468EDF40064BF82 /* WMZDialog+NaviMenu.h */,
+				4AB50A392468EDF40064BF82 /* WMZDialog+NaviMenu.m */,
+			);
+			path = NaviMenu;
+			sourceTree = "<group>";
+		};
+		4AB50A3C2468EDF40064BF82 /* TabbarMenu */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A3D2468EDF40064BF82 /* Loading */,
+				4AB50A402468EDF40064BF82 /* WMZDialog+TabbarMenu.m */,
+				4AB50A412468EDF40064BF82 /* WMZDialog+TabbarMenu.h */,
+			);
+			path = TabbarMenu;
+			sourceTree = "<group>";
+		};
+		4AB50A3D2468EDF40064BF82 /* Loading */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A3E2468EDF40064BF82 /* WMZDialog+Loading.m */,
+				4AB50A3F2468EDF40064BF82 /* WMZDialog+Loading.h */,
+			);
+			path = Loading;
+			sourceTree = "<group>";
+		};
+		4AB50A422468EDF40064BF82 /* AutoDisappear */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A432468EDF40064BF82 /* WMZDialog+AutoDisappear.m */,
+				4AB50A442468EDF40064BF82 /* WMZDialog+AutoDisappear.h */,
+			);
+			path = AutoDisappear;
+			sourceTree = "<group>";
+		};
+		4AB50A452468EDF40064BF82 /* Dowm */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A462468EDF40064BF82 /* WMZDialog+Down.h */,
+				4AB50A472468EDF40064BF82 /* WMZDialog+Down.m */,
+			);
+			path = Dowm;
+			sourceTree = "<group>";
+		};
+		4AB50A482468EDF40064BF82 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A492468EDF40064BF82 /* WMZDialog+Location.m */,
+				4AB50A4A2468EDF40064BF82 /* WMZDialog+Location.h */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
+		4AB50A4B2468EDF40064BF82 /* DatePicker */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A4C2468EDF40064BF82 /* WMZDialog+DatePicker.m */,
+				4AB50A4D2468EDF40064BF82 /* WMZDialog+DatePicker.h */,
+			);
+			path = DatePicker;
+			sourceTree = "<group>";
+		};
+		4AB50A4E2468EDF40064BF82 /* PopView */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A502468EDF40064BF82 /* WMZDialog+PopView.h */,
+				4AB50A4F2468EDF40064BF82 /* WMZDialog+PopView.m */,
+			);
+			path = PopView;
+			sourceTree = "<group>";
+		};
+		4AB50A512468EDF40064BF82 /* Pay */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A522468EDF40064BF82 /* WMZDialog+Pay.h */,
+				4AB50A532468EDF40064BF82 /* WMZDialog+Pay.m */,
+			);
+			path = Pay;
+			sourceTree = "<group>";
+		};
+		4AB50A542468EDF40064BF82 /* Calander */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A552468EDF40064BF82 /* WMZDialog+Calander.h */,
+				4AB50A562468EDF40064BF82 /* CalanderModel.h */,
+				4AB50A572468EDF40064BF82 /* WMZDialog+Calander.m */,
+				4AB50A582468EDF40064BF82 /* CalanderModel.m */,
+			);
+			path = Calander;
+			sourceTree = "<group>";
+		};
+		4AB50A592468EDF40064BF82 /* Time */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A5A2468EDF40064BF82 /* WMZDialog+time.m */,
+				4AB50A5B2468EDF40064BF82 /* WMZDialog+time.h */,
+			);
+			path = Time;
+			sourceTree = "<group>";
+		};
+		4AB50A5C2468EDF40064BF82 /* MenusSelect */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A5D2468EDF40064BF82 /* WMZDialog+MenusSelect.h */,
+				4AB50A5E2468EDF40064BF82 /* WMZDialog+MenusSelect.m */,
+			);
+			path = MenusSelect;
+			sourceTree = "<group>";
+		};
+		4AB50A5F2468EDF40064BF82 /* CardPresent */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A602468EDF40064BF82 /* WMZDialog+CardPresent.h */,
+				4AB50A612468EDF40064BF82 /* WMZDialog+CardPresent.m */,
+			);
+			path = CardPresent;
+			sourceTree = "<group>";
+		};
+		4AB50A632468EDF40064BF82 /* PickView */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A642468EDF40064BF82 /* WMZDialog+PickView.h */,
+				4AB50A652468EDF40064BF82 /* WMZDialog+PickView.m */,
+			);
+			path = PickView;
+			sourceTree = "<group>";
+		};
+		4AB50A662468EDF40064BF82 /* WMZDialogTool */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A672468EDF40064BF82 /* WMZDialogTableView.h */,
+				4AB50A682468EDF40064BF82 /* WMZDialogTool.h */,
+				4AB50A692468EDF40064BF82 /* NSDate+WMZCalendarDate.h */,
+				4AB50A6A2468EDF40064BF82 /* WMZDialogShareView.m */,
+				4AB50A6B2468EDF40064BF82 /* WMZDialogAnimation.h */,
+				4AB50A6C2468EDF40064BF82 /* WMZDialogTool.m */,
+				4AB50A6D2468EDF40064BF82 /* WMZDialogTableView.m */,
+				4AB50A6E2468EDF40064BF82 /* NSDate+WMZCalendarDate.m */,
+				4AB50A6F2468EDF40064BF82 /* WMZDialogShareView.h */,
+				4AB50A702468EDF40064BF82 /* WMZDialogAnimation.m */,
+			);
+			path = WMZDialogTool;
+			sourceTree = "<group>";
+		};
+		4AB50A712468EDF40064BF82 /* BuyCar */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A722468EDF40064BF82 /* WMZDialog+BuyCar.m */,
+				4AB50A732468EDF40064BF82 /* WMZDialog+BuyCar.h */,
+			);
+			path = BuyCar;
+			sourceTree = "<group>";
+		};
+		4AB50A742468EDF40064BF82 /* Normal */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A752468EDF40064BF82 /* WMZDialog+Normal.m */,
+				4AB50A762468EDF40064BF82 /* WMZDialog+Normal.h */,
+			);
+			path = Normal;
+			sourceTree = "<group>";
+		};
+		4AB50A772468EDF40064BF82 /* Advertisement */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A782468EDF40064BF82 /* WMZDialog+Advertisement.m */,
+				4AB50A792468EDF40064BF82 /* WMZDialog+Advertisement.h */,
+			);
+			path = Advertisement;
+			sourceTree = "<group>";
+		};
+		4AB50A7A2468EDF40064BF82 /* Select */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A7B2468EDF40064BF82 /* WMZDialog+Select.m */,
+				4AB50A7C2468EDF40064BF82 /* WMZDialog+Select.h */,
+			);
+			path = Select;
+			sourceTree = "<group>";
+		};
+		4AB50A7D2468EDF40064BF82 /* Sheet */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A7E2468EDF40064BF82 /* WMZDialog+Sheet.m */,
+				4AB50A7F2468EDF40064BF82 /* WMZDialog+Sheet.h */,
+			);
+			path = Sheet;
+			sourceTree = "<group>";
+		};
+		4AB50A802468EDF40064BF82 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A832468EDF40064BF82 /* WMZDialog.h */,
+				4AB50A812468EDF40064BF82 /* WMZDialog.m */,
+				4AB50A822468EDF40064BF82 /* WMZDiaLogBase.h */,
+				4AB50A852468EDF40064BF82 /* WMZDiaLogBase.m */,
+				4AB50A842468EDF40064BF82 /* WMZDialogMacro.h */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		4AB50A862468EDF40064BF82 /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A872468EDF40064BF82 /* WMZDialog+Share.m */,
+				4AB50A882468EDF40064BF82 /* WMZDialog+Share.h */,
+			);
+			path = Share;
+			sourceTree = "<group>";
+		};
+		4AB50A892468EDF40064BF82 /* WMZTags */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50A902468EDF40064BF82 /* tagOneCell.h */,
+				4AB50A922468EDF40064BF82 /* tagOneCell.m */,
+				4AB50A8A2468EDF40064BF82 /* WMZTagBtn.h */,
+				4AB50A912468EDF40064BF82 /* WMZTagBtn.m */,
+				4AB50A8E2468EDF40064BF82 /* WMZTagCell.h */,
+				4AB50A952468EDF40064BF82 /* WMZTagCell.m */,
+				4AB50A8B2468EDF40064BF82 /* WMZTagConfig.h */,
+				4AB50A942468EDF40064BF82 /* WMZTagParam.h */,
+				4AB50A8D2468EDF40064BF82 /* WMZTagParam.m */,
+				4AB50A8F2468EDF40064BF82 /* WMZTags.h */,
+				4AB50A932468EDF40064BF82 /* WMZTags.m */,
+				4AB50A962468EDF40064BF82 /* WMZTagsTool.h */,
+				4AB50A8C2468EDF40064BF82 /* WMZTagsTool.m */,
+			);
+			path = WMZTags;
+			sourceTree = "<group>";
+		};
+		4AB50AC32468FB240064BF82 /* PopMenuView */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50ACD2468FB240064BF82 /* WBPopMenuModel.h */,
+				4AB50AC62468FB240064BF82 /* WBPopMenuModel.m */,
+				4AB50ACA2468FB240064BF82 /* WBPopMenuSingleton.h */,
+				4AB50AC52468FB240064BF82 /* WBPopMenuSingleton.m */,
+				4AB50ACE2468FB240064BF82 /* WBPopMenuView.h */,
+				4AB50AC82468FB240064BF82 /* WBPopMenuView.m */,
+				4AB50AC72468FB240064BF82 /* WBTableViewCell.h */,
+				4AB50ACC2468FB240064BF82 /* WBTableViewCell.m */,
+				4AB50ACB2468FB240064BF82 /* WBTableViewDataSource.h */,
+				4AB50AC42468FB240064BF82 /* WBTableViewDataSource.m */,
+				4AB50ACF2468FB240064BF82 /* WBTableViewDelegate.h */,
+				4AB50AC92468FB240064BF82 /* WBTableViewDelegate.m */,
+			);
+			path = PopMenuView;
+			sourceTree = "<group>";
+		};
+		4AB50ADA246928290064BF82 /* 二维码扫描 */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50ADB246928290064BF82 /* beep.wav */,
+				4AB50ADE246928290064BF82 /* QRCodeViewController.h */,
+				4AB50ADD246928290064BF82 /* QRCodeViewController.m */,
+			);
+			path = "二维码扫描";
+			sourceTree = "<group>";
+		};
 		4ABDA64424174022003B3170 /* DHClass */ = {
 			isa = PBXGroup;
 			children = (
@@ -4379,6 +4857,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A46072C2407C889007C209A /* Tabbar-4-normal@3x.png in Resources */,
+				4AB50AE524692A3F0064BF82 /* icon_back_screen@3x.png in Resources */,
 				4AB50A30246685E60064BF82 /* player_videos_select_image@3x.png in Resources */,
 				4A4607042407C514007C209A /* new_guide_p4_text@3x.png in Resources */,
 				4A46070E2407C514007C209A /* tabbar_shadow@3x.png in Resources */,
@@ -4396,6 +4875,7 @@
 				4A6869C0245ACEB10036355E /* share_add_image@3x.png in Resources */,
 				4A64ECF6242D89BD00D30FB1 /* cameraex_press@2x.png in Resources */,
 				4A68696524591CE00036355E /* group_add_image@2x.png in Resources */,
+				4AB50AEB246932190064BF82 /* qrcode_xiangce_image@3x.png in Resources */,
 				4AB29A352410AC2B004CA6B5 /* password_code_image@3x.png in Resources */,
 				4ABDA71124174023003B3170 /* scan.png in Resources */,
 				4AB50A1A2466424E0064BF82 /* video_control_down_image@2x.png in Resources */,
@@ -4409,6 +4889,7 @@
 				4A68697D2459272D0036355E /* index_right_image@3x.png in Resources */,
 				4AB299AB240CF8C0004CA6B5 /* button_select_image@3x.png in Resources */,
 				4AD2702024652DC500D462B4 /* Player_add_video_image@2x.png in Resources */,
+				4AB50AEA246932190064BF82 /* qrcode_light_image@2x.png in Resources */,
 				4A4607022407C514007C209A /* new_guide_p3_img@3x.png in Resources */,
 				4A46088924090860007C209A /* mine_download_image@2x.png in Resources */,
 				4AB50A172466424E0064BF82 /* video_control_close_image@2x.png in Resources */,
@@ -4442,6 +4923,7 @@
 				4A46072F2407C889007C209A /* Tabbar-2-select@2x.png in Resources */,
 				4A68697E2459272D0036355E /* index_allplay_image@3x.png in Resources */,
 				4AD270242465345700D462B4 /* player_hoder_image@3x.png in Resources */,
+				4AB50AD82468FEA40064BF82 /* index_popview_image@3x.png in Resources */,
 				4AE928FD2417753400CFBBD8 /* shara_url_image@2x.png in Resources */,
 				4A68696624591CE00036355E /* group_header_image@2x.png in Resources */,
 				4AB29A17240FA644004CA6B5 /* choose_area_reset_iamge@2x.png in Resources */,
@@ -4478,6 +4960,7 @@
 				4AB50A31246685E60064BF82 /* player_videos_select_image@2x.png in Resources */,
 				4ABDA70324174023003B3170 /* login_remember_n.png in Resources */,
 				4A4607342407C889007C209A /* Tabbar-5-normal@2x.png in Resources */,
+				4AB50AF02469464C0064BF82 /* qrcode_light_close_image@2x.png in Resources */,
 				4A46070A2407C514007C209A /* new_guide_p4_img@3x.png in Resources */,
 				4A4606EB2407C513007C209A /* Tabbar-3-select@2x.png in Resources */,
 				4A46072E2407C889007C209A /* Tabbar-4-select@2x.png in Resources */,
@@ -4501,9 +4984,11 @@
 				4AE928FB2417753400CFBBD8 /* shara_wechat_image@3x.png in Resources */,
 				4AB299ED240F357C004CA6B5 /* video_delete_image@3x.png in Resources */,
 				4ABDA75424174023003B3170 /* apns-production.pem in Resources */,
+				4AB50AF12469464C0064BF82 /* qrcode_light_close_image@3x.png in Resources */,
 				4A64ECFE242D89BD00D30FB1 /* cursor_focus@2x.png in Resources */,
 				4A580BF824075D0700E82675 /* Main.storyboard in Resources */,
 				4ABDA70624174023003B3170 /* login_remember_h@2x.png in Resources */,
+				4AB50AE424692A3F0064BF82 /* icon_back_screen@2x.png in Resources */,
 				4A68694A24582A850036355E /* index_more_image@2x.png in Resources */,
 				4AB50A2F246685E60064BF82 /* player_screenshots_select_image@2x.png in Resources */,
 				4A10B92D244D39E200105B93 /* login_close@2x.png in Resources */,
@@ -4517,6 +5002,7 @@
 				4A68697224591E7B0036355E /* group_up_image@2x.png in Resources */,
 				4A68695224590B050036355E /* index_channel_detail_image@2x.png in Resources */,
 				4AB29A04240F80D1004CA6B5 /* choose_area_down_image@2x.png in Resources */,
+				4AB50AC22468EF610064BF82 /* index_add_group_image@2x.png in Resources */,
 				4A580F7124075F2D00E82675 /* DateTools.bundle in Resources */,
 				4A68699C24597C250036355E /* local_right_image@2x.png in Resources */,
 				4A6869BF245ACEB10036355E /* share_add_image@2x.png in Resources */,
@@ -4528,6 +5014,7 @@
 				4AB2999D240CDBF3004CA6B5 /* send_url_image@3x.png in Resources */,
 				4AD2700B2463E82100D462B4 /* player_screenshots_image@3x.png in Resources */,
 				4AB29A342410AC2B004CA6B5 /* password_code_image@2x.png in Resources */,
+				4AB50AC12468EF610064BF82 /* index_scan_image@3x.png in Resources */,
 				4AD270272465550E00D462B4 /* index_search_player_image@3x.png in Resources */,
 				4A4607292407C889007C209A /* Tabbar-5-normal@3x.png in Resources */,
 				4AD26FC8246252E100D462B4 /* share_delete_image@3x.png in Resources */,
@@ -4551,6 +5038,7 @@
 				4ABDA71A24174023003B3170 /* ExportOptions.plist in Resources */,
 				4AB29A23241094BE004CA6B5 /* living_share_image@3x.png in Resources */,
 				4AB299F0240F3939004CA6B5 /* PingFang-SC-Regular.ttf in Resources */,
+				4AB50AD92468FEA40064BF82 /* index_popview_image@2x.png in Resources */,
 				4A4606FC2407C514007C209A /* new_guide_open@2x.png in Resources */,
 				4ABDA70524174023003B3170 /* login_remember_n@2x.png in Resources */,
 				4A46072D2407C889007C209A /* Tabbar-2-select@3x.png in Resources */,
@@ -4568,9 +5056,11 @@
 				4A4607072407C514007C209A /* new_guide_p1_img@3x.png in Resources */,
 				4AB50A20246642E90064BF82 /* video_control_stop_image@2x.png in Resources */,
 				4AB299B4240DE3DF004CA6B5 /* demand_edit_image@2x.png in Resources */,
+				4AB50AA62468EDF40064BF82 /* WMZDialog.bundle in Resources */,
 				4AB29A05240F80D1004CA6B5 /* choose_area_up_image@3x.png in Resources */,
 				4A4606FB2407C513007C209A /* new_guide_p2_img@2x.png in Resources */,
 				4AD270282465550E00D462B4 /* index_search_player_image@2x.png in Resources */,
+				4AB50ABF2468EF610064BF82 /* index_add_group_image@3x.png in Resources */,
 				4A6869A6245A74FE0036355E /* carmera_info_address_image@3x.png in Resources */,
 				4A4606EE2407C513007C209A /* Tabbar-3-select@3x.png in Resources */,
 				4AB299B9240DE3DF004CA6B5 /* demand_download_image@3x.png in Resources */,
@@ -4581,6 +5071,7 @@
 				4A580F8C24075F2D00E82675 /* ZYBannerView.bundle in Resources */,
 				4A46089124090CCE007C209A /* mine_header_image@2x.png in Resources */,
 				4A4606FF2407C514007C209A /* new_guide_p3_text@3x.png in Resources */,
+				4AB50ADF246928290064BF82 /* beep.wav in Resources */,
 				4AB299FC240F5592004CA6B5 /* upload_add_image@2x.png in Resources */,
 				4A4607262407C889007C209A /* Tabbar-5-select@3x.png in Resources */,
 				4AD2701F24652DC500D462B4 /* Player_add_video_image@3x.png in Resources */,
@@ -4602,10 +5093,13 @@
 				4AB299E4240E36F4004CA6B5 /* playback_back_image@2x.png in Resources */,
 				4AB50A192466424E0064BF82 /* video_control_up_image@2x.png in Resources */,
 				4AD26FC9246252E100D462B4 /* share_delete_image@2x.png in Resources */,
+				4AB50AEC246932190064BF82 /* qrcode_xiangce_image@2x.png in Resources */,
 				4A68697024591E7B0036355E /* group_up_image@3x.png in Resources */,
 				4AB299B7240DE3DF004CA6B5 /* demand_upload_image@3x.png in Resources */,
+				4AB50AC02468EF610064BF82 /* index_scan_image@2x.png in Resources */,
 				4AB50A182466424E0064BF82 /* video_control_right_image@2x.png in Resources */,
 				4AD270122463F11900D462B4 /* player_localvideo_image@3x.png in Resources */,
+				4AB50AED246932190064BF82 /* qrcode_light_image@3x.png in Resources */,
 				4AB299AC240CF8C0004CA6B5 /* button_select_image@2x.png in Resources */,
 				4AD2700C2463E82100D462B4 /* player_control_image@3x.png in Resources */,
 				4AB299AD240CF8C0004CA6B5 /* button_unselect_image@2x.png in Resources */,
@@ -4691,6 +5185,8 @@
 				4AB299F1240F39B4004CA6B5 /* PingFang-SC-Regular.ttf in Sources */,
 				4A58100324075F2D00E82675 /* MJRefreshNormalHeader.m in Sources */,
 				4A58105D24075F2E00E82675 /* UIAlertView+Blocks.m in Sources */,
+				4AB50AA42468EDF40064BF82 /* WMZDialog+MenusSelect.m in Sources */,
+				4AB50AA72468EDF40064BF82 /* WMZDialog+PickView.m in Sources */,
 				4A58101524075F2D00E82675 /* ADScaleTransition.m in Sources */,
 				4A580F6924075F2D00E82675 /* CGXPickerView.m in Sources */,
 				4A58102724075F2E00E82675 /* IFTTTTextColorAnimation.m in Sources */,
@@ -4703,6 +5199,9 @@
 				4AB29A3C2410DB59004CA6B5 /* DownloadListCell.m in Sources */,
 				4A64ECC4242B5A5A00D30FB1 /* LivingModel.m in Sources */,
 				4A580F2524075F2D00E82675 /* TopImageBottomTextView.m in Sources */,
+				4AB50AD12468FB240064BF82 /* WBPopMenuSingleton.m in Sources */,
+				4AB50AB32468EDF50064BF82 /* WMZDiaLogBase.m in Sources */,
+				4AB50AAB2468EDF40064BF82 /* NSDate+WMZCalendarDate.m in Sources */,
 				4A580F1E24075F2D00E82675 /* WWTableView.m in Sources */,
 				4A580FDD24075F2D00E82675 /* UIButton+common.m in Sources */,
 				4A58105B24075F2E00E82675 /* RIButtonItem.m in Sources */,
@@ -4717,9 +5216,11 @@
 				4A58103124075F2E00E82675 /* IFTTTBackgroundColorAnimation.m in Sources */,
 				4A6869412457C89E0036355E /* NoChooseCarmerasCell.m in Sources */,
 				4AB299A5240CEF23004CA6B5 /* CarmeaVideosViewCell.m in Sources */,
+				4AB50AB82468EDF50064BF82 /* tagOneCell.m in Sources */,
 				4A580FFE24075F2D00E82675 /* MJRefreshBackNormalFooter.m in Sources */,
 				4A58100F24075F2D00E82675 /* FTAnimation+UIView.m in Sources */,
 				4AB29A11240F9627004CA6B5 /* AreaNormalCell.m in Sources */,
+				4AB50AB72468EDF50064BF82 /* WMZTagBtn.m in Sources */,
 				4A4608A8240C94CE007C209A /* EquipmentInformationController.m in Sources */,
 				4A58103224075F2E00E82675 /* IFTTTConstraintMultiplierAnimation.m in Sources */,
 				4A58104324075F2E00E82675 /* IOSDeviceConfig.m in Sources */,
@@ -4765,6 +5266,7 @@
 				4A51192E242B082D005A3065 /* SharedClient.m in Sources */,
 				4A6D13CF243C63B80069EA93 /* CLVoiceApplyAddressModel.m in Sources */,
 				4A7007DD241766660024DFB8 /* WXMediaMessage+messageConstruct.m in Sources */,
+				4AB50AD02468FB240064BF82 /* WBTableViewDataSource.m in Sources */,
 				4A580FCD24075F2D00E82675 /* PhoneKeyView.m in Sources */,
 				4A68699F245A5C0C0036355E /* CarmeraDetailInfoController.m in Sources */,
 				4ABDA6FF24174023003B3170 /* CABasicAnimation+Category.mm in Sources */,
@@ -4775,12 +5277,15 @@
 				4AD2700F2463F02300D462B4 /* PlayerLocalVideosCell.m in Sources */,
 				4AD26FDA2462AB7800D462B4 /* DeleteGroupsTableViewCell.m in Sources */,
 				4A58103024075F2E00E82675 /* IFTTTPathPositionAnimation.m in Sources */,
+				4AB50AB52468EDF50064BF82 /* WMZTagsTool.m in Sources */,
 				4A580F1924075F2D00E82675 /* RefreshControlView.m in Sources */,
 				4A580FE024075F2D00E82675 /* UIView+autolayout.m in Sources */,
 				4A64ED05242DF2E000D30FB1 /* DemandViewCell.m in Sources */,
 				4ABDA70D24174023003B3170 /* P2PClient.mm in Sources */,
+				4AB50AB42468EDF50064BF82 /* WMZDialog+Share.m in Sources */,
 				4A580F3224075F2D00E82675 /* WWAssetModel.m in Sources */,
 				4A4608692408E6A8007C209A /* IndexDataModel.m in Sources */,
+				4AB50AAF2468EDF40064BF82 /* WMZDialog+Advertisement.m in Sources */,
 				4AB29A392410D95E004CA6B5 /* DownloadListController.m in Sources */,
 				4A580F7524075F2D00E82675 /* DTError.m in Sources */,
 				4A580FFA24075F2D00E82675 /* NSBundle+MJRefresh.m in Sources */,
@@ -4793,6 +5298,7 @@
 				4A580FF024075F2D00E82675 /* NSData+MKBase64.m in Sources */,
 				4A580F7224075F2D00E82675 /* DTTimePeriod.m in Sources */,
 				4A580FC224075F2D00E82675 /* BindPhoneSence.m in Sources */,
+				4AB50AA02468EDF40064BF82 /* WMZDialog+Pay.m in Sources */,
 				4AD2701C2464E9C700D462B4 /* PlayerTopCollectionViewCell.m in Sources */,
 				4A58106324075F2E00E82675 /* SCLButton.m in Sources */,
 				4A64ECE7242D875B00D30FB1 /* TCNavigationController.m in Sources */,
@@ -4805,6 +5311,7 @@
 				4A580F8F24075F2D00E82675 /* EPBannerView.m in Sources */,
 				4A46086C2408E7C6007C209A /* IndexTableViewCell.m in Sources */,
 				4A580F3324075F2D00E82675 /* WWPhoneInfo.m in Sources */,
+				4AB50AD52468FB240064BF82 /* WBTableViewCell.m in Sources */,
 				4A511930242B082D005A3065 /* DownLoadSence.m in Sources */,
 				4A58106124075F2E00E82675 /* SCLTextView.m in Sources */,
 				4A580F8E24075F2D00E82675 /* ZYBannerCell.m in Sources */,
@@ -4813,9 +5320,11 @@
 				4A58101B24075F2D00E82675 /* UIViewController+ADTransition.m in Sources */,
 				4A68698E245973430036355E /* LocalVideoViewController.m in Sources */,
 				4A6D1436243F01A70069EA93 /* YDDownloadTask.m in Sources */,
+				4AB50AA52468EDF40064BF82 /* WMZDialog+CardPresent.m in Sources */,
 				4A64ECC7242C508500D30FB1 /* PLPlayerView.m in Sources */,
 				4AD270192463FFAB00D462B4 /* UIView+Ex.m in Sources */,
 				4A580FF624075F2D00E82675 /* UIScrollView+MJRefresh.m in Sources */,
+				4AB50A9E2468EDF40064BF82 /* WMZDialog+DatePicker.m in Sources */,
 				4ABDA72024174023003B3170 /* PlayStream.cpp in Sources */,
 				4A580FD924075F2D00E82675 /* UIButton+BGColor.m in Sources */,
 				4A580F8D24075F2D00E82675 /* ZYBannerView.m in Sources */,
@@ -4823,26 +5332,33 @@
 				4A58104024075F2E00E82675 /* JSONKit.m in Sources */,
 				4A580F6324075F2D00E82675 /* CGXAddressPcikerView.m in Sources */,
 				4A6869302456C32E0036355E /* AllGroupsViewController.m in Sources */,
+				4AB50AB12468EDF40064BF82 /* WMZDialog+Sheet.m in Sources */,
 				4A580FC024075F2D00E82675 /* RetrievePasswordController.m in Sources */,
 				4A580FE324075F2D00E82675 /* UISearchBar+Extension.m in Sources */,
 				4A580FFF24075F2D00E82675 /* MJRefreshAutoStateFooter.m in Sources */,
 				4A580F7624075F2D00E82675 /* DTTimePeriodCollection.m in Sources */,
 				4A580FF724075F2D00E82675 /* MJRefreshConst.m in Sources */,
+				4AB50AB92468EDF50064BF82 /* WMZTags.m in Sources */,
 				4AE92904241872D500CFBBD8 /* DHVideoPlaybackController.mm in Sources */,
 				4AD26FE92463AE9E00D462B4 /* SuperPlayerViewController.m in Sources */,
 				4A6D13F3243C79B00069EA93 /* HSSessionModel.m in Sources */,
 				4A580FE424075F2D00E82675 /* UIImage+loadImage.m in Sources */,
+				4AB50A982468EDF40064BF82 /* WMZDialog+Write.m in Sources */,
 				4A58100124075F2D00E82675 /* MJRefreshAutoNormalFooter.m in Sources */,
 				4AB29A1D24109012004CA6B5 /* HKLivingViewController.m in Sources */,
 				4A6869232456644C0036355E /* SingleCarmeraCell.m in Sources */,
 				4A6869A2245A67B80036355E /* CarmeraMoreSystemController.m in Sources */,
 				4A68693E2457C8850036355E /* SelectedCarmeraCell.m in Sources */,
 				4A58101924075F2D00E82675 /* UITableViewController+ADFlipTransition.m in Sources */,
+				4AB50AB62468EDF50064BF82 /* WMZTagParam.m in Sources */,
 				4A580FCF24075F2D00E82675 /* LoginButtonCell.m in Sources */,
 				4A58102324075F2D00E82675 /* IFTTTLayerStrokeEndAnimation.m in Sources */,
+				4AB50A9B2468EDF40064BF82 /* WMZDialog+AutoDisappear.m in Sources */,
 				4A580F2D24075F2D00E82675 /* LGXHorizontalButton.m in Sources */,
 				4A580FED24075F2D00E82675 /* MKNetworkOperation.m in Sources */,
+				4AB50AE1246928290064BF82 /* QRCodeViewController.m in Sources */,
 				4ABDA70224174023003B3170 /* BECheckBox.mm in Sources */,
+				4AB50AA92468EDF40064BF82 /* WMZDialogTool.m in Sources */,
 				4A580FF924075F2D00E82675 /* UIScrollView+MJExtension.m in Sources */,
 				4AB299F6240F3D67004CA6B5 /* VideoPlaybackViewCell.m in Sources */,
 				4A4608B6240C9F68007C209A /* ConfigurationFileCell.m in Sources */,
@@ -4851,6 +5367,7 @@
 				4A580FD724075F2D00E82675 /* UILabel+Common.m in Sources */,
 				4A580F7424075F2D00E82675 /* DTTimePeriodGroup.m in Sources */,
 				4A58102C24075F2E00E82675 /* IFTTTAnimation.m in Sources */,
+				4AB50AA12468EDF40064BF82 /* WMZDialog+Calander.m in Sources */,
 				4A580F7324075F2D00E82675 /* NSDate+DateTools.m in Sources */,
 				4A64ECEA242D87F200D30FB1 /* UIImage+Additions.m in Sources */,
 				4A580F7024075F2D00E82675 /* LGXDatePicker.m in Sources */,
@@ -4886,6 +5403,7 @@
 				4A580FDC24075F2D00E82675 /* UIView+badge.m in Sources */,
 				4A580FC424075F2D00E82675 /* RegistNewModel.m in Sources */,
 				4A6869A9245AA33A0036355E /* AddCarmeraAddressController.m in Sources */,
+				4AB50AA82468EDF40064BF82 /* WMZDialogShareView.m in Sources */,
 				4A6869B8245AC0310036355E /* ChannelMoreSystemController.m in Sources */,
 				4A64ECD5242C547B00D30FB1 /* NSObject+Auth.m in Sources */,
 				4A580F2B24075F2D00E82675 /* UIColor+_Hex.m in Sources */,
@@ -4923,10 +5441,12 @@
 				4A58103724075F2E00E82675 /* IFTTTTranslationAnimation.m in Sources */,
 				4A58101824075F2D00E82675 /* UIViewController+ADFlipTransition.m in Sources */,
 				4A51193B242B082D005A3065 /* AFHTTPSessionManager.m in Sources */,
+				4AB50AAE2468EDF40064BF82 /* WMZDialog+Normal.m in Sources */,
 				4A4608A5240C948D007C209A /* LGXMenuView.m in Sources */,
 				4A6869372457C3380036355E /* AddNewGroupController.m in Sources */,
 				4A580FDF24075F2D00E82675 /* UIView+Layout.m in Sources */,
 				4A58105C24075F2E00E82675 /* UIActionSheet+Blocks.m in Sources */,
+				4AB50AD32468FB240064BF82 /* WBPopMenuView.m in Sources */,
 				4AB29A0D240F8D92004CA6B5 /* ChooseAreaView.m in Sources */,
 				4A580F5C24075F2D00E82675 /* WWCollectionView.m in Sources */,
 				4A51193A242B082D005A3065 /* AFURLResponseSerialization.m in Sources */,
@@ -4948,6 +5468,7 @@
 				4A6D13F4243C79B00069EA93 /* NSString+Hash.m in Sources */,
 				4A580F8524075F2D00E82675 /* GeneralWebViewController.m in Sources */,
 				4A580FF224075F2D00E82675 /* UIImageView+MKNetworkKitAdditions.m in Sources */,
+				4AB50AAA2468EDF40064BF82 /* WMZDialogTableView.m in Sources */,
 				4A580FFC24075F2D00E82675 /* MJRefreshBackGifFooter.m in Sources */,
 				4A58100C24075F2D00E82675 /* KeychainItemWrapper.m in Sources */,
 				4A4608B1240C9B0A007C209A /* CarmeaVideosViewController.m in Sources */,
@@ -4960,6 +5481,7 @@
 				4A64ECC1242B506A00D30FB1 /* DemandModel.m in Sources */,
 				4A10B91E2449379D00105B93 /* FDownLoaderManager.m in Sources */,
 				4A580F3024075F2D00E82675 /* MarginLabel.m in Sources */,
+				4AB50A9F2468EDF40064BF82 /* WMZDialog+PopView.m in Sources */,
 				4A58102424075F2D00E82675 /* IFTTTAlphaAnimation.m in Sources */,
 				4A58102F24075F2E00E82675 /* IFTTTAnimatedScrollViewController.m in Sources */,
 				4AD26FD324629C8E00D462B4 /* DeleteGroupsViewController.m in Sources */,
@@ -4967,6 +5489,7 @@
 				4A6D13D2243C63F50069EA93 /* CLInvoiceApplyAddressModelTool.m in Sources */,
 				4A580F2424075F2D00E82675 /* LGXVerticalButton.m in Sources */,
 				4A580FE124075F2D00E82675 /* PageMenuScrollView.m in Sources */,
+				4AB50AA32468EDF40064BF82 /* WMZDialog+time.m in Sources */,
 				4A58105F24075F2E00E82675 /* SCLAlertViewStyleKit.m in Sources */,
 				4A64ECD3242C547B00D30FB1 /* NSString+URLCheck.m in Sources */,
 				4A6D1435243F01A70069EA93 /* YDDownloadQueue.m in Sources */,
@@ -4986,6 +5509,7 @@
 				4A580F2224075F2D00E82675 /* TCUserManager.m in Sources */,
 				4A580FE824075F2D00E82675 /* UIColor+custom.m in Sources */,
 				4A580F2124075F2D00E82675 /* UserInfoModel.m in Sources */,
+				4AB50A9C2468EDF40064BF82 /* WMZDialog+Down.m in Sources */,
 				4ABDA70124174023003B3170 /* ScanViewController.mm in Sources */,
 				4A58102024075F2D00E82675 /* IFTTTRotationAnimation.m in Sources */,
 				4A58101A24075F2D00E82675 /* UICollectionViewController+ADFlipTransition.m in Sources */,
@@ -4997,14 +5521,17 @@
 				4A580FF524075F2D00E82675 /* NSDate+RFC1123.m in Sources */,
 				4A580FD324075F2D00E82675 /* MineViewController.m in Sources */,
 				4A511942242B082D005A3065 /* AFNetworkReachabilityManager.m in Sources */,
+				4AB50A9D2468EDF40064BF82 /* WMZDialog+Location.m in Sources */,
 				4A580FFB24075F2D00E82675 /* UIView+MJExtension.m in Sources */,
 				4A7007DC241766660024DFB8 /* SendMessageToWXReq+requestWithTextOrMediaMessage.m in Sources */,
+				4AB50AA22468EDF40064BF82 /* CalanderModel.m in Sources */,
 				4A58103424075F2E00E82675 /* IFTTTTransform3DAnimation.m in Sources */,
 				4A580FCB24075F2D00E82675 /* RetrievePasswordCell.m in Sources */,
 				4A580F6C24075F2D00E82675 /* LGXBadgeManager.m in Sources */,
 				4A10B925244D2C0900105B93 /* CameraControlView.m in Sources */,
 				4A64ECE1242D862C00D30FB1 /* StartRecordVideoController.m in Sources */,
 				4A511935242B082D005A3065 /* UIButton+AFNetworking.m in Sources */,
+				4AB50A972468EDF40064BF82 /* WMZDialog+NaviMenu.m in Sources */,
 				4A58100724075F2D00E82675 /* MJRefreshHeader.m in Sources */,
 				4A58101F24075F2D00E82675 /* IFTTTLayerFillColorAnimation.m in Sources */,
 				4AA2EE622407A0EE00C4F5DA /* DemandViewController.m in Sources */,
@@ -5016,6 +5543,7 @@
 				4A580BF224075D0700E82675 /* SceneDelegate.m in Sources */,
 				4A58100224075F2D00E82675 /* MJChiBaoZiHeader.m in Sources */,
 				4A686998245975660036355E /* LocalVideoCell.m in Sources */,
+				4AB50A992468EDF40064BF82 /* WMZDialog+Loading.m in Sources */,
 				4A46087E24090598007C209A /* MineTableViewCell.m in Sources */,
 				4A58104724075F2E00E82675 /* GCDSemaphore.m in Sources */,
 				4A4608B9240C9F94007C209A /* ConnectionMonitoringCell.m in Sources */,
@@ -5023,19 +5551,26 @@
 				4A580F6724075F2D00E82675 /* CGXAddressModel.m in Sources */,
 				4ABDA70824174023003B3170 /* DHHudPrecess.m in Sources */,
 				4A511946242B082D005A3065 /* FilePathManager.m in Sources */,
+				4AB50AB02468EDF40064BF82 /* WMZDialog+Select.m in Sources */,
 				4A58104624075F2E00E82675 /* GCDGroup.m in Sources */,
 				4A580F3524075F2D00E82675 /* ConversionLocation.m in Sources */,
 				4A58102224075F2D00E82675 /* UIView+IFTTTJazzHands.m in Sources */,
+				4AB50AD42468FB240064BF82 /* WBTableViewDelegate.m in Sources */,
+				4AB50ABA2468EDF50064BF82 /* WMZTagCell.m in Sources */,
 				4A511947242B082D005A3065 /* UploadEngine.m in Sources */,
 				4A58100A24075F2D00E82675 /* MJRefreshComponent.m in Sources */,
+				4AB50A9A2468EDF40064BF82 /* WMZDialog+TabbarMenu.m in Sources */,
 				4A6D13E5243C6E110069EA93 /* YCDownloadDB.m in Sources */,
 				4A58100824075F2D00E82675 /* MJRefreshBackFooter.m in Sources */,
 				4A580F1624075F2D00E82675 /* UITableView+FDTemplateLayoutCell.m in Sources */,
 				4A6D13E7243C6E110069EA93 /* YCDownloadItem.m in Sources */,
+				4AB50AB22468EDF40064BF82 /* WMZDialog.m in Sources */,
+				4AB50AAD2468EDF40064BF82 /* WMZDialog+BuyCar.m in Sources */,
 				4A46089A240912DB007C209A /* PersonInfoViewController.m in Sources */,
 				4A580F6F24075F2D00E82675 /* TargetEngine.m in Sources */,
 				4A4608AB240C9AB5007C209A /* EquimentBasicInfoController.m in Sources */,
 				4A580F2724075F2D00E82675 /* UITabBar+badgeView.m in Sources */,
+				4AB50AAC2468EDF40064BF82 /* WMZDialogAnimation.m in Sources */,
 				4A58102924075F2E00E82675 /* IFTTTScrollViewPageConstraintAnimation.m in Sources */,
 				4A51192F242B082D005A3065 /* DownloadEngine.m in Sources */,
 				4A580F6E24075F2D00E82675 /* LGXBadgeView.m in Sources */,
@@ -5044,6 +5579,7 @@
 				4A580F2E24075F2D00E82675 /* WWViewController.m in Sources */,
 				4AB29A0A240F8621004CA6B5 /* LiveViewCollectionViewCell.m in Sources */,
 				4A6D13E4243C6E110069EA93 /* YCDownloadUtils.m in Sources */,
+				4AB50AD22468FB240064BF82 /* WBPopMenuModel.m in Sources */,
 				4A580F1A24075F2D00E82675 /* RefreshLeftView.m in Sources */,
 				4A580FEB24075F2D00E82675 /* GTMBase64.m in Sources */,
 				4A6D13F5243C79B00069EA93 /* HSDownloadManager.m in Sources */,
