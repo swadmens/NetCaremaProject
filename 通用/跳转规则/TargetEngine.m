@@ -41,6 +41,10 @@
 #import "DeleteGroupsViewController.h"//删除分组
 #import "GlobalSearchViewController.h"//全局搜索
 #import "SuperPlayerViewController.h"//播放器
+#import "AddNewEquipmentController.h"//添加设备
+
+
+
 
 @interface TargetEngine ()
 //<LGXPhotoBrowserDelegate,UIWebViewDelegate>
@@ -657,6 +661,14 @@
             toController = controller;
         }
             break;
+        case PushTargetAddNewEquipment: //添加设备
+        {
+            AddNewEquipmentController *controller = [[AddNewEquipmentController alloc] init];
+            controller.device_id = pushId;
+            toController = controller;
+        }
+            break;
+            
             
             
             

@@ -42,6 +42,7 @@ typedef enum : NSUInteger {
     PushTargetDeleteGroups = 27, /// 删除分组
     PushTargetGlobalSearch = 28, /// 全局搜索
     PushTargetSuperPlayer = 29, /// 播放器
+    PushTargetAddNewEquipment = 30, /// 添加设备
 
     
     

@@ -604,8 +604,6 @@
 		4AB50AD52468FB240064BF82 /* WBTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50ACC2468FB240064BF82 /* WBTableViewCell.m */; };
 		4AB50AD82468FEA40064BF82 /* index_popview_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AD62468FEA30064BF82 /* index_popview_image@3x.png */; };
 		4AB50AD92468FEA40064BF82 /* index_popview_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AD72468FEA40064BF82 /* index_popview_image@2x.png */; };
-		4AB50ADF246928290064BF82 /* beep.wav in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50ADB246928290064BF82 /* beep.wav */; };
-		4AB50AE1246928290064BF82 /* QRCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50ADD246928290064BF82 /* QRCodeViewController.m */; };
 		4AB50AE424692A3F0064BF82 /* icon_back_screen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AE224692A3F0064BF82 /* icon_back_screen@2x.png */; };
 		4AB50AE524692A3F0064BF82 /* icon_back_screen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AE324692A3F0064BF82 /* icon_back_screen@3x.png */; };
 		4AB50AEA246932190064BF82 /* qrcode_light_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AE6246932180064BF82 /* qrcode_light_image@2x.png */; };
@@ -614,6 +612,10 @@
 		4AB50AED246932190064BF82 /* qrcode_light_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AE9246932180064BF82 /* qrcode_light_image@3x.png */; };
 		4AB50AF02469464C0064BF82 /* qrcode_light_close_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AEE2469464B0064BF82 /* qrcode_light_close_image@2x.png */; };
 		4AB50AF12469464C0064BF82 /* qrcode_light_close_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50AEF2469464B0064BF82 /* qrcode_light_close_image@3x.png */; };
+		4AB50AFF246A3AD00064BF82 /* AddNewEquipmentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50AFE246A3AD00064BF82 /* AddNewEquipmentController.m */; };
+		4AB50B02246A410E0064BF82 /* add_device_back_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50B00246A410E0064BF82 /* add_device_back_image@3x.png */; };
+		4AB50B03246A410E0064BF82 /* add_device_back_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50B01246A410E0064BF82 /* add_device_back_image@2x.png */; };
+		4AB50B18246A97B50064BF82 /* QRScanCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50B17246A97B50064BF82 /* QRScanCodeViewController.m */; };
 		4ABDA6FF24174023003B3170 /* CABasicAnimation+Category.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4ABDA65C24174022003B3170 /* CABasicAnimation+Category.mm */; };
 		4ABDA70024174023003B3170 /* DHOptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4ABDA65D24174022003B3170 /* DHOptionViewController.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4ABDA70124174023003B3170 /* ScanViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4ABDA65F24174022003B3170 /* ScanViewController.mm */; };
@@ -1787,9 +1789,6 @@
 		4AB50ACF2468FB240064BF82 /* WBTableViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBTableViewDelegate.h; sourceTree = "<group>"; };
 		4AB50AD62468FEA30064BF82 /* index_popview_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "index_popview_image@3x.png"; sourceTree = "<group>"; };
 		4AB50AD72468FEA40064BF82 /* index_popview_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "index_popview_image@2x.png"; sourceTree = "<group>"; };
-		4AB50ADB246928290064BF82 /* beep.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = beep.wav; sourceTree = "<group>"; };
-		4AB50ADD246928290064BF82 /* QRCodeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QRCodeViewController.m; sourceTree = "<group>"; };
-		4AB50ADE246928290064BF82 /* QRCodeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QRCodeViewController.h; sourceTree = "<group>"; };
 		4AB50AE224692A3F0064BF82 /* icon_back_screen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_back_screen@2x.png"; sourceTree = "<group>"; };
 		4AB50AE324692A3F0064BF82 /* icon_back_screen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_back_screen@3x.png"; sourceTree = "<group>"; };
 		4AB50AE6246932180064BF82 /* qrcode_light_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qrcode_light_image@2x.png"; sourceTree = "<group>"; };
@@ -1798,6 +1797,12 @@
 		4AB50AE9246932180064BF82 /* qrcode_light_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qrcode_light_image@3x.png"; sourceTree = "<group>"; };
 		4AB50AEE2469464B0064BF82 /* qrcode_light_close_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qrcode_light_close_image@2x.png"; sourceTree = "<group>"; };
 		4AB50AEF2469464B0064BF82 /* qrcode_light_close_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "qrcode_light_close_image@3x.png"; sourceTree = "<group>"; };
+		4AB50AFD246A3AD00064BF82 /* AddNewEquipmentController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddNewEquipmentController.h; sourceTree = "<group>"; };
+		4AB50AFE246A3AD00064BF82 /* AddNewEquipmentController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddNewEquipmentController.m; sourceTree = "<group>"; };
+		4AB50B00246A410E0064BF82 /* add_device_back_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_device_back_image@3x.png"; sourceTree = "<group>"; };
+		4AB50B01246A410E0064BF82 /* add_device_back_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_device_back_image@2x.png"; sourceTree = "<group>"; };
+		4AB50B16246A97B50064BF82 /* QRScanCodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QRScanCodeViewController.h; sourceTree = "<group>"; };
+		4AB50B17246A97B50064BF82 /* QRScanCodeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QRScanCodeViewController.m; sourceTree = "<group>"; };
 		4ABDA65B24174022003B3170 /* GlobalDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalDefine.h; sourceTree = "<group>"; };
 		4ABDA65C24174022003B3170 /* CABasicAnimation+Category.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "CABasicAnimation+Category.mm"; sourceTree = "<group>"; };
 		4ABDA65D24174022003B3170 /* DHOptionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DHOptionViewController.mm; sourceTree = "<group>"; };
@@ -2075,6 +2080,8 @@
 		4A4606BE2407C513007C209A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4AB50B01246A410E0064BF82 /* add_device_back_image@2x.png */,
+				4AB50B00246A410E0064BF82 /* add_device_back_image@3x.png */,
 				4AB50AEE2469464B0064BF82 /* qrcode_light_close_image@2x.png */,
 				4AB50AEF2469464B0064BF82 /* qrcode_light_close_image@3x.png */,
 				4AB50AE6246932180064BF82 /* qrcode_light_image@2x.png */,
@@ -3070,6 +3077,7 @@
 		4A580D7924075F2C00E82675 /* 首页 */ = {
 			isa = PBXGroup;
 			children = (
+				4AB50AFC246A3A7F0064BF82 /* 添加设备 */,
 				4AD26FDB2463977B00D462B4 /* 搜索 */,
 				4A6869B9245ACB680036355E /* 设备共享 */,
 				4A6869B2245AB9970036355E /* 通道详情 */,
@@ -4495,11 +4503,19 @@
 		4AB50ADA246928290064BF82 /* 二维码扫描 */ = {
 			isa = PBXGroup;
 			children = (
-				4AB50ADB246928290064BF82 /* beep.wav */,
-				4AB50ADE246928290064BF82 /* QRCodeViewController.h */,
-				4AB50ADD246928290064BF82 /* QRCodeViewController.m */,
+				4AB50B16246A97B50064BF82 /* QRScanCodeViewController.h */,
+				4AB50B17246A97B50064BF82 /* QRScanCodeViewController.m */,
 			);
 			path = "二维码扫描";
+			sourceTree = "<group>";
+		};
+		4AB50AFC246A3A7F0064BF82 /* 添加设备 */ = {
+			isa = PBXGroup;
+			children = (
+				4AB50AFD246A3AD00064BF82 /* AddNewEquipmentController.h */,
+				4AB50AFE246A3AD00064BF82 /* AddNewEquipmentController.m */,
+			);
+			path = "添加设备";
 			sourceTree = "<group>";
 		};
 		4ABDA64424174022003B3170 /* DHClass */ = {
@@ -4873,6 +4889,7 @@
 				4A10B929244D39A300105B93 /* circle_content_right@2x.png in Resources */,
 				4A46070D2407C514007C209A /* tabbar_shadow@2x.png in Resources */,
 				4A6869C0245ACEB10036355E /* share_add_image@3x.png in Resources */,
+				4AB50B03246A410E0064BF82 /* add_device_back_image@2x.png in Resources */,
 				4A64ECF6242D89BD00D30FB1 /* cameraex_press@2x.png in Resources */,
 				4A68696524591CE00036355E /* group_add_image@2x.png in Resources */,
 				4AB50AEB246932190064BF82 /* qrcode_xiangce_image@3x.png in Resources */,
@@ -4994,6 +5011,7 @@
 				4A10B92D244D39E200105B93 /* login_close@2x.png in Resources */,
 				4AD270132463F11900D462B4 /* player_localvideo_image@2x.png in Resources */,
 				4AD26FD624629F1600D462B4 /* group_chooses_image@3x.png in Resources */,
+				4AB50B02246A410E0064BF82 /* add_device_back_image@3x.png in Resources */,
 				4AD270082463E82100D462B4 /* player_videos_image@3x.png in Resources */,
 				4A64ECF8242D89BD00D30FB1 /* HVideo_back@3x.png in Resources */,
 				4A68695324590B050036355E /* index_all_video_image@3x.png in Resources */,
@@ -5071,7 +5089,6 @@
 				4A580F8C24075F2D00E82675 /* ZYBannerView.bundle in Resources */,
 				4A46089124090CCE007C209A /* mine_header_image@2x.png in Resources */,
 				4A4606FF2407C514007C209A /* new_guide_p3_text@3x.png in Resources */,
-				4AB50ADF246928290064BF82 /* beep.wav in Resources */,
 				4AB299FC240F5592004CA6B5 /* upload_add_image@2x.png in Resources */,
 				4A4607262407C889007C209A /* Tabbar-5-select@3x.png in Resources */,
 				4AD2701F24652DC500D462B4 /* Player_add_video_image@3x.png in Resources */,
@@ -5356,7 +5373,6 @@
 				4AB50A9B2468EDF40064BF82 /* WMZDialog+AutoDisappear.m in Sources */,
 				4A580F2D24075F2D00E82675 /* LGXHorizontalButton.m in Sources */,
 				4A580FED24075F2D00E82675 /* MKNetworkOperation.m in Sources */,
-				4AB50AE1246928290064BF82 /* QRCodeViewController.m in Sources */,
 				4ABDA70224174023003B3170 /* BECheckBox.mm in Sources */,
 				4AB50AA92468EDF40064BF82 /* WMZDialogTool.m in Sources */,
 				4A580FF924075F2D00E82675 /* UIScrollView+MJExtension.m in Sources */,
@@ -5407,6 +5423,7 @@
 				4A6869B8245AC0310036355E /* ChannelMoreSystemController.m in Sources */,
 				4A64ECD5242C547B00D30FB1 /* NSObject+Auth.m in Sources */,
 				4A580F2B24075F2D00E82675 /* UIColor+_Hex.m in Sources */,
+				4AB50B18246A97B50064BF82 /* QRScanCodeViewController.m in Sources */,
 				4A580FD124075F2D00E82675 /* LoginBottomViewCell.m in Sources */,
 				4A68693B2457C8530036355E /* AddGroupTopViewCell.m in Sources */,
 				4A6869BC245ACB930036355E /* EquimentSharedViewController.m in Sources */,
@@ -5456,6 +5473,7 @@
 				4A511948242B082D005A3065 /* UploadSence.m in Sources */,
 				4A580F1824075F2D00E82675 /* RefreshRightView.m in Sources */,
 				4AB299F9240F4837004CA6B5 /* VideoUpLoadViewController.m in Sources */,
+				4AB50AFF246A3AD00064BF82 /* AddNewEquipmentController.m in Sources */,
 				4AD26FDE246397A200D462B4 /* GlobalSearchViewController.m in Sources */,
 				4A4608AE240C9ADD007C209A /* NetLivingViewController.m in Sources */,
 				4A58102A24075F2E00E82675 /* IFTTTHideAnimation.m in Sources */,
