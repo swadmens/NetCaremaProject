@@ -37,6 +37,9 @@
     CGFloat bigSpace = kScreenWidth * 0.3;
 
     
+    CGFloat btnWidth = 30;
+    
+    
     UIView *topView = [UIView new];
     topView.backgroundColor = UIColorFromRGB(0x585A66, 1);
     [self.contentView addSubview:topView];
@@ -46,10 +49,13 @@
     
     _gongGeBtn = [UIButton new];
     [_gongGeBtn setImage:UIImageWithFileName(@"player_gongge_image") forState:UIControlStateNormal];
+    [_gongGeBtn setImage:UIImageWithFileName(@"player_full_image") forState:UIControlStateSelected];
     [topView addSubview:_gongGeBtn];
     [_gongGeBtn xCenterToView:topView];
     [_gongGeBtn yCenterToView:topView];
     [_gongGeBtn addTarget:self action:@selector(gongGeBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [_gongGeBtn addWidth:btnWidth];
+    [_gongGeBtn addHeight:btnWidth];
     
     
     _voiceBtn = [UIButton new];
@@ -58,7 +64,8 @@
     [_voiceBtn yCenterToView:topView];
     [_voiceBtn addCenterX:-space toView:topView];
     [_voiceBtn addTarget:self action:@selector(voiceBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-
+    [_voiceBtn addWidth:btnWidth];
+    [_voiceBtn addHeight:btnWidth];
     
     _clarityBtn = [UIButton new];
     [_clarityBtn setTitle:@"标清" forState:UIControlStateNormal];
@@ -68,7 +75,8 @@
     [_clarityBtn yCenterToView:topView];
     [_clarityBtn addCenterX:space toView:topView];
     [_clarityBtn addTarget:self action:@selector(clarityBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-
+    [_clarityBtn addWidth:btnWidth];
+    [_clarityBtn addHeight:btnWidth];
     
     _fullBtn = [UIButton new];
     [_fullBtn setImage:UIImageWithFileName(@"player_full_image") forState:UIControlStateNormal];
@@ -76,7 +84,8 @@
     [_fullBtn yCenterToView:topView];
     [_fullBtn addCenterX:space toView:_clarityBtn];
     [_fullBtn addTarget:self action:@selector(fullBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-
+    [_fullBtn addWidth:btnWidth];
+    [_fullBtn addHeight:btnWidth];
     
     _playerBtn = [UIButton new];
     [_playerBtn setImage:UIImageWithFileName(@"player_full_image") forState:UIControlStateNormal];
@@ -84,7 +93,8 @@
     [_playerBtn yCenterToView:topView];
     [_playerBtn addCenterX:-space toView:_voiceBtn];
     [_playerBtn addTarget:self action:@selector(playerBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-
+    [_playerBtn addWidth:btnWidth];
+    [_playerBtn addHeight:btnWidth];
         
     
     _videoBtn = [LGXVerticalButton new];
@@ -94,9 +104,8 @@
     [_videoBtn setTitleColor:kColorSecondTextColor forState:UIControlStateNormal];
     _videoBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEight];
     [self.contentView addSubview:_videoBtn];
-    [_videoBtn xCenterToView:self.contentView];
-    [_videoBtn bottomToView:self.contentView withSpace:15];
     [_videoBtn addTarget:self action:@selector(videoBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+
 
     
     _screenshotsBtn = [LGXVerticalButton new];
@@ -106,9 +115,8 @@
     [_screenshotsBtn setTitleColor:kColorSecondTextColor forState:UIControlStateNormal];
     _screenshotsBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEight];
     [self.contentView addSubview:_screenshotsBtn];
-    [_screenshotsBtn addCenterX:-bigSpace toView:_videoBtn];
-    [_screenshotsBtn yCenterToView:_videoBtn];
     [_screenshotsBtn addTarget:self action:@selector(screenshotsBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+
 
     
     _controlBtn = [LGXVerticalButton new];
@@ -121,11 +129,44 @@
     [_controlBtn addCenterX:bigSpace toView:_videoBtn];
     [_controlBtn yCenterToView:_videoBtn];
     [_controlBtn addTarget:self action:@selector(controlBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+}
 
+-(void)setIsLiving:(BOOL)isLiving
+{
+    CGFloat bigSpace = kScreenWidth * 0.3;
+    
+    if (isLiving) {
+        _controlBtn.hidden = NO;
+        
+        [_videoBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
+            make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter);
+            make.bottomEdge.lgx_equalTo(self.contentView.lgx_bottomEdge).lgx_floatOffset(-15);
+        }];
+        
+        [_screenshotsBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
+            make.xCenter.lgx_equalTo(self.videoBtn.lgx_xCenter).lgx_floatOffset(-bigSpace);
+            make.yCenter.lgx_equalTo(self.videoBtn.lgx_yCenter);
+        }];
+        
+    }else{
+        _controlBtn.hidden = YES;
+        
+        [_videoBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
+            make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter).lgx_floatOffset(40);
+            make.bottomEdge.lgx_equalTo(self.contentView.lgx_bottomEdge).lgx_floatOffset(-15);
+        }];
+        
+        [_screenshotsBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
+            make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter).lgx_floatOffset(-40);
+            make.yCenter.lgx_equalTo(self.videoBtn.lgx_yCenter);
+        }];
+    }
+        
 }
 
 -(void)gongGeBtnClick:(UIButton*)sender
 {
+    _gongGeBtn.selected = !_gongGeBtn.selected;
     [self.delegate playerControlwithState:videoSateGongge withButton:sender];
 }
 -(void)voiceBtnClick:(UIButton*)sender

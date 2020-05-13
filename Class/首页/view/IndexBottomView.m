@@ -24,8 +24,8 @@
 @interface IndexBottomView ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong) WWTableView *tableView;
-
-
+@property (nonatomic,strong) NSArray *dataArray;
+@property (nonatomic,strong) UIView *backView;
 @end
 
 @implementation IndexBottomView
@@ -45,28 +45,28 @@
 -(void)createUI
 {
     
-    UIView *backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 190)];
-    backView.backgroundColor = [UIColor whiteColor];
+    _backView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth, 190)];
+    _backView.backgroundColor = [UIColor whiteColor];
 //    backView.clipsToBounds = YES;
 //    backView.layer.cornerRadius = 5;
     // 绘制圆角 需设置的圆角 使用"|"来组合
-    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:backView.bounds byRoundingCorners:UIRectCornerTopLeft |
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_backView.bounds byRoundingCorners:UIRectCornerTopLeft |
     UIRectCornerTopRight cornerRadii:CGSizeMake(10, 10)];
     CAShapeLayer *maskLayer = [[CAShapeLayer alloc]init];
     // 设置大小
-    maskLayer.frame = backView.bounds;
+    maskLayer.frame = _backView.bounds;
     // 设置图形样子
     maskLayer.path = maskPath.CGPath;
-    backView.layer.mask = maskLayer;
-    [self addSubview:backView];
+    _backView.layer.mask = maskLayer;
+    [self addSubview:_backView];
 
     
     
     self.tableView = [[WWTableView alloc] init];
     self.tableView.backgroundColor = kColorBackgroundColor;
-    [backView addSubview:self.tableView];
+    [_backView addSubview:self.tableView];
     self.tableView.rowHeight = 35;
-    [self.tableView alignTop:@"5" leading:@"0" bottom:@"45" trailing:@"0" toView:backView];
+    [self.tableView alignTop:@"5" leading:@"0" bottom:@"45" trailing:@"0" toView:_backView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[IndexBottomTableViewCell class] forCellReuseIdentifier:[IndexBottomTableViewCell getCellIDStr]];
@@ -78,8 +78,8 @@
     [cancelBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
     cancelBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
     [cancelBtn addTarget:self action:@selector(hideThisViewClick) forControlEvents:UIControlEventTouchUpInside];
-    [backView addSubview:cancelBtn];
-    [cancelBtn alignTop:nil leading:@"0" bottom:@"0" trailing:@"0" toView:backView];
+    [_backView addSubview:cancelBtn];
+    [cancelBtn alignTop:nil leading:@"0" bottom:@"0" trailing:@"0" toView:_backView];
     [cancelBtn addHeight:45];
     
     
@@ -92,18 +92,18 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 4;
+    return self.dataArray.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     IndexBottomTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[IndexBottomTableViewCell getCellIDStr] forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.lineHidden = NO;
+ 
+    NSDictionary *dic = [self.dataArray objectAtIndex:indexPath.row];
     
-    NSArray *Arr = @[@"消息设置",@"全部录像",@"设备共享",@"设备详情"];
-    NSArray *iconArr = @[@"index_message_image",@"index_all_video_image",@"index_equiment_shara_image",@"index_channel_detail_image"];
-    cell.titleLabel.text = [Arr objectAtIndex:indexPath.row];
-    cell.iconImageView.image = UIImageWithFileName([iconArr objectAtIndex:indexPath.row]);
+    cell.titleLabel.text = [dic objectForKey:@"title"];
+    cell.iconImageView.image = UIImageWithFileName([dic objectForKey:@"image"]);
   
     
     return cell;
@@ -113,17 +113,37 @@
 {
     [self.delegate clickCancelBtn];
     
-    if (indexPath.row == 1) {
-        [TargetEngine controller:nil pushToController:PushTargetLocalVideo WithTargetId:nil];
-    }else if (indexPath.row == 0){
+    NSDictionary *dic = [self.dataArray objectAtIndex:indexPath.row];
+    NSString *title = [dic objectForKey:@"image"];
+    
+    if ([title isEqualToString:@"index_message_image"]) {
+        //消息设置
         [TargetEngine controller:nil pushToController:PushTargetMessageNoticesDeal WithTargetId:nil];
-    }else if (indexPath.row == 3){
-        [TargetEngine controller:nil pushToController:PushTargetChannelDetail WithTargetId:nil];
-    }else{
+    }else if ([title isEqualToString:@"index_all_video_image"]){
+        //全部录像
+        [TargetEngine controller:nil pushToController:PushTargetLocalVideo WithTargetId:nil];
+    }else if ([title isEqualToString:@"index_equiment_shara_image"]){
         //设备共享
         [TargetEngine controller:nil pushToController:PushTargetEquimentShared WithTargetId:nil];
+    }else{
+        //通道详情
+        [TargetEngine controller:nil pushToController:PushTargetChannelDetail WithTargetId:nil];
     }
+ 
+}
+-(void)makeViewData:(NSArray*)arr
+{
+    self.dataArray = [NSArray arrayWithArray:arr];
     
+    CGFloat height = self.dataArray.count * 35 + 50;
+    
+    [_backView lgx_remakeConstraints:^(LGXLayoutMaker *make) {
+        make.height.lgx_floatOffset(height);
+        make.width.lgx_floatOffset(kScreenWidth);
+    }];
+    
+    
+    [self.tableView reloadData];
 }
 
 /*

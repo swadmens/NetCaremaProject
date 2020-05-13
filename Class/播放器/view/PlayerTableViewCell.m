@@ -11,7 +11,7 @@
 #import "UIView+Ex.h"
 #import "WWCollectionView.h"
 #import "PlayerTopCollectionViewCell.h"
-
+#import "PlayLocalVideoView.h"
 
 #define KDeleteHeight 60
 
@@ -19,6 +19,8 @@
 
 @property (nonatomic, strong) WWCollectionView *collectionView;
 @property (strong, nonatomic) NSMutableArray *dataArray;
+
+@property (nonatomic,strong) PlayLocalVideoView *localVideoView;
 
 /**
  *  需要移动的矩阵
@@ -32,6 +34,8 @@
 
 @property (nonatomic, strong) UIView *deleteView;
 @property (nonatomic, strong) UIView *playerView;
+
+@property (nonatomic,strong) NSIndexPath *moveIndexPath;
 
 @end
 
@@ -49,7 +53,7 @@
         
         UICollectionViewFlowLayout *flowlayout = [[UICollectionViewFlowLayout alloc] init];
         //设置滚动方向
-        flowlayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        flowlayout.scrollDirection = UICollectionViewScrollDirectionVertical;
         //左右间距
         flowlayout.minimumLineSpacing = 1;
         //上下间距
@@ -71,6 +75,14 @@
     }
     return _collectionView;
 }
+-(PlayLocalVideoView*)localVideoView
+{
+    if (!_localVideoView) {
+        _localVideoView = [PlayLocalVideoView new];
+    }
+    return _localVideoView;
+    
+}
 - (void)dosetup {
     [super dosetup];
     // Initialization code
@@ -78,11 +90,16 @@
     
     CGFloat height = kScreenWidth * 0.68 + 1;
     
-    NSArray *arr = @[@"player_hoder_image",@"player_hoder_image",@"player_hoder_image",@"Player_add_video_image",];
+    NSArray *arr = @[@"player_hoder_image",@"playback_back_image",@"mine_top_backimage",@"Player_add_video_image",];
     [self.dataArray addObjectsFromArray:arr];
     
     
-    
+    [self.contentView addSubview:self.localVideoView];
+    [self.localVideoView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.contentView];
+    [self.localVideoView addHeight:height];
+
+
+
     _playerView = [UIView new];
     _playerView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:_playerView];
@@ -95,16 +112,22 @@
     UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onLongPressed:)];
     [self.collectionView addGestureRecognizer:longPress];
     
-
     self.showDeleteView = YES;
-    
-    
 }
+
+-(void)setIsLiving:(BOOL)isLiving
+{
+    self.localVideoView.hidden = isLiving;
+    self.playerView.hidden = !isLiving;
+}
+
+
+
 #pragma mark - UICollectionViewDataSourec
 //定义展示的Section的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 4;
+    return self.dataArray.count;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -126,9 +149,8 @@
 //是否允许移动
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 3) {
-        return NO;
-    }
+//    NSString *icon = [self.dataArray objectAtIndex:indexPath.row];
+//    return ![icon isEqualToString:@"Player_add_video_image"];
     return YES;
 }
  
@@ -136,17 +158,15 @@
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
     [self.dataArray exchangeObjectAtIndex:sourceIndexPath.item withObjectAtIndex:destinationIndexPath.item];
+    [self.collectionView reloadData];
 }
 
 
 - (void)onLongPressed:(UILongPressGestureRecognizer *)sender
 {
-    CGPoint point = [sender locationInView:sender.view];
-    NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:point];
-    
-    
-    if (indexPath.row == 3) {
-        return;
+    CGPoint point = [sender locationInView:self.collectionView];
+    if (self.moveIndexPath == nil) {
+        self.moveIndexPath = [self.collectionView indexPathForItemAtPoint:point];
     }
     
     switch (sender.state) {
@@ -156,13 +176,14 @@
                 [self showDeleteViewAnimation];
             }
           
-            if (indexPath) {
-                [self.collectionView selectItemAtIndexPath:indexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-                [self.collectionView beginInteractiveMovementForItemAtIndexPath:indexPath];
+            if (self.moveIndexPath) {
+                [self.collectionView selectItemAtIndexPath:self.moveIndexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+                [self.collectionView beginInteractiveMovementForItemAtIndexPath:self.moveIndexPath];
             }
           break;
         }
         case UIGestureRecognizerStateChanged: {
+            
             [self.collectionView updateInteractiveMovementTargetPosition:point];
             
             NSLog(@"当前视图在View的位置:%@",NSStringFromCGPoint(point));
@@ -174,20 +195,21 @@
                     [self setDeleteViewNormalState];
                 }
             }
-
             
           break;
         }
         case UIGestureRecognizerStateEnded: {
-          [self.collectionView endInteractiveMovement];
             if (self.showDeleteView) {
                 [self hiddenDeleteViewAnimation];
                 if (point.y  <  50) {
                     //删除
-                    [self.dataArray replaceObjectAtIndex:indexPath.row withObject:@"Player_add_video_image"];
+                    [self.dataArray removeObjectAtIndex:self.moveIndexPath.row];
+                    [self.dataArray addObject:@"Player_add_video_image"];
                     [self.collectionView reloadData];
                 }
             }
+            [self.collectionView endInteractiveMovement];
+            self.moveIndexPath = nil;
           break;
         }
         default: {

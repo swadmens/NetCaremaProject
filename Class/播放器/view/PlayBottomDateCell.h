@@ -1,8 +1,8 @@
 //
-//  PlayerTableViewCell.h
+//  PlayBottomDateCell.h
 //  NetCamera
 //
-//  Created by 汪伟 on 2020/5/7.
+//  Created by 汪伟 on 2020/5/13.
 //  Copyright © 2020 Guangzhou Eston Trade Co.,Ltd. All rights reserved.
 //
 
@@ -10,10 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PlayerTableViewCell : WWTableViewCell
-
-@property (nonatomic,assign) BOOL isLiving;//是否是直播
-
+@interface PlayBottomDateCell : WWTableViewCell
 
 @end
 

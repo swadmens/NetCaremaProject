@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,weak) id<PlayerControlDelegate>delegate;
 
+@property (nonatomic,assign) BOOL isLiving;//是否是直播
 
 @end
 

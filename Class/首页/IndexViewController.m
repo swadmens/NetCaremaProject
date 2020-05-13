@@ -19,6 +19,7 @@
 #import "MyEquipmentsModel.h"
 #import "WMZDialog.h"
 #import "QRScanCodeViewController.h"//二维码
+#import "SuperPlayerViewController.h"
 
 @interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource,IndexTopDelegate,IndexBottomDelegate,showCarmeraDelegate>
 {
@@ -202,8 +203,13 @@
 //
 //    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
     
-    if (indexPath.row > 1) {
-        [TargetEngine controller:self pushToController:PushTargetSuperPlayer WithTargetId:nil];
+    if (indexPath.row > 0) {
+//        [TargetEngine controller:self pushToController:PushTargetSuperPlayer WithTargetId:nil];
+        SuperPlayerViewController *vc = [SuperPlayerViewController new];
+        vc.hidesBottomBarWhenPushed = YES;
+        vc.isLiving = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+        self.hidesBottomBarWhenPushed = NO;
     }
     
 }
@@ -302,8 +308,24 @@
 #pragma IndexTopDelegate
 -(void)collectionSelect:(NSInteger)index
 {
+    NSArray *arr = @[@{@"title":@"消息设置",@"image":@"index_message_image"},
+                    @{@"title":@"全部录像",@"image":@"index_all_video_image"},
+                    @{@"title":@"设备共享",@"image":@"index_equiment_shara_image"},
+                    @{@"title":@"设备详情",@"image":@"index_channel_detail_image"}];
+    NSArray *arr2 = @[@{@"title":@"全部录像",@"image":@"index_all_video_image"},
+                    @{@"title":@"通道详情",@"image":@"index_channel_detail_image"}];
+    
+    CGFloat height;
+    if (index == 1) {
+        [self.bottomView makeViewData:arr2];
+        height = arr2.count * 35 + 50;
+    }else{
+        [self.bottomView makeViewData:arr];
+        height = arr.count * 35 + 50;
+    }
+    
    [UIView animateWithDuration:0.3 animations:^{
-       self.bottomView.transform = CGAffineTransformMakeTranslation(0, -190);
+       self.bottomView.transform = CGAffineTransformMakeTranslation(0, -height);
        self.coverView.hidden = NO;
    }];
     

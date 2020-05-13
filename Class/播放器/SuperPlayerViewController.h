@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *live_type;
 @property (nonatomic,strong) NSString *nvr_channel;
 
+@property (nonatomic,assign) BOOL isLiving;//是否是直播
+
 
 @end
 

@@ -616,6 +616,8 @@
 		4AB50B02246A410E0064BF82 /* add_device_back_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50B00246A410E0064BF82 /* add_device_back_image@3x.png */; };
 		4AB50B03246A410E0064BF82 /* add_device_back_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB50B01246A410E0064BF82 /* add_device_back_image@2x.png */; };
 		4AB50B18246A97B50064BF82 /* QRScanCodeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50B17246A97B50064BF82 /* QRScanCodeViewController.m */; };
+		4AB50B1B246BA22C0064BF82 /* PlayLocalVideoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50B1A246BA22C0064BF82 /* PlayLocalVideoView.m */; };
+		4AB50B1E246BC9100064BF82 /* PlayBottomDateCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AB50B1D246BC9100064BF82 /* PlayBottomDateCell.m */; };
 		4ABDA6FF24174023003B3170 /* CABasicAnimation+Category.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4ABDA65C24174022003B3170 /* CABasicAnimation+Category.mm */; };
 		4ABDA70024174023003B3170 /* DHOptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4ABDA65D24174022003B3170 /* DHOptionViewController.mm */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4ABDA70124174023003B3170 /* ScanViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4ABDA65F24174022003B3170 /* ScanViewController.mm */; };
@@ -1803,6 +1805,10 @@
 		4AB50B01246A410E0064BF82 /* add_device_back_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_device_back_image@2x.png"; sourceTree = "<group>"; };
 		4AB50B16246A97B50064BF82 /* QRScanCodeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QRScanCodeViewController.h; sourceTree = "<group>"; };
 		4AB50B17246A97B50064BF82 /* QRScanCodeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = QRScanCodeViewController.m; sourceTree = "<group>"; };
+		4AB50B19246BA22C0064BF82 /* PlayLocalVideoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayLocalVideoView.h; sourceTree = "<group>"; };
+		4AB50B1A246BA22C0064BF82 /* PlayLocalVideoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayLocalVideoView.m; sourceTree = "<group>"; };
+		4AB50B1C246BC9100064BF82 /* PlayBottomDateCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayBottomDateCell.h; sourceTree = "<group>"; };
+		4AB50B1D246BC9100064BF82 /* PlayBottomDateCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayBottomDateCell.m; sourceTree = "<group>"; };
 		4ABDA65B24174022003B3170 /* GlobalDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GlobalDefine.h; sourceTree = "<group>"; };
 		4ABDA65C24174022003B3170 /* CABasicAnimation+Category.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "CABasicAnimation+Category.mm"; sourceTree = "<group>"; };
 		4ABDA65D24174022003B3170 /* DHOptionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = DHOptionViewController.mm; sourceTree = "<group>"; };
@@ -4710,6 +4716,10 @@
 				4AD2700E2463F02300D462B4 /* PlayerLocalVideosCell.m */,
 				4AD2701A2464E9C700D462B4 /* PlayerTopCollectionViewCell.h */,
 				4AD2701B2464E9C700D462B4 /* PlayerTopCollectionViewCell.m */,
+				4AB50B19246BA22C0064BF82 /* PlayLocalVideoView.h */,
+				4AB50B1A246BA22C0064BF82 /* PlayLocalVideoView.m */,
+				4AB50B1C246BC9100064BF82 /* PlayBottomDateCell.h */,
+				4AB50B1D246BC9100064BF82 /* PlayBottomDateCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -5231,6 +5241,7 @@
 				4A58100624075F2D00E82675 /* MJRefreshFooter.m in Sources */,
 				4A511938242B082D005A3065 /* AFAutoPurgingImageCache.m in Sources */,
 				4A58103124075F2E00E82675 /* IFTTTBackgroundColorAnimation.m in Sources */,
+				4AB50B1E246BC9100064BF82 /* PlayBottomDateCell.m in Sources */,
 				4A6869412457C89E0036355E /* NoChooseCarmerasCell.m in Sources */,
 				4AB299A5240CEF23004CA6B5 /* CarmeaVideosViewCell.m in Sources */,
 				4AB50AB82468EDF50064BF82 /* tagOneCell.m in Sources */,
@@ -5351,6 +5362,7 @@
 				4A6869302456C32E0036355E /* AllGroupsViewController.m in Sources */,
 				4AB50AB12468EDF40064BF82 /* WMZDialog+Sheet.m in Sources */,
 				4A580FC024075F2D00E82675 /* RetrievePasswordController.m in Sources */,
+				4AB50B1B246BA22C0064BF82 /* PlayLocalVideoView.m in Sources */,
 				4A580FE324075F2D00E82675 /* UISearchBar+Extension.m in Sources */,
 				4A580FFF24075F2D00E82675 /* MJRefreshAutoStateFooter.m in Sources */,
 				4A580F7624075F2D00E82675 /* DTTimePeriodCollection.m in Sources */,

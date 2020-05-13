@@ -14,7 +14,7 @@
 #import "CameraControlView.h"
 #import "AFHTTPSessionManager.h"
 #import "LGXVerticalButton.h"
-
+#import "PlayBottomDateCell.h"
 
 #define KTopviewheight kScreenWidth*0.68
 
@@ -51,6 +51,8 @@
     [self.tableView registerClass:[PlayerTableViewCell class] forCellReuseIdentifier:[PlayerTableViewCell getCellIDStr]];
     [self.tableView registerClass:[PlayerControlCell class] forCellReuseIdentifier:[PlayerControlCell getCellIDStr]];
     [self.tableView registerClass:[PlayerLocalVideosCell class] forCellReuseIdentifier:[PlayerLocalVideosCell getCellIDStr]];
+    [self.tableView registerClass:[PlayBottomDateCell class] forCellReuseIdentifier:[PlayBottomDateCell getCellIDStr]];
+
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -79,6 +81,7 @@
         
         PlayerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerTableViewCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.isLiving = _isLiving;
         
         return cell;
         
@@ -87,14 +90,25 @@
         PlayerControlCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerControlCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.delegate = self;
+        
+        cell.isLiving = _isLiving;
 
         return cell;
     }else{
         
-        PlayerLocalVideosCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerLocalVideosCell getCellIDStr] forIndexPath:indexPath];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        if (_isLiving) {
+            PlayerLocalVideosCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerLocalVideosCell getCellIDStr] forIndexPath:indexPath];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-        return cell;
+            return cell;
+        }else{
+            PlayBottomDateCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayBottomDateCell getCellIDStr] forIndexPath:indexPath];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+            return cell;
+        }
+        
+        
     }
 }
 
@@ -117,6 +131,8 @@
             break;
         case videoSateGongge://宫格变化
         
+            self.isLiving = !self.isLiving;
+            [self.tableView reloadData];
         
             break;
         case videoSateClarity://清晰度
