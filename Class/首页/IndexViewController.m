@@ -85,19 +85,18 @@
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"140"];
-    self.noDataView.backgroundColor = kColorBackgroundColor;
-    // label
-    UILabel *tipLabel = [self getNoDataTipLabel];
-    
-    UIButton *againBtn = [UIButton new];
-    [againBtn setTitle:@"暂无数据，轻触重试" forState:UIControlStateNormal];
-    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
-    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
-    [self.noDataView addSubview:againBtn];
-    [againBtn xCenterToView:self.noDataView];
-    [againBtn topToView:tipLabel withSpace:-8];
+    self.noDataView = [self setupnoDataContentViewWithTitle:@"网络出问题了，快去检查一下吧~" andImageNamed:@"index_empty_backimage" andTop:@"105"];
+//    // label
+//    UILabel *tipLabel = [self getNoDataTipLabel];
+//
+//    UIButton *againBtn = [UIButton new];
+//    [againBtn setTitle:@"暂无数据，轻触重试" forState:UIControlStateNormal];
+//    [againBtn setTitleColor:kColorThirdTextColor forState:UIControlStateNormal];
+//    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+//    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
+//    [self.noDataView addSubview:againBtn];
+//    [againBtn xCenterToView:self.noDataView];
+//    [againBtn topToView:tipLabel withSpace:-8];
 }
 -(void)againLoadDataBtn
 {
@@ -144,7 +143,7 @@
            }else{
                [self setupNoDataView];
                [self setupTableView];
-//               [self loadNewData];
+               [self loadNewData];
            }
 
        }];
@@ -152,8 +151,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    return self.dataArray.count;
-    return 4;
+    return self.dataArray.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -164,15 +162,15 @@
         MoreCarmerasCell *cell = [tableView dequeueReusableCellWithIdentifier:[MoreCarmerasCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-//        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//        [cell makeCellData:model withData:@[@"01",@"02"]];
+        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+        [cell makeCellData:model withData:@[@"01",@"02"]];
         
         cell.moreDealClick = ^{
             [self collectionSelect:indexPath.row];
         };
         cell.rightBtnClick = ^{
             ShowCarmerasViewController *vc = [ShowCarmerasViewController new];
-//            vc.equipment_id = model.equipment_id;
+            vc.equipment_id = model.equipment_id;
             vc.delegate = self;
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
@@ -185,8 +183,8 @@
         SingleCarmeraCell *cell = [tableView dequeueReusableCellWithIdentifier:[SingleCarmeraCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-//        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//        [cell makeCellData:model];
+        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+        [cell makeCellData:model];
         
         cell.moreClick = ^{
             [self collectionSelect:indexPath.row];
@@ -198,19 +196,17 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSString *url = [NSString stringWithFormat:@"https://leo.quarkioe.com/apps/androidapp/#/device/%@/dashboard/%@",model.childId,model.wechat[0]];
-//    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//
-//    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
+    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
     
-    if (indexPath.row > 0) {
-//        [TargetEngine controller:self pushToController:PushTargetSuperPlayer WithTargetId:nil];
-        SuperPlayerViewController *vc = [SuperPlayerViewController new];
-        vc.hidesBottomBarWhenPushed = YES;
-        vc.isLiving = YES;
-        [self.navigationController pushViewController:vc animated:YES];
-        self.hidesBottomBarWhenPushed = NO;
-    }
+    
+//    if (indexPath.row > 0) {
+//        SuperPlayerViewController *vc = [SuperPlayerViewController new];
+//        vc.hidesBottomBarWhenPushed = YES;
+//        vc.isLiving = YES;
+//        [self.navigationController pushViewController:vc animated:YES];
+//        self.hidesBottomBarWhenPushed = NO;
+//    }
     
 }
 

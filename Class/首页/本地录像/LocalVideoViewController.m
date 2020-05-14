@@ -68,19 +68,19 @@
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"90"];
-    self.noDataView.backgroundColor = kColorBackgroundColor;
-    // label
-    UILabel *tipLabel = [self getNoDataTipLabel];
-    
-    UIButton *againBtn = [UIButton new];
-    [againBtn setTitle:@"暂无分组，轻触重试" forState:UIControlStateNormal];
-    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
-    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
-    [self.noDataView addSubview:againBtn];
-    [againBtn xCenterToView:self.noDataView];
-    [againBtn topToView:tipLabel withSpace:-8];
+    self.noDataView = [self setupnoDataContentViewWithTitle:@"暂无录像，快去创建吧~" andImageNamed:@"localvideo_empty_backimage" andTop:@"60"];
+//    self.noDataView.backgroundColor = kColorBackgroundColor;
+//    // label
+//    UILabel *tipLabel = [self getNoDataTipLabel];
+//    
+//    UIButton *againBtn = [UIButton new];
+//    [againBtn setTitle:@"暂无录像，轻触重试" forState:UIControlStateNormal];
+//    [againBtn setTitleColor:kColorThirdTextColor forState:UIControlStateNormal];
+//    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+//    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
+//    [self.noDataView addSubview:againBtn];
+//    [againBtn xCenterToView:self.noDataView];
+//    [againBtn topToView:tipLabel withSpace:-8];
 }
 -(void)againLoadDataBtn
 {

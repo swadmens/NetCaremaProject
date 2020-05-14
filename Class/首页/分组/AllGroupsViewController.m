@@ -135,7 +135,7 @@
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"90"];
+    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"device_empty_backimage" andTop:@"60"];
     self.noDataView.backgroundColor = kColorBackgroundColor;
     // label
     UILabel *tipLabel = [self getNoDataTipLabel];

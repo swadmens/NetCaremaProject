@@ -244,7 +244,6 @@
                         weak_self.tagLabel.text = @"离线";
                         weak_self.isLiving = NO;
                     }];
-                    
                 }
             }
         }];

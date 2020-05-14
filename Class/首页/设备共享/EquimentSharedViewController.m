@@ -53,19 +53,19 @@
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"60"];
-    self.noDataView.backgroundColor = kColorBackgroundColor;
-    // label
-    UILabel *tipLabel = [self getNoDataTipLabel];
-    
-    UIButton *againBtn = [UIButton new];
-    [againBtn setTitle:@"暂无数据，轻触重试" forState:UIControlStateNormal];
-    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
-    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
-    [self.noDataView addSubview:againBtn];
-    [againBtn xCenterToView:self.noDataView];
-    [againBtn topToView:tipLabel withSpace:-8];
+    self.noDataView = [self setupnoDataContentViewWithTitle:@"还没有好友，赶紧点击右上角添加吧~" andImageNamed:@"friends_empty_backimage" andTop:@"60"];
+//    self.noDataView.backgroundColor = kColorBackgroundColor;
+//    // label
+//    UILabel *tipLabel = [self getNoDataTipLabel];
+//    
+//    UIButton *againBtn = [UIButton new];
+//    [againBtn setTitle:@"暂无好友，轻触重试" forState:UIControlStateNormal];
+//    [againBtn setTitleColor:kColorThirdTextColor forState:UIControlStateNormal];
+//    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+//    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
+//    [self.noDataView addSubview:againBtn];
+//    [againBtn xCenterToView:self.noDataView];
+//    [againBtn topToView:tipLabel withSpace:-8];
 }
 -(void)againLoadDataBtn
 {
@@ -87,12 +87,6 @@
                     @{@"icon":@"",@"title":@"",@"phone":@""},
                     @{@"icon":@"",@"title":@"",@"phone":@""},];
     [self.dataArray addObjectsFromArray:arr];
-    
-    
-    
-    
-    
-    
     
     
     //右上角按钮

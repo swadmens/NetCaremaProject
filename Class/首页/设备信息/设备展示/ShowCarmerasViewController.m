@@ -50,48 +50,30 @@
     [self.tableView alignTop:@"10" leading:@"15" bottom:@"10" trailing:@"15" toView:self.view];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.showsVerticalScrollIndicator = NO;
     [self.tableView registerClass:[ShowCarmerasTableViewCell class] forCellReuseIdentifier:[ShowCarmerasTableViewCell getCellIDStr]];
-//    self.tableView.refreshEnable = YES;
-//    self.tableView.loadingMoreEnable = NO;
-//
-
-//    __unsafe_unretained typeof(self) weak_self = self;
-//    self.tableView.actionHandle = ^(WWScrollingState state){
-//        switch (state) {
-//            case WWScrollingStateRefreshing:
-//            {
-//                [weak_self loadNewData];
-//            }
-//                break;
-//            case WWScrollingStateLoadingMore:
-//            {
-//                [weak_self loadMoreData];
-//            }
-//                break;
-//            default:
-//                break;
-//        }
-//    };
+    self.tableView.refreshEnable = YES;
+    __unsafe_unretained typeof(self) weak_self = self;
+    self.tableView.actionHandle = ^(WWScrollingState state){
+        switch (state) {
+            case WWScrollingStateRefreshing:
+            {
+                [weak_self loadNewData];
+            }
+                break;
+            case WWScrollingStateLoadingMore:
+            {
+                [weak_self loadMoreData];
+            }
+                break;
+            default:
+                break;
+        }
+    };
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"60"];
-    self.noDataView.backgroundColor = kColorBackgroundColor;
-    // label
-    UILabel *tipLabel = [self getNoDataTipLabel];
-    
-    UIButton *againBtn = [UIButton new];
-    [againBtn setTitle:@"暂无数据，轻触重试" forState:UIControlStateNormal];
-    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
-    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
-    [self.noDataView addSubview:againBtn];
-    [againBtn xCenterToView:self.noDataView];
-    [againBtn topToView:tipLabel withSpace:-8];
-}
--(void)againLoadDataBtn
-{
-    [self loadNewData];
+    self.noDataView = [self setupnoDataContentViewWithTitle:@"还没有设备，赶快去添加吧~" andImageNamed:@"device_empty_backimage" andTop:@"60"];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -102,8 +84,7 @@
     
     [self setupNoDataView];
     [self setupTableView];
-    
-    
+    [self loadNewData];
     
     
     //右上角按钮
@@ -117,13 +98,8 @@
     [_rightBtn addTarget:self action:@selector(right_clicked:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:_rightBtn];
     [self.navigationItem setRightBarButtonItem:rightItem];
-    
 }
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-//    [self loadNewData];
-}
+
 -(void)right_clicked:(UIButton*)sender
 {
     _rightBtn.selected = !_rightBtn.selected;
@@ -136,8 +112,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-//    return self.dataArray.count;
-    return 3;
+    return self.dataArray.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -145,8 +120,8 @@
     ShowCarmerasTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ShowCarmerasTableViewCell getCellIDStr] forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-//    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//    [cell makeCellData:model];
+    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    [cell makeCellData:model];
     
     return cell;
     

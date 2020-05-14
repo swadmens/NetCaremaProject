@@ -75,19 +75,18 @@
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"60"];
-    self.noDataView.backgroundColor = kColorBackgroundColor;
-    // label
-    UILabel *tipLabel = [self getNoDataTipLabel];
-    
-    UIButton *againBtn = [UIButton new];
-    [againBtn setTitle:@"暂无数据，轻触重试" forState:UIControlStateNormal];
-    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
-    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
-    [self.noDataView addSubview:againBtn];
-    [againBtn xCenterToView:self.noDataView];
-    [againBtn topToView:tipLabel withSpace:-8];
+    self.noDataView = [self setupnoDataContentViewWithTitle:@"还没有设备，赶快去添加吧~" andImageNamed:@"device_empty_backimage" andTop:@"60"];
+//    // label
+//    UILabel *tipLabel = [self getNoDataTipLabel];
+//    
+//    UIButton *againBtn = [UIButton new];
+//    [againBtn setTitle:@"暂无数据，轻触重试" forState:UIControlStateNormal];
+//    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
+//    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+//    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
+//    [self.noDataView addSubview:againBtn];
+//    [againBtn xCenterToView:self.noDataView];
+//    [againBtn topToView:tipLabel withSpace:-8];
 }
 -(void)againLoadDataBtn
 {
@@ -126,11 +125,7 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    
-//    NSString *url = [NSString stringWithFormat:@"https://leo.quarkioe.com/apps/androidapp/#/device/%@/dashboard/%@",model.childId,model.wechat[0]];
     MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    
     
     NSDictionary *dic = @{
                           @"id":model.equipment_id,

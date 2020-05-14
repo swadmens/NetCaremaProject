@@ -65,18 +65,17 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"60"];
-    self.noDataView.backgroundColor = kColorBackgroundColor;
-    // label
-    UILabel *tipLabel = [self getNoDataTipLabel];
-    
-    UIButton *againBtn = [UIButton new];
-    [againBtn setTitle:@"暂无数据" forState:UIControlStateNormal];
-    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
-    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [self.noDataView addSubview:againBtn];
-    [againBtn xCenterToView:self.noDataView];
-    [againBtn topToView:tipLabel withSpace:-8];
+    self.noDataView = [self setupnoDataContentViewWithTitle:@"暂无下载数据" andImageNamed:@"device_empty_backimage" andTop:@"60"];
+//    // label
+//    UILabel *tipLabel = [self getNoDataTipLabel];
+//
+//    UIButton *againBtn = [UIButton new];
+//    [againBtn setTitle:@"暂无数据" forState:UIControlStateNormal];
+//    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
+//    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+//    [self.noDataView addSubview:againBtn];
+//    [againBtn xCenterToView:self.noDataView];
+//    [againBtn topToView:tipLabel withSpace:-8];
 }
 -(void)setupTableView
 {

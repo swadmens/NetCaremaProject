@@ -77,20 +77,19 @@
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"170"];
-    self.noDataView.backgroundColor = kColorBackgroundColor;
-    // label
-    UILabel *tipLabel = [self getNoDataTipLabel];
-    
-    UIButton *againBtn = [UIButton new];
-    [againBtn setEnabled:NO];
-    [againBtn setTitle:@"暂无点播文件" forState:UIControlStateNormal];
-    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
-    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
-    [self.noDataView addSubview:againBtn];
-    [againBtn xCenterToView:self.noDataView];
-    [againBtn bottomToView:tipLabel withSpace:80];
+    self.noDataView = [self setupnoDataContentViewWithTitle:@"暂无点播文件" andImageNamed:@"device_empty_backimage" andTop:@"60"];
+//    // label
+//    UILabel *tipLabel = [self getNoDataTipLabel];
+//
+//    UIButton *againBtn = [UIButton new];
+//    [againBtn setEnabled:NO];
+//    [againBtn setTitle:@"暂无点播文件" forState:UIControlStateNormal];
+//    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
+//    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+//    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
+//    [self.noDataView addSubview:againBtn];
+//    [againBtn xCenterToView:self.noDataView];
+//    [againBtn bottomToView:tipLabel withSpace:80];
 }
 -(void)againLoadDataBtn
 {
@@ -101,9 +100,10 @@
     /// 顶部搜索的
     self.contentView = [[UIView alloc] init];
     self.contentView.backgroundColor = [UIColor clearColor];
-    self.contentView.frame = CGRectMake(0, 0, kScreenWidth, 60);
+    self.contentView.frame = CGRectMake(0, 0, kScreenWidth, 64);
 //    [self.view addSubview:self.contentView];
     self.navigationItem.titleView = self.contentView;
+
     
     
     self.searchButton = [UISearchBar new];
@@ -130,45 +130,42 @@
     UIImage *image=[UIImage imageWithColor:[UIColor whiteColor]];
     UIImage *searchBGImage = [image resizableImageWithCapInsets:UIEdgeInsetsMake(0.0, 30.0, 0.0, 40.0) resizingMode:UIImageResizingModeStretch];
     [self.searchButton setBackgroundImage:searchBGImage];
-    [self.searchButton yCenterToView:self.contentView];
-    [self.searchButton leftToView:self.contentView withSpace:78];
-    [self.searchButton addWidth:kScreenWidth-160];
-    [self.searchButton addHeight:25];
-    
-    
-    //编辑按钮
-    UIButton *editBtn = [UIButton new];
-    editBtn.hidden = YES;
-    [editBtn setImage:UIImageWithFileName(@"demand_edit_image") forState:UIControlStateNormal];
-    [editBtn addTarget:self action:@selector(editButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView addSubview:editBtn];
-    [editBtn addCenterY:10 toView:self.contentView];
-    [editBtn leftToView:self.contentView withSpace:5];
-    [editBtn addWidth:30];
-    [editBtn addHeight:30];
-
-    //下载按钮
-    UIButton *downLoadBtn = [UIButton new];
-    downLoadBtn.hidden = YES;
-    [downLoadBtn setImage:UIImageWithFileName(@"demand_download_image") forState:UIControlStateNormal];
-    [downLoadBtn addTarget:self action:@selector(downLoadButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView addSubview:downLoadBtn];
-    [downLoadBtn yCenterToView:editBtn];
-    [downLoadBtn leftToView:editBtn withSpace:3];
-    [downLoadBtn addWidth:30];
-    [downLoadBtn addHeight:30];
+    self.searchButton.frame = CGRectMake(28, 10, kScreenWidth-110, 25);
 
     
-    //上传按钮
-    UIButton *upLoadBtn = [UIButton new];
-    [upLoadBtn setBackgroundImage:UIImageWithFileName(@"demand_upload_image") forState:UIControlStateNormal];
-    [upLoadBtn setTitle:@"上传" forState:UIControlStateNormal];
-    [upLoadBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    upLoadBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
-    [upLoadBtn addTarget:self action:@selector(upLoadButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView addSubview:upLoadBtn];
-    [upLoadBtn yCenterToView:self.contentView];
-    [upLoadBtn rightToView:self.contentView withSpace:15];
+//    //编辑按钮
+//    UIButton *editBtn = [UIButton new];
+//    editBtn.hidden = YES;
+//    [editBtn setImage:UIImageWithFileName(@"demand_edit_image") forState:UIControlStateNormal];
+//    [editBtn addTarget:self action:@selector(editButtonClick) forControlEvents:UIControlEventTouchUpInside];
+//    [self.contentView addSubview:editBtn];
+//    [editBtn addCenterY:10 toView:self.contentView];
+//    [editBtn leftToView:self.contentView withSpace:5];
+//    [editBtn addWidth:30];
+//    [editBtn addHeight:30];
+//
+//    //下载按钮
+//    UIButton *downLoadBtn = [UIButton new];
+//    downLoadBtn.hidden = YES;
+//    [downLoadBtn setImage:UIImageWithFileName(@"demand_download_image") forState:UIControlStateNormal];
+//    [downLoadBtn addTarget:self action:@selector(downLoadButtonClick) forControlEvents:UIControlEventTouchUpInside];
+//    [self.contentView addSubview:downLoadBtn];
+//    [downLoadBtn yCenterToView:editBtn];
+//    [downLoadBtn leftToView:editBtn withSpace:3];
+//    [downLoadBtn addWidth:30];
+//    [downLoadBtn addHeight:30];
+//
+//
+//    //上传按钮
+//    UIButton *upLoadBtn = [UIButton new];
+//    [upLoadBtn setBackgroundImage:UIImageWithFileName(@"demand_upload_image") forState:UIControlStateNormal];
+//    [upLoadBtn setTitle:@"上传" forState:UIControlStateNormal];
+//    [upLoadBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    upLoadBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
+//    [upLoadBtn addTarget:self action:@selector(upLoadButtonClick) forControlEvents:UIControlEventTouchUpInside];
+//    [self.contentView addSubview:upLoadBtn];
+//    [upLoadBtn yCenterToView:self.searchButton];
+//    [upLoadBtn rightToView:self.contentView withSpace:15];
     
 }
 //编辑
@@ -258,19 +255,19 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationItem.leftBarButtonItem = nil;
 //    self.FDPrefersNavigationBarHidden = YES;
     
-    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
 
     
     [self.view addSubview:self.collectionUpView];
-    [self.collectionUpView alignTop:@"25" leading:@"0" bottom:nil trailing:@"0" toView:self.view];
+    [self.collectionUpView alignTop:@"0" leading:@"0" bottom:nil trailing:@"0" toView:self.view];
     [self.collectionUpView addHeight:35];
     
     [self.view addSubview:self.collectionView];
-    [self.collectionView alignTop:@"70" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
+    [self.collectionView alignTop:@"35" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     
     self.folder = @" ";
     self.isClick = NO;
@@ -278,6 +275,22 @@
     [self setupViews];
     [self loadNewData];
     [self getSubcatalogList];
+    
+    
+    //右上角
+    
+    
+    UIButton *upLoadBtn = [UIButton new];
+    [upLoadBtn setBackgroundImage:UIImageWithFileName(@"demand_upload_image") forState:UIControlStateNormal];
+    [upLoadBtn setTitle:@"上传" forState:UIControlStateNormal];
+    [upLoadBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    upLoadBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
+    [upLoadBtn addTarget:self action:@selector(upLoadButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:upLoadBtn];
+    [self.navigationItem setRightBarButtonItem:rightItem];
+    
+    
+    
 }
 #pragma mark -- collectionDelegate
 //定义展示的Section的个数

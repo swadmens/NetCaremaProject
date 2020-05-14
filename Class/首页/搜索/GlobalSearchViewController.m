@@ -130,19 +130,17 @@
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"empty_message_image" andTop:@"140"];
-    self.noDataView.backgroundColor = kColorBackgroundColor;
+    self.noDataView = [self setupnoDataContentViewWithTitle:@"无搜索结果，换个词试试吧~" andImageNamed:@"search_empty_backimage" andTop:@"70"];
     // label
-    UILabel *tipLabel = [self getNoDataTipLabel];
-    
-    UIButton *againBtn = [UIButton new];
-    againBtn.enabled = NO;
-    [againBtn setTitle:@"暂无搜索结果，请重试" forState:UIControlStateNormal];
-    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
-    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [self.noDataView addSubview:againBtn];
-    [againBtn xCenterToView:self.noDataView];
-    [againBtn topToView:tipLabel withSpace:-8];
+//    UILabel *tipLabel = [self getNoDataTipLabel];
+//    UIButton *againBtn = [UIButton new];
+//    againBtn.enabled = NO;
+//    [againBtn setTitle:@"暂无搜索结果，请重试" forState:UIControlStateNormal];
+//    [againBtn setTitleColor:kColorThirdTextColor forState:UIControlStateNormal];
+//    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+//    [self.noDataView addSubview:againBtn];
+//    [againBtn xCenterToView:self.noDataView];
+//    [againBtn topToView:tipLabel withSpace:-8];
 }
 
 
@@ -154,6 +152,8 @@
     [self setupSearchView];
     [self setupTableView];
     [self setupNoDataView];
+    
+
     
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

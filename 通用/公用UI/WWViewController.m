@@ -76,7 +76,7 @@
     [self.view addSubview:self.noDataContentView];
     [self.noDataContentView alignTop:top leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     
-    CGFloat space = 20.0;
+    CGFloat space = 10.0;
     
     UIImage *iconImage = UIImageWithFileName(name);
     CGSize imageSize = iconImage.size;
@@ -86,13 +86,13 @@
     [self.noDataContentView addSubview:imageView];
     [imageView addWidth:imageSize.width];
     [imageView addHeight:imageSize.height];
-    [imageView topToView:self.noDataContentView withSpace:[top floatValue]];
+    [imageView topToView:self.noDataContentView withSpace:30];
     [imageView addCenterX:0 toView:self.noDataContentView];
 //    [imageView addCenterY:-45 toView:self.noDataContentView];
     
     // label
     UILabel *tipLabel = [[UILabel alloc] init];
-    tipLabel.font = [UIFont customFontWithSize:kFontSizeSixteen];
+    tipLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
     tipLabel.textColor = kColorThirdTextColor;
     tipLabel.textAlignment = NSTextAlignmentCenter;
     tipLabel.text = title;
@@ -102,7 +102,7 @@
     [tipLabel addHeight:0 withPriority:249.0];
     [tipLabel addWidth:0 withPriority:249.0];
     [tipLabel addCenterX:0 toView:self.noDataContentView];
-    [tipLabel topToView:imageView withSpace:space];
+    [tipLabel topToView:imageView];
     
     self.noDataContentView.hidden = YES;
     
