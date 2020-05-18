@@ -26,7 +26,7 @@ typedef enum {
 @protocol PlayerControlDelegate <NSObject>
 
 
--(void)playerControlwithState:(videoSate)state withButton:(UIButton*)sender;
+-(void)playerControlwithState:(videoSate)state withButton:(UIButton*_Nullable)sender;
 
 
 @end

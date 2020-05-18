@@ -10,6 +10,7 @@
 #import "IndexDataModel.h"
 #import "WWCollectionView.h"
 #import "MoreCarmerasCollectionViewCell.h"
+#import "MyEquipmentsModel.h"
 
 @interface MoreCarmerasCell ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -18,10 +19,12 @@
 @property (nonatomic,strong) UILabel *equipmentStates;
 
 @property (nonatomic, strong) WWCollectionView *collectionView;
+@property (nonatomic,strong) NSArray *dataArray;
 
 @end
 
 @implementation MoreCarmerasCell
+
 - (WWCollectionView *)collectionView
 {
     if (!_collectionView) {
@@ -137,7 +140,7 @@
     
       
 }
--(void)makeCellData:(IndexDataModel *)model withData:(nonnull NSArray *)array
+-(void)makeCellData:(IndexDataModel *)model
 {
     _equipmentName.text = model.equipment_name;
     _equipmentStates.text = model.equipment_states;
@@ -147,18 +150,22 @@
     }else{
         _equipmentStates.backgroundColor = UIColorFromRGB(0xF39700, 1);
     }
+    self.dataArray = [NSArray arrayWithArray:model.equipment_nums];
+    [self.collectionView reloadData];
 }
 #pragma mark -- collectionDelegate
 //定义展示的Section的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-//    return self.titleDataArray.count;
-    return 10;
+    return self.dataArray.count;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
    
     MoreCarmerasCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MoreCarmerasCollectionViewCell getCellIDStr] forIndexPath:indexPath];
+    
+    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    [cell makeCellData:model];
     
     cell.moreBtnClick = ^{
         if (self.moreDealClick) {
@@ -171,10 +178,8 @@
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    DemandSubcatalogModel *model = [self.titleDataArray objectAtIndex:indexPath.row];
-//    self.folder = model.folder;
-//    [self loadNewData];
-
+//    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section

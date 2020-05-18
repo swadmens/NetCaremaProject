@@ -18,7 +18,6 @@
     BOOL _isHadFirst; // 是否第一次加载了
 }
 @property (nonatomic,strong) WWTableView *tableView;
-@property (nonatomic, strong) NSMutableArray *dataArray;
 @property(nonatomic,assign) NSInteger page;
 
 /// 没有内容
@@ -31,13 +30,13 @@
 
 @implementation ShowCarmerasViewController
 
--(NSMutableArray*)dataArray
-{
-    if (!_dataArray) {
-        _dataArray = [NSMutableArray array];
-    }
-    return _dataArray;
-}
+//-(NSMutableArray*)dataArray
+//{
+//    if (!_dataArray) {
+//        _dataArray = [NSMutableArray array];
+//    }
+//    return _dataArray;
+//}
 - (void)setupTableView
 {
     self.tableView = [[WWTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
@@ -84,7 +83,7 @@
     
     [self setupNoDataView];
     [self setupTableView];
-    [self loadNewData];
+    [self changeNoDataViewHiddenStatus];
     
     
     //右上角按钮
@@ -187,7 +186,7 @@
     
 
     UILabel *titleLabel = [UILabel new];
-    titleLabel.text = @"摄像机(3)";
+    titleLabel.text = [NSString stringWithFormat:@"摄像机(%lu)",(unsigned long)self.dataArray.count];
     titleLabel.textColor = kColorMainTextColor;
     titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [headerView addSubview:titleLabel];
@@ -316,9 +315,9 @@
 }
 - (void)changeNoDataViewHiddenStatus
 {
-    if (_isHadFirst == NO) {
-        return ;
-    }
+//    if (_isHadFirst == NO) {
+//        return ;
+//    }
     
     NSInteger count = self.dataArray.count;
     if (count == 0) {
@@ -332,7 +331,7 @@
 }
 -(void)action_goback
 {
-    [self.delegate getNewArray:self.dataArray];
+    [self.delegate getNewArray:self.dataArray withIndex:self.indexRow];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

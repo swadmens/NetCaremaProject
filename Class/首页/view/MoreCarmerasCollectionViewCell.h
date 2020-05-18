@@ -10,8 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MyEquipmentsModel;
 @interface MoreCarmerasCollectionViewCell : WWCollectionViewCell
 
+-(void)makeCellData:(MyEquipmentsModel*)model;
 @property (nonatomic,copy) void(^moreBtnClick)(void);
 
 @end

@@ -113,7 +113,7 @@
     
     
     _titleImageView = [UIImageView new];
-    _titleImageView.image = [UIImage imageWithColor:[UIColor redColor]];
+    _titleImageView.image = UIImageWithFileName(@"player_hoder_image");
     [self.contentView addSubview:_titleImageView];
     [_titleImageView topToView:self.contentView withSpace:10];
     [_titleImageView bottomToView:self.contentView withSpace:10];

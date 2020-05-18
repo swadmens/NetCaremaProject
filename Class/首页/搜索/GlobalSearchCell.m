@@ -27,14 +27,13 @@
     
     
     _showImageView = [UIImageView new];
-    _showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
+    _showImageView.image = UIImageWithFileName(@"player_hoder_image");
     [self.contentView addSubview:_showImageView];
     [_showImageView topToView:self.contentView withSpace:10];
     [_showImageView leftToView:self.contentView withSpace:15];
     [_showImageView bottomToView:self.contentView withSpace:10];
     [_showImageView addWidth:94.5];
     [_showImageView addHeight:58.5];
-    
     
     
     _equipmentName = [UILabel new];

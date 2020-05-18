@@ -99,7 +99,7 @@
     
     
     _showImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 70, kScreenWidth-30, backHeight-70)];
-    _showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
+    _showImageView.image = UIImageWithFileName(@"player_hoder_image");
     // 绘制圆角 需设置的圆角 使用"|"来组合
     UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_showImageView.bounds byRoundingCorners:UIRectCornerBottomLeft |
     UIRectCornerBottomRight cornerRadii:CGSizeMake(5, 5)];

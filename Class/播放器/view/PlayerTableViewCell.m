@@ -12,16 +12,16 @@
 #import "WWCollectionView.h"
 #import "PlayerTopCollectionViewCell.h"
 #import "PlayLocalVideoView.h"
+#import "PlayerControlCell.h"
 
 #define KDeleteHeight 60
 
-@interface PlayerTableViewCell ()<UICollectionViewDelegate,UICollectionViewDataSource>
+@interface PlayerTableViewCell ()<UICollectionViewDelegate,UICollectionViewDataSource,PlayerControlDelegate>
 
 @property (nonatomic, strong) WWCollectionView *collectionView;
 @property (strong, nonatomic) NSMutableArray *dataArray;
 
 @property (nonatomic,strong) PlayLocalVideoView *localVideoView;
-
 /**
  *  需要移动的矩阵
  */
@@ -36,6 +36,9 @@
 @property (nonatomic, strong) UIView *playerView;
 
 @property (nonatomic,strong) NSIndexPath *moveIndexPath;
+@property (nonatomic,strong) NSIndexPath *selectIndexPath;
+
+@property (nonatomic,assign) BOOL isPlayerVideo;
 
 @end
 
@@ -47,6 +50,7 @@
     }
     return _dataArray;
 }
+
 - (WWCollectionView *)collectionView
 {
     if (!_collectionView) {
@@ -62,6 +66,7 @@
         CGFloat width = (kScreenWidth-1)/2;
 
         flowlayout.itemSize = CGSizeMake(width, width*0.68);
+        flowlayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
         
         _collectionView = [[WWCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowlayout];
         _collectionView.backgroundColor = [UIColor whiteColor];
@@ -71,7 +76,8 @@
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.showsHorizontalScrollIndicator = NO;
-        _collectionView.pagingEnabled = YES;
+//        _collectionView.pagingEnabled = YES;
+//        _collectionView.backgroundColor = [UIColor redColor];
     }
     return _collectionView;
 }
@@ -88,7 +94,7 @@
     // Initialization code
     self.contentView.backgroundColor = [UIColor whiteColor];
     
-    CGFloat height = kScreenWidth * 0.68 + 1;
+    CGFloat height = kScreenWidth * 0.68 + 0.5;
     
     NSArray *arr = @[@"player_hoder_image",@"playback_back_image",@"mine_top_backimage",@"Player_add_video_image",];
     [self.dataArray addObjectsFromArray:arr];
@@ -106,6 +112,7 @@
     [_playerView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.contentView];
     [_playerView addHeight:height];
     
+    
     [_playerView addSubview:self.collectionView];
     [self.collectionView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:_playerView];
 
@@ -113,15 +120,72 @@
     [self.collectionView addGestureRecognizer:longPress];
     
     self.showDeleteView = YES;
+    
+    self.selectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
+    //接收通知
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadInfoNotica:) name:@"gonggeChangeInfomation" object:nil];
+    
 }
+//接收通知并操作
+- (void)uploadInfoNotica:(NSNotification *)notification
+{
+    if (_isPlayerVideo) {
+        [[NSNotificationCenter defaultCenter] removeObserver:@"gonggeChangeInfomation"];
+        return;
+    }
+    NSDictionary *dic = notification.userInfo;
+    BOOL value = [[dic objectForKey:@"value"] boolValue];
+    
+    CGFloat totalHeight = kScreenWidth * 0.68 + 0.5;
+    CGFloat width = (kScreenWidth-1)/2;
+    CGFloat height = width * 0.68;
 
+    CGFloat scaleXValue = kScreenWidth/width;
+    CGFloat scaleYValue = totalHeight/height;
+
+    CGFloat xSpacing;
+    CGFloat ySpacing;
+
+    if (self.selectIndexPath.row == 0) {
+        xSpacing = width/4+0.25;
+        ySpacing = width*0.68/4;
+    }else if (self.selectIndexPath.row == 1){
+        xSpacing = -width/4;
+        ySpacing = width*0.68/4;
+    }else if (self.selectIndexPath.row == 2){
+        xSpacing = width/4+0.25;
+        ySpacing = -width*0.68/4;
+    }else{
+        xSpacing = -width/4;
+        ySpacing = -width*0.68/4;
+    }
+    
+    for (int i = 0; i < 4; i++) {
+        NSIndexPath *indexPaths = [NSIndexPath indexPathForRow:i inSection:0];
+        PlayerTopCollectionViewCell *cells = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPaths];
+        if (value) {
+            if (i == self.selectIndexPath.row) {
+                cells.transform = CGAffineTransformMakeScale(scaleXValue, scaleYValue);
+                cells.transform = CGAffineTransformTranslate(cells.transform, xSpacing, ySpacing);
+                
+                cells.selected = NO;
+                
+            }else{
+                cells.transform = CGAffineTransformMakeScale(0.01, 0.01);
+            }
+        }else{
+            cells.transform = CGAffineTransformIdentity;
+            [self.collectionView selectItemAtIndexPath:self.selectIndexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+        }
+    }
+}
 -(void)setIsLiving:(BOOL)isLiving
 {
+    self.isPlayerVideo = !isLiving;
     self.localVideoView.hidden = isLiving;
     self.playerView.hidden = !isLiving;
 }
-
-
 
 #pragma mark - UICollectionViewDataSourec
 //定义展示的Section的个数
@@ -136,21 +200,22 @@
     NSString *icon = [self.dataArray objectAtIndex:indexPath.row];
     [cell makeCellData:icon];
     
+//    [_indexSet addIndex:indexPath.row];
+    
     return cell;
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-
+    self.selectIndexPath = indexPath;
 }
-- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+-(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return UIEdgeInsetsMake(0, 0, 0, 0);
+    
 }
+
 //是否允许移动
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSString *icon = [self.dataArray objectAtIndex:indexPath.row];
-//    return ![icon isEqualToString:@"Player_add_video_image"];
     return YES;
 }
  
@@ -160,8 +225,6 @@
     [self.dataArray exchangeObjectAtIndex:sourceIndexPath.item withObjectAtIndex:destinationIndexPath.item];
     [self.collectionView reloadData];
 }
-
-
 - (void)onLongPressed:(UILongPressGestureRecognizer *)sender
 {
     CGPoint point = [sender locationInView:self.collectionView];
@@ -178,6 +241,7 @@
           
             if (self.moveIndexPath) {
                 [self.collectionView selectItemAtIndexPath:self.moveIndexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+                self.selectIndexPath = self.moveIndexPath;
                 [self.collectionView beginInteractiveMovementForItemAtIndexPath:self.moveIndexPath];
             }
           break;
@@ -210,6 +274,8 @@
             }
             [self.collectionView endInteractiveMovement];
             self.moveIndexPath = nil;
+            //删除后默认选择第一个
+            self.selectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
           break;
         }
         default: {

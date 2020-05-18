@@ -62,7 +62,7 @@
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     
     [self setupTableView];
-    
+
     
     self.clView = [CameraControlView new];
     self.clView.delegate = self;
@@ -126,14 +126,14 @@
             
             break;
         case videoSateVoice://声音控制
-        
-        
-            break;
-        case videoSateGongge://宫格变化
-        
+          
             self.isLiving = !self.isLiving;
             [self.tableView reloadData];
         
+            break;
+        case videoSateGongge://宫格变化
+    
+            
             break;
         case videoSateClarity://清晰度
         

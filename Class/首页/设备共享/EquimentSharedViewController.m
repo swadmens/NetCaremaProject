@@ -233,7 +233,7 @@
     _titleImageView = [UIImageView new];
     _titleImageView.clipsToBounds = YES;
     _titleImageView.layer.cornerRadius = 16.5;
-    _titleImageView.image = [UIImage imageWithColor:[UIColor redColor]];
+    _titleImageView.image = UIImageWithFileName(@"friend_header_backimage");
     [self.contentView addSubview:_titleImageView];
     [_titleImageView topToView:self.contentView withSpace:10];
     [_titleImageView leftToView:self.contentView withSpace:12.5];

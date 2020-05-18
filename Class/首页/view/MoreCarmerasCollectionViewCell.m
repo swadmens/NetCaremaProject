@@ -7,6 +7,7 @@
 //
 
 #import "MoreCarmerasCollectionViewCell.h"
+#import "MyEquipmentsModel.h"
 
 @interface MoreCarmerasCollectionViewCell ()
 
@@ -38,7 +39,7 @@
     _showImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, width, width*0.625)];
     _showImageView.clipsToBounds = YES;
     _showImageView.userInteractionEnabled = YES;
-    _showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
+    _showImageView.image = UIImageWithFileName(@"player_hoder_image");
     // 绘制圆角 需设置的圆角 使用"|"来组合
     UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_showImageView.bounds byRoundingCorners:UIRectCornerTopLeft |
     UIRectCornerTopRight cornerRadii:CGSizeMake(5, 5)];
@@ -114,6 +115,13 @@
     
     
     
+}
+-(void)makeCellData:(MyEquipmentsModel *)model
+{
+    _titleLabel.text = model.equipment_name;
+//    _coverView.hidden = ![model.equipment_states isEqualToString:@"离线"];
+    _coverView.hidden = [WWPublicMethod isStringEmptyText:model.equipment_name];
+
 }
 -(void)checkHelpClick
 {

@@ -20,6 +20,7 @@
 #import "WMZDialog.h"
 #import "QRScanCodeViewController.h"//二维码
 #import "SuperPlayerViewController.h"
+#import "AFHTTPSessionManager.h"
 
 @interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource,IndexTopDelegate,IndexBottomDelegate,showCarmeraDelegate>
 {
@@ -158,12 +159,13 @@
     
 //    IndexTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[IndexTableViewCell getCellIDStr] forIndexPath:indexPath];
     
-    if (indexPath.row == 0) {
+    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+   
+    if (model.equipment_nums.count > 1) {
         MoreCarmerasCell *cell = [tableView dequeueReusableCellWithIdentifier:[MoreCarmerasCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        [cell makeCellData:model withData:@[@"01",@"02"]];
+        [cell makeCellData:model];
         
         cell.moreDealClick = ^{
             [self collectionSelect:indexPath.row];
@@ -172,6 +174,8 @@
             ShowCarmerasViewController *vc = [ShowCarmerasViewController new];
             vc.equipment_id = model.equipment_id;
             vc.delegate = self;
+            vc.indexRow = indexPath.row;
+            vc.dataArray = [NSMutableArray arrayWithArray:model.equipment_nums];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
             self.hidesBottomBarWhenPushed = NO;
@@ -182,8 +186,6 @@
     }else{
         SingleCarmeraCell *cell = [tableView dequeueReusableCellWithIdentifier:[SingleCarmeraCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
         [cell makeCellData:model];
         
         cell.moreClick = ^{
@@ -196,17 +198,17 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
+//    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+//    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
     
     
-//    if (indexPath.row > 0) {
-//        SuperPlayerViewController *vc = [SuperPlayerViewController new];
-//        vc.hidesBottomBarWhenPushed = YES;
-//        vc.isLiving = YES;
-//        [self.navigationController pushViewController:vc animated:YES];
-//        self.hidesBottomBarWhenPushed = NO;
-//    }
+    if (indexPath.row > 0) {
+        SuperPlayerViewController *vc = [SuperPlayerViewController new];
+        vc.hidesBottomBarWhenPushed = YES;
+        vc.isLiving = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+        self.hidesBottomBarWhenPushed = NO;
+    }
     
 }
 
@@ -267,6 +269,7 @@
             NSDictionary *dic = obj;
             IndexDataModel *model = [IndexDataModel makeModelData:dic];
             [tempArray addObject:model];
+            [weak_self getDeviceInfo:model.equipment_id withIndex:idx];
         }];
         [weak_self.dataArray addObjectsFromArray:tempArray];
         
@@ -299,8 +302,64 @@
         self.tableView.hidden = NO;
         self.noDataView.hidden = YES;
     }
-    
 }
+
+//获取设备信息
+-(void)getDeviceInfo:(NSString*)device_id withIndex:(NSInteger)index
+{
+    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/inventory/managedObjects/%@/childAssets?pageSize=100&currentPage=1",device_id];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+    __unsafe_unretained typeof(self) weak_self = self;
+    
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        
+        DLog(@"Received: %@", responseObject);
+        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+        
+         [weak_self handleDeviceInfoObject:responseObject withIndex:index];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error: %@", error);
+//        [self failedOperation];
+    }];
+        
+}
+- (void)handleDeviceInfoObject:(id)obj withIndex:(NSInteger)index
+{
+    _isHadFirst = YES;
+    [_kHUDManager hideAfter:0.1 onHide:nil];
+    __unsafe_unretained typeof(self) weak_self = self;
+    [[GCDQueue globalQueue] queueBlock:^{
+        NSArray *data = [obj objectForKey:@"references"];
+        NSMutableArray *tempArray = [NSMutableArray array];
+
+        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *dic = obj;
+            MyEquipmentsModel *model = [MyEquipmentsModel makeModelData:dic];
+            [tempArray addObject:model];
+        }];
+        
+        IndexDataModel *model = [self.dataArray objectAtIndex:index];
+        model.equipment_nums = tempArray;
+        [self.dataArray replaceObjectAtIndex:index withObject:model];
+        
+        
+        [[GCDQueue mainQueue] queueBlock:^{
+            
+            [weak_self.tableView reloadData];
+        }];
+    }];
+}
+
 #pragma IndexTopDelegate
 -(void)collectionSelect:(NSInteger)index
 {
@@ -351,10 +410,13 @@
     self.coverView.hidden = YES;
 }
 #pragma showCarmeraDelegate
--(void)getNewArray:(NSArray *)array
+-(void)getNewArray:(NSArray *)array withIndex:(NSInteger)index
 {
-    MyEquipmentsModel *model = array.firstObject;
-    DLog(@"调整后的 ===   %@",model.CameraId);
+    IndexDataModel *model = [self.dataArray objectAtIndex:index];
+    model.equipment_nums = array;
+    [self.dataArray replaceObjectAtIndex:index withObject:model];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    
 }
 
 

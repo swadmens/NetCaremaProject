@@ -8,12 +8,31 @@
 
 #import "WWCollectionViewCell.h"
 
+
+
+@class PlayerTopCollectionViewCell;
+@protocol PlayerTopCollectionDelegate <NSObject>
+
+- (void)playerViewCellEnterFullScreen:(PlayerTopCollectionViewCell *_Nullable)cell;
+
+- (void)playerViewCellExitFullScreen:(PlayerTopCollectionViewCell *_Nullable)cell;
+
+- (void)playerViewCellWillPlay:(PlayerTopCollectionViewCell *_Nullable)cell;
+
+
+@end
+
+
 NS_ASSUME_NONNULL_BEGIN
 
+@class PLPlayerView;
 @interface PlayerTopCollectionViewCell : WWCollectionViewCell
+
+@property (nonatomic,weak) id<PlayerTopCollectionDelegate>delegate;
 
 -(void)makeCellData:(NSString*)icon;
 
+- (void)playerViewEnterFullScreen:(PLPlayerView *)playerView;
 
 @end
 

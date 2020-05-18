@@ -29,7 +29,7 @@
     _showImageView = [UIImageView new];
     _showImageView.clipsToBounds = YES;
     _showImageView.layer.cornerRadius = 5;
-    _showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
+    _showImageView.image = UIImageWithFileName(@"player_hoder_image");
     [self.contentView addSubview:_showImageView];
     [_showImageView leftToView:self.self.contentView];
     [_showImageView topToView:self.contentView];

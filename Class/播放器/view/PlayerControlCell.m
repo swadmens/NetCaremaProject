@@ -167,6 +167,13 @@
 -(void)gongGeBtnClick:(UIButton*)sender
 {
     _gongGeBtn.selected = !_gongGeBtn.selected;
+    
+     
+    NSDictionary *userDic = @{@"value":@(_gongGeBtn.selected)};
+    //注册通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"gonggeChangeInfomation" object:nil userInfo:userDic];
+            
+    
     [self.delegate playerControlwithState:videoSateGongge withButton:sender];
 }
 -(void)voiceBtnClick:(UIButton*)sender

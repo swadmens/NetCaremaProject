@@ -22,6 +22,8 @@
     NSString *status = [NSString stringWithFormat:@"%@",[statesDic objectForKey:@"status"]];
     model.equipment_states = [status isEqualToString:@"UNAVAILABLE"]?@"离线":@"在线";
 
+
+    model.equipment_nums = [NSArray arrayWithArray:[dic objectForKey:@"device_num"]];
     
     
     
