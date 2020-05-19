@@ -289,7 +289,7 @@
 - (UIView *)deleteView{
     if (!_deleteView) {
         _deleteView = [[UIView alloc] initWithFrame:CGRectMake(0, -KDeleteHeight, kScreenWidth, KDeleteHeight)];
-        _deleteView.backgroundColor = [UIColor redColor];
+        _deleteView.backgroundColor = kColorMainColor;
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
         button.tag = 201809;
         [button setImage:[UIImage imageNamed:@"share_delete_image"] forState:UIControlStateNormal];

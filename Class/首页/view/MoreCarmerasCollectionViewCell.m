@@ -14,7 +14,6 @@
 @property (nonatomic,strong) UIImageView *showImageView;
 @property (nonatomic,strong) UILabel *titleLabel;
 
-
 @property (nonatomic,strong) UIView *coverView;
 @property (nonatomic,strong) UILabel *timeLabel;
 

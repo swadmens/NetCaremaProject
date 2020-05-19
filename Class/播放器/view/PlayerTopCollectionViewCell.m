@@ -22,6 +22,8 @@
 
 @property (nonatomic,strong) DemandModel *model;
 
+@property (nonatomic,strong) UIView *coverView;
+@property (nonatomic,strong) UILabel *timeLabel;
 
 @end
 
@@ -72,6 +74,46 @@
 //    if (self.isLiving) {
 //        [self play];
 //    }
+    
+    _coverView = [UIView new];
+    _coverView.backgroundColor = UIColorFromRGB(0x060606, 0.55);
+    [_playView addSubview:_coverView];
+    [_coverView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:_playView];
+    
+    
+    _timeLabel = [UILabel new];
+    _timeLabel.text = @"2020-01-20  10:20:32";
+    _timeLabel.textColor = [UIColor whiteColor];
+    _timeLabel.font = [UIFont customFontWithSize:kFontSizeTen];
+    [_coverView addSubview:_timeLabel];
+    [_timeLabel xCenterToView:_coverView];
+    [_timeLabel addCenterY:-5 toView:_coverView];
+    
+    
+    UILabel *outlineLabel = [UILabel new];
+    outlineLabel.text = @"设备离线";
+    outlineLabel.textColor = [UIColor whiteColor];
+    outlineLabel.font = [UIFont customFontWithSize:kFontSizeTen];
+    [_coverView addSubview:outlineLabel];
+    [outlineLabel xCenterToView:_coverView];
+    [outlineLabel bottomToView:_timeLabel withSpace:2];
+    
+    
+    UIButton *helpBtn = [UIButton new];
+    helpBtn.clipsToBounds = YES;
+    helpBtn.layer.cornerRadius = 6.5;
+    helpBtn.layer.borderColor = [UIColor whiteColor].CGColor;
+    helpBtn.layer.borderWidth = 0.5;
+    [helpBtn setTitle:@"查看帮助" forState:UIControlStateNormal];
+    [helpBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [helpBtn setBGColor:UIColorFromRGB(0x949293, 1) forState:UIControlStateNormal];
+    helpBtn.titleLabel.font = [UIFont customFontWithSize:8];
+    [_coverView addSubview:helpBtn];
+    [helpBtn xCenterToView:_coverView];
+    [helpBtn topToView:_timeLabel withSpace:3];
+    [helpBtn addWidth:52];
+    [helpBtn addHeight:13];
+    [helpBtn addTarget:self action:@selector(checkHelpClick) forControlEvents:UIControlEventTouchUpInside];
 }
 - (void)play {
     [self.playerView play];
@@ -135,6 +177,8 @@
 {
     _titleImageView.image = UIImageWithFileName(icon);
     
+    _coverView.hidden = ![icon isEqualToString:@"playback_back_image"];
+    
 }
 
 -(void)setSelected:(BOOL)selected
@@ -142,6 +186,10 @@
     [super setSelected:selected];
     self.contentView.layer.borderColor = selected?UIColorFromRGB(0xFF7000, 1).CGColor:[UIColor clearColor].CGColor;
 }
-
+-(void)checkHelpClick
+{
+    //设备离线，查看帮助
+    [TargetEngine controller:nil pushToController:PushTargetEquipmentOffline WithTargetId:nil];
+}
 
 @end

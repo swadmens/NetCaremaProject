@@ -35,9 +35,6 @@
     [searchView addHeight:64];
     [searchView addBottomLineByColor:kColorLineColor];
     
-    
-    
-//
     UIButton *backBtn = [UIButton new];
     [backBtn setImage:UIImageWithFileName(@"black_back_image") forState:UIControlStateNormal];
     [backBtn addTarget:self action:@selector(goBackClick) forControlEvents:UIControlEventTouchUpInside];
@@ -58,6 +55,7 @@
     [searchBtn yCenterToView:backBtn];
     [searchBtn addWidth:30];
     [searchBtn addHeight:30];
+    [searchBtn addTarget:self action:@selector(startSearchClick) forControlEvents:UIControlEventTouchUpInside];
     
     
     self.searchButton = [UISearchBar new];
@@ -87,7 +85,7 @@
     [self.searchButton setBackgroundImage:searchBGImage];
     [self.searchButton yCenterToView:backBtn];
     [self.searchButton leftToView:backBtn withSpace:0];
-    [self.searchButton addWidth:kScreenWidth-110];
+    [self.searchButton addWidth:kScreenWidth-80];
     [self.searchButton addHeight:35];
     
     
@@ -167,7 +165,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.lineHidden = NO;
 //        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//        [cell makeCellData:model];
+    [cell makeCellData:self.searchValue];
     
     return cell;
 }
@@ -176,7 +174,7 @@
 //    NSString *url = [NSString stringWithFormat:@"https://leo.quarkioe.com/apps/androidapp/#/device/%@/dashboard/%@",model.childId,model.wechat[0]];
 //    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
 //
-//    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
+    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:nil];
 }
 
 - (void)loadNewData
@@ -267,6 +265,28 @@
         self.noDataView.hidden = YES;
     }
     
+}
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    if (searchText.length == 0) {
+        self.searchValue = @"";
+        return;
+    }else {
+        self.searchValue = searchText;
+    }
+    [self.tableView reloadData];
+}
+//开始搜索
+-(void)startSearchClick
+{
+    [self.view endEditing:YES];
+    
+    if (![WWPublicMethod isStringEmptyText:self.searchValue]) {
+        [_kHUDManager showMsgInView:nil withTitle:@"请输入搜索内容" isSuccess:YES];
+        return;
+    }
+    
+    [_kHUDManager showMsgInView:nil withTitle:self.searchValue isSuccess:YES];
 }
 
 /*

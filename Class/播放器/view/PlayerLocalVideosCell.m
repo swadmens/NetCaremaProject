@@ -103,7 +103,8 @@
 }
 -(void)allVideosClick
 {
-    
+    //全部录像
+    [TargetEngine controller:nil pushToController:PushTargetLocalVideo WithTargetId:nil];
 }
 #pragma mark - UICollectionViewDataSourec
 //定义展示的Section的个数

@@ -15,6 +15,8 @@
 #import "AFHTTPSessionManager.h"
 #import "LGXVerticalButton.h"
 #import "PlayBottomDateCell.h"
+#import "LGXThirdEngine.h"
+#import "ShareSDKMethod.h"
 
 #define KTopviewheight kScreenWidth*0.68
 
@@ -26,6 +28,11 @@
 
 @property (nonatomic,strong) CameraControlView *clView;
 @property (nonatomic,strong) LGXVerticalButton *controlBtn;
+
+
+@property (nonatomic,strong) UIView *saveBackView;
+@property (nonatomic, strong) LGXShareParams *shareParams;
+
 
 @end
 
@@ -57,7 +64,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"播放器";
+    self.title = @"866262045665618";
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     
@@ -70,6 +77,27 @@
     [self.view addSubview:self.clView];
     self.clView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight - KTopviewheight - 177);
     
+    
+    //右上角按钮组
+    UIButton *sharaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [sharaBtn addTarget:self action:@selector(sharaBtnCLick) forControlEvents:UIControlEventTouchUpInside];
+    [sharaBtn setImage:UIImageWithFileName(@"super_player_shara_image") forState:UIControlStateNormal];
+    [sharaBtn sizeToFit];
+    UIBarButtonItem *sharaBtnItem = [[UIBarButtonItem alloc] initWithCustomView:sharaBtn];
+    
+    UIBarButtonItem *fixedSpaceBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    fixedSpaceBarButtonItem.width = 16;
+
+    UIButton *settingBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [settingBtn addTarget:self action:@selector(systemBtnCLick) forControlEvents:UIControlEventTouchUpInside];
+    [settingBtn setImage:UIImageWithFileName(@"super_player_system_image") forState:UIControlStateNormal];
+    [settingBtn sizeToFit];
+    UIBarButtonItem *settingBtnItem = [[UIBarButtonItem alloc] initWithCustomView:settingBtn];
+    
+    self.navigationItem.rightBarButtonItems  = @[settingBtnItem,fixedSpaceBarButtonItem,sharaBtnItem];
+    
+    
+    [self setupSaveView];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -144,16 +172,16 @@
         
             break;
         case videoSatesSreenshots://截图
-        
-//            btn.selected = NO;
+                        
+            self.controlBtn.selected = !self.controlBtn.selected;
+            self.saveBackView.hidden = !self.controlBtn.selected;
            
-        
             break;
         case videoSateVideing://录像
         
-//            btn.selected = NO;
+            self.controlBtn.selected = !self.controlBtn.selected;
+            self.saveBackView.hidden = !self.controlBtn.selected;
 
-        
             break;
         case videoSateYuntai://云台控制
             self.controlBtn.selected = !self.controlBtn.selected;
@@ -163,8 +191,6 @@
             }else{
                [self clickMoreButton];
             }
-            
-            
         
         break;
         default:
@@ -301,6 +327,136 @@
 //        DLog(@"error: %@", error);
     }];
 }
+
+//图片，视频保存view
+-(void)setupSaveView
+{
+    CGFloat ySpace = kScreenWidth * 0.68 - 44.5;
+    
+    _saveBackView = [UIView new];
+    _saveBackView.hidden = YES;
+    _saveBackView.backgroundColor = UIColorFromRGB(0x000000, 0.37);
+    [self.view addSubview:_saveBackView];
+    [_saveBackView addHeight:45];
+    [_saveBackView addWidth:kScreenWidth];
+    [_saveBackView topToView:self.view withSpace:ySpace];
+    
+    
+    UIImageView *saveImageView = [UIImageView new];
+    saveImageView.image = UIImageWithFileName(@"player_hoder_image");
+    [_saveBackView addSubview:saveImageView];
+    [saveImageView alignTop:@"5" leading:@"10" bottom:@"5" trailing:nil toView:_saveBackView];
+    [saveImageView addWidth:49];
+    
+    
+    UILabel *subTitleLabel = [UILabel new];
+    subTitleLabel.text = @"视频已保存";
+    subTitleLabel.textColor = [UIColor whiteColor];
+    subTitleLabel.font = [UIFont customFontWithSize:kFontSizeEleven];
+    [_saveBackView addSubview:subTitleLabel];
+    [subTitleLabel yCenterToView:_saveBackView];
+    [subTitleLabel leftToView:saveImageView withSpace:8];
+    
+    
+    UIButton *lookBtn = [UIButton new];
+    [lookBtn setTitle:@"查看" forState:UIControlStateNormal];
+    [lookBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
+    lookBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEleven];
+    [lookBtn addTarget:self action:@selector(lookPictureClick) forControlEvents:UIControlEventTouchUpInside];
+    [_saveBackView addSubview:lookBtn];
+    [lookBtn yCenterToView:_saveBackView];
+    [lookBtn rightToView:_saveBackView withSpace:10];
+    [lookBtn addWidth:30];
+    [lookBtn addHeight:30];
+    
+}
+-(void)lookPictureClick
+{
+    //打开本地相册查看 photos-redirect:// cGhvdG9zLXJlZGlyZWN0Oi8v
+    NSURL * url = [NSURL URLWithString:[WWPublicMethod dencodeBase64:@"cGhvdG9zLXJlZGlyZWN0Oi8v"]];
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+    }
+    
+}
+//右上角按钮
+-(void)sharaBtnCLick
+{
+    //分享里面的内容
+    self.shareParams = [[LGXShareParams alloc] init];
+//        [self.shareParams makeShreParamsByData:self.model.share];
+            
+    [ShareSDKMethod ShareTextActionWithParams:self.shareParams QRCode:^{
+
+        //视频播放地址生成二维码图片
+        [self generatingTwoDimensionalCode:@"这是用来测试的"];
+
+     } url:^{
+         //链接
+         DLog(@"链接");
+         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+         pasteboard.string = @"这个也是用来测试的";
+         [_kHUDManager showMsgInView:nil withTitle:@"链接已复制至剪切板" isSuccess:YES];
+         
+     } Result:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
+        
+         if (state == SSDKResponseStateSuccess) {
+            
+         }
+     }];
+}
+-(void)systemBtnCLick
+{
+    //更多设置
+    [TargetEngine controller:self pushToController:PushTargetChannelMoreSystem WithTargetId:nil];
+}
+//生成二维码并保存到相册
+-(void)generatingTwoDimensionalCode:(NSString *)value {
+    // 创建过滤器
+    CIFilter *filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
+    // 过滤器恢复默认
+    [filter setDefaults];
+    // 给过滤器添加数据
+    NSData *data = [value dataUsingEncoding:NSUTF8StringEncoding allowLossyConversion:YES];
+    [filter setValue:data forKeyPath:@"inputMessage"];
+    // 获取二维码过滤器生成的二维码
+    CIImage *image = [filter outputImage];// 此时的 image 是模糊的
+    // 高清处理：将获取到的二维码添加到 imageview
+    UIImage *images =[self createNonInterpolatedUIImageFormCIImage:image withSize:300];// withSize 大于等于视图显示的尺寸
+    UIImageWriteToSavedPhotosAlbum(images, self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), (__bridge void *)self);
+}
+//--生成高清二维码
+- (UIImage *)createNonInterpolatedUIImageFormCIImage:(CIImage *)image withSize:(CGFloat) size {
+    CGRect extent = CGRectIntegral(image.extent);
+    CGFloat scale = MIN(size/CGRectGetWidth(extent), size/CGRectGetHeight(extent));
+    // 创建 bitmap
+    size_t width = CGRectGetWidth(extent) * scale;
+    size_t height = CGRectGetHeight(extent) * scale;
+    CGColorSpaceRef cs = CGColorSpaceCreateDeviceGray();
+    CGContextRef bitmapRef = CGBitmapContextCreate(nil, width, height, 8, 0, cs, (CGBitmapInfo)kCGImageAlphaNone);
+    CIContext *context = [CIContext contextWithOptions:nil];
+    CGImageRef bitmapImage = [context createCGImage:image fromRect:extent];
+    CGContextSetInterpolationQuality(bitmapRef, kCGInterpolationNone);
+    CGContextScaleCTM(bitmapRef, scale, scale);
+    CGContextDrawImage(bitmapRef, extent, bitmapImage);
+    // 保存 bitmap 到图片
+    CGImageRef scaledImage = CGBitmapContextCreateImage(bitmapRef);
+    CGContextRelease(bitmapRef);
+    CGImageRelease(bitmapImage);
+    
+    return [UIImage imageWithCGImage:scaledImage];
+}
+//保存图片完成之后的回调
+- (void) savedPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError *)error contextInfo: (void *)contextInfo {
+    if (error) {
+        NSLog(@"保存图片失败%@", error.localizedDescription);
+    }else {
+        [_kHUDManager showMsgInView:nil withTitle:@"二维码图片已保存至您的相册" isSuccess:YES];
+    }
+}
+
+
+
 
 /*
 #pragma mark - Navigation

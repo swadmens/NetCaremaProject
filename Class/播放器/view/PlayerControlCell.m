@@ -194,12 +194,12 @@
 }
 -(void)videoBtnClick:(UIButton*)sender
 {
-    _videoBtn.selected = !_videoBtn.selected;
+//    _videoBtn.selected = !_videoBtn.selected;
     [self.delegate playerControlwithState:videoSateVideing withButton:sender];
 }
 -(void)screenshotsBtnClick:(UIButton*)sender
 {
-    _screenshotsBtn.selected = !_screenshotsBtn.selected;
+//    _screenshotsBtn.selected = !_screenshotsBtn.selected;
     [self.delegate playerControlwithState:videoSatesSreenshots withButton:sender];
 }
 -(void)controlBtnClick:(UIButton*)sender

@@ -37,12 +37,16 @@
     
     
     _equipmentName = [UILabel new];
-    _equipmentName.text = @"设备名称123456";
+//    _equipmentName.text = @"设备名称123456";
     _equipmentName.textColor = kColorMainTextColor;
     _equipmentName.font = [UIFont customFontWithSize:kFontSizeSixteen];
     [self.contentView addSubview:_equipmentName];
     [_equipmentName leftToView:_showImageView withSpace:10];
     [_equipmentName addCenterY:-14 toView:self.contentView];
+    
+    
+    
+
     
     
     _equipmentStates = [UILabel new];
@@ -84,6 +88,31 @@
     [rightImageView yCenterToView:self.contentView];
     [rightImageView rightToView:self.contentView withSpace:15];
     
+}
+-(void)makeCellData:(NSString*)value
+{
+    if (![WWPublicMethod isStringEmptyText:value]) {
+        _equipmentName.text = @"866262045665618";
+        return;
+    }
+    
+    NSString *tmpStr = @"866262045665618";
+    NSRange range = [tmpStr rangeOfString:value];
+    
+    if (range.location != NSNotFound) {
+        
+//        NSLog(@"found at location = %lu, length = %lu",(unsigned long)range.location,(unsigned long)range.length);
+        
+        NSMutableAttributedString *aString = [[NSMutableAttributedString alloc]initWithString:tmpStr];
+        [aString addAttribute:NSForegroundColorAttributeName value:kColorMainColor range:NSMakeRange(range.location,range.length)];
+        _equipmentName.attributedText = aString;
+        
+//        NSString *ok = [tmpStr substringFromIndex:range.location];
+//        NSLog(@"%@",ok);
+    }else{
+//      NSLog(@"Not Found");
+    }
+
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

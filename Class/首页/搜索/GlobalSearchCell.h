@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface GlobalSearchCell : WWTableViewCell
 
+-(void)makeCellData:(NSString*)value;
+
 @end
 
 NS_ASSUME_NONNULL_END
