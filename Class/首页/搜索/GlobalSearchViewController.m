@@ -235,7 +235,6 @@
         }];
         [weak_self.dataArray addObjectsFromArray:tempArray];
         
-        
         [[GCDQueue mainQueue] queueBlock:^{
             
             [weak_self.tableView reloadData];

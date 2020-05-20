@@ -120,7 +120,7 @@
     addBtn.layer.cornerRadius = 19;
     [addBtn setTitle:@"添加分组" forState:UIControlStateNormal];
     [addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [addBtn setBGColor:kColorMainColor forState:UIControlStateNormal];
+    [addBtn setBackgroundImage:UIImageWithFileName(@"button_back_image") forState:UIControlStateNormal];
     addBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [addBtn addTarget:self action:@selector(addGroupClick) forControlEvents:UIControlEventTouchUpInside];
     [bottomView addSubview:addBtn];

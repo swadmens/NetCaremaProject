@@ -69,7 +69,7 @@
     deleteBtn.layer.cornerRadius = 19;
     [deleteBtn setTitle:@"删除分组" forState:UIControlStateNormal];
     [deleteBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [deleteBtn setBGColor:kColorMainColor forState:UIControlStateNormal];
+    [deleteBtn setBackgroundImage:UIImageWithFileName(@"button_back_image") forState:UIControlStateNormal];
     deleteBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [deleteBtn addTarget:self action:@selector(deleteGroupClick) forControlEvents:UIControlEventTouchUpInside];
     [bottomView addSubview:deleteBtn];
@@ -81,25 +81,30 @@
 -(void)deleteGroupClick
 {
     //删除分组
+    if (self.selectedIndexSet.count == 0) {
+        return;
+    }
     [self.dataArray removeObjectsAtIndexes:self.selectedIndexSet];
+    
+    [self changeNoDataViewHiddenStatus];
+    [self.selectedIndexSet removeAllIndexes];
+    
+    
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+
+        DeleteGroupsTableViewCell *cell = (DeleteGroupsTableViewCell*)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:0]];
+        cell.selectBtn.selected = NO;
+
+    }];
+    
+        
     [self.tableView reloadData];
+
     
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:nil andImageNamed:@"device_empty_backimage" andTop:@"60"];
-    self.noDataView.backgroundColor = kColorBackgroundColor;
-    // label
-    UILabel *tipLabel = [self getNoDataTipLabel];
-    
-    UIButton *againBtn = [UIButton new];
-    [againBtn setTitle:@"暂无分组，轻触重试" forState:UIControlStateNormal];
-    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
-    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
-    [self.noDataView addSubview:againBtn];
-    [againBtn xCenterToView:self.noDataView];
-    [againBtn topToView:tipLabel withSpace:-8];
+    self.noDataView = [self setupnoDataContentViewWithTitle:@"暂无分组" andImageNamed:@"device_empty_backimage" andTop:@"60"];
 }
 -(void)againLoadDataBtn
 {
@@ -109,17 +114,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"全部分组";
+    self.title = @"删除分组";
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     
     [self setupTableView];
+    [self setupNoDataView];
 
     
-    NSArray *arr = @[@{@"select":@(NO)},@{@"select":@(NO)},@{@"select":@(NO)},@{@"select":@(NO)},@{@"select":@(NO)},@{@"select":@(NO)},@{@"select":@(NO)},@{@"select":@(NO)},];
+    NSArray *arr = @[@{@"titles":@"111"},@{@"titles":@"222"},@{@"titles":@"333"},@{@"titles":@"444"},@{@"titles":@"555"},@{@"titles":@"666"},@{@"titles":@"777"},@{@"titles":@"888"}];
     [self.dataArray addObjectsFromArray:arr];
-    
-    
     
     
     //右上角按钮
@@ -133,6 +137,15 @@
 -(void)right_clicked
 {
 //    [self.tableView setEditing:YES animated:NO];
+    
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+
+        DeleteGroupsTableViewCell *cell = (DeleteGroupsTableViewCell*)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:0]];
+        cell.selectBtn.selected = YES;
+        [self.selectedIndexSet addIndex:idx];
+
+    }];
+    
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -157,24 +170,30 @@
 // 选中
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+//    NSDictionary *model = [self.dataArray objectAtIndex:indexPath.row];
+//    BOOL selected = [[model objectForKey:@"select"] boolValue];
+//    if (selected) {
+//        NSDictionary *dic = @{@"select":@(NO)};
+//        [self.dataArray replaceObjectAtIndex:indexPath.row withObject:dic];
+//        [self.selectedIndexSet removeIndex:indexPath.item];
+//    }else{
+//        NSDictionary *dic = @{@"select":@(YES)};
+//        [self.dataArray replaceObjectAtIndex:indexPath.row withObject:dic];
+//        [self.selectedIndexSet addIndex:indexPath.item];
+//    }
 //
+//    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     
-    NSDictionary *model = [self.dataArray objectAtIndex:indexPath.row];
-    BOOL selected = [[model objectForKey:@"select"] boolValue];
-    if (selected) {
-        NSDictionary *dic = @{@"select":@(NO)};
-        [self.dataArray replaceObjectAtIndex:indexPath.row withObject:dic];
-        [self.selectedIndexSet removeIndex:indexPath.item];
-    }else{
-        NSDictionary *dic = @{@"select":@(YES)};
-        [self.dataArray replaceObjectAtIndex:indexPath.row withObject:dic];
+    
+    DeleteGroupsTableViewCell *cell = (DeleteGroupsTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
+    cell.selectBtn.selected = !cell.selectBtn.selected;
+    if (cell.selectBtn.selected) {
         [self.selectedIndexSet addIndex:indexPath.item];
+    }else{
+        [self.selectedIndexSet removeIndex:indexPath.item];
     }
-
-    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     
     
-//    [self.tableView reloadData];
 }
 
 - (void)loadNewData
@@ -253,9 +272,9 @@
 }
 - (void)changeNoDataViewHiddenStatus
 {
-    if (_isHadFirst == NO) {
-        return ;
-    }
+//    if (_isHadFirst == NO) {
+//        return ;
+//    }
     
     NSInteger count = self.dataArray.count;
     if (count == 0) {

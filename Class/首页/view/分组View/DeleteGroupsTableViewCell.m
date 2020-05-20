@@ -10,7 +10,6 @@
 
 @interface DeleteGroupsTableViewCell ()
 
-@property (nonatomic,strong) UIButton *selectBtn;
 @property (nonatomic,strong) UILabel *titleLabel;
 
 @end
@@ -48,11 +47,13 @@
 }
 -(void)makeCellData:(NSDictionary *)dic
 {
-    BOOL selected = [[dic objectForKey:@"select"] boolValue];
-    _selectBtn.selected = selected;
+    _titleLabel.text = [dic objectForKey:@"titles"];
+    
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
+//    _selectBtn.selected = selected;
+
     // Configure the view for the selected state
 }
 

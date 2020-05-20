@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface DeleteGroupsTableViewCell : WWTableViewCell
 
 -(void)makeCellData:(NSDictionary*)dic;
+@property (nonatomic,strong) UIButton *selectBtn;
 
 @end
 

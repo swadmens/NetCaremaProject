@@ -125,7 +125,7 @@
     
     UIButton *playBtn = [UIButton new];
     [playBtn setImage:UIImageWithFileName(@"index_allplay_image") forState:UIControlStateNormal];
-    [playBtn addTarget:self action:@selector(playAllButtonClick) forControlEvents:UIControlEventTouchUpInside];
+//    [playBtn addTarget:self action:@selector(playAllButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [backView addSubview:playBtn];
     [playBtn rightToView:rightBtn withSpace:10];
     [playBtn yCenterToView:rightBtn];
