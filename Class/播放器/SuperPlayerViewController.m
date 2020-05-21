@@ -154,13 +154,11 @@
             
             break;
         case videoSateVoice://声音控制
-          
-            self.isLiving = !self.isLiving;
-            [self.tableView reloadData];
-        
+            
+            
             break;
         case videoSateGongge://宫格变化
-    
+            
             
             break;
         case videoSateClarity://清晰度
@@ -331,7 +329,7 @@
 //图片，视频保存view
 -(void)setupSaveView
 {
-    CGFloat ySpace = kScreenWidth * 0.68 - 44.5;
+    CGFloat ySpace = kScreenWidth * 0.68 - 43.5;
     
     _saveBackView = [UIView new];
     _saveBackView.hidden = YES;

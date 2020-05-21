@@ -258,7 +258,9 @@
 {
     //还原
     self.transform = CGAffineTransformIdentity;
-    [self.delegate cameraColseControl:self];
+    if ([self.delegate respondsToSelector:@selector(cameraColseControl:)]) {
+        [self.delegate cameraColseControl:self];
+    }
 }
 -(void)setIsLiveGBS:(BOOL)isLiveGBS
 {
@@ -277,63 +279,93 @@
 
 -(void)controlUpClick
 {
-    [self.delegate cameraControl:self withState:ControlStateUp];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStateUp];
+    }
 }
 -(void)controlDownClick
 {
-    [self.delegate cameraControl:self withState:ControlStateDown];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStateDown];
+    }
 }
 -(void)controlLeftClick
 {
-    [self.delegate cameraControl:self withState:ControlStateLeft];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStateLeft];
+    }
 }
 -(void)controlRightClick
 {
-    [self.delegate cameraControl:self withState:ControlStaterRight];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStaterRight];
+    }
 }
 -(void)controlStopClick
 {
-    [self.delegate cameraControl:self withState:ControlStaterStop];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStaterStop];
+    }
 }
 -(void)controlLeftUpClick
 {
-    [self.delegate cameraControl:self withState:ControlStaterLeftUp];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStaterLeftUp];
+    }
 }
 -(void)controlLeftDownClick
 {
-    [self.delegate cameraControl:self withState:ControlStaterLeftDown];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStaterLeftDown];
+    }
 }
 -(void)controlRightUpClick
 {
-    [self.delegate cameraControl:self withState:ControlStaterRightUp];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStaterRightUp];
+    }
 }
 -(void)controlRightDownClick
 {
-    [self.delegate cameraControl:self withState:ControlStaterRightDown];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStaterRightDown];
+    }
 }
 -(void)controlZoominClick
 {
-    [self.delegate cameraControl:self withState:ControlStaterZoomin];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStaterZoomin];
+    }
 }
 -(void)controlZoomoutClick
 {
-    [self.delegate cameraControl:self withState:ControlStaterZoomout];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStaterZoomout];
+    }
 }
 -(void)controlFocusinClick
 {
-    [self.delegate cameraControl:self withState:ControlStaterFocusin];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStaterFocusin];
+    }
 }
 -(void)controlFocusoutClick
 {
-    [self.delegate cameraControl:self withState:ControlStaterFocusout];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStaterFocusout];
+    }
 }
 -(void)controlApertureinClick
 {
-    [self.delegate cameraControl:self withState:ControlStaterAperturein];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStaterAperturein];
+    }
 }
 -(void)controlApertureoutClick
 {
-    [self.delegate cameraControl:self withState:ControlStaterApertureout];
+    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
+        [self.delegate cameraControl:self withState:ControlStaterApertureout];
+    }
 }
 
 /*

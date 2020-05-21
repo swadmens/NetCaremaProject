@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)collectionSelect:(NSInteger)index;
 -(void)searchValue:(NSString*)value;
 -(void)navPopView:(NSInteger)value;
+-(void)allPlayerBtn;
 
 @end
 

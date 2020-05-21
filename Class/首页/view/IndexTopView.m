@@ -99,7 +99,10 @@
     [allPlayBtn setImage:UIImageWithFileName(@"index_search_player_image") forState:UIControlStateNormal];
     [self addSubview:allPlayBtn];
     [allPlayBtn yCenterToView:self.searchButton];
-    [allPlayBtn rightToView:self withSpace:15];
+    [allPlayBtn rightToView:self withSpace:10];
+    [allPlayBtn addWidth:30];
+    [allPlayBtn addHeight:30];
+    [allPlayBtn addTarget:self action:@selector(allPlayerBtnClick) forControlEvents:UIControlEventTouchUpInside];
     
     
     
@@ -211,7 +214,9 @@
            self.searchValue = @"";
        }else {
            self.searchValue = searchBar.text;
-           [self.delegate searchValue:searchBar.text];
+           if ([self.delegate respondsToSelector:@selector(searchValue:)]) {
+               [self.delegate searchValue:searchBar.text];
+           }
        }
 }
 
@@ -221,6 +226,12 @@
 -(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
     [TargetEngine controller:nil pushToController:PushTargetGlobalSearch WithTargetId:nil];
+}
+-(void)allPlayerBtnClick
+{
+    if ([self.delegate respondsToSelector:@selector(allPlayerBtn)]) {
+        [self.delegate allPlayerBtn];
+    }
 }
 
 -(void)addGroupClick:(UIButton*)sender
@@ -243,7 +254,9 @@
                                                             action:^(NSInteger index) {
          NSLog(@"index:%ld",(long)index);
          
-         [self.delegate navPopView:index];
+         if ([self.delegate respondsToSelector:@selector(navPopView:)]) {
+             [self.delegate navPopView:index];
+         }
         
      }];
     

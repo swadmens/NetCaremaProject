@@ -7,6 +7,25 @@
 //
 
 #import "PlayLocalVideoView.h"
+#import "PLPlayerView.h"
+#import "DemandModel.h"
+
+
+@interface PlayLocalVideoView ()
+
+@property (nonatomic,strong) UIImageView *titleImageView;
+
+@property (nonatomic,strong) UIView *playView;
+@property (nonatomic, strong) PLPlayerView *playerView;
+@property (nonatomic, assign) BOOL isFullScreen;   /// 是否全屏标记
+@property (nonatomic, assign) BOOL isPlaying;
+
+@property (nonatomic,strong) DemandModel *model;
+
+@property (nonatomic,strong) UIView *coverView;
+
+
+@end
 
 @implementation PlayLocalVideoView
 
@@ -14,14 +33,118 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.backgroundColor = [UIColor redColor];
+        self.backgroundColor = [UIColor whiteColor];
         [self createUI];
     }
     return self;
 }
 -(void)createUI
 {
+//    CGFloat height = kScreenWidth * 0.68 + 0.5;
+
+    _playView = [UIView new];
+    _playView.backgroundColor = [UIColor whiteColor];
+    [self addSubview:_playView];
+    [_playView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self];
+
+//    [_playView addWidth:kScreenWidth];
+//    [_playView addHeight:height];
     
+    
+    
+    _titleImageView = [UIImageView new];
+    _titleImageView.image = UIImageWithFileName(@"playback_back_image");
+    [_playView addSubview:_titleImageView];
+//    [_titleImageView xCenterToView:_playView];
+//    [_titleImageView yCenterToView:_playView];
+    [_titleImageView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:_playView];
+    
+    
+//    self.playerView = [[PLPlayerView alloc] init];
+//    self.playerView.delegate = self;
+//    [_playView addSubview:self.playerView];
+//    self.playerView.media = _model;
+//    self.playerView.isLocalVideo = NO;
+//    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.edges.equalTo(self.playView);
+//    }];
+//
+//    [self configureVideo:NO];
+//    if (self.isLiving) {
+//        [self play];
+//    }
+    
+    _coverView = [UIView new];
+    _coverView.backgroundColor = UIColorFromRGB(0x060606, 0.55);
+    [_titleImageView addSubview:_coverView];
+    [_coverView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:_titleImageView];
+    
+
+    UILabel *outlineLabel = [UILabel new];
+    outlineLabel.text = @"离线";
+    outlineLabel.textColor = [UIColor whiteColor];
+    outlineLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
+    [_coverView addSubview:outlineLabel];
+    [outlineLabel xCenterToView:_coverView];
+    [outlineLabel yCenterToView:_coverView];
+}
+- (void)play {
+    [self.playerView play];
+    self.isPlaying = YES;
+}
+
+- (void)stop {
+    [self.playerView stop];
+    self.isPlaying = NO;
+}
+
+- (void)configureVideo:(BOOL)enableRender {
+    [self.playerView configureVideo:enableRender];
+}
+
+- (void)playerViewEnterFullScreen:(PLPlayerView *)playerView {
+    
+//    UIView *superView = [UIApplication sharedApplication].delegate.window.rootViewController.view;
+    UIView *superView = [[UIApplication sharedApplication] keyWindow];
+    [self.playerView removeFromSuperview];
+    [superView addSubview:self.playerView];
+    [self.playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(superView.mas_height);
+        make.height.equalTo(superView.mas_width);
+        make.center.equalTo(superView);
+    }];
+    
+    [superView setNeedsUpdateConstraints];
+    [superView updateConstraintsIfNeeded];
+
+    [UIView animateWithDuration:.3 animations:^{
+        [superView layoutIfNeeded];
+    }];
+
+    self.isFullScreen = YES;
+}
+
+- (void)playerViewExitFullScreen:(PLPlayerView *)playerView {
+    
+    [self.playerView removeFromSuperview];
+    [self.playView addSubview:self.playerView];
+    
+    [self.playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.playView);
+    }];
+    
+    [self setNeedsUpdateConstraints];
+    [self updateConstraintsIfNeeded];
+
+    [UIView animateWithDuration:.3 animations:^{
+        [self layoutIfNeeded];
+    }];
+    
+    self.isFullScreen = NO;
+}
+
+- (void)playerViewWillPlay:(PLPlayerView *)playerView {
+//    [self.playerView.delegate playerViewWillPlay:self.playerView];
 }
 
 /*

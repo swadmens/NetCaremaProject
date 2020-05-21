@@ -10,6 +10,11 @@
 #import "WWTableView.h"
 #import "LocalVideoCell.h"
 #import "RequestSence.h"
+#import "SuperPlayerViewController.h"
+#import "DemandModel.h"
+#import "AFHTTPSessionManager.h"
+#import "CarmeaVideosModel.h"
+
 
 @interface LocalVideoViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -20,6 +25,11 @@
 @property(nonatomic,assign) NSInteger page;
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
+
+@property (nonatomic,strong) NSString *device_id;//具体设备id
+
+@property (nonatomic, strong) NSMutableIndexSet* selectedIndexSet;
+
 
 @end
 
@@ -34,7 +44,7 @@
 - (void)setupTableView
 {
     self.tableView = [[WWTableView alloc] init];
-    self.tableView.backgroundColor = kColorBackgroundColor;
+    self.tableView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 60;
@@ -62,29 +72,9 @@
         }
     };
 }
--(void)addGroupClick
-{
-    [TargetEngine controller:nil pushToController:PushTargetAddNewGroup WithTargetId:nil];
-}
 - (void)setupNoDataView
 {
     self.noDataView = [self setupnoDataContentViewWithTitle:@"暂无录像，快去创建吧~" andImageNamed:@"localvideo_empty_backimage" andTop:@"60"];
-//    self.noDataView.backgroundColor = kColorBackgroundColor;
-//    // label
-//    UILabel *tipLabel = [self getNoDataTipLabel];
-//    
-//    UIButton *againBtn = [UIButton new];
-//    [againBtn setTitle:@"暂无录像，轻触重试" forState:UIControlStateNormal];
-//    [againBtn setTitleColor:kColorThirdTextColor forState:UIControlStateNormal];
-//    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-//    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
-//    [self.noDataView addSubview:againBtn];
-//    [againBtn xCenterToView:self.noDataView];
-//    [againBtn topToView:tipLabel withSpace:-8];
-}
--(void)againLoadDataBtn
-{
-    [self loadNewData];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -94,18 +84,18 @@
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
    
     [self setupTableView];
-    
-    
-//
+    self.selectedIndexSet = [NSMutableIndexSet new];
+
     //右上角按钮
     UIButton *rightBtn = [UIButton new];
-    [rightBtn setImage:UIImageWithFileName(@"local_right_image") forState:UIControlStateNormal];
+    [rightBtn setImage:UIImageWithFileName(@"share_delete_image") forState:UIControlStateNormal];
     [rightBtn addTarget:self action:@selector(right_clicked) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     [self.navigationItem setRightBarButtonItem:rightItem];
 }
 -(void)right_clicked
 {
+    //删除本地录像
     
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -118,6 +108,7 @@
     LocalVideoCell *cell = [tableView dequeueReusableCellWithIdentifier:[LocalVideoCell getCellIDStr] forIndexPath:indexPath];
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.lineHidden = NO;
     
 //        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
 //        [cell makeCellData:model];
@@ -126,7 +117,9 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    SuperPlayerViewController *vc = [SuperPlayerViewController new];
+    vc.isLiving = NO;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)loadNewData
@@ -145,19 +138,71 @@
 - (void)startLoadDataRequest
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathURL = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_IsCameraManageDevice&currentPage=%ld",(long)self.page];;
-    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
+    
+    NSString *start = [NSString stringWithFormat:@"%ld",(self.page - 1)*10];
 
-        [weak_self handleObject:obj];
-    };
-    sence.errorBlock = ^(NSError *error) {
+    NSDictionary *finalParams = @{
+                                  @"id":self.device_id,
+                                  @"day":@"all",
+                                  @"start":start,
+                                  @"limit":@"10",
+                                  };
         
-        [weak_self failedOperation];
-    };
-    [sence sendRequest];
+    //提交数据
+    NSString *url = @"http://192.168.6.120:10102/outer/liveqing/record/query_records";
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
+                                                       options:0
+                                                         error:nil];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
+    
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:nil error:nil];
+    
+    // 设置请求头
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
+    
+    // 设置body
+    [request setHTTPBody:jsonData];
+    __unsafe_unretained typeof(self) weak_self = self;
+
+    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+    
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        
+        if (error) {
+            // 请求失败
+            DLog(@"error  ==  %@",error.userInfo);
+            DLog(@"responseObject  ==  %@",responseObject);
+            [self failedOperation];
+            
+//            self.refreshtoken++;
+//            if (self.refreshtoken > 1) {
+//                return ;
+//            }
+//            NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+//            int statusCode = [[responseObject objectForKey:@"code"] intValue];
+//            if ([unauthorized containsString:@"500"] && statusCode == 401) {
+//                [WWPublicMethod refreshToken:^(id obj) {
+//                    [self loadNewData];
+//                }];
+//            }
+            return ;
+        }
+        DLog(@"responseObject  ==  %@",responseObject);
+        [weak_self handleObject:responseObject];
+    }];
+    [task resume];
 }
 - (void)failedOperation
 {
@@ -174,23 +219,52 @@
     [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
-        NSArray *data = [obj objectForKey:@"managedObjects"];
+        NSDictionary *data = [obj objectForKey:@"data"];
+        NSArray *months = [data objectForKey:@"months"];
+        
         NSMutableArray *tempArray = [NSMutableArray array];
 
+        [months enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            NSString *keys = obj;
+            NSDictionary *mothsDic = [data objectForKey:keys];
+            NSArray *days = [mothsDic objectForKey:@"days"];
+            NSMutableArray *daysMutArray = [NSMutableArray new];
+            [days enumerateObjectsUsingBlock:^(id  _Nonnull obj2, NSUInteger idx2, BOOL * _Nonnull stop2) {
+                NSString *dayKeys = obj2;
+                NSArray *allData = [mothsDic objectForKey:dayKeys];
+                [daysMutArray addObjectsFromArray:allData];
+            }];
+            
+            [tempArray addObjectsFromArray:daysMutArray];
+        }];
+        
         if (weak_self.page == 1) {
             [weak_self.dataArray removeAllObjects];
         }
-
-        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSMutableArray *modelArray = [NSMutableArray new];
+        
+        
+        [tempArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
-//            IndexDataModel *model = [IndexDataModel makeModelData:dic];
-//            [tempArray addObject:model];
-        }];
-        [weak_self.dataArray addObjectsFromArray:tempArray];
-        
-        
-        [[GCDQueue mainQueue] queueBlock:^{
             
+            NSString *originalSnap = [dic objectForKey:@"snap"];
+            NSString *start_time = [dic objectForKey:@"start_time"];
+
+            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
+            NSString *startTime = [mutDic objectForKey:@"start_time"];
+            NSString *snap = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/getsnap?id=%@&period=%@",self.device_id,startTime];
+            if (![WWPublicMethod isStringEmptyText:originalSnap]) {
+                [mutDic setValue:snap forKey:@"snap"];
+                [self getRecordCoverPhoto:start_time withData:idx];
+            }
+            CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
+            [modelArray addObject:model];
+        }];
+        [weak_self.dataArray addObjectsFromArray:modelArray];
+
+        [[GCDQueue mainQueue] queueBlock:^{
+
             [weak_self.tableView reloadData];
             if (tempArray.count >0) {
                 weak_self.page++;
@@ -218,6 +292,114 @@
         self.noDataView.hidden = YES;
     }
     
+}
+//获取录像封面快照
+-(void)getRecordCoverPhoto:(NSString*)period withData:(NSInteger)indexInteger
+{
+    NSString *url = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.device_id,period];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
+
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+
+        DLog(@"RecordCoverPhoto.Received: %@", responseObject);
+        DLog(@"RecordCoverPhoto.Received HTTP %ld", (long)httpResponse.statusCode);
+
+        [self dealWithCoverPhoto:responseObject withData:indexInteger];
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        DLog(@"error: %@", error);
+    }];
+}
+
+-(void)dealWithCoverPhoto:(id)obj withData:(NSInteger)indexInteger
+{
+    if (obj == nil) {
+        return;
+    }
+    CarmeaVideosModel *model = [self.dataArray objectAtIndex:indexInteger];
+    model.snap = [NSString stringWithFormat:@"%@",[obj objectForKey:@"url"]];
+    [self.dataArray replaceObjectAtIndex:indexInteger withObject:model];
+    [self.tableView reloadData];
+}
+//删除视频
+-(void)deleteVideoClick
+{
+    [[TCNewAlertView shareInstance] showAlert:nil message:@"确认删除选择的视频吗？" cancelTitle:@"取消" viewController:self confirm:^(NSInteger buttonTag) {
+        if (buttonTag == 0 ) {
+            [self.selectedIndexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                CarmeaVideosModel *model = [self.dataArray objectAtIndex:idx];
+                [self deleteNumbersVideo:model.start_time withInteger:idx];
+            }];
+        }
+    } buttonTitles:@"确定", nil];
+}
+-(void)deleteNumbersVideo:(NSString*)startime withInteger:(NSInteger)integer
+{
+    NSDictionary *finalParams = @{
+                                      @"id":self.device_id,
+                                      @"period": startime,
+                                      };
+    //提交数据
+    NSString *url = @"http://192.168.6.120:10102/outer/liveqing/record/remove";
+        
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
+                                                       options:0
+                                                         error:nil];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
+    
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:nil error:nil];
+    
+    // 设置请求头
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
+    
+    // 设置body
+    [request setHTTPBody:jsonData];
+    
+    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        
+        if (error) {
+            // 请求失败
+            DLog(@"error  ==  %@",error.userInfo);
+            [_kHUDManager showMsgInView:nil withTitle:@"删除失败，请重试！" isSuccess:YES];
+            
+            return ;
+        }
+        DLog(@"responseObject  ==  %@",responseObject);
+//        [self exitTheEditStates];
+//        NSIndexPath *path = [NSIndexPath indexPathForItem:integer inSection:0];
+//        [self.collectionView deleteItemsAtIndexPaths:@[path]];
+        
+        [self.dataArray removeObjectAtIndex:integer];
+        [self.selectedIndexSet removeIndex:integer];
+        [self.tableView reloadData];
+        
+    }];
+    [task resume];
 }
 
 /*

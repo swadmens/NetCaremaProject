@@ -81,6 +81,16 @@
 
     [self setupTableView];
     
+    
+    UIButton *rightBtn = [UIButton new];
+    [rightBtn setImage:UIImageWithFileName(@"help_refresh_image") forState:UIControlStateNormal];
+    [rightBtn addTarget:self action:@selector(right_clicked) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
+    [self.navigationItem setRightBarButtonItem:rightItem];
+}
+-(void)right_clicked
+{
+    //刷新数据
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

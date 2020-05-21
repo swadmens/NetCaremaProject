@@ -202,13 +202,13 @@
 //    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
     
     
-    if (indexPath.row > 0) {
+//    if (indexPath.row > 0) {
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
         vc.hidesBottomBarWhenPushed = YES;
         vc.isLiving = YES;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
-    }
+//    }
     
 }
 
@@ -402,6 +402,16 @@
     }else{
         [TargetEngine controller:nil pushToController:PushTargetAllGroups WithTargetId:nil];
     }
+}
+-(void)allPlayerBtn
+{
+//    IndexDataModel *model = [self.dataArray objectAtIndex:0];
+    
+    SuperPlayerViewController *vc = [SuperPlayerViewController new];
+    vc.hidesBottomBarWhenPushed = YES;
+    vc.isLiving = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 #pragma IndexBottomDelegate
 -(void)clickCancelBtn

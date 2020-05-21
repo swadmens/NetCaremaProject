@@ -174,7 +174,6 @@
     NSDictionary *userDic = @{@"value":@(_gongGeBtn.selected)};
     //注册通知
     [[NSNotificationCenter defaultCenter] postNotificationName:@"gonggeChangeInfomation" object:nil userInfo:userDic];
-            
     
     [self.delegate playerControlwithState:videoSateGongge withButton:sender];
 }
