@@ -10,7 +10,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol LocalVideoDelegate <NSObject>
+
+-(void)selectRowData:(NSString*)value;
+
+@end
+
 @interface LocalVideoViewController : WWViewController
+
+@property (nonatomic,weak) id<LocalVideoDelegate>delegate;
+
+@property (nonatomic,assign) BOOL isFromIndex;
+@property (nonatomic,strong) NSString *device_id;//具体设备id
+
 
 @end
 

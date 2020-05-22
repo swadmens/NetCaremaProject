@@ -26,8 +26,6 @@
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
 
-@property (nonatomic,strong) NSString *device_id;//具体设备id
-
 @property (nonatomic, strong) NSMutableIndexSet* selectedIndexSet;
 
 
@@ -84,7 +82,11 @@
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
    
     [self setupTableView];
+    [self setupNoDataView];
     self.selectedIndexSet = [NSMutableIndexSet new];
+    
+//    self.page = 1;
+//    [self loadNewData];
 
     //右上角按钮
     UIButton *rightBtn = [UIButton new];
@@ -117,9 +119,19 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    SuperPlayerViewController *vc = [SuperPlayerViewController new];
-    vc.isLiving = NO;
-    [self.navigationController pushViewController:vc animated:YES];
+
+    
+    if (_isFromIndex) {
+            SuperPlayerViewController *vc = [SuperPlayerViewController new];
+            vc.isLiving = NO;
+            [self.navigationController pushViewController:vc animated:YES];
+    }else{
+        [self.delegate selectRowData:@"111"];
+        [self.navigationController popViewControllerAnimated:YES];
+
+    }
+    
+    
 }
 
 - (void)loadNewData

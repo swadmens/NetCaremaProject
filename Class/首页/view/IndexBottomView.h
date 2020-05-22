@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)clickCancelBtn;
 
+-(void)clickAllVideos;
+
 @end
 
 
@@ -21,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,weak) id<IndexBottomDelegate> delegate;
 
--(void)makeViewData:(NSArray*)arr;
+-(void)makeViewData:(NSArray*)arr with:(NSString*)device_id;
 
 @end
 

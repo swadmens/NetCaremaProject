@@ -9,7 +9,6 @@
 #import "PlayBottomDateCell.h"
 #import "CGXPickerView.h"
 
-
 @interface PlayBottomDateCell ()
 
 @property (nonatomic,strong) UILabel *dateLabel;
@@ -54,11 +53,12 @@
 }
 -(void)tapBackViewClick:(UITapGestureRecognizer*)tp
 {
-    [CGXPickerView showDatePickerWithTitle:@"日期和时间" DateType:UIDatePickerModeDateAndTime DefaultSelValue:nil MinDateStr:nil MaxDateStr:nil IsAutoSelect:YES Manager:nil ResultBlock:^(NSString *selectValue) {
+    [CGXPickerView showDatePickerWithTitle:@"日期和时间" DateType:UIDatePickerModeDateAndTime DefaultSelValue:nil MinDateStr:nil MaxDateStr:[_kDatePicker getCurrentTimes:@"YYYY-MM-dd  hh:mm"] IsAutoSelect:YES Manager:nil ResultBlock:^(NSString *selectValue) {
         DLog(@"%@",selectValue);
         self.dateLabel.text = selectValue;;
     }];
 }
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

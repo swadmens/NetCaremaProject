@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ChannelDetailController : WWViewController
 
+@property (nonatomic,strong) NSString *device_id;//具体设备id
+
+
 @end
 
 NS_ASSUME_NONNULL_END

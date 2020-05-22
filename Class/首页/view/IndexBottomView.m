@@ -26,6 +26,9 @@
 @property (nonatomic,strong) WWTableView *tableView;
 @property (nonatomic,strong) NSArray *dataArray;
 @property (nonatomic,strong) UIView *backView;
+
+@property (nonatomic,strong) NSString *device_id;//具体设备id
+
 @end
 
 @implementation IndexBottomView
@@ -121,19 +124,25 @@
         [TargetEngine controller:nil pushToController:PushTargetMessageNoticesDeal WithTargetId:nil];
     }else if ([title isEqualToString:@"index_all_video_image"]){
         //全部录像
-        [TargetEngine controller:nil pushToController:PushTargetLocalVideo WithTargetId:nil];
+//        [TargetEngine controller:nil pushToController:PushTargetLocalVideo WithTargetId:nil];
+        
+        if ([self.delegate respondsToSelector:@selector(clickAllVideos)]) {
+            [self.delegate clickAllVideos];
+        }
+        
     }else if ([title isEqualToString:@"index_equiment_shara_image"]){
         //设备共享
         [TargetEngine controller:nil pushToController:PushTargetEquimentShared WithTargetId:nil];
     }else{
         //通道详情
-        [TargetEngine controller:nil pushToController:PushTargetChannelDetail WithTargetId:nil];
+        [TargetEngine controller:nil pushToController:PushTargetChannelDetail WithTargetId:self.device_id];
     }
  
 }
--(void)makeViewData:(NSArray*)arr
+-(void)makeViewData:(NSArray*)arr with:(nonnull NSString *)device_id
 {
     self.dataArray = [NSArray arrayWithArray:arr];
+    self.device_id = device_id;
     
     CGFloat height = self.dataArray.count * 35 + 50;
     

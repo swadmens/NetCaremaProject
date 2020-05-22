@@ -109,7 +109,7 @@
         //更多设置
         [TargetEngine controller:self pushToController:PushTargetChannelMoreSystem WithTargetId:nil];
     }else if (indexPath.row == 0){
-        [TargetEngine controller:self pushToController:PushTargetEquimentBasicInfo WithTargetId:nil];
+        [TargetEngine controller:self pushToController:PushTargetEquimentBasicInfo WithTargetId:self.device_id];
     }else if (indexPath.row == 1){
         //通知
         [TargetEngine controller:nil pushToController:PushTargetMessageNoticesDeal WithTargetId:nil];

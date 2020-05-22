@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PlayerLocalVideosCell : WWTableViewCell
 
+@property (nonatomic,copy) void(^allBtn)(void);
+
 @end
 
 NS_ASSUME_NONNULL_END

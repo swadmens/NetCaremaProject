@@ -22,7 +22,10 @@
 #import "SuperPlayerViewController.h"
 #import "AFHTTPSessionManager.h"
 
-@interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource,IndexTopDelegate,IndexBottomDelegate,showCarmeraDelegate>
+#import "LocalVideoViewController.h"
+
+
+@interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource,IndexTopDelegate,IndexBottomDelegate,showCarmeraDelegate,LocalVideoDelegate>
 {
     BOOL _isHadFirst; // 是否第一次加载了
 }
@@ -36,6 +39,7 @@
 @property (nonatomic,strong) UIView *coverView;
 
 @property (nonatomic,assign) BOOL isLogion;//是否登录
+@property (nonatomic,strong) MyEquipmentsModel *selectModel;
 
 
 @end
@@ -167,9 +171,11 @@
         
         [cell makeCellData:model];
         
-        cell.moreDealClick = ^{
+        cell.moreDealClick = ^(NSInteger selectRow) {
             [self collectionSelect:indexPath.row];
+            self.selectModel = [model.equipment_nums objectAtIndex:selectRow];
         };
+        
         cell.rightBtnClick = ^{
             ShowCarmerasViewController *vc = [ShowCarmerasViewController new];
             vc.equipment_id = model.equipment_id;
@@ -370,12 +376,18 @@
     NSArray *arr2 = @[@{@"title":@"全部录像",@"image":@"index_all_video_image"},
                     @{@"title":@"通道详情",@"image":@"index_channel_detail_image"}];
     
+    NSString *ClientId = [WWPublicMethod isStringEmptyText:self.selectModel.ClientId]?self.selectModel.ClientId:@"";
+    NSString *DeviceId = [WWPublicMethod isStringEmptyText:self.selectModel.DeviceId]?self.selectModel.DeviceId:@"";
+    NSString *CameraId = [WWPublicMethod isStringEmptyText:self.selectModel.CameraId]?self.selectModel.CameraId:@"";
+    
+    NSString *device_id = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
+    
     CGFloat height;
     if (index == 1) {
-        [self.bottomView makeViewData:arr2];
+        [self.bottomView makeViewData:arr2 with:device_id];
         height = arr2.count * 35 + 50;
     }else{
-        [self.bottomView makeViewData:arr];
+        [self.bottomView makeViewData:arr with:device_id];
         height = arr.count * 35 + 50;
     }
     
@@ -418,6 +430,27 @@
 {
     self.bottomView.transform = CGAffineTransformIdentity;
     self.coverView.hidden = YES;
+}
+-(void)clickAllVideos
+{
+    
+    NSString *ClientId = [WWPublicMethod isStringEmptyText:self.selectModel.ClientId]?self.selectModel.ClientId:@"";
+    NSString *DeviceId = [WWPublicMethod isStringEmptyText:self.selectModel.DeviceId]?self.selectModel.DeviceId:@"";
+    NSString *CameraId = [WWPublicMethod isStringEmptyText:self.selectModel.CameraId]?self.selectModel.CameraId:@"";
+
+    
+    LocalVideoViewController *vc = [LocalVideoViewController new];
+    vc.delegate = self;
+    vc.hidesBottomBarWhenPushed = YES;
+    vc.isFromIndex = YES;
+    vc.device_id = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
+    [self.navigationController pushViewController:vc animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
+}
+#pragma LocalVideoDelegate
+-(void)selectRowData:(NSString *)value
+{
+    
 }
 #pragma showCarmeraDelegate
 -(void)getNewArray:(NSArray *)array withIndex:(NSInteger)index

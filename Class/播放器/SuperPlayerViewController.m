@@ -17,10 +17,11 @@
 #import "PlayBottomDateCell.h"
 #import "LGXThirdEngine.h"
 #import "ShareSDKMethod.h"
+#import "LocalVideoViewController.h"
 
 #define KTopviewheight kScreenWidth*0.68
 
-@interface SuperPlayerViewController ()<UITableViewDelegate,UITableViewDataSource,PlayerControlDelegate,CameraControlDelete>
+@interface SuperPlayerViewController ()<UITableViewDelegate,UITableViewDataSource,PlayerControlDelegate,CameraControlDelete,LocalVideoDelegate>
 
 @property (nonatomic,strong) WWTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -128,6 +129,15 @@
             PlayerLocalVideosCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerLocalVideosCell getCellIDStr] forIndexPath:indexPath];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
+            cell.allBtn = ^{
+                 
+                LocalVideoViewController *vc = [LocalVideoViewController new];
+                vc.delegate = self;
+                vc.isFromIndex = NO;
+                [self.navigationController pushViewController:vc animated:YES];
+               
+            };
+            
             return cell;
         }else{
             PlayBottomDateCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayBottomDateCell getCellIDStr] forIndexPath:indexPath];
@@ -453,7 +463,12 @@
     }
 }
 
-
+#pragma LocalVideoDelegate
+-(void)selectRowData:(NSString *)value
+{
+    self.isLiving = NO;
+    [self.tableView reloadData];
+}
 
 
 /*

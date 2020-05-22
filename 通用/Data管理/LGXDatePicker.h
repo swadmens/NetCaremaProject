@@ -56,8 +56,8 @@ typedef NS_ENUM(NSInteger, LGXDatePickerMode) {
 /// 根据date获取yyyy年MM月dd日的字符串,date为nil时是当前时间
 - (NSString *)dateStringWithDate:(NSDate *)date;
 
-//获取当前年月日时分秒（20200417104250）
--(NSString*)getCurrentTimes;
+//获取当前年月日时分秒（自带相应的格式如YYYY-MM-dd  hh:mm//YYYYMMddhh:mm:ss）
+-(NSString*)getCurrentTimes:(NSString*)format;
 
 
 @end

@@ -169,7 +169,7 @@
     
     cell.moreBtnClick = ^{
         if (self.moreDealClick) {
-            self.moreDealClick();
+            self.moreDealClick(indexPath.row);
         }
     };
 

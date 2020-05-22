@@ -214,7 +214,7 @@ didReceiveResponse:(NSURLResponse *)response
     //创建文件
 
     //以当前时间（年月日时分秒）为文件命名
-    NSString *fileNames = [NSString stringWithFormat:@"%@.mp4",[_kDatePicker getCurrentTimes]];
+    NSString *fileNames = [NSString stringWithFormat:@"%@.mp4",[_kDatePicker getCurrentTimes:@"YYYYMMddhhmmss"]];
    
     _filePath = [self.directoryPath stringByAppendingPathComponent:fileNames];
     if (![[NSFileManager defaultManager] fileExistsAtPath:_filePath]) {

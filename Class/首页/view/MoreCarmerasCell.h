@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class IndexDataModel;
 @interface MoreCarmerasCell : WWTableViewCell
 
-@property (nonatomic,copy) void(^moreDealClick)(void);
+@property (nonatomic,copy) void(^moreDealClick)(NSInteger selectRow);
 @property (nonatomic,copy) void(^rightBtnClick)(void);
 
 -(void)makeCellData:(IndexDataModel*)model;

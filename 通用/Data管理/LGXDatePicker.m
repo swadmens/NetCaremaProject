@@ -205,18 +205,13 @@
 }
 
 //获取当前年月日时分秒（20200417104250）
--(NSString*)getCurrentTimes
+-(NSString*)getCurrentTimes:(NSString*)format
 {
     NSDate *date = [NSDate date];
-    
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    
-    
     [formatter setDateStyle:NSDateFormatterMediumStyle];
-    
     [formatter setTimeStyle:NSDateFormatterShortStyle];
-    
-    [formatter setDateFormat:@"YYYYMMddhhmmss"];
+    [formatter setDateFormat:format];
     NSString *DateTime = [formatter stringFromDate:date];
     
     return DateTime;

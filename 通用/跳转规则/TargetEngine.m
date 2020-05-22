@@ -622,6 +622,7 @@
         case PushTargetChannelDetail: //通道详情
         {
             ChannelDetailController *controller = [[ChannelDetailController alloc] init];
+            controller.device_id = pushId;
             toController = controller;
         }
             break;
