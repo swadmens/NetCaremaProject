@@ -66,15 +66,11 @@
     [rightBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     rightBtn.titleLabel.font=[UIFont customFontWithSize:kFontSizeFourteen];
     [rightBtn.titleLabel setTextAlignment: NSTextAlignmentRight];
-    rightBtn.frame = CGRectMake(0, 0, 65, 40);
+//    rightBtn.frame = CGRectMake(0, 0, 65, 40);
     [rightBtn addTarget:self action:@selector(right_clicked) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     [rightBtn setTitle:@"保存" forState:UIControlStateNormal];
     [self.navigationItem setRightBarButtonItem:rightItem];
-    
-    
-    //接收通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadInfoNotica:) name:@"saveInfomation" object:nil];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -88,11 +84,6 @@
     self.c8y_Notes = [self.dicData objectForKey:@"c8y_Notes"];
     [self.tableView reloadData];
 }
-//上传数据
-- (void)uploadInfoNotica:(NSNotification *)notification
-{
-    [self upLoadInfo];
-}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return 2;
@@ -104,6 +95,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
         [cell makeCellData:self.dicData];
+        
         cell.textFieldName = ^(NSString * _Nonnull text) {
             self.name = text;
         };
@@ -111,6 +103,7 @@
             self.c8y_Notes = text;
         };
         cell.addAddressClick = ^{
+            [self.view endEditing:YES];
             AddCarmeraAddressController *vc = [AddCarmeraAddressController new];
             vc.delegate = self;
             [self.navigationController pushViewController:vc animated:YES];
@@ -130,7 +123,7 @@
 -(void)right_clicked
 {
     //上传保存
-    
+    [self upLoadInfo];
 }
 
 -(void)upLoadInfo
@@ -189,6 +182,10 @@
             return ;
         }
         DLog(@"responseObject  ==  %@",responseObject);
+        
+        [_kHUDManager showMsgInView:nil withTitle:@"保存成功" isSuccess:YES];
+//        [self.navigationController popToRootViewControllerAnimated:YES];
+
         self.isSave = YES;
         
     }];
@@ -198,7 +195,6 @@
 #pragma AddCarmeraAddressDelegate
 -(void)addNewAddress:(NSString *)address
 {
-//    DLog(@"选择的地址 ==  %@",address);
     [self.dicData setObject:address forKey:@"address"];
     [self.tableView reloadData];
 }

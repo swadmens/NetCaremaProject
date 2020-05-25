@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)clickAllVideos;
 
+-(void)clickChannelDetails;
+
+
 @end
 
 

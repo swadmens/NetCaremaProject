@@ -135,7 +135,10 @@
         [TargetEngine controller:nil pushToController:PushTargetEquimentShared WithTargetId:nil];
     }else{
         //通道详情
-        [TargetEngine controller:nil pushToController:PushTargetChannelDetail WithTargetId:self.device_id];
+        if ([self.delegate respondsToSelector:@selector(clickChannelDetails)]) {
+            [self.delegate clickChannelDetails];
+        }
+//        [TargetEngine controller:nil pushToController:PushTargetChannelDetail WithTargetId:self.device_id];
     }
  
 }

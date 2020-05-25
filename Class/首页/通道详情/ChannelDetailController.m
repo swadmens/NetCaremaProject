@@ -57,7 +57,8 @@
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
       
        
-    NSArray *arr = @[@"866262045665618",@"通知",@"设备音频采集",@"设备分享",@"更多设置"];
+    NSDictionary *data = [NSDictionary dictionaryWithDictionary:[WWPublicMethod objectTransFromJson:self.device_id]];
+    NSArray *arr = @[[data objectForKey:@"name"],@"通知",@"设备音频采集",@"设备分享",@"更多设置"];
        
     [self.dataArray addObjectsFromArray:arr];
        

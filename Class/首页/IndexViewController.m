@@ -447,6 +447,25 @@
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }
+-(void)clickChannelDetails
+{
+    NSDictionary *dic = @{
+                          @"id":self.selectModel.equipment_id,
+                          @"name":self.selectModel.equipment_name,
+                          @"c8y_Notes":self.selectModel.c8y_Notes,
+                          @"CameraId":self.selectModel.CameraId,
+                          @"Channel":self.selectModel.equipment_Channel,
+                          @"ClientId":self.selectModel.ClientId,
+                          @"DeviceId":self.selectModel.DeviceId,
+                          @"owner":self.selectModel.owner,
+                          @"lastUpdated":self.selectModel.lastUpdated,
+                          @"responseInterval":self.selectModel.responseInterval,
+                         };
+    NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
+    
+    [TargetEngine controller:nil pushToController:PushTargetChannelDetail WithTargetId:pushId];
+
+}
 #pragma LocalVideoDelegate
 -(void)selectRowData:(NSString *)value
 {

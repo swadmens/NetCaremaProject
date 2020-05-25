@@ -85,6 +85,7 @@
     [_equipment_name leftToView:nameLabel withSpace:8];
     [_equipment_name addWidth:kScreenWidth-100];
     [_equipment_name addHeight:25];
+    [_equipment_name addTarget:self action:@selector(textfieldChangeValue:) forControlEvents:UIControlEventEditingChanged];
     
     
     UILabel *lineAddLabel = [UILabel new];
@@ -199,6 +200,7 @@
     [_annotation_view leftToView:explanLabel withSpace:8];
     [_annotation_view addWidth:kScreenWidth-100];
     [_annotation_view addHeight:117];
+
     
     UILabel *lineLabel4 = [UILabel new];
     lineLabel4.backgroundColor = kColorLineColor;
@@ -249,15 +251,19 @@
 }
 -(void)makeCellData:(NSDictionary *)dic
 {
-    _equipment_name.text = [dic objectForKey:@"name"];
-    _annotation_view.text = [dic objectForKey:@"c8y_Notes"];
+    if (![WWPublicMethod isStringEmptyText:_equipment_name.text]) {
+        _equipment_name.text = [dic objectForKey:@"name"];
+    }
+    if (![WWPublicMethod isStringEmptyText:_annotation_view.text]) {
+        _annotation_view.text = [dic objectForKey:@"c8y_Notes"];
+    }
     _equipment_id.text = [NSString stringWithFormat:@"ID：%@",[dic objectForKey:@"id"]];
     _equipment_user.text = [NSString stringWithFormat:@"拥有者：%@",[dic objectForKey:@"owner"]];
     _timeLabel.text = [NSString stringWithFormat:@"最近更新：%@",[dic objectForKey:@"lastUpdated"]];
     _addressLabel.text = [dic objectForKey:@"address"];
     
 }
--(void)textFieldDidEndEditing:(UITextField *)textField
+-(void)textfieldChangeValue:(UITextField *)textField
 {
     if (self.textFieldName) {
         self.textFieldName(textField.text);
@@ -269,6 +275,7 @@
         self.textFieldAnnotation(textView.text);
     }
 }
+
 //选择地址
 -(void)chooseAddressClick:(UITapGestureRecognizer*)tp
 {
