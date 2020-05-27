@@ -10,9 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class DemandModel;
 @interface PlayerTableViewCell : WWTableViewCell
 
-@property (nonatomic,assign) BOOL isLiving;//是否是直播
+-(void)makeCellDataNoLiving:(DemandModel*)model witnLive:(BOOL)isLiving;
+-(void)makeCellDataLiving:(NSArray*)array witnLive:(BOOL)isLiving;
 
 
 @end

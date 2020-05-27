@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,weak) id<PlayerTopCollectionDelegate>delegate;
 
--(void)makeCellData:(NSString*)icon;
+-(void)makeCellData:(id)obj;
 
 - (void)playerViewEnterFullScreen:(PLPlayerView *)playerView;
 

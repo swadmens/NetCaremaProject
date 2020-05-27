@@ -40,6 +40,7 @@
 
 @property (nonatomic,assign) BOOL isLogion;//是否登录
 @property (nonatomic,strong) MyEquipmentsModel *selectModel;
+@property (nonatomic,strong) NSArray *modelArray;
 
 
 @end
@@ -187,6 +188,10 @@
             self.hidesBottomBarWhenPushed = NO;
         };
         
+        cell.getModelArrayBackdata = ^(NSArray * _Nonnull array) {
+            self.modelArray = [NSArray arrayWithArray:array];
+        };
+        
         return cell;
         
     }else{
@@ -209,11 +214,12 @@
     
     
 //    if (indexPath.row > 0) {
-        SuperPlayerViewController *vc = [SuperPlayerViewController new];
-        vc.hidesBottomBarWhenPushed = YES;
-        vc.isLiving = YES;
-        [self.navigationController pushViewController:vc animated:YES];
-        self.hidesBottomBarWhenPushed = NO;
+    SuperPlayerViewController *vc = [SuperPlayerViewController new];
+    vc.hidesBottomBarWhenPushed = YES;
+    vc.allDataArray = [NSArray arrayWithArray:self.modelArray];
+    vc.isLiving = YES;
+    [self.navigationController pushViewController:vc animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 //    }
     
 }
@@ -233,7 +239,7 @@
 }
 - (void)startLoadDataRequest
 {
-    [_kHUDManager showActivityInView:self.view withTitle:nil];
+    [_kHUDManager showActivityInView:nil withTitle:nil];
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -313,7 +319,7 @@
 //获取设备信息
 -(void)getDeviceInfo:(NSString*)device_id withIndex:(NSInteger)index
 {
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/inventory/managedObjects/%@/childAssets?pageSize=100&currentPage=1",device_id];
+    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
     NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];

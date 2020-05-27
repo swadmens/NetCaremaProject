@@ -66,7 +66,7 @@
     nav4.tabBarItem=[self createTabBarItem:@"我的" image:@"Tabbar-5-normal" selectedImage:@"Tabbar-5-select"];
 
 
-    NSLog(@"select = %lu",(unsigned long)self.selectedIndex);
+//    NSLog(@"select = %lu",(unsigned long)self.selectedIndex);
 
 //     1个app 只有一个 rootViewController,
     NSArray *arr = @[nav1,nav2,nav3,nav4];

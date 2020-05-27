@@ -10,7 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class DemandModel;
 @interface PlayLocalVideoView : UIView
+
+@property (nonatomic,strong) DemandModel *model;
 
 @end
 

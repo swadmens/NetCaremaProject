@@ -243,7 +243,7 @@
 - (void)failedOperation
 {
     [_kHUDManager hideAfter:0.1 onHide:nil];
-    [_kHUDManager showMsgInView:nil withTitle:@"请求失败" isSuccess:NO];
+    [_kHUDManager showMsgInView:nil withTitle:@"登陆失败" isSuccess:NO];
 }
 
 

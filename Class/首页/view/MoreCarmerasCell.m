@@ -20,11 +20,18 @@
 
 @property (nonatomic, strong) WWCollectionView *collectionView;
 @property (nonatomic,strong) NSArray *dataArray;
+@property (nonatomic,strong) NSMutableArray *modelArray;
 
 @end
 
 @implementation MoreCarmerasCell
-
+-(NSMutableArray*)modelArray
+{
+    if (!_modelArray) {
+        _modelArray = [NSMutableArray array];
+    }
+    return _modelArray;
+}
 - (WWCollectionView *)collectionView
 {
     if (!_collectionView) {
@@ -125,7 +132,7 @@
     
     UIButton *playBtn = [UIButton new];
     [playBtn setImage:UIImageWithFileName(@"index_allplay_image") forState:UIControlStateNormal];
-//    [playBtn addTarget:self action:@selector(playAllButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [playBtn addTarget:self action:@selector(playAllButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [backView addSubview:playBtn];
     [playBtn rightToView:rightBtn withSpace:10];
     [playBtn yCenterToView:rightBtn];
@@ -172,6 +179,15 @@
             self.moreDealClick(indexPath.row);
         }
     };
+    cell.getModelBackdata = ^(LivingModel * _Nonnull model) {
+        [self.modelArray addObject:model];
+        
+        if (self.modelArray.count == self.dataArray.count) {
+            if (self.getModelArrayBackdata) {
+                self.getModelArrayBackdata(self.modelArray);
+            }
+        }
+    };
 
     return cell;
     
@@ -212,7 +228,7 @@
 }
 -(void)playAllButtonClick
 {
-    
+   
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

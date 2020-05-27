@@ -9,6 +9,7 @@
 #import "PlayerTopCollectionViewCell.h"
 #import "PLPlayerView.h"
 #import "DemandModel.h"
+#import "LivingModel.h"
 
 @interface PlayerTopCollectionViewCell ()<PLPlayerViewDelegate>
 
@@ -60,20 +61,6 @@
     [_titleImageView xCenterToView:_playView];
     [_titleImageView yCenterToView:_playView];
     
-    
-//    self.playerView = [[PLPlayerView alloc] init];
-//    self.playerView.delegate = self;
-//    [_playView addSubview:self.playerView];
-//    self.playerView.media = _model;
-//    self.playerView.isLocalVideo = NO;
-//    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.edges.equalTo(self.playView);
-//    }];
-//
-//    [self configureVideo:NO];
-//    if (self.isLiving) {
-//        [self play];
-//    }
     
     _coverView = [UIView new];
     _coverView.backgroundColor = UIColorFromRGB(0x060606, 0.55);
@@ -173,11 +160,39 @@
 - (void)playerViewWillPlay:(PLPlayerView *)playerView {
 //    [self.playerView.delegate playerViewWillPlay:self.playerView];
 }
--(void)makeCellData:(NSString*)icon
+-(void)makeCellData:(id)obj
 {
-    _titleImageView.image = UIImageWithFileName(icon);
-    
-    _coverView.hidden = ![icon isEqualToString:@"playback_back_image"];
+    if ([obj isKindOfClass:[NSString class]]) {
+        _titleImageView.image = UIImageWithFileName(obj);
+        _coverView.hidden = YES;
+        _titleImageView.hidden = NO;
+    }else{
+        _titleImageView.hidden = YES;
+        LivingModel *model = obj;
+        if (![WWPublicMethod isStringEmptyText:model.RTMP]) {
+            _coverView.hidden = NO;
+        }else{
+            _coverView.hidden = YES;
+            NSDictionary *dic = @{ @"name":model.name,
+                                    @"snapUrl":model.url,
+                                    @"videoUrl":model.RTMP,
+                                    @"sharedLink":model.sharedLink,
+                                    @"createAt":model.createAt,
+                                  };
+             DemandModel *models = [DemandModel makeModelData:dic];
+             self.playerView = [[PLPlayerView alloc] init];
+             self.playerView.delegate = self;
+             [_playView addSubview:self.playerView];
+             self.playerView.media = models;
+             self.playerView.isLocalVideo = NO;
+             [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+                 make.edges.equalTo(self.playView);
+             }];
+             [self configureVideo:NO];
+             [self play];
+        }
+        
+    }
     
 }
 

@@ -81,14 +81,7 @@
     }
     return _collectionView;
 }
--(PlayLocalVideoView*)localVideoView
-{
-    if (!_localVideoView) {
-        _localVideoView = [PlayLocalVideoView new];
-    }
-    return _localVideoView;
-    
-}
+
 - (void)dosetup {
     [super dosetup];
     // Initialization code
@@ -96,15 +89,8 @@
     
     CGFloat height = kScreenWidth * 0.68 + 0.5;
     
-    NSArray *arr = @[@"player_hoder_image",@"playback_back_image",@"mine_top_backimage",@"Player_add_video_image",];
-    [self.dataArray addObjectsFromArray:arr];
-    
-    
-    [self.contentView addSubview:self.localVideoView];
-    [self.localVideoView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.contentView];
-    [self.localVideoView addHeight:height];
-
-
+//    NSArray *arr = @[@"player_hoder_image",@"playback_back_image",@"mine_top_backimage",@"Player_add_video_image",];
+//    [self.dataArray addObjectsFromArray:arr];
 
     _playerView = [UIView new];
     _playerView.backgroundColor = [UIColor whiteColor];
@@ -186,7 +172,6 @@
     self.localVideoView.hidden = isLiving;
     self.playerView.hidden = !isLiving;
 }
-
 #pragma mark - UICollectionViewDataSourec
 //定义展示的Section的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -197,8 +182,8 @@
 {
     PlayerTopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr] forIndexPath:indexPath];
     
-    NSString *icon = [self.dataArray objectAtIndex:indexPath.row];
-    [cell makeCellData:icon];
+    id obj = [self.dataArray objectAtIndex:indexPath.row];
+    [cell makeCellData:obj];
     
 //    [_indexSet addIndex:indexPath.row];
     
@@ -341,6 +326,42 @@
 - (void)setDeleteViewNormalState{
     UIButton *button = (UIButton *)[_deleteView viewWithTag:201809];
     button.selected = NO;
+}
+-(void)makeCellDataNoLiving:(DemandModel*)model witnLive:(BOOL)isLiving
+{
+   
+    CGFloat height = kScreenWidth * 0.68 + 0.5;
+
+    _localVideoView = [PlayLocalVideoView new];
+    self.localVideoView.model = model;
+    [self.contentView addSubview:self.localVideoView];
+    [self.localVideoView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.contentView];
+    [self.localVideoView addHeight:height];
+    
+    self.isPlayerVideo = !isLiving;
+    self.localVideoView.hidden = isLiving;
+    self.playerView.hidden = !isLiving;
+       
+}
+-(void)makeCellDataLiving:(NSArray*)array witnLive:(BOOL)isLiving
+{
+    self.isPlayerVideo = !isLiving;
+    self.localVideoView.hidden = isLiving;
+    self.playerView.hidden = !isLiving;
+    
+    [self.dataArray removeAllObjects];
+    if (array.count > 3) {
+        NSArray *arr = [array subarrayWithRange:NSMakeRange(0, 4)];
+        [self.dataArray addObjectsFromArray:arr];
+    }else{
+        
+        [self.dataArray addObjectsFromArray:array];
+        
+        for (int i = 0; i < 4 - array.count; i++) {
+            [self.dataArray addObject:@"Player_add_video_image"];
+        }
+    }
+    [self.collectionView reloadData];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

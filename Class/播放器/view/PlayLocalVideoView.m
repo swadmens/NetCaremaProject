@@ -11,7 +11,7 @@
 #import "DemandModel.h"
 
 
-@interface PlayLocalVideoView ()
+@interface PlayLocalVideoView ()<PLPlayerViewDelegate>
 
 @property (nonatomic,strong) UIImageView *titleImageView;
 
@@ -19,8 +19,6 @@
 @property (nonatomic, strong) PLPlayerView *playerView;
 @property (nonatomic, assign) BOOL isFullScreen;   /// 是否全屏标记
 @property (nonatomic, assign) BOOL isPlaying;
-
-@property (nonatomic,strong) DemandModel *model;
 
 @property (nonatomic,strong) UIView *coverView;
 
@@ -40,39 +38,11 @@
 }
 -(void)createUI
 {
-//    CGFloat height = kScreenWidth * 0.68 + 0.5;
-
     _playView = [UIView new];
     _playView.backgroundColor = [UIColor whiteColor];
     [self addSubview:_playView];
     [_playView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self];
 
-//    [_playView addWidth:kScreenWidth];
-//    [_playView addHeight:height];
-    
-    
-    
-    _titleImageView = [UIImageView new];
-    _titleImageView.image = UIImageWithFileName(@"playback_back_image");
-    [_playView addSubview:_titleImageView];
-//    [_titleImageView xCenterToView:_playView];
-//    [_titleImageView yCenterToView:_playView];
-    [_titleImageView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:_playView];
-    
-    
-//    self.playerView = [[PLPlayerView alloc] init];
-//    self.playerView.delegate = self;
-//    [_playView addSubview:self.playerView];
-//    self.playerView.media = _model;
-//    self.playerView.isLocalVideo = NO;
-//    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.edges.equalTo(self.playView);
-//    }];
-//
-//    [self configureVideo:NO];
-//    if (self.isLiving) {
-//        [self play];
-//    }
     
     _coverView = [UIView new];
     _coverView.backgroundColor = UIColorFromRGB(0x060606, 0.55);
@@ -87,6 +57,18 @@
     [_coverView addSubview:outlineLabel];
     [outlineLabel xCenterToView:_coverView];
     [outlineLabel yCenterToView:_coverView];
+}
+-(void)setModel:(DemandModel *)model
+{
+    self.playerView = [[PLPlayerView alloc] init];
+    self.playerView.delegate = self;
+    [_playView addSubview:self.playerView];
+    self.playerView.media = model;
+    self.playerView.isLocalVideo = NO;
+    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.playView);
+    }];
+    [self configureVideo:NO];
 }
 - (void)play {
     [self.playerView play];

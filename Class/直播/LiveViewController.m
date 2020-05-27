@@ -254,7 +254,7 @@
 }
 - (void)startLoadDataRequest
 {
-    [_kHUDManager showActivityInView:self.view withTitle:nil];
+    [_kHUDManager showActivityInView:nil withTitle:nil];
         
     NSString *start = [NSString stringWithFormat:@"%ld",(self.page - 1)*10];
        
@@ -264,7 +264,7 @@
                                  };
        
     //提交数据
-    NSString *url = @"http://192.168.6.120:10102/outer/liveqing/live/list";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/live/list";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                       options:0
@@ -400,7 +400,7 @@
 //获取直播快照
 -(void)getLivingCoverPhoto:(NSString*)live_id withIndex:(NSInteger)indexPath
 {
-    NSString *url = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/snap/current?id=%@",live_id];
+    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/snap/current?id=%@",live_id];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码

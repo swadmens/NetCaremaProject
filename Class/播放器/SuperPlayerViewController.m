@@ -18,6 +18,7 @@
 #import "LGXThirdEngine.h"
 #import "ShareSDKMethod.h"
 #import "LocalVideoViewController.h"
+#import "DemandModel.h"
 
 #define KTopviewheight kScreenWidth*0.68
 
@@ -110,7 +111,10 @@
         
         PlayerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerTableViewCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.isLiving = _isLiving;
+//        cell.isLiving = _isLiving;
+//        cell.model = self.model;
+        [cell makeCellDataNoLiving:self.model witnLive:_isLiving];
+        [cell makeCellDataLiving:self.allDataArray witnLive:_isLiving];
         
         return cell;
         
@@ -308,9 +312,9 @@
     NSString *url;
     
     if ([self.live_type isEqualToString:@"LiveGBS"]) {
-        url = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.gbs_serial,self.gbs_code,controls];
+        url = [NSString stringWithFormat:@"http://ncore.iot/service/video/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.gbs_serial,self.gbs_code,controls];
     }else{
-        url = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
+        url = [NSString stringWithFormat:@"http://ncore.iot/service/video/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
     }
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -469,6 +473,8 @@
     self.isLiving = NO;
     [self.tableView reloadData];
 }
+
+
 
 
 /*

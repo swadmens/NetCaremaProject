@@ -13,7 +13,7 @@
 #import "AFHTTPSessionManager.h"
 #import "DemandModel.h"
 #import "HKVideoPlaybackController.h"
-
+#import "SuperPlayerViewController.h"
 
 @interface DemandViewController ()<UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource>
 {
@@ -340,9 +340,10 @@
 
     if ([collectionView isEqual:self.collectionView]) {
         DemandModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
+        
+        SuperPlayerViewController *vc = [SuperPlayerViewController new];
         vc.model = model;
-        vc.allDataArray = [NSMutableArray arrayWithArray:self.dataArray];
+//        vc.allDataArray = [NSArray arrayWithArray:self.dataArray];
         vc.indexInteger = indexPath.row;
         vc.isRecordFile = NO;
         vc.isLiving = NO;
@@ -400,7 +401,7 @@
 }
 - (void)startLoadDataRequest
 {
-    [_kHUDManager showActivityInView:self.view withTitle:nil];
+    [_kHUDManager showActivityInView:nil withTitle:nil];
     
     NSString *start = [NSString stringWithFormat:@"%ld",(self.page - 1)*10];
     
@@ -419,7 +420,7 @@
     }
     
     //提交数据
-    NSString *url = @"http://192.168.6.120:10102/outer/liveqing/vod/list";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/list";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mutData
                                                        options:0
@@ -546,7 +547,7 @@
 -(void)getSubcatalogList
 {
         
-    NSString *url = @"http://192.168.6.120:10102/outer/liveqing/vod/subcataloglist";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/subcataloglist";
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
     NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];

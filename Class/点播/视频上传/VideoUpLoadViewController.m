@@ -316,7 +316,7 @@
     [_kHUDManager showActivityInView:nil withTitle:@"正在上传..."];
     
     //提交数据
-    NSString *url = @"http://192.168.6.120:10102/outer/liveqing/vod/upload";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/upload";
     
 //    NSDictionary *finalParams = @{@"describe":self.msg_content};
 //    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams

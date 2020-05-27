@@ -161,7 +161,7 @@
                                   };
         
     //提交数据
-    NSString *url = @"http://192.168.6.120:10102/outer/liveqing/record/query_records";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/record/query_records";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
@@ -265,7 +265,7 @@
 
             NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
             NSString *startTime = [mutDic objectForKey:@"start_time"];
-            NSString *snap = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/getsnap?id=%@&period=%@",self.device_id,startTime];
+            NSString *snap = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/record/getsnap?id=%@&period=%@",self.device_id,startTime];
             if (![WWPublicMethod isStringEmptyText:originalSnap]) {
                 [mutDic setValue:snap forKey:@"snap"];
                 [self getRecordCoverPhoto:start_time withData:idx];
@@ -308,7 +308,7 @@
 //获取录像封面快照
 -(void)getRecordCoverPhoto:(NSString*)period withData:(NSInteger)indexInteger
 {
-    NSString *url = [NSString stringWithFormat:@"http://192.168.6.120:10102/outer/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.device_id,period];
+    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.device_id,period];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
@@ -365,7 +365,7 @@
                                       @"period": startime,
                                       };
     //提交数据
-    NSString *url = @"http://192.168.6.120:10102/outer/liveqing/record/remove";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/record/remove";
         
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
