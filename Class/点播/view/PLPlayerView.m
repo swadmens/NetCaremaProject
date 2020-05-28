@@ -61,6 +61,8 @@ UIGestureRecognizerDelegate
 // 很多时候调用stop之后，播放器可能还会返回请他状态，导致逻辑混乱，记录一下，只要调用了播放器的 stop 方法，就将 isStop 置为 YES 做标记
 @property (nonatomic, assign) BOOL isStop;
 
+@property (nonatomic, assign) BOOL isStartPlay;
+
 // 当底部的 bottomBarView 因隐藏的时候，提供两个 progrssview 在最底部，随时能看到播放进度和缓冲进度
 @property (nonatomic, strong) UIProgressView *bottomPlayProgreeeView;
 @property (nonatomic, strong) UIProgressView *bottomBufferingProgressView;
@@ -74,8 +76,8 @@ UIGestureRecognizerDelegate
 
 -(void)dealloc {
     [self unsetupPlayer];
+    [[NSNotificationCenter defaultCenter] removeObserver:@"FullScreebInfomation"];
 }
-
 - (void)configureVideo:(BOOL)enableRender {
     self.player.enableRender = enableRender;
     
@@ -115,8 +117,19 @@ UIGestureRecognizerDelegate
         self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
         self.panGesture.delegate = self;
 
+        //接收通知
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fullScreenInfoNotica:) name:@"FullScreebInfomation" object:nil];
     }
     return self;
+   
+        
+}
+//接收通知并操作
+- (void)fullScreenInfoNotica:(NSNotification *)notification
+{
+    if (self.isStartPlay) {
+        [self clickEnterFullScreenButton];
+    }
 }
 
 - (BOOL)isFullScreen {
@@ -761,6 +774,7 @@ UIGestureRecognizerDelegate
         self.isNeedSetupPlayer = NO;
     }
     self.isStop = NO;
+    self.isStartPlay = YES;
     
     [self.delegate playerViewWillPlay:self];
     [self addFullStreenNotify];
@@ -798,6 +812,7 @@ UIGestureRecognizerDelegate
         date = [NSDate date];
     }
     [self.player stop];
+    
     if (date) {
         NSLog(@"stop 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
     }
@@ -807,6 +822,7 @@ UIGestureRecognizerDelegate
     [self resetUI];
     [self.controlView resetStatus];
     self.isStop = YES;
+    self.isStartPlay = NO;
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
 }
 

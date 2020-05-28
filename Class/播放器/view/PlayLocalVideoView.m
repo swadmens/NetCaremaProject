@@ -27,6 +27,12 @@
 
 @implementation PlayLocalVideoView
 
+-(void)dealloc
+{
+    [self stop];
+    [[NSNotificationCenter defaultCenter] removeObserver:@"FullScreebInfomation"];
+}
+
 -(instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -57,7 +63,19 @@
     [_coverView addSubview:outlineLabel];
     [outlineLabel xCenterToView:_coverView];
     [outlineLabel yCenterToView:_coverView];
+//    //接收通知
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fullScreenInfoNotica:) name:@"FullScreebInfomation" object:nil];
+//
 }
+////接收通知并操作
+//- (void)fullScreenInfoNotica:(NSNotification *)notification
+//{
+//    [UIView animateWithDuration:0.5 animations:^{
+//        self.playerView.transform = CGAffineTransformMakeRotation(M_PI/2);
+//        //        : CGAffineTransformMakeRotation(3*M_PI/2);
+//    }];
+//    [self playerViewEnterFullScreen:self.playerView];
+//}
 -(void)setModel:(DemandModel *)model
 {
     self.playerView = [[PLPlayerView alloc] init];
@@ -78,6 +96,14 @@
 - (void)stop {
     [self.playerView stop];
     self.isPlaying = NO;
+}
+- (void)pause {
+    [self.playerView pause];
+    self.isPlaying = NO;
+}
+- (void)resume {
+    [self.playerView resume];
+    self.isPlaying = YES;
 }
 
 - (void)configureVideo:(BOOL)enableRender {
@@ -104,6 +130,8 @@
     }];
 
     self.isFullScreen = YES;
+    [self.delegate tableViewCellEnterFullScreen:self];
+
 }
 
 - (void)playerViewExitFullScreen:(PLPlayerView *)playerView {
@@ -123,10 +151,13 @@
     }];
     
     self.isFullScreen = NO;
+    [self.delegate tableViewCellExitFullScreen:self];
+
 }
 
 - (void)playerViewWillPlay:(PLPlayerView *)playerView {
 //    [self.playerView.delegate playerViewWillPlay:self.playerView];
+    [self.delegate tableViewWillPlay:self];
 }
 
 /*

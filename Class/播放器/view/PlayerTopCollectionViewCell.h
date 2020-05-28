@@ -34,6 +34,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)playerViewEnterFullScreen:(PLPlayerView *)playerView;
 
+- (void)play;
+
+- (void)stop;
+
+- (void)configureVideo:(BOOL)enableRender;
+
 @end
 
 NS_ASSUME_NONNULL_END

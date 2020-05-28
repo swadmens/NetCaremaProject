@@ -7,7 +7,7 @@
 //
 
 #import "MyEquipmentsCell.h"
-#import "MyEquipmentsModel.h"
+#import "LivingModel.h"
 
 
 @interface MyEquipmentsCell ()
@@ -90,16 +90,16 @@
 //    frame.size.width -= 30;
 //    [super setFrame:frame];
 //}
--(void)makeCellData:(MyEquipmentsModel *)model
+-(void)makeCellData:(LivingModel *)model
 {
-    _equipmentName.text = model.equipment_name;
-    _equipmentDeatil.text = model.equipment_Channel;
-    _equipmentStates.text = model.equipment_states;
-    if ([model.equipment_states isEqualToString:@"离线"]) {
-        _equipmentStates.backgroundColor = UIColorFromRGB(0xAEAEAE, 1);
-    }else{
-        _equipmentStates.backgroundColor = UIColorFromRGB(0xF39700, 1);
-    }
+    _equipmentName.text = model.name;
+//    _equipmentDeatil.text = model.;
+//    _equipmentStates.text = model.;
+//    if ([model.equipment_states isEqualToString:@"离线"]) {
+//        _equipmentStates.backgroundColor = UIColorFromRGB(0xAEAEAE, 1);
+//    }else{
+//        _equipmentStates.backgroundColor = UIColorFromRGB(0xF39700, 1);
+//    }
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

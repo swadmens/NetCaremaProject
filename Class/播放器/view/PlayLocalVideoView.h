@@ -10,8 +10,22 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class PlayLocalVideoView;
+@protocol PlayLocalVideoViewDelegate <NSObject>
+
+- (void)tableViewWillPlay:(PlayLocalVideoView *)view;
+
+- (void)tableViewCellEnterFullScreen:(PlayLocalVideoView *)view;
+
+- (void)tableViewCellExitFullScreen:(PlayLocalVideoView *)view;
+
+@end
+
+
 @class DemandModel;
 @interface PlayLocalVideoView : UIView
+
+@property (nonatomic, weak) id<PlayLocalVideoViewDelegate> delegate;
 
 @property (nonatomic,strong) DemandModel *model;
 

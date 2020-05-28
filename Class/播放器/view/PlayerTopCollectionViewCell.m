@@ -30,6 +30,9 @@
 
 
 @implementation PlayerTopCollectionViewCell
+- (void)dealloc {
+    [self stop];
+}
 -(void)doSetup
 {
     [super doSetup];
@@ -101,6 +104,7 @@
     [helpBtn addWidth:52];
     [helpBtn addHeight:13];
     [helpBtn addTarget:self action:@selector(checkHelpClick) forControlEvents:UIControlEventTouchUpInside];
+    
 }
 - (void)play {
     [self.playerView play];
@@ -136,6 +140,7 @@
     }];
 
     self.isFullScreen = YES;
+    [self.delegate playerViewCellEnterFullScreen:self];
 }
 
 - (void)playerViewExitFullScreen:(PLPlayerView *)playerView {
@@ -155,10 +160,12 @@
     }];
     
     self.isFullScreen = NO;
+    [self.delegate playerViewCellExitFullScreen:self];
 }
 
 - (void)playerViewWillPlay:(PLPlayerView *)playerView {
 //    [self.playerView.delegate playerViewWillPlay:self.playerView];
+    [self.delegate playerViewCellWillPlay:self];
 }
 -(void)makeCellData:(id)obj
 {
@@ -171,6 +178,7 @@
         LivingModel *model = obj;
         if (![WWPublicMethod isStringEmptyText:model.RTMP]) {
             _coverView.hidden = NO;
+            _timeLabel.text = model.updateAt;
         }else{
             _coverView.hidden = YES;
             NSDictionary *dic = @{ @"name":model.name,

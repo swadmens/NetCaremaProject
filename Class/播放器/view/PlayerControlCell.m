@@ -187,6 +187,9 @@
 }
 -(void)fullBtnClick:(UIButton*)sender
 {
+    //注册通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"FullScreebInfomation" object:nil userInfo:nil];
+       
     [self.delegate playerControlwithState:videoSateFullScreen withButton:sender];
 }
 -(void)playerBtnClick:(UIButton*)sender

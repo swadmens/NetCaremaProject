@@ -10,10 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class MyEquipmentsModel;
+@class LivingModel;
 @interface MyEquipmentsCell : WWTableViewCell
 
--(void)makeCellData:(MyEquipmentsModel*)model;
+-(void)makeCellData:(LivingModel*)model;
 
 
 @end

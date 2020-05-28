@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isRecordFile;
 @property (nonatomic,strong) NSString *device_id;//具体设备id
 
++(UIViewController *)viewController:(UIView *)view;
+
 
 @end
 

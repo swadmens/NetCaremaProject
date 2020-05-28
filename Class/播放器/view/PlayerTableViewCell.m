@@ -13,15 +13,21 @@
 #import "PlayerTopCollectionViewCell.h"
 #import "PlayLocalVideoView.h"
 #import "PlayerControlCell.h"
+#import "MyEquipmentsViewController.h"
+#import "SuperPlayerViewController.h"
+
 
 #define KDeleteHeight 60
 
-@interface PlayerTableViewCell ()<UICollectionViewDelegate,UICollectionViewDataSource,PlayerControlDelegate>
+@interface PlayerTableViewCell ()<UICollectionViewDelegate,UICollectionViewDataSource,PlayerControlDelegate,MyEquipmentsDelegate,PlayLocalVideoViewDelegate,PlayerTopCollectionDelegate>
 
 @property (nonatomic, strong) WWCollectionView *collectionView;
 @property (strong, nonatomic) NSMutableArray *dataArray;
+@property (strong, nonatomic) NSArray *allDataArray;
 
 @property (nonatomic,strong) PlayLocalVideoView *localVideoView;
+@property (nonatomic, weak) PlayerTopCollectionViewCell *playingCell;
+
 /**
  *  需要移动的矩阵
  */
@@ -39,10 +45,17 @@
 @property (nonatomic,strong) NSIndexPath *selectIndexPath;
 
 @property (nonatomic,assign) BOOL isPlayerVideo;
+@property (nonatomic,assign) NSInteger selectIndex;
+
 
 @end
 
 @implementation PlayerTableViewCell
+- (void)onUIApplication:(BOOL)active {
+    if (self.playingCell) {
+        [self.playingCell configureVideo:active];
+    }
+}
 - (NSMutableArray *)dataArray
 {
     if (!_dataArray) {
@@ -181,21 +194,27 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     PlayerTopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr] forIndexPath:indexPath];
+    cell.delegate = self;
     
     id obj = [self.dataArray objectAtIndex:indexPath.row];
     [cell makeCellData:obj];
-    
-//    [_indexSet addIndex:indexPath.row];
-    
+        
     return cell;
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     self.selectIndexPath = indexPath;
-}
--(void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
-{
     
+    id obj = [self.dataArray objectAtIndex:indexPath.row];
+    if ([obj isKindOfClass:[NSString class]]) {
+        self.selectIndex = indexPath.row;
+        MyEquipmentsViewController *mvc = [MyEquipmentsViewController new];
+        mvc.dataArray = [NSArray arrayWithArray:self.allDataArray];
+        mvc.delegate = self;
+        [[SuperPlayerViewController viewController:self].navigationController pushViewController:mvc animated:YES];
+    }else{
+        self.playingCell = (PlayerTopCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+    }
 }
 
 //是否允许移动
@@ -334,6 +353,7 @@
 
     _localVideoView = [PlayLocalVideoView new];
     self.localVideoView.model = model;
+    self.localVideoView.delegate = self;
     [self.contentView addSubview:self.localVideoView];
     [self.localVideoView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.contentView];
     [self.localVideoView addHeight:height];
@@ -348,6 +368,7 @@
     self.isPlayerVideo = !isLiving;
     self.localVideoView.hidden = isLiving;
     self.playerView.hidden = !isLiving;
+    self.allDataArray = [NSArray arrayWithArray:array];
     
     [self.dataArray removeAllObjects];
     if (array.count > 3) {
@@ -363,6 +384,45 @@
     }
     [self.collectionView reloadData];
 }
+#pragma mark - MyEquipmentsDelegate
+-(void)selectCarmeraModel:(LivingModel *)model
+{
+    [self.dataArray replaceObjectAtIndex:self.selectIndex withObject:model];
+    [self.collectionView reloadData];
+}
+#pragma mark - PlayLocalVideoViewDelegate
+- (void)tableViewWillPlay:(PlayLocalVideoView *)view
+{
+    
+}
+
+- (void)tableViewCellEnterFullScreen:(PlayLocalVideoView *)view
+{
+//    [[SuperPlayerViewController viewController:self] setNeedsStatusBarAppearanceUpdate];
+    [self.delegate tableViewCellEnterFullScreen:self];
+}
+
+- (void)tableViewCellExitFullScreen:(PlayLocalVideoView *)view
+{
+    [self.delegate tableViewCellExitFullScreen:self];
+}
+
+#pragma mark - PlayerTopCollectionDelegate
+- (void)playerViewCellEnterFullScreen:(PlayerTopCollectionViewCell *_Nullable)cell
+{
+    
+}
+
+- (void)playerViewCellExitFullScreen:(PlayerTopCollectionViewCell *_Nullable)cell
+{
+    
+}
+
+- (void)playerViewCellWillPlay:(PlayerTopCollectionViewCell *_Nullable)cell
+{
+    
+}
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

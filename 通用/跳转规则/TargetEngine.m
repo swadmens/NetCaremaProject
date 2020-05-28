@@ -497,7 +497,6 @@
         case PushTargetMyEquipments: //  我的设备
         {
             MyEquipmentsViewController *controller = [[MyEquipmentsViewController alloc] init];
-            controller.equipment_id = pushId;
             toController = controller;
         }
             break;

@@ -9,10 +9,19 @@
 #import "WWViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
+@class LivingModel;
+@protocol MyEquipmentsDelegate <NSObject>
+
+-(void)selectCarmeraModel:(LivingModel*)model;
+
+@end
+
 
 @interface MyEquipmentsViewController : WWViewController
 
-@property (nonatomic,strong) NSString *equipment_id;
+@property (nonatomic,weak) id<MyEquipmentsDelegate>delegate;
+
+@property (nonatomic,strong) NSArray *dataArray;
 
 @end
 

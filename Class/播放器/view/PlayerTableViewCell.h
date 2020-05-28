@@ -9,13 +9,24 @@
 #import "WWTableViewCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
+@class PlayerTableViewCell;
+@protocol PlayerTableViewCellDelegate <NSObject>
+
+- (void)tableViewWillPlay:(PlayerTableViewCell *)cell;
+
+- (void)tableViewCellEnterFullScreen:(PlayerTableViewCell *)cell;
+
+- (void)tableViewCellExitFullScreen:(PlayerTableViewCell *)cell;
+
+@end
 
 @class DemandModel;
 @interface PlayerTableViewCell : WWTableViewCell
 
+@property (nonatomic, weak) id<PlayerTableViewCellDelegate> delegate;
+
 -(void)makeCellDataNoLiving:(DemandModel*)model witnLive:(BOOL)isLiving;
 -(void)makeCellDataLiving:(NSArray*)array witnLive:(BOOL)isLiving;
-
 
 @end
 

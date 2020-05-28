@@ -22,7 +22,7 @@
 
 #define KTopviewheight kScreenWidth*0.68
 
-@interface SuperPlayerViewController ()<UITableViewDelegate,UITableViewDataSource,PlayerControlDelegate,CameraControlDelete,LocalVideoDelegate>
+@interface SuperPlayerViewController ()<UITableViewDelegate,UITableViewDataSource,PlayerControlDelegate,CameraControlDelete,LocalVideoDelegate,PlayerTableViewCellDelegate>
 
 @property (nonatomic,strong) WWTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -115,6 +115,8 @@
 //        cell.model = self.model;
         [cell makeCellDataNoLiving:self.model witnLive:_isLiving];
         [cell makeCellDataLiving:self.allDataArray witnLive:_isLiving];
+        cell.delegate = self;
+        
         
         return cell;
         
@@ -473,10 +475,28 @@
     self.isLiving = NO;
     [self.tableView reloadData];
 }
++(UIViewController *)viewController:(UIView *)view{
+    UIResponder *responder = view;
+    while ((responder = [responder nextResponder]))
+        if ([responder isKindOfClass: [UIViewController class]])
+            return (UIViewController *)responder;
+    return nil;
+}
+- (void)tableViewWillPlay:(PlayerTableViewCell *)cell
+{
+    
+}
 
+- (void)tableViewCellEnterFullScreen:(PlayerTableViewCell *)cell
+{
+    [self setNeedsStatusBarAppearanceUpdate];
 
+}
 
-
+- (void)tableViewCellExitFullScreen:(PlayerTableViewCell *)cell
+{
+    [self setNeedsStatusBarAppearanceUpdate];
+}
 /*
 #pragma mark - Navigation
 
