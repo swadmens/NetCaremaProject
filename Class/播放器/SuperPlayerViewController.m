@@ -19,6 +19,8 @@
 #import "ShareSDKMethod.h"
 #import "LocalVideoViewController.h"
 #import "DemandModel.h"
+#import "CarmeaVideosModel.h"
+#import "LivingModel.h"
 
 #define KTopviewheight kScreenWidth*0.68
 
@@ -35,6 +37,8 @@
 @property (nonatomic,strong) UIView *saveBackView;
 @property (nonatomic, strong) LGXShareParams *shareParams;
 
+@property (nonatomic, strong) NSMutableArray *localVideosArray;
+
 
 @end
 
@@ -45,6 +49,13 @@
         _dataArray = [NSMutableArray array];
     }
     return _dataArray;
+}
+-(NSMutableArray*)localVideosArray
+{
+    if (!_localVideosArray) {
+        _localVideosArray = [NSMutableArray array];
+    }
+    return _localVideosArray;
 }
 - (void)setupTableView
 {
@@ -100,6 +111,9 @@
     
     
     [self setupSaveView];
+    if (_isLiving) {
+        [self startLoadDataRequest];
+    }
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -135,13 +149,21 @@
             PlayerLocalVideosCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerLocalVideosCell getCellIDStr] forIndexPath:indexPath];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
+            [cell makeCellData:self.localVideosArray];
+            
             cell.allBtn = ^{
                  
                 LocalVideoViewController *vc = [LocalVideoViewController new];
                 vc.delegate = self;
                 vc.isFromIndex = NO;
+                vc.dataArray = [NSArray arrayWithArray:self.localVideosArray];
                 [self.navigationController pushViewController:vc animated:YES];
                
+            };
+            cell.selectedRowData = ^(DemandModel * _Nonnull model) {
+                self.model = model;
+                self.isLiving = NO;
+                [self.tableView reloadData];
             };
             
             return cell;
@@ -314,9 +336,9 @@
     NSString *url;
     
     if ([self.live_type isEqualToString:@"LiveGBS"]) {
-        url = [NSString stringWithFormat:@"http://ncore.iot/service/video/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.gbs_serial,self.gbs_code,controls];
+        url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.gbs_serial,self.gbs_code,controls];
     }else{
-        url = [NSString stringWithFormat:@"http://ncore.iot/service/video/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
+        url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
     }
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -470,9 +492,21 @@
 }
 
 #pragma LocalVideoDelegate
--(void)selectRowData:(NSString *)value
+-(void)selectRowData:(NSInteger)value
 {
     self.isLiving = NO;
+    if (self.localVideosArray.count == 0) {
+        return;
+    }
+    CarmeaVideosModel *model = [self.localVideosArray objectAtIndex:value];
+    NSDictionary *dic = @{ @"name":model.video_name,
+                           @"snapUrl":model.snap,
+                           @"videoUrl":model.hls,
+                           @"createAt":model.time,
+                          };
+    DemandModel *models = [DemandModel makeModelData:dic];
+    self.model = models;
+    
     [self.tableView reloadData];
 }
 +(UIViewController *)viewController:(UIView *)view{
@@ -497,6 +531,168 @@
 {
     [self setNeedsStatusBarAppearanceUpdate];
 }
+
+
+//如果是直播，获取该摄像头下的录像文件
+- (void)startLoadDataRequest
+{
+//    [_kHUDManager showActivityInView:nil withTitle:nil];
+    if (self.allDataArray.count == 0) {
+        return;
+    }
+    LivingModel *mdl = self.allDataArray.firstObject;
+    if (![WWPublicMethod isStringEmptyText:mdl.session_id]) {
+        return;
+    }
+    NSDictionary *finalParams = @{
+                                  @"id":mdl.session_id,
+                                  @"day":[_kDatePicker dateStringWithDate:nil],
+                                  @"start":@"0",
+                                  @"limit":@"10",
+                                  };
+    //提交数据
+    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/record/query_records";
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
+                                                       options:0
+                                                         error:nil];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
+    
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:nil error:nil];
+    
+    // 设置请求头
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
+    
+    // 设置body
+    [request setHTTPBody:jsonData];
+    __unsafe_unretained typeof(self) weak_self = self;
+
+    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+    
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        
+        if (error) {
+            // 请求失败
+            DLog(@"error  ==  %@",error.userInfo);
+            DLog(@"responseObject  ==  %@",responseObject);
+            [self failedOperation];
+        }
+        DLog(@"responseObject  ==  %@",responseObject);
+        [weak_self handleObject:responseObject];
+    }];
+    [task resume];
+}
+- (void)failedOperation
+{
+    [_kHUDManager hideAfter:0.1 onHide:nil];
+    [_kHUDManager showMsgInView:nil withTitle:@"请求失败" isSuccess:NO];
+}
+- (void)handleObject:(id)obj
+{
+    [_kHUDManager hideAfter:0.1 onHide:nil];
+    __unsafe_unretained typeof(self) weak_self = self;
+    [[GCDQueue globalQueue] queueBlock:^{
+        NSDictionary *data = [obj objectForKey:@"data"];
+        NSArray *months = [data objectForKey:@"months"];
+        
+        NSMutableArray *tempArray = [NSMutableArray array];
+
+        [months enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString *keys = obj;
+            NSDictionary *mothsDic = [data objectForKey:keys];
+            NSArray *days = [mothsDic objectForKey:[_kDatePicker dateStringWithDate:nil]];
+            [tempArray addObjectsFromArray:days];
+        }];
+        
+        NSMutableArray *modelArray = [NSMutableArray new];
+        
+        [tempArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *dic = obj;
+            
+            NSString *originalSnap = [dic objectForKey:@"snap"];
+            NSString *start_time = [dic objectForKey:@"start_time"];
+
+//            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
+//            NSString *snap = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/record/getsnap?id=%@&period=%@",self.device_id,start_time];
+            if (![WWPublicMethod isStringEmptyText:originalSnap]) {
+//                [mutDic setValue:snap forKey:@"snap"];
+                [self getRecordCoverPhoto:start_time withData:idx];
+            }
+            CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:dic];
+            [modelArray addObject:model];
+        }];
+        [weak_self.localVideosArray addObjectsFromArray:modelArray];
+        [[GCDQueue mainQueue] queueBlock:^{
+    
+            [weak_self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }];
+    }];
+}
+//获取录像封面快照
+-(void)getRecordCoverPhoto:(NSString*)period withData:(NSInteger)indexInteger
+{
+    LivingModel *mdl = self.allDataArray.firstObject;
+    if (![WWPublicMethod isStringEmptyText:mdl.session_id]) {
+        return;
+    }
+    
+    NSString *url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",mdl.session_id,period];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
+
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+
+        DLog(@"RecordCoverPhoto.Received: %@", responseObject);
+        DLog(@"RecordCoverPhoto.Received HTTP %ld", (long)httpResponse.statusCode);
+
+        [self dealWithCoverPhoto:responseObject withData:indexInteger];
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        DLog(@"error: %@", error);
+    }];
+}
+
+-(void)dealWithCoverPhoto:(id)obj withData:(NSInteger)indexInteger
+{
+    if (obj == nil) {
+        return;
+    }
+    __unsafe_unretained typeof(self) weak_self = self;
+    CarmeaVideosModel *model = [self.localVideosArray objectAtIndex:indexInteger];
+    model.snap = [NSString stringWithFormat:@"%@",[obj objectForKey:@"url"]];
+    [weak_self.localVideosArray replaceObjectAtIndex:indexInteger withObject:model];
+//    weak_self.allDataArray = [NSMutableArray arrayWithArray:weak_self.dataArray];
+    [[GCDQueue mainQueue] queueBlock:^{
+
+//        [weak_self.tableView reloadData];
+        [weak_self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+
+    }];
+}
+
 /*
 #pragma mark - Navigation
 

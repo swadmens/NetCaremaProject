@@ -21,7 +21,7 @@
     BOOL _isHadFirst; // 是否第一次加载了
 }
 @property (nonatomic,strong) WWTableView *tableView;
-@property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *indexDataArray;
 @property(nonatomic,assign) NSInteger page;
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
@@ -32,12 +32,12 @@
 @end
 
 @implementation LocalVideoViewController
--(NSMutableArray*)dataArray
+-(NSMutableArray*)indexDataArray
 {
-    if (!_dataArray) {
-        _dataArray = [NSMutableArray array];
+    if (!_indexDataArray) {
+        _indexDataArray = [NSMutableArray array];
     }
-    return _dataArray;
+    return _indexDataArray;
 }
 - (void)setupTableView
 {
@@ -85,8 +85,11 @@
     [self setupNoDataView];
     self.selectedIndexSet = [NSMutableIndexSet new];
     
-//    self.page = 1;
-//    [self loadNewData];
+    if (self.isFromIndex) {
+        self.page = 1;
+        [self loadNewData];
+    }
+    
 
     //右上角按钮
     UIButton *rightBtn = [UIButton new];
@@ -102,7 +105,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 4;
+    return _isFromIndex?self.indexDataArray.count:self.dataArray.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -112,8 +115,8 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.lineHidden = NO;
     
-//        IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//        [cell makeCellData:model];
+    CarmeaVideosModel *model = [_isFromIndex?self.indexDataArray:self.dataArray objectAtIndex:indexPath.row];
+    [cell makeCellData:model];
     
     return cell;
 }
@@ -126,7 +129,7 @@
             vc.isLiving = NO;
             [self.navigationController pushViewController:vc animated:YES];
     }else{
-        [self.delegate selectRowData:@"111"];
+        [self.delegate selectRowData:indexPath.row];
         [self.navigationController popViewControllerAnimated:YES];
 
     }
@@ -150,6 +153,9 @@
 - (void)startLoadDataRequest
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
+    if (![WWPublicMethod isStringEmptyText:self.device_id]) {
+        return;
+    }
     
     NSString *start = [NSString stringWithFormat:@"%ld",(self.page - 1)*10];
 
@@ -161,7 +167,7 @@
                                   };
         
     //提交数据
-    NSString *url = @"http://ncore.iot/service/video/liveqing/record/query_records";
+    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/record/query_records";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
@@ -252,7 +258,7 @@
         }];
         
         if (weak_self.page == 1) {
-            [weak_self.dataArray removeAllObjects];
+            [weak_self.indexDataArray removeAllObjects];
         }
         NSMutableArray *modelArray = [NSMutableArray new];
         
@@ -265,7 +271,7 @@
 
             NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
             NSString *startTime = [mutDic objectForKey:@"start_time"];
-            NSString *snap = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/record/getsnap?id=%@&period=%@",self.device_id,startTime];
+            NSString *snap = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/record/getsnap?id=%@&period=%@",self.device_id,startTime];
             if (![WWPublicMethod isStringEmptyText:originalSnap]) {
                 [mutDic setValue:snap forKey:@"snap"];
                 [self getRecordCoverPhoto:start_time withData:idx];
@@ -273,7 +279,7 @@
             CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
             [modelArray addObject:model];
         }];
-        [weak_self.dataArray addObjectsFromArray:modelArray];
+        [weak_self.indexDataArray addObjectsFromArray:modelArray];
 
         [[GCDQueue mainQueue] queueBlock:^{
 
@@ -295,7 +301,7 @@
         return ;
     }
     
-    NSInteger count = self.dataArray.count;
+    NSInteger count = _isFromIndex?self.indexDataArray.count:self.dataArray.count;
     if (count == 0) {
         self.tableView.hidden = YES;
         self.noDataView.hidden = NO;
@@ -308,7 +314,7 @@
 //获取录像封面快照
 -(void)getRecordCoverPhoto:(NSString*)period withData:(NSInteger)indexInteger
 {
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.device_id,period];
+    NSString *url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.device_id,period];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
@@ -341,9 +347,9 @@
     if (obj == nil) {
         return;
     }
-    CarmeaVideosModel *model = [self.dataArray objectAtIndex:indexInteger];
+    CarmeaVideosModel *model = [self.indexDataArray objectAtIndex:indexInteger];
     model.snap = [NSString stringWithFormat:@"%@",[obj objectForKey:@"url"]];
-    [self.dataArray replaceObjectAtIndex:indexInteger withObject:model];
+    [self.indexDataArray replaceObjectAtIndex:indexInteger withObject:model];
     [self.tableView reloadData];
 }
 //删除视频
@@ -365,7 +371,7 @@
                                       @"period": startime,
                                       };
     //提交数据
-    NSString *url = @"http://ncore.iot/service/video/liveqing/record/remove";
+    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/record/remove";
         
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
@@ -406,7 +412,7 @@
 //        NSIndexPath *path = [NSIndexPath indexPathForItem:integer inSection:0];
 //        [self.collectionView deleteItemsAtIndexPaths:@[path]];
         
-        [self.dataArray removeObjectAtIndex:integer];
+        [self.indexDataArray removeObjectAtIndex:integer];
         [self.selectedIndexSet removeIndex:integer];
         [self.tableView reloadData];
         

@@ -52,11 +52,11 @@
 {
     if ([model isKindOfClass:[DemandModel class]]) {
         DemandModel *models = model;
-        [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.snapUrl] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
+        [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.snapUrl] placeholder:UIImageWithFileName(@"player_hoder_image")];
         _titleLabel.text = models.video_name;
     }else{
         CarmeaVideosModel *models = model;
-        [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.snap] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
+        [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
         _titleLabel.text = models.video_name;
     }
 }

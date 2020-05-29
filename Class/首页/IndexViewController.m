@@ -319,7 +319,7 @@
 //获取设备信息
 -(void)getDeviceInfo:(NSString*)device_id withIndex:(NSInteger)index
 {
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
+    NSString *url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
     NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];

@@ -230,7 +230,7 @@
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=%ld",self.equipment_id,(long)self.page];
+    NSString *url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=%ld",self.equipment_id,(long)self.page];
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
     NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];

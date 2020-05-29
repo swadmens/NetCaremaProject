@@ -13,7 +13,7 @@
 #import "AFHTTPSessionManager.h"
 #import "LivingModel.h"
 #import "HKVideoPlaybackController.h"
-#import "DHLivingViewController.h"
+#import "SuperPlayerViewController.h"
 #import "DemandModel.h"
 
 
@@ -212,24 +212,31 @@
     LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
     if ([WWPublicMethod isStringEmptyText:model.RTMP]) {
         //live直播
-        LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
-        NSDictionary *dic = @{ @"name":model.name,
-                               @"snapUrl":model.url,
-                               @"videoUrl":model.RTMP,
-                               @"sharedLink":model.sharedLink,
-                               @"createAt":model.createAt,
-                             };
-        DemandModel *models = [DemandModel makeModelData:dic];
-        HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
-        vc.model = models;
-        vc.isLiving = YES;
-        vc.isRecordFile = YES;
-        vc.device_id = model.session_id;
-        vc.gbs_code = model.code;
-        vc.gbs_serial = model.serial;
-        vc.live_type = model.type;
-        vc.nvr_channel = model.session_id;
+//        LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
+//        NSDictionary *dic = @{ @"name":model.name,
+//                               @"snapUrl":model.url,
+//                               @"videoUrl":model.RTMP,
+//                               @"sharedLink":model.sharedLink,
+//                               @"createAt":model.createAt,
+//                             };
+//        DemandModel *models = [DemandModel makeModelData:dic];
+//        HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
+//        vc.model = models;
+//        vc.isLiving = YES;
+//        vc.isRecordFile = YES;
+//        vc.device_id = model.session_id;
+//        vc.gbs_code = model.code;
+//        vc.gbs_serial = model.serial;
+//        vc.live_type = model.type;
+//        vc.nvr_channel = model.session_id;
+//        vc.hidesBottomBarWhenPushed = YES;
+//        [self.navigationController pushViewController:vc animated:YES];
+//        self.hidesBottomBarWhenPushed = NO;
+        
+        SuperPlayerViewController *vc = [SuperPlayerViewController new];
         vc.hidesBottomBarWhenPushed = YES;
+        vc.allDataArray = [NSArray arrayWithArray:self.dataArray];
+        vc.isLiving = YES;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
         
@@ -264,7 +271,7 @@
                                  };
        
     //提交数据
-    NSString *url = @"http://ncore.iot/service/video/liveqing/live/list";
+    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/live/list";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                       options:0
@@ -400,7 +407,7 @@
 //获取直播快照
 -(void)getLivingCoverPhoto:(NSString*)live_id withIndex:(NSInteger)indexPath
 {
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/snap/current?id=%@",live_id];
+    NSString *url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/snap/current?id=%@",live_id];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码

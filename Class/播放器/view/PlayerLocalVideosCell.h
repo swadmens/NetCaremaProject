@@ -10,9 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class DemandModel;
 @interface PlayerLocalVideosCell : WWTableViewCell
 
 @property (nonatomic,copy) void(^allBtn)(void);
+@property (nonatomic,copy) void(^selectedRowData)(DemandModel*model);
+-(void)makeCellData:(NSArray*)array;
 
 @end
 

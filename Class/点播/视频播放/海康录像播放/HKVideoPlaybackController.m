@@ -461,13 +461,13 @@
     NSString *url;
     
     if (self.isRecordFile) {
-        url = @"http://ncore.iot/service/video/liveqing/record/remove";
+        url = @"https://homebay.quarkioe.com/service/video/liveqing/record/remove";
         finalParams = @{
                         @"id":self.device_id,
                         @"period": self.carmeaModel.start_time,
                         };
     }else{
-        url = @"http://ncore.iot/service/video/liveqing/vod/remove";
+        url = @"https://homebay.quarkioe.com/service/video/liveqing/vod/remove";
         finalParams = @{
                         @"id":self.model.video_id,
                         };
@@ -597,7 +597,7 @@
                                   @"limit":@"10",
                                   };
     //提交数据
-    NSString *url = @"http://ncore.iot/service/video/liveqing/record/query_records";
+    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/record/query_records";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
@@ -670,7 +670,7 @@
 //            NSString *start_time = [dic objectForKey:@"start_time"];
 //
 //            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-//            NSString *snap = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/record/getsnap?id=%@&period=%@",self.device_id,start_time];
+//            NSString *snap = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/record/getsnap?id=%@&period=%@",self.device_id,start_time];
 //            if (![WWPublicMethod isStringEmptyText:originalSnap]) {
 //                [mutDic setValue:snap forKey:@"snap"];
 //                [self getRecordCoverPhoto:start_time withData:idx];
@@ -689,7 +689,7 @@
 //获取录像封面快照
 -(void)getRecordCoverPhoto:(NSString*)period withData:(NSInteger)indexInteger
 {
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.device_id,period];
+    NSString *url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.device_id,period];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
@@ -821,9 +821,9 @@
     NSString *url;
     
     if ([self.live_type isEqualToString:@"LiveGBS"]) {
-        url = [NSString stringWithFormat:@"http://ncore.iot/service/video/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.gbs_serial,self.gbs_code,controls];
+        url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.gbs_serial,self.gbs_code,controls];
     }else{
-        url = [NSString stringWithFormat:@"http://ncore.iot/service/video/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
+        url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
     }
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];

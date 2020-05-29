@@ -745,6 +745,7 @@
 		4AD270242465345700D462B4 /* player_hoder_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AD270222465345700D462B4 /* player_hoder_image@3x.png */; };
 		4AD270272465550E00D462B4 /* index_search_player_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AD270252465550E00D462B4 /* index_search_player_image@3x.png */; };
 		4AD270282465550E00D462B4 /* index_search_player_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AD270262465550E00D462B4 /* index_search_player_image@2x.png */; };
+		4AE2FBF62480B762007E3BAA /* PlayerTopAddViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2FBF52480B762007E3BAA /* PlayerTopAddViewCell.m */; };
 		4AE928FA2417753400CFBBD8 /* shara_url_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE928F22417753300CFBBD8 /* shara_url_image@3x.png */; };
 		4AE928FB2417753400CFBBD8 /* shara_wechat_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE928F32417753300CFBBD8 /* shara_wechat_image@3x.png */; };
 		4AE928FC2417753400CFBBD8 /* shara_qq_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE928F42417753300CFBBD8 /* shara_qq_image@3x.png */; };
@@ -1996,6 +1997,8 @@
 		4AD270222465345700D462B4 /* player_hoder_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_hoder_image@3x.png"; sourceTree = "<group>"; };
 		4AD270252465550E00D462B4 /* index_search_player_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "index_search_player_image@3x.png"; sourceTree = "<group>"; };
 		4AD270262465550E00D462B4 /* index_search_player_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "index_search_player_image@2x.png"; sourceTree = "<group>"; };
+		4AE2FBF42480B762007E3BAA /* PlayerTopAddViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerTopAddViewCell.h; sourceTree = "<group>"; };
+		4AE2FBF52480B762007E3BAA /* PlayerTopAddViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerTopAddViewCell.m; sourceTree = "<group>"; };
 		4AE928F22417753300CFBBD8 /* shara_url_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shara_url_image@3x.png"; sourceTree = "<group>"; };
 		4AE928F32417753300CFBBD8 /* shara_wechat_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shara_wechat_image@3x.png"; sourceTree = "<group>"; };
 		4AE928F42417753300CFBBD8 /* shara_qq_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shara_qq_image@3x.png"; sourceTree = "<group>"; };
@@ -4786,6 +4789,8 @@
 				4AB50B1A246BA22C0064BF82 /* PlayLocalVideoView.m */,
 				4AB50B1C246BC9100064BF82 /* PlayBottomDateCell.h */,
 				4AB50B1D246BC9100064BF82 /* PlayBottomDateCell.m */,
+				4AE2FBF42480B762007E3BAA /* PlayerTopAddViewCell.h */,
+				4AE2FBF52480B762007E3BAA /* PlayerTopAddViewCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -5334,6 +5339,7 @@
 				4AB299A5240CEF23004CA6B5 /* CarmeaVideosViewCell.m in Sources */,
 				4AB50AB82468EDF50064BF82 /* tagOneCell.m in Sources */,
 				4A580FFE24075F2D00E82675 /* MJRefreshBackNormalFooter.m in Sources */,
+				4AE2FBF62480B762007E3BAA /* PlayerTopAddViewCell.m in Sources */,
 				4A58100F24075F2D00E82675 /* FTAnimation+UIView.m in Sources */,
 				4AB29A11240F9627004CA6B5 /* AreaNormalCell.m in Sources */,
 				4AB50AB72468EDF50064BF82 /* WMZTagBtn.m in Sources */,

@@ -28,7 +28,6 @@
     CGFloat width = kScreenWidth/2-21;
     
     _showImageView = [UIImageView new];
-    _showImageView.image = [UIImage imageWithColor:[UIColor redColor]];
     [self.contentView addSubview:_showImageView];
     [_showImageView leftToView:self.self.contentView];
     [_showImageView topToView:self.contentView];
@@ -51,7 +50,7 @@
 -(void)makeCellData:(DemandModel *)model
 {
 //    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] options:YYWebImageOptionProgressive];
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:UIImageWithFileName(@"player_hoder_image")];
     _titleLabel.text = model.video_name;
 }
 

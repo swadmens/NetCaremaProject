@@ -316,7 +316,7 @@
     [_kHUDManager showActivityInView:nil withTitle:@"正在上传..."];
     
     //提交数据
-    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/upload";
+    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/vod/upload";
     
 //    NSDictionary *finalParams = @{@"describe":self.msg_content};
 //    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
@@ -357,6 +357,7 @@
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error  ==  %@",error);
         [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
+
     }];
 }
 

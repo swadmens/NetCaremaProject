@@ -125,14 +125,12 @@
 }
 -(void)makeCellData:(MyEquipmentsModel *)model
 {
-//    _titleLabel.text = model.equipment_name;
-//    _coverView.hidden = ![model.equipment_states isEqualToString:@"离线"];
-//    _coverView.hidden = [WWPublicMethod isStringEmptyText:model.equipment_name];
-
     NSString *ClientId = [WWPublicMethod isStringEmptyText:model.ClientId]?model.ClientId:@"";
     NSString *DeviceId = [WWPublicMethod isStringEmptyText:model.DeviceId]?model.DeviceId:@"";
     NSString *CameraId = [WWPublicMethod isStringEmptyText:model.CameraId]?model.CameraId:@"";
     
+//    _titleLabel.text = model.equipment_name;
+
     [self startLoadDataRequest:[NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId]];
 }
 -(void)checkHelpClick
@@ -153,7 +151,7 @@
                                   @"q":device_id,
                                   };
     //提交数据
-    NSString *url = @"http://ncore.iot/service/video/liveqing/live/list";
+    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/live/list";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
@@ -187,7 +185,7 @@
         if (error) {
             // 请求失败
             DLog(@"error  ==  %@",error.userInfo);
-            [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
+//            [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
             return ;
         }
         DLog(@"responseObject  ==  %@",responseObject);
@@ -204,11 +202,14 @@
         NSDictionary *data = [obj objectForKey:@"data"];
         NSArray *rows= [data objectForKey:@"rows"];
         if (rows.count == 0) {
+            LivingModel *models = [LivingModel new];
+            if (self.getModelBackdata) {
+                self.getModelBackdata(models);
+            }
             [[GCDQueue mainQueue] queueBlock:^{
-                weak_self.showImageView.image = [UIImage imageWithColor:kColorThirdTextColor];
-//                weak_self.nameLabel.text = @" ";
-//                weak_self.tagLabel.text = @"离线";
+//                weak_self.showImageView.image = [UIImage imageWithColor:kColorThirdTextColor];
                 weak_self.isLiving = NO;
+                weak_self.coverView.hidden = NO;
             }];
             return ;
         }
@@ -223,13 +224,14 @@
                     [weak_self getLivingCoverPhoto:weak_self.model.live_id];
                     [[GCDQueue mainQueue] queueBlock:^{
                         weak_self.isLiving = YES;
+                        weak_self.coverView.hidden = YES;
                     }];
                 }else{
                     [[GCDQueue mainQueue] queueBlock:^{
-                        weak_self.showImageView.image = [UIImage imageWithColor:kColorThirdTextColor];
-                        weak_self.titleLabel.text = weak_self.model.name;
+//                        weak_self.showImageView.image = [UIImage imageWithColor:kColorThirdTextColor];
                         weak_self.timeLabel.text = weak_self.model.updateAt;
                         weak_self.isLiving = NO;
+                        weak_self.coverView.hidden = NO;
                     }];
                 }
             }
@@ -240,7 +242,7 @@
 //获取直播快照
 -(void)getLivingCoverPhoto:(NSString*)live_id
 {
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/snap/current?id=%@",live_id];
+    NSString *url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/snap/current?id=%@",live_id];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
@@ -276,10 +278,9 @@
     
     NSDictionary *data = [obj objectForKey:@"data"];
     NSString *snapUrl = [NSString stringWithFormat:@"%@",[data objectForKey:self.model.live_id]];
-    
+
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:snapUrl] placeholder:[UIImage imageWithColor:kColorLineColor]];
     _titleLabel.text = self.model.name;
-//    _tagLabel.text = @"直播中";
-    
+
 }
 @end

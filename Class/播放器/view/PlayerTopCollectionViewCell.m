@@ -36,7 +36,7 @@
 -(void)doSetup
 {
     [super doSetup];
-    self.contentView.backgroundColor = [UIColor whiteColor];
+    self.contentView.backgroundColor = UIColorFromRGB(0x47484D, 1);
     self.contentView.clipsToBounds = YES;
     self.contentView.layer.borderColor = [UIColor clearColor].CGColor;
     self.contentView.layer.borderWidth = 1;
@@ -49,20 +49,16 @@
     [self.contentView addSubview:_playView];
     [_playView xCenterToView:self.contentView];
     [_playView yCenterToView:self.contentView];
-    [_playView addWidth:width];
-    [_playView addHeight:width*0.68];
+    [_playView addWidth:width-1];
+    [_playView addHeight:width*0.68-1];
     
     
     _titleImageView = [UIImageView new];
-    _titleImageView.clipsToBounds = YES;
-    _titleImageView.layer.borderColor = [UIColor clearColor].CGColor;
-    _titleImageView.layer.borderWidth = 0.5;
-    _titleImageView.userInteractionEnabled = YES;
-    _titleImageView.layer.masksToBounds = YES;
+    _titleImageView.image = UIImageWithFileName(@"player_hoder_image");
     _titleImageView.contentMode = UIViewContentModeScaleAspectFill;
     [_playView addSubview:_titleImageView];
-    [_titleImageView xCenterToView:_playView];
-    [_titleImageView yCenterToView:_playView];
+    [_titleImageView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:_playView];
+//    [_titleImageView yCenterToView:_playView];
     
     
     _coverView = [UIView new];
@@ -169,18 +165,20 @@
 }
 -(void)makeCellData:(id)obj
 {
-    if ([obj isKindOfClass:[NSString class]]) {
-        _titleImageView.image = UIImageWithFileName(obj);
-        _coverView.hidden = YES;
-        _titleImageView.hidden = NO;
-    }else{
-        _titleImageView.hidden = YES;
+//    if ([obj isKindOfClass:[NSString class]]) {
+//        _titleImageView.image = UIImageWithFileName(obj);
+//        _coverView.hidden = YES;
+//        _titleImageView.hidden = NO;
+//    }else{
+//        _titleImageView.hidden = YES;
         LivingModel *model = obj;
         if (![WWPublicMethod isStringEmptyText:model.RTMP]) {
             _coverView.hidden = NO;
+            _titleImageView.hidden = NO;
             _timeLabel.text = model.updateAt;
         }else{
             _coverView.hidden = YES;
+            _titleImageView.hidden = YES;
             NSDictionary *dic = @{ @"name":model.name,
                                     @"snapUrl":model.url,
                                     @"videoUrl":model.RTMP,
@@ -200,7 +198,7 @@
              [self play];
         }
         
-    }
+//    }
     
 }
 

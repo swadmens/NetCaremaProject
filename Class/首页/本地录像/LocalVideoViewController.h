@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol LocalVideoDelegate <NSObject>
 
--(void)selectRowData:(NSString*)value;
+-(void)selectRowData:(NSInteger)value;
 
 @end
 
@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,assign) BOOL isFromIndex;
 @property (nonatomic,strong) NSString *device_id;//具体设备id
+@property (nonatomic,strong) NSArray *dataArray;//具体设备id
 
 
 @end

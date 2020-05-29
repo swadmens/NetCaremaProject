@@ -10,7 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class CarmeaVideosModel;
 @interface LocalVideoCell : WWTableViewCell
+
+-(void)makeCellData:(CarmeaVideosModel*)model;
 
 @end
 

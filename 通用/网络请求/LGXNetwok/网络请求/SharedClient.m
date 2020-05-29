@@ -36,11 +36,11 @@
 #ifdef DEBUG
     url = [[NSUserDefaults standardUserDefaults] objectForKey:_DEVURLKey];
     if (url == nil) {
-        url = @"http://ncore.iot/"; // 开发用的
-//        url = @"https://192.168.10.12:9090/outer/";
+        url = @"https://homebay.quarkioe.com/"; // 开发用的
+//        url = @"https://192.168.10.12:9090/outer/"; https://homebay.quarkioe.com
     }
 #else
-    url = @"http://ncore.iot/"; // 正式服务器
+    url = @"https://homebay.quarkioe.com/"; // 正式服务器
 //    url = @"https://192.168.10.12:9090/outer/";
 #endif
     return url;

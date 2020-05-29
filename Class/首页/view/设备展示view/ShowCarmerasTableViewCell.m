@@ -25,7 +25,7 @@
     self.contentView.backgroundColor = [UIColor whiteColor];
     
     _titleImageView = [UIImageView new];
-    _titleImageView.image = [UIImage imageWithColor:[UIColor redColor]];
+    _titleImageView.image = UIImageWithFileName(@"player_hoder_image");
     [self.contentView addSubview:_titleImageView];
     [_titleImageView alignTop:@"10" leading:@"15" bottom:@"10" trailing:nil toView:self.contentView];
     [_titleImageView addWidth:94.5];

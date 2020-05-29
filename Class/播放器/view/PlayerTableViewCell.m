@@ -11,6 +11,7 @@
 #import "UIView+Ex.h"
 #import "WWCollectionView.h"
 #import "PlayerTopCollectionViewCell.h"
+#import "PlayerTopAddViewCell.h"
 #import "PlayLocalVideoView.h"
 #import "PlayerControlCell.h"
 #import "MyEquipmentsViewController.h"
@@ -85,6 +86,8 @@
         _collectionView.backgroundColor = [UIColor whiteColor];
         // 注册
         [_collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr]];
+        [_collectionView registerClass:[PlayerTopAddViewCell class] forCellWithReuseIdentifier:[PlayerTopAddViewCell getCellIDStr]];
+
         
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
@@ -193,13 +196,20 @@
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    PlayerTopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr] forIndexPath:indexPath];
-    cell.delegate = self;
-    
     id obj = [self.dataArray objectAtIndex:indexPath.row];
-    [cell makeCellData:obj];
+    if ([obj isKindOfClass:[NSString class]]) {
+        PlayerTopAddViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PlayerTopAddViewCell getCellIDStr] forIndexPath:indexPath];
+        [cell makeCellData:obj];
+        return cell;
+    }else{
+        PlayerTopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr] forIndexPath:indexPath];
+        cell.delegate = self;
         
-    return cell;
+        [cell makeCellData:obj];
+        return cell;
+    }
+
+   
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -318,9 +328,7 @@
 - (void)showDeleteViewAnimation{
     self.deleteView.hidden = NO;
     [UIView animateWithDuration:0.25 animations:^{
-        
         self.deleteView.transform = CGAffineTransformTranslate( self.deleteView.transform, 0,KDeleteHeight);
-        
     } completion:^(BOOL finished) {
         
     }];
@@ -388,7 +396,8 @@
 -(void)selectCarmeraModel:(LivingModel *)model
 {
     [self.dataArray replaceObjectAtIndex:self.selectIndex withObject:model];
-    [self.collectionView reloadData];
+//    [self.collectionView reloadData];
+    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.selectIndex inSection:0]]];
 }
 #pragma mark - PlayLocalVideoViewDelegate
 - (void)tableViewWillPlay:(PlayLocalVideoView *)view

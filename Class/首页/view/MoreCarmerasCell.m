@@ -11,6 +11,7 @@
 #import "WWCollectionView.h"
 #import "MoreCarmerasCollectionViewCell.h"
 #import "MyEquipmentsModel.h"
+#import "LivingModel.h"
 
 @interface MoreCarmerasCell ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -180,7 +181,11 @@
         }
     };
     cell.getModelBackdata = ^(LivingModel * _Nonnull model) {
-        [self.modelArray addObject:model];
+        if (![WWPublicMethod isStringEmptyText:model.RTMP]) {
+            [self.modelArray addObject:model];
+        }else{
+            [self.modelArray insertObject:model atIndex:0];
+        }
         
         if (self.modelArray.count == self.dataArray.count) {
             if (self.getModelArrayBackdata) {

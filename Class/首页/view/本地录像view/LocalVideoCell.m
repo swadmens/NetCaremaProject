@@ -7,7 +7,7 @@
 //
 
 #import "LocalVideoCell.h"
-
+#import "CarmeaVideosModel.h"
 
 @interface LocalVideoCell ()
 
@@ -33,7 +33,7 @@
     
     _showImageView = [UIImageView new];
     _showImageView.userInteractionEnabled = YES;
-    _showImageView.image = UIImageWithFileName(@"playback_back_image");
+    _showImageView.image = UIImageWithFileName(@"player_hoder_image");
     [backView addSubview:_showImageView];
     [_showImageView alignTop:@"10" leading:@"15" bottom:@"10" trailing:nil toView:backView];
     [_showImageView addWidth:95];
@@ -67,6 +67,11 @@
     [rightBtn addWidth:15];
     [rightBtn addHeight:25];
     
+}
+-(void)makeCellData:(CarmeaVideosModel *)model
+{
+    _titleLabel.text = model.video_name;
+    _timeLabel.text = model.start_time;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

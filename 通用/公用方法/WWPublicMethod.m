@@ -677,7 +677,7 @@
 }
 +(void)refreshToken:(RefreshTokenSuccessBlock)tokenBlock
 {
-    NSString *url = @"http://ncore.iot/service/video/account/refreshtoken";
+    NSString *url = @"https://homebay.quarkioe.com/service/video/account/refreshtoken";
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
@@ -718,7 +718,7 @@
 //        DLog(@"当前时间  ==  %@",locationString);
 //
         
-       NSString *url = @"http://ncore.iot/service/video/ncore/sync/device/status";
+       NSString *url = @"https://homebay.quarkioe.com/service/video/ncore/sync/device/status";
 
        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
        //配置用户名 密码
@@ -745,7 +745,7 @@
 {
     [NSTimer scheduledTimerWithTimeInterval:120 repeats:YES block:^(NSTimer * _Nonnull timer) {
          
-        NSString *url = @"http://ncore.iot/service/video/ncore/sync/device";
+        NSString *url = @"https://homebay.quarkioe.com/service/video/ncore/sync/device";
         
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
         //配置用户名 密码

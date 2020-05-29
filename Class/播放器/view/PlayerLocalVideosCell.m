@@ -9,6 +9,8 @@
 #import "PlayerLocalVideosCell.h"
 #import "WWCollectionView.h"
 #import "VideoPlaybackViewCell.h"
+#import "CarmeaVideosModel.h"
+#import "DemandModel.h"
 
 @interface PlayerLocalVideosCell ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -111,19 +113,25 @@
     }
     
 }
+-(void)makeCellData:(NSArray *)array
+{
+    [self.dataArray removeAllObjects];
+    [self.dataArray addObjectsFromArray:array];
+    [self.collectionView reloadData];
+}
 #pragma mark - UICollectionViewDataSourec
 //定义展示的Section的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-//    return self.allDataArray.count;
-    return 5;
+    return self.dataArray.count;
+//    return 5;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     VideoPlaybackViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[VideoPlaybackViewCell getCellIDStr] forIndexPath:indexPath];
 
-//    id objt = [self.allDataArray objectAtIndex:indexPath.row];
-//    [cell makeCellData:objt];
+    CarmeaVideosModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    [cell makeCellData:model];
     
     return cell;
 }
@@ -138,7 +146,7 @@
 //    _downLoadBtn.hidden = NO;
 //    _moreButton.hidden = YES;
 //
-//    id obj = [self.allDataArray objectAtIndex:indexPath.row];
+    CarmeaVideosModel *model = [self.dataArray objectAtIndex:indexPath.row];
 //
 //    if ([obj isKindOfClass:[DemandModel class]]) {
 //        DemandModel *model = obj;
@@ -153,17 +161,20 @@
 //        CarmeaVideosModel *model = obj;
 //        self.carmeaModel = model;
 //
-//        NSDictionary *dic = @{ @"name":model.video_name,
-//                               @"snapUrl":model.snap,
-//                               @"videoUrl":model.hls,
-//                               @"createAt":model.time,
-//                              };
-//        DemandModel *models = [DemandModel makeModelData:dic];
+        NSDictionary *dic = @{ @"name":model.video_name,
+                               @"snapUrl":model.snap,
+                               @"videoUrl":model.hls,
+                               @"createAt":model.time,
+                              };
+        DemandModel *models = [DemandModel makeModelData:dic];
 //        self.playerView.media = models;
 //        self.indexInteger = indexPath.row;
 //        _videoNameLabel.text = self.model.video_name;
 //        _videoTimeLabel.text = self.model.createAt;
 //   }
+    if (self.selectedRowData) {
+        self.selectedRowData(models);
+    }
 
 }
 
