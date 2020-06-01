@@ -33,6 +33,10 @@
 - (void)dealloc {
     [self stop];
 }
+- (void)prepareForReuse {
+    [self stop];
+    [super prepareForReuse];
+}
 -(void)doSetup
 {
     [super doSetup];
@@ -185,17 +189,20 @@
                                     @"sharedLink":model.sharedLink,
                                     @"createAt":model.createAt,
                                   };
-             DemandModel *models = [DemandModel makeModelData:dic];
-             self.playerView = [[PLPlayerView alloc] init];
-             self.playerView.delegate = self;
-             [_playView addSubview:self.playerView];
-             self.playerView.media = models;
-             self.playerView.isLocalVideo = NO;
-             [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
-                 make.edges.equalTo(self.playView);
-             }];
-             [self configureVideo:NO];
-             [self play];
+            DemandModel *models = [DemandModel makeModelData:dic];
+            self.playerView = [[PLPlayerView alloc] init];
+            self.playerView.delegate = self;
+            [_playView addSubview:self.playerView];
+            self.playerView.media = models;
+            self.playerView.isLocalVideo = NO;
+            [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(self.playView);
+            }];
+            [self configureVideo:NO];
+            
+            [self play];
+            self.playerView.userInteractionEnabled = NO;
+            
         }
         
 //    }

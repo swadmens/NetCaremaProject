@@ -30,7 +30,11 @@
 -(void)dealloc
 {
     [self stop];
-    [[NSNotificationCenter defaultCenter] removeObserver:@"FullScreebInfomation"];
+//    [[NSNotificationCenter defaultCenter] removeObserver:@"FullScreebInfomation"];
+}
+- (void)prepareForReuse {
+    [self stop];
+//    [super prepareForReuse];
 }
 
 -(instancetype)initWithFrame:(CGRect)frame

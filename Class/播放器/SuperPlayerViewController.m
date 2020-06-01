@@ -30,6 +30,8 @@
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property(nonatomic,assign) NSInteger page;
 
+@property (nonatomic,strong) PlayerTableViewCell *topCell;
+
 @property (nonatomic,strong) CameraControlView *clView;
 @property (nonatomic,strong) LGXVerticalButton *controlBtn;
 
@@ -121,18 +123,22 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+
+    __weak typeof(self) weakSelf = self;
+    
     if (indexPath.row == 0) {
         
-        PlayerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerTableViewCell getCellIDStr] forIndexPath:indexPath];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.topCell = [tableView dequeueReusableCellWithIdentifier:[PlayerTableViewCell getCellIDStr] forIndexPath:indexPath];
+        self.topCell.selectionStyle = UITableViewCellSelectionStyleNone;
 //        cell.isLiving = _isLiving;
 //        cell.model = self.model;
-        [cell makeCellDataNoLiving:self.model witnLive:_isLiving];
-        [cell makeCellDataLiving:self.allDataArray witnLive:_isLiving];
-        cell.delegate = self;
+        [self.topCell makeCellDataNoLiving:self.model witnLive:_isLiving];
+        [self.topCell makeCellDataLiving:self.allDataArray witnLive:_isLiving];
+        self.topCell.delegate = self;
         
         
-        return cell;
+        return self.topCell;
         
     }else if (indexPath.row == 1){
         
@@ -156,14 +162,14 @@
                 LocalVideoViewController *vc = [LocalVideoViewController new];
                 vc.delegate = self;
                 vc.isFromIndex = NO;
-                vc.dataArray = [NSArray arrayWithArray:self.localVideosArray];
-                [self.navigationController pushViewController:vc animated:YES];
+                vc.dataArray = [NSArray arrayWithArray:weakSelf.localVideosArray];
+                [weakSelf.navigationController pushViewController:vc animated:YES];
                
             };
             cell.selectedRowData = ^(DemandModel * _Nonnull model) {
-                self.model = model;
-                self.isLiving = NO;
-                [self.tableView reloadData];
+                weakSelf.model = model;
+                weakSelf.isLiving = NO;
+                [weakSelf.tableView reloadData];
             };
             
             return cell;
@@ -691,6 +697,15 @@
         [weak_self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 
     }];
+}
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    [self.topCell stop];
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.topCell play];
 }
 
 /*

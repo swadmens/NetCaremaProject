@@ -42,6 +42,14 @@
     [_titleImageView yCenterToView:backView];
     
 }
+-(void)stop
+{
+    
+}
+-(void)play
+{
+    
+}
 -(void)makeCellData:(NSString *)icon
 {
     _titleImageView.image = UIImageWithFileName(icon);

@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class PLPlayerView;
 @interface PlayerTopCollectionViewCell : WWCollectionViewCell
 
-@property (nonatomic,weak) id<PlayerTopCollectionDelegate>delegate;
+@property (nonatomic,assign) id<PlayerTopCollectionDelegate>delegate;
 
 -(void)makeCellData:(id)obj;
 

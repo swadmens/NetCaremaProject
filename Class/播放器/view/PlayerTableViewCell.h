@@ -28,6 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)makeCellDataNoLiving:(DemandModel*)model witnLive:(BOOL)isLiving;
 -(void)makeCellDataLiving:(NSArray*)array witnLive:(BOOL)isLiving;
 
+- (void)stop;
+-(void)play;
+
 @end
 
 NS_ASSUME_NONNULL_END

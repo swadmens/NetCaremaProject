@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)makeCellData:(NSString*)icon;
 
+- (void)stop;
+- (void)play;
 
 @end
 

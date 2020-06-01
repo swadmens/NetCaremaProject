@@ -25,9 +25,11 @@ NS_ASSUME_NONNULL_BEGIN
 @class DemandModel;
 @interface PlayLocalVideoView : UIView
 
-@property (nonatomic, weak) id<PlayLocalVideoViewDelegate> delegate;
+@property (nonatomic, assign) id<PlayLocalVideoViewDelegate> delegate;
 
 @property (nonatomic,strong) DemandModel *model;
+- (void)stop;
+- (void)play;
 
 @end
 

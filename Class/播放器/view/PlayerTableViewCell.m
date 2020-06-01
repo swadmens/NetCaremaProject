@@ -52,6 +52,10 @@
 @end
 
 @implementation PlayerTableViewCell
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:@"gonggeChangeInfomation"];
+}
 - (void)onUIApplication:(BOOL)active {
     if (self.playingCell) {
         [self.playingCell configureVideo:active];
@@ -432,7 +436,23 @@
     
 }
 
-
+- (void)stop {
+    
+    NSArray *array = [self.collectionView visibleCells];
+    for (PlayerTopCollectionViewCell *cell in array) {
+        [cell stop];
+    }
+    [self.localVideoView stop];
+    
+}
+-(void)play
+{
+    NSArray *array = [self.collectionView visibleCells];
+    for (PlayerTopCollectionViewCell *cell in array) {
+        [cell play];
+    }
+    [self.localVideoView play];
+}
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
