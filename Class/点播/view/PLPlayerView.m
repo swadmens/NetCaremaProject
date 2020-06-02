@@ -127,6 +127,8 @@ UIGestureRecognizerDelegate
 //接收通知并操作
 - (void)fullScreenInfoNotica:(NSNotification *)notification
 {
+//    NSDictionary *dic = notification.userInfo;
+//    BOOL select = [[dic objectForKey:@"select"] boolValue];
     if (self.isStartPlay) {
         [self clickEnterFullScreenButton];
     }

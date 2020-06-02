@@ -195,6 +195,12 @@
     switch (state) {
         case videoSatePlay://播放暂停
             
+//            self.controlBtn.selected = !self.controlBtn.selected;
+//            if (self.controlBtn.selected) {
+//                [self.topCell stop];
+//            }else{
+//                [self.topCell play];
+//            }
             
             break;
         case videoSateVoice://声音控制
@@ -211,6 +217,7 @@
             break;
         case videoSateFullScreen://全屏
         
+            [self.topCell makePlayerViewFullScreen];
         
             break;
         case videoSatesSreenshots://截图

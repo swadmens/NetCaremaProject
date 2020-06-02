@@ -50,6 +50,10 @@
 {
     
 }
+-(void)makePlayerViewFullScreen:(BOOL)selected
+{
+    
+}
 -(void)makeCellData:(NSString *)icon
 {
     _titleImageView.image = UIImageWithFileName(icon);

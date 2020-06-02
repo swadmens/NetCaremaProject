@@ -40,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)configureVideo:(BOOL)enableRender;
 
+-(void)makePlayerViewFullScreen:(BOOL)selected;
+
 @end
 
 NS_ASSUME_NONNULL_END

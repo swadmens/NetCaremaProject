@@ -16,6 +16,8 @@
 #import "PlayerControlCell.h"
 #import "MyEquipmentsViewController.h"
 #import "SuperPlayerViewController.h"
+#import "LivingModel.h"
+#import "DemandModel.h"
 
 
 #define KDeleteHeight 60
@@ -140,9 +142,10 @@
         [[NSNotificationCenter defaultCenter] removeObserver:@"gonggeChangeInfomation"];
         return;
     }
-    NSDictionary *dic = notification.userInfo;
-    BOOL value = [[dic objectForKey:@"value"] boolValue];
-    
+ 
+    NSDictionary *dicInfo = notification.userInfo;
+    BOOL value = [[dicInfo objectForKey:@"value"] boolValue];
+
     CGFloat totalHeight = kScreenWidth * 0.68 + 0.5;
     CGFloat width = (kScreenWidth-1)/2;
     CGFloat height = width * 0.68;
@@ -166,7 +169,7 @@
         xSpacing = -width/4;
         ySpacing = -width*0.68/4;
     }
-    
+
     for (int i = 0; i < 4; i++) {
         NSIndexPath *indexPaths = [NSIndexPath indexPathForRow:i inSection:0];
         PlayerTopCollectionViewCell *cells = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPaths];
@@ -174,9 +177,9 @@
             if (i == self.selectIndexPath.row) {
                 cells.transform = CGAffineTransformMakeScale(scaleXValue, scaleYValue);
                 cells.transform = CGAffineTransformTranslate(cells.transform, xSpacing, ySpacing);
-                
+
                 cells.selected = NO;
-                
+
             }else{
                 cells.transform = CGAffineTransformMakeScale(0.01, 0.01);
             }
@@ -219,6 +222,8 @@
 {
     self.selectIndexPath = indexPath;
     
+    [[NSNotificationCenter defaultCenter] removeObserver:@"FullScreebInfomation"];
+
     id obj = [self.dataArray objectAtIndex:indexPath.row];
     if ([obj isKindOfClass:[NSString class]]) {
         self.selectIndex = indexPath.row;
@@ -286,6 +291,8 @@
                 if (point.y  <  50) {
                     //删除
                     [self.dataArray removeObjectAtIndex:self.moveIndexPath.row];
+                    PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.moveIndexPath];
+                    [selectCell stop];
                     [self.dataArray addObject:@"Player_add_video_image"];
                     [self.collectionView reloadData];
                 }
@@ -309,7 +316,7 @@
         _deleteView = [[UIView alloc] initWithFrame:CGRectMake(0, -KDeleteHeight, kScreenWidth, KDeleteHeight)];
         _deleteView.backgroundColor = kColorMainColor;
         UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.tag = 201809;
+        button.tag = 202004;
         [button setImage:[UIImage imageNamed:@"share_delete_image"] forState:UIControlStateNormal];
         [button setImage:[UIImage imageNamed:@"share_delete_image"] forState:UIControlStateSelected];
         [button setTitle:@"拖到此处删除" forState:UIControlStateNormal];
@@ -350,12 +357,12 @@
 }
 
 - (void)setDeleteViewDeleteState{
-    UIButton *button = (UIButton *)[_deleteView viewWithTag:201809];
+    UIButton *button = (UIButton *)[_deleteView viewWithTag:202004];
     button.selected = YES;
 }
 
 - (void)setDeleteViewNormalState{
-    UIButton *button = (UIButton *)[_deleteView viewWithTag:201809];
+    UIButton *button = (UIButton *)[_deleteView viewWithTag:202004];
     button.selected = NO;
 }
 -(void)makeCellDataNoLiving:(DemandModel*)model witnLive:(BOOL)isLiving
@@ -453,6 +460,18 @@
     }
     [self.localVideoView play];
 }
+
+-(void)makePlayerViewFullScreen
+{
+    PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
+    NSArray *array = [self.collectionView visibleCells];
+    for (PlayerTopCollectionViewCell *cell in array) {
+        
+        [cell makePlayerViewFullScreen:cell == selectCell];
+        
+    }
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

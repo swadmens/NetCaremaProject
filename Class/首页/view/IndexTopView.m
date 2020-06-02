@@ -146,7 +146,7 @@
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
 //    return self.titleDataArray.count;
-    return 10;
+    return 3;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -219,7 +219,6 @@
            }
        }
 }
-
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     self.searchValue = @"";
 }

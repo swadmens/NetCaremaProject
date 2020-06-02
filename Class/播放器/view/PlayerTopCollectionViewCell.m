@@ -32,9 +32,11 @@
 @implementation PlayerTopCollectionViewCell
 - (void)dealloc {
     [self stop];
+    [[NSNotificationCenter defaultCenter] removeObserver:@"FullScreebInfomation"];
 }
 - (void)prepareForReuse {
     [self stop];
+    [[NSNotificationCenter defaultCenter] removeObserver:@"FullScreebInfomation"];
     [super prepareForReuse];
 }
 -(void)doSetup
@@ -45,24 +47,17 @@
     self.contentView.layer.borderColor = [UIColor clearColor].CGColor;
     self.contentView.layer.borderWidth = 1;
     
-    CGFloat width = (kScreenWidth-1)/2;
-    
     
     _playView = [UIView new];
     _playView.backgroundColor = UIColorFromRGB(0x47484D, 1);
     [self.contentView addSubview:_playView];
-    [_playView xCenterToView:self.contentView];
-    [_playView yCenterToView:self.contentView];
-    [_playView addWidth:width-1];
-    [_playView addHeight:width*0.68-1];
-    
+    [_playView alignTop:@"1" leading:@"1" bottom:@"1" trailing:@"1" toView:self.contentView];
+
     
     _titleImageView = [UIImageView new];
     _titleImageView.image = UIImageWithFileName(@"player_hoder_image");
-    _titleImageView.contentMode = UIViewContentModeScaleAspectFill;
     [_playView addSubview:_titleImageView];
     [_titleImageView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:_playView];
-//    [_titleImageView yCenterToView:_playView];
     
     
     _coverView = [UIView new];
@@ -126,6 +121,7 @@
     UIView *superView = [[UIApplication sharedApplication] keyWindow];
     [self.playerView removeFromSuperview];
     [superView addSubview:self.playerView];
+    self.playerView.userInteractionEnabled = YES;
     [self.playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(superView.mas_height);
         make.height.equalTo(superView.mas_width);
@@ -147,7 +143,8 @@
     
     [self.playerView removeFromSuperview];
     [self.playView addSubview:self.playerView];
-    
+    self.playerView.userInteractionEnabled = NO;
+
     [self.playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.playView);
     }];
@@ -164,49 +161,38 @@
 }
 
 - (void)playerViewWillPlay:(PLPlayerView *)playerView {
-//    [self.playerView.delegate playerViewWillPlay:self.playerView];
     [self.delegate playerViewCellWillPlay:self];
 }
 -(void)makeCellData:(id)obj
 {
-//    if ([obj isKindOfClass:[NSString class]]) {
-//        _titleImageView.image = UIImageWithFileName(obj);
-//        _coverView.hidden = YES;
-//        _titleImageView.hidden = NO;
-//    }else{
-//        _titleImageView.hidden = YES;
-        LivingModel *model = obj;
-        if (![WWPublicMethod isStringEmptyText:model.RTMP]) {
-            _coverView.hidden = NO;
-            _titleImageView.hidden = NO;
-            _timeLabel.text = model.updateAt;
-        }else{
-            _coverView.hidden = YES;
-            _titleImageView.hidden = YES;
-            NSDictionary *dic = @{ @"name":model.name,
-                                    @"snapUrl":model.url,
-                                    @"videoUrl":model.RTMP,
-                                    @"sharedLink":model.sharedLink,
-                                    @"createAt":model.createAt,
-                                  };
-            DemandModel *models = [DemandModel makeModelData:dic];
-            self.playerView = [[PLPlayerView alloc] init];
-            self.playerView.delegate = self;
-            [_playView addSubview:self.playerView];
-            self.playerView.media = models;
-            self.playerView.isLocalVideo = NO;
-            [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.edges.equalTo(self.playView);
-            }];
-            [self configureVideo:NO];
-            
-            [self play];
-            self.playerView.userInteractionEnabled = NO;
-            
-        }
+    LivingModel *model = obj;
+    if (![WWPublicMethod isStringEmptyText:model.RTMP]) {
+        _coverView.hidden = NO;
+        _titleImageView.hidden = NO;
+        _timeLabel.text = model.updateAt;
+    }else{
+        _coverView.hidden = YES;
+        _titleImageView.hidden = YES;
+        NSDictionary *dic = @{ @"name":model.name,
+                                @"snapUrl":model.url,
+                                @"videoUrl":model.RTMP,
+                                @"sharedLink":model.sharedLink,
+                                @"createAt":model.createAt,
+                              };
+        DemandModel *models = [DemandModel makeModelData:dic];
+        self.playerView = [[PLPlayerView alloc] init];
+        self.playerView.delegate = self;
+        [_playView addSubview:self.playerView];
+        self.playerView.media = models;
+        self.playerView.isLocalVideo = NO;
+        [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(self.playView);
+        }];
+        [self configureVideo:NO];
         
-//    }
-    
+        [self play];
+        self.playerView.userInteractionEnabled = NO;
+    }
 }
 
 -(void)setSelected:(BOOL)selected
@@ -218,6 +204,12 @@
 {
     //设备离线，查看帮助
     [TargetEngine controller:nil pushToController:PushTargetEquipmentOffline WithTargetId:nil];
+}
+-(void)makePlayerViewFullScreen:(BOOL)selected
+{
+    if (selected) {
+        [self.playerView clickEnterFullScreenButton];
+    }
 }
 
 @end

@@ -23,7 +23,7 @@
     
     _titleLabel = [UILabel new];
     _titleLabel.textColor = kColorSecondTextColor;
-    _titleLabel.text = @"分组1";
+    _titleLabel.text = @"公司";
     _titleLabel.textAlignment = NSTextAlignmentCenter;
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [self.contentView addSubview:_titleLabel];
