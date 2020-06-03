@@ -235,7 +235,8 @@
         
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
         vc.hidesBottomBarWhenPushed = YES;
-        vc.allDataArray = [NSArray arrayWithArray:self.dataArray];
+//        vc.allDataArray = [NSArray arrayWithArray:self.dataArray];
+        vc.allDataArray = [NSArray arrayWithObjects:model, nil];
         vc.isLiving = YES;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;

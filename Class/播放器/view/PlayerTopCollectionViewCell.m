@@ -163,6 +163,12 @@
 - (void)playerViewWillPlay:(PLPlayerView *)playerView {
     [self.delegate playerViewCellWillPlay:self];
 }
+-(void)getSnapshot:(PLPlayerView *)playerView with:(UIImage *)image
+{
+    if ([self.delegate respondsToSelector:@selector(getTopCellSnapshot:with:)]) {
+        [self.delegate getTopCellSnapshot:self with:image];
+    }
+}
 -(void)makeCellData:(id)obj
 {
     LivingModel *model = obj;
@@ -210,6 +216,10 @@
     if (selected) {
         [self.playerView clickEnterFullScreenButton];
     }
+}
+-(void)clickSnapshotButton
+{
+    [self.playerView clickSnapshotButton];
 }
 
 @end

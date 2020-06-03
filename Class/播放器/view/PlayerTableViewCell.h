@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)tableViewCellExitFullScreen:(PlayerTableViewCell *)cell;
 
+- (void)getPlayerCellSnapshot:(PlayerTableViewCell *_Nullable)cell with:(UIImage*_Nullable)image;
+
 @end
 
 @class DemandModel;
@@ -31,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)stop;
 -(void)play;
 -(void)makePlayerViewFullScreen;
+-(void)makeCellScale:(BOOL)scale;
+-(void)clickSnapshotButton;
 
 
 @end

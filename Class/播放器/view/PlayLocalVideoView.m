@@ -158,6 +158,20 @@
     [self.delegate tableViewCellExitFullScreen:self];
 
 }
+-(void)getSnapshot:(PLPlayerView *)playerView with:(UIImage *)image
+{
+    if ([self.delegate respondsToSelector:@selector(getLocalViewSnap:with:)]) {
+        [self.delegate getLocalViewSnap:self with:image];
+    }
+}
+-(void)clickSnapshotButton
+{
+    [self.playerView clickSnapshotButton];
+}
+-(void)makePlayerViewFullScreen
+{
+    [self.playerView clickEnterFullScreenButton];
+}
 
 - (void)playerViewWillPlay:(PLPlayerView *)playerView {
 //    [self.playerView.delegate playerViewWillPlay:self.playerView];

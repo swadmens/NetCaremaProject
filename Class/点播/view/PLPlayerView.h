@@ -20,6 +20,7 @@
 
 - (void)theLocalFileDoesNotExist:(PLPlayerView *)playerView;
 
+- (void)getSnapshot:(PLPlayerView *)playerView with:(UIImage*)image;
 @end
 
 @interface PLPlayerView : UIView
@@ -42,6 +43,9 @@
 - (void)configureVideo:(BOOL)enableRender;
 
 -(void)clickEnterFullScreenButton;
+
+-(void)clickSnapshotButton;
+
 @end
 
 

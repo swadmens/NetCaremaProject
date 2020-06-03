@@ -173,12 +173,13 @@
     
     MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
     [cell makeCellData:model];
-    
-    cell.moreBtnClick = ^{
+
+    cell.moreBtnClick = ^(BOOL offline) {
         if (self.moreDealClick) {
-            self.moreDealClick(indexPath.row);
+            self.moreDealClick(indexPath.row,offline);
         }
     };
+    
     cell.getModelBackdata = ^(LivingModel * _Nonnull model) {
         if (![WWPublicMethod isStringEmptyText:model.RTMP]) {
             [self.modelArray addObject:model];

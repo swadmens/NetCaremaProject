@@ -112,7 +112,7 @@
     self.navigationItem.rightBarButtonItems  = @[settingBtnItem,fixedSpaceBarButtonItem,sharaBtnItem];
     
     
-    [self setupSaveView];
+//    [self setupSaveView];
     if (_isLiving) {
         [self startLoadDataRequest];
     }
@@ -195,12 +195,14 @@
     switch (state) {
         case videoSatePlay://播放暂停
             
-//            self.controlBtn.selected = !self.controlBtn.selected;
-//            if (self.controlBtn.selected) {
-//                [self.topCell stop];
-//            }else{
-//                [self.topCell play];
-//            }
+            if (!_isLiving) {
+                self.controlBtn.selected = !self.controlBtn.selected;
+                if (self.controlBtn.selected) {
+                    [self.topCell play];
+                }else{
+                    [self.topCell stop];
+                }
+            }
             
             break;
         case videoSateVoice://声音控制
@@ -208,7 +210,8 @@
             
             break;
         case videoSateGongge://宫格变化
-            
+            self.controlBtn.selected = !self.controlBtn.selected;
+            [self.topCell makeCellScale:self.controlBtn.selected];
             
             break;
         case videoSateClarity://清晰度
@@ -222,8 +225,10 @@
             break;
         case videoSatesSreenshots://截图
                         
-            self.controlBtn.selected = !self.controlBtn.selected;
-            self.saveBackView.hidden = !self.controlBtn.selected;
+//            self.controlBtn.selected = !self.controlBtn.selected;
+//            self.saveBackView.hidden = !self.controlBtn.selected;
+            
+            [self.topCell clickSnapshotButton];
            
             break;
         case videoSateVideing://录像
@@ -376,14 +381,21 @@
 //        DLog(@"error: %@", error);
     }];
 }
+- (void)getPlayerCellSnapshot:(PlayerTableViewCell *_Nullable)cell with:(UIImage*_Nullable)image
+{
+    [self setupSaveView:image];
 
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __weak __typeof(&*self)weakSelf = self;
+        [weakSelf.saveBackView removeFromSuperview];
+    });
+}
 //图片，视频保存view
--(void)setupSaveView
+-(void)setupSaveView:(UIImage*)image
 {
     CGFloat ySpace = kScreenWidth * 0.68 - 43.5;
     
     _saveBackView = [UIView new];
-    _saveBackView.hidden = YES;
     _saveBackView.backgroundColor = UIColorFromRGB(0x000000, 0.37);
     [self.view addSubview:_saveBackView];
     [_saveBackView addHeight:45];
@@ -392,14 +404,14 @@
     
     
     UIImageView *saveImageView = [UIImageView new];
-    saveImageView.image = UIImageWithFileName(@"player_hoder_image");
+    saveImageView.image = image;
     [_saveBackView addSubview:saveImageView];
     [saveImageView alignTop:@"5" leading:@"10" bottom:@"5" trailing:nil toView:_saveBackView];
     [saveImageView addWidth:49];
     
     
     UILabel *subTitleLabel = [UILabel new];
-    subTitleLabel.text = @"视频已保存";
+    subTitleLabel.text = @"图片已保存";
     subTitleLabel.textColor = [UIColor whiteColor];
     subTitleLabel.font = [UIFont customFontWithSize:kFontSizeEleven];
     [_saveBackView addSubview:subTitleLabel];
@@ -714,6 +726,7 @@
     [super viewWillAppear:animated];
     [self.topCell play];
 }
+
 
 /*
 #pragma mark - Navigation

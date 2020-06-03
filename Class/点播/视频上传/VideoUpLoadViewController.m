@@ -144,7 +144,7 @@
     }
     
     NSString *string = [NSString stringWithFormat:@"%@.mp4",self.fileName];
-    [self uploadVideo:self.fileData withFileName:string];
+    [self getUploadVideoAddress:self.fileData withFileName:string];
 }
 #pragma mark - UITextFieldDelegate
 -(void)textFieldDidEndEditing:(UITextField *)textField
@@ -310,19 +310,45 @@
     
 }
 
-//上传视频
--(void)uploadVideo:(NSData*)value withFileName:(NSString*)fileName
+//获取上传视频地址
+-(void)getUploadVideoAddress:(NSData*)value withFileName:(NSString*)fileName
 {
     [_kHUDManager showActivityInView:nil withTitle:@"正在上传..."];
-    
+
+    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/vod/upload_addr";
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    //配置用户名 密码
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
+    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
+    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
+    // 设置Authorization的方法设置header
+    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+       
+    __unsafe_unretained typeof(self) weak_self = self;
+
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        [_kHUDManager hideAfter:0.1 onHide:nil];
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        
+        DLog(@"getSubcatalogList.Received: %@", responseObject);
+        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+        NSDictionary *dic = responseObject;
+        NSString *url = [dic objectForKey:@"url"];
+        NSString *token = [dic objectForKey:@"token"];
+        [weak_self uploadVideo:value withFileName:fileName withToken:token withUrl:url];
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error  ==  %@",error);
+        [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
+    }];
+}
+
+
+//上传视频
+-(void)uploadVideo:(NSData*)value withFileName:(NSString*)fileName withToken:(NSString*)token withUrl:(NSString*)url
+{
     //提交数据
-    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/vod/upload";
-    
-//    NSDictionary *finalParams = @{@"describe":self.msg_content};
-//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
-//                                                       options:0
-//                                                         error:nil];
-    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -340,7 +366,8 @@
     [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
-    [manager POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    
+    [manager POST:url parameters:@{@"token":token} constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         
         [formData appendPartWithFileData:value name:@"file" fileName:fileName mimeType:@"video/mp4"];
         

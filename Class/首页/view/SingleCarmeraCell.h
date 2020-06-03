@@ -10,9 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @class IndexDataModel;
+@class LivingModel;
 @interface SingleCarmeraCell : WWTableViewCell
 
 @property (nonatomic,copy) void(^moreClick)(void);
+@property (nonatomic,copy) void(^getSingleModelBackdata)(LivingModel *model);
 
 -(void)makeCellData:(IndexDataModel*)model;
 

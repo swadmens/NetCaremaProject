@@ -22,9 +22,11 @@
 
 #define KDeleteHeight 60
 
-@interface PlayerTableViewCell ()<UICollectionViewDelegate,UICollectionViewDataSource,PlayerControlDelegate,MyEquipmentsDelegate,PlayLocalVideoViewDelegate,PlayerTopCollectionDelegate>
+@interface PlayerTableViewCell ()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,PlayerControlDelegate,MyEquipmentsDelegate,PlayLocalVideoViewDelegate,PlayerTopCollectionDelegate>
 
 @property (nonatomic, strong) WWCollectionView *collectionView;
+@property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
+
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSArray *allDataArray;
 
@@ -49,6 +51,7 @@
 
 @property (nonatomic,assign) BOOL isPlayerVideo;
 @property (nonatomic,assign) NSInteger selectIndex;
+@property (nonatomic,assign) BOOL changeUI;
 
 
 @end
@@ -70,40 +73,6 @@
     }
     return _dataArray;
 }
-
-- (WWCollectionView *)collectionView
-{
-    if (!_collectionView) {
-        
-        UICollectionViewFlowLayout *flowlayout = [[UICollectionViewFlowLayout alloc] init];
-        //设置滚动方向
-        flowlayout.scrollDirection = UICollectionViewScrollDirectionVertical;
-        //左右间距
-        flowlayout.minimumLineSpacing = 1;
-        //上下间距
-        flowlayout.minimumInteritemSpacing = 1;
-        
-        CGFloat width = (kScreenWidth-1)/2;
-
-        flowlayout.itemSize = CGSizeMake(width, width*0.68);
-        flowlayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
-        
-        _collectionView = [[WWCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowlayout];
-        _collectionView.backgroundColor = [UIColor whiteColor];
-        // 注册
-        [_collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr]];
-        [_collectionView registerClass:[PlayerTopAddViewCell class] forCellWithReuseIdentifier:[PlayerTopAddViewCell getCellIDStr]];
-
-        
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        _collectionView.showsHorizontalScrollIndicator = NO;
-//        _collectionView.pagingEnabled = YES;
-//        _collectionView.backgroundColor = [UIColor redColor];
-    }
-    return _collectionView;
-}
-
 - (void)dosetup {
     [super dosetup];
     // Initialization code
@@ -111,9 +80,6 @@
     
     CGFloat height = kScreenWidth * 0.68 + 0.5;
     
-//    NSArray *arr = @[@"player_hoder_image",@"playback_back_image",@"mine_top_backimage",@"Player_add_video_image",];
-//    [self.dataArray addObjectsFromArray:arr];
-
     _playerView = [UIView new];
     _playerView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:_playerView];
@@ -121,6 +87,23 @@
     [_playerView addHeight:height];
     
     
+    _flowLayout = [UICollectionViewFlowLayout new];
+    //设置滚动方向
+    _flowLayout.scrollDirection = UICollectionViewScrollDirectionVertical;
+    //左右间距
+    _flowLayout.minimumLineSpacing = 1;
+    //上下间距
+    _flowLayout.minimumInteritemSpacing = 1;
+    _flowLayout.sectionInset = UIEdgeInsetsMake(0, 0, 0, 0);
+    _collectionView = [[WWCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:_flowLayout];
+    _collectionView.backgroundColor = [UIColor whiteColor];
+    // 注册
+    [_collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr]];
+    [_collectionView registerClass:[PlayerTopAddViewCell class] forCellWithReuseIdentifier:[PlayerTopAddViewCell getCellIDStr]];
+    _collectionView.delegate = self;
+    _collectionView.dataSource = self;
+    _collectionView.showsHorizontalScrollIndicator = NO;
+    _collectionView.scrollEnabled = NO;
     [_playerView addSubview:self.collectionView];
     [self.collectionView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:_playerView];
 
@@ -128,67 +111,15 @@
     [self.collectionView addGestureRecognizer:longPress];
     
     self.showDeleteView = YES;
-    
     self.selectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     
-    //接收通知
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(uploadInfoNotica:) name:@"gonggeChangeInfomation" object:nil];
-    
 }
-//接收通知并操作
-- (void)uploadInfoNotica:(NSNotification *)notification
+-(void)makeCellScale:(BOOL)scale
 {
-    if (_isPlayerVideo) {
-        [[NSNotificationCenter defaultCenter] removeObserver:@"gonggeChangeInfomation"];
-        return;
-    }
- 
-    NSDictionary *dicInfo = notification.userInfo;
-    BOOL value = [[dicInfo objectForKey:@"value"] boolValue];
-
-    CGFloat totalHeight = kScreenWidth * 0.68 + 0.5;
-    CGFloat width = (kScreenWidth-1)/2;
-    CGFloat height = width * 0.68;
-
-    CGFloat scaleXValue = kScreenWidth/width;
-    CGFloat scaleYValue = totalHeight/height;
-
-    CGFloat xSpacing;
-    CGFloat ySpacing;
-
-    if (self.selectIndexPath.row == 0) {
-        xSpacing = width/4+0.25;
-        ySpacing = width*0.68/4;
-    }else if (self.selectIndexPath.row == 1){
-        xSpacing = -width/4;
-        ySpacing = width*0.68/4;
-    }else if (self.selectIndexPath.row == 2){
-        xSpacing = width/4+0.25;
-        ySpacing = -width*0.68/4;
-    }else{
-        xSpacing = -width/4;
-        ySpacing = -width*0.68/4;
-    }
-
-    for (int i = 0; i < 4; i++) {
-        NSIndexPath *indexPaths = [NSIndexPath indexPathForRow:i inSection:0];
-        PlayerTopCollectionViewCell *cells = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:indexPaths];
-        if (value) {
-            if (i == self.selectIndexPath.row) {
-                cells.transform = CGAffineTransformMakeScale(scaleXValue, scaleYValue);
-                cells.transform = CGAffineTransformTranslate(cells.transform, xSpacing, ySpacing);
-
-                cells.selected = NO;
-
-            }else{
-                cells.transform = CGAffineTransformMakeScale(0.01, 0.01);
-            }
-        }else{
-            cells.transform = CGAffineTransformIdentity;
-            [self.collectionView selectItemAtIndexPath:self.selectIndexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-        }
-    }
+    self.changeUI = scale;
+    [self.collectionView reloadData];
 }
+
 -(void)setIsLiving:(BOOL)isLiving
 {
     self.isPlayerVideo = !isLiving;
@@ -213,6 +144,11 @@
         cell.delegate = self;
         
         [cell makeCellData:obj];
+        
+        if (indexPath == self.selectIndexPath && self.changeUI) {
+            [collectionView scrollToItemAtIndexPath:self.selectIndexPath atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+        }
+        
         return cell;
     }
 
@@ -290,10 +226,9 @@
                 [self hiddenDeleteViewAnimation];
                 if (point.y  <  50) {
                     //删除
-                    [self.dataArray removeObjectAtIndex:self.moveIndexPath.row];
+                    [self.dataArray replaceObjectAtIndex:self.moveIndexPath.row withObject:@"Player_add_video_image"];
                     PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.moveIndexPath];
                     [selectCell stop];
-                    [self.dataArray addObject:@"Player_add_video_image"];
                     [self.collectionView reloadData];
                 }
             }
@@ -309,6 +244,21 @@
         }
       }
 }
+#pragma mark - UICollectionViewDelegateFlowLayout
+-(CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat totalHeight = kScreenWidth * 0.68 + 0.5;
+    CGFloat width = (kScreenWidth-1)/2;
+    
+    if (indexPath == self.selectIndexPath && self.changeUI) {
+        return CGSizeMake(kScreenWidth, totalHeight);
+    }else if (indexPath != self.selectIndexPath && self.changeUI){
+        return CGSizeMake(10, 10);
+    }else{
+        return CGSizeMake(width, width*0.68);
+    }
+}
+
  
 #pragma mark - 顶部删除 视图
 - (UIView *)deleteView{
@@ -426,6 +376,12 @@
 {
     [self.delegate tableViewCellExitFullScreen:self];
 }
+-(void)getLocalViewSnap:(PlayLocalVideoView *)view with:(UIImage *)image
+{
+    if ([self.delegate respondsToSelector:@selector(getPlayerCellSnapshot:with:)]) {
+        [self.delegate getPlayerCellSnapshot:self with:image];
+    }
+}
 
 #pragma mark - PlayerTopCollectionDelegate
 - (void)playerViewCellEnterFullScreen:(PlayerTopCollectionViewCell *_Nullable)cell
@@ -449,8 +405,9 @@
     for (PlayerTopCollectionViewCell *cell in array) {
         [cell stop];
     }
-    [self.localVideoView stop];
-    
+    if (self.localVideoView !=nil) {
+        [self.localVideoView stop];
+    }
 }
 -(void)play
 {
@@ -458,7 +415,9 @@
     for (PlayerTopCollectionViewCell *cell in array) {
         [cell play];
     }
-    [self.localVideoView play];
+    if (self.localVideoView !=nil) {
+        [self.localVideoView play];
+    }
 }
 
 -(void)makePlayerViewFullScreen
@@ -466,9 +425,33 @@
     PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
     NSArray *array = [self.collectionView visibleCells];
     for (PlayerTopCollectionViewCell *cell in array) {
-        
         [cell makePlayerViewFullScreen:cell == selectCell];
+    }
+    
+    if (self.localVideoView !=nil) {
+           [_localVideoView makePlayerViewFullScreen];
+       }
+}
+-(void)clickSnapshotButton
+{
+    PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
+    NSArray *array = [self.collectionView visibleCells];
+    for (PlayerTopCollectionViewCell *cell in array) {
         
+        if (cell == selectCell) {
+            [cell clickSnapshotButton];
+        }
+    }
+    
+    if (self.localVideoView !=nil) {
+        [_localVideoView clickSnapshotButton];
+    }
+    
+}
+-(void)getTopCellSnapshot:(PlayerTopCollectionViewCell *)cell with:(UIImage *)image
+{
+    if ([self.delegate respondsToSelector:@selector(getPlayerCellSnapshot:with:)]) {
+        [self.delegate getPlayerCellSnapshot:self with:image];
     }
 }
 

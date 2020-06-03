@@ -40,7 +40,9 @@
 
 @property (nonatomic,assign) BOOL isLogion;//是否登录
 @property (nonatomic,strong) MyEquipmentsModel *selectModel;
-@property (nonatomic,strong) NSArray *modelArray;
+
+//直播数据源
+@property (nonatomic,strong) NSMutableDictionary *modelDic;
 
 
 @end
@@ -53,6 +55,13 @@
         _dataArray = [NSMutableArray array];
     }
     return _dataArray;
+}
+-(NSMutableDictionary*)modelDic
+{
+    if (!_modelDic) {
+        _modelDic = [NSMutableDictionary dictionary];
+    }
+    return _modelDic;
 }
 - (void)setupTableView
 {
@@ -172,9 +181,9 @@
         
         [cell makeCellData:model];
         
-        cell.moreDealClick = ^(NSInteger selectRow) {
-            [self collectionSelect:indexPath.row];
+        cell.moreDealClick = ^(NSInteger selectRow, BOOL offline) {
             self.selectModel = [model.equipment_nums objectAtIndex:selectRow];
+            [self moreDealwith:offline];
         };
         
         cell.rightBtnClick = ^{
@@ -189,7 +198,9 @@
         };
         
         cell.getModelArrayBackdata = ^(NSArray * _Nonnull array) {
-            self.modelArray = [NSArray arrayWithArray:array];
+//            self.modelArray = [NSArray arrayWithArray:array];
+            [self.modelDic removeObjectForKey:@(indexPath.row)];
+            [self.modelDic setObject:array forKey:@(indexPath.row)];
         };
         
         return cell;
@@ -200,7 +211,12 @@
         [cell makeCellData:model];
         
         cell.moreClick = ^{
-            [self collectionSelect:indexPath.row];
+            [self moreDealwith:[model.equipment_states isEqualToString:@"离线"]];
+        };
+        cell.getSingleModelBackdata = ^(LivingModel * _Nonnull model) {
+            NSArray *arr = [NSArray arrayWithObjects:model, nil];
+            [self.modelDic removeObjectForKey:@(indexPath.row)];
+            [self.modelDic setObject:arr forKey:@(indexPath.row)];
         };
         
         
@@ -216,7 +232,7 @@
 //    if (indexPath.row > 0) {
     SuperPlayerViewController *vc = [SuperPlayerViewController new];
     vc.hidesBottomBarWhenPushed = YES;
-    vc.allDataArray = [NSArray arrayWithArray:self.modelArray];
+    vc.allDataArray = [NSArray arrayWithArray:[self.modelDic objectForKey:@(indexPath.row)]];
     vc.isLiving = YES;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
@@ -375,32 +391,7 @@
 #pragma IndexTopDelegate
 -(void)collectionSelect:(NSInteger)index
 {
-    NSArray *arr = @[@{@"title":@"消息设置",@"image":@"index_message_image"},
-                    @{@"title":@"全部录像",@"image":@"index_all_video_image"},
-                    @{@"title":@"设备共享",@"image":@"index_equiment_shara_image"},
-                    @{@"title":@"设备详情",@"image":@"index_channel_detail_image"}];
-    NSArray *arr2 = @[@{@"title":@"全部录像",@"image":@"index_all_video_image"},
-                    @{@"title":@"通道详情",@"image":@"index_channel_detail_image"}];
     
-    NSString *ClientId = [WWPublicMethod isStringEmptyText:self.selectModel.ClientId]?self.selectModel.ClientId:@"";
-    NSString *DeviceId = [WWPublicMethod isStringEmptyText:self.selectModel.DeviceId]?self.selectModel.DeviceId:@"";
-    NSString *CameraId = [WWPublicMethod isStringEmptyText:self.selectModel.CameraId]?self.selectModel.CameraId:@"";
-    
-    NSString *device_id = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
-    
-    CGFloat height;
-    if (index == 1) {
-        [self.bottomView makeViewData:arr2 with:device_id];
-        height = arr2.count * 35 + 50;
-    }else{
-        [self.bottomView makeViewData:arr with:device_id];
-        height = arr.count * 35 + 50;
-    }
-    
-   [UIView animateWithDuration:0.3 animations:^{
-       self.bottomView.transform = CGAffineTransformMakeTranslation(0, -height);
-       self.coverView.hidden = NO;
-   }];
     
 }
 -(void)searchValue:(NSString *)value
@@ -473,7 +464,7 @@
 
 }
 #pragma LocalVideoDelegate
--(void)selectRowData:(NSString *)value
+-(void)selectRowData:(NSInteger)value
 {
     
 }
@@ -485,6 +476,36 @@
     [self.dataArray replaceObjectAtIndex:index withObject:model];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     
+}
+//更多操作
+-(void)moreDealwith:(BOOL)offline
+{
+    NSArray *arr = @[@{@"title":@"消息设置",@"image":@"index_message_image"},
+                     @{@"title":@"全部录像",@"image":@"index_all_video_image"},
+                     @{@"title":@"设备共享",@"image":@"index_equiment_shara_image"},
+                     @{@"title":@"设备详情",@"image":@"index_channel_detail_image"}];
+     NSArray *arr2 = @[@{@"title":@"全部录像",@"image":@"index_all_video_image"},
+                     @{@"title":@"通道详情",@"image":@"index_channel_detail_image"}];
+     
+     NSString *ClientId = [WWPublicMethod isStringEmptyText:self.selectModel.ClientId]?self.selectModel.ClientId:@"";
+     NSString *DeviceId = [WWPublicMethod isStringEmptyText:self.selectModel.DeviceId]?self.selectModel.DeviceId:@"";
+     NSString *CameraId = [WWPublicMethod isStringEmptyText:self.selectModel.CameraId]?self.selectModel.CameraId:@"";
+     
+     NSString *device_id = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
+     
+     CGFloat height;
+     if (offline) {
+         [self.bottomView makeViewData:arr2 with:device_id];
+         height = arr2.count * 35 + 50;
+     }else{
+         [self.bottomView makeViewData:arr with:device_id];
+         height = arr.count * 35 + 50;
+     }
+     
+    [UIView animateWithDuration:0.3 animations:^{
+        self.bottomView.transform = CGAffineTransformMakeTranslation(0, -height);
+        self.coverView.hidden = NO;
+    }];
 }
 
 

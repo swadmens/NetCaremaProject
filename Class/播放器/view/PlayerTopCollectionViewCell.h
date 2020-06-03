@@ -19,6 +19,7 @@
 
 - (void)playerViewCellWillPlay:(PlayerTopCollectionViewCell *_Nullable)cell;
 
+- (void)getTopCellSnapshot:(PlayerTopCollectionViewCell *_Nullable)cell with:(UIImage*_Nullable)image;
 
 @end
 
@@ -41,6 +42,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)configureVideo:(BOOL)enableRender;
 
 -(void)makePlayerViewFullScreen:(BOOL)selected;
+
+-(void)clickSnapshotButton;
 
 @end
 

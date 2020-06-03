@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)tableViewCellExitFullScreen:(PlayLocalVideoView *)view;
 
+- (void)getLocalViewSnap:(PlayLocalVideoView *)view with:(UIImage*)image;
+
 @end
 
 
@@ -30,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) DemandModel *model;
 - (void)stop;
 - (void)play;
+-(void)clickSnapshotButton;
+-(void)makePlayerViewFullScreen;
 
 @end
 

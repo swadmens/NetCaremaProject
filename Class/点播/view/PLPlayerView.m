@@ -523,8 +523,12 @@ UIGestureRecognizerDelegate
         
         [wself.player getScreenShotWithCompletionHandler:^(UIImage * _Nullable image) {
             if (image) {
-                [wself showTip:@"拍照成功"];
+//                [wself showTip:@"拍照成功"];
+                if ([self.delegate respondsToSelector:@selector(getSnapshot:with:)]) {
+                       [self.delegate getSnapshot:self with:image];
+                   }
                 UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
+               
             }
         }];
     }];
@@ -629,6 +633,11 @@ UIGestureRecognizerDelegate
                [self.delegate playerViewExitFullScreen:self];
                if (![self.gestureRecognizers containsObject:self.tapGesture]) {
                    [self addGestureRecognizer:self.tapGesture];
+               }
+               if (_isLiving) {
+                   [self hideBottomBar];
+                   self.centerPauseButton.hidden = YES;
+                   self.centerPlayButton.hidden = YES;
                }
            }
            [UIView animateWithDuration:.3 animations:^{
@@ -749,7 +758,10 @@ UIGestureRecognizerDelegate
     
     _slider.hidden = self.isLiving;
     _bufferingView.hidden = _isLiving;
-    
+//    _playTimeLabel.hidden = self.isLiving && !_isFullScreen;
+//    _durationLabel.hidden = self.isLiving && !_isFullScreen;
+//    _enterFullScreenButton.hidden = self.isLiving && !_isFullScreen;
+//    self.bottomBarView.hidden = self.isLiving && !_isFullScreen;
 }
 
 - (void)unsetupPlayer {
