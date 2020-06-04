@@ -41,7 +41,8 @@
     
     NSArray *arr = @[@{@"icon":@"mine_system_image",@"title":@"用户设置",@"describe":@""},
                      @{@"icon":@"mine_download_image",@"title":@"我的下载",@"describe":@""},
-                     @{@"icon":@"mine_download_image",@"title":@"我的消息",@"describe":@""},];
+//                     @{@"icon":@"mine_download_image",@"title":@"我的消息",@"describe":@""},
+    ];
     [self.dataArray addObjectsFromArray:arr];
         
     [self creadTopView];

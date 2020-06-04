@@ -175,7 +175,7 @@
     
     
     UIButton *addBtn = [UIButton new];
-    [addBtn setImage:UIImageWithFileName(@"group_add_image") forState:UIControlStateNormal];
+    [addBtn setImage:UIImageWithFileName(@"group_remove_image") forState:UIControlStateNormal];
     [addBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
     addBtn.tag = section;
     [headerView addSubview:addBtn];

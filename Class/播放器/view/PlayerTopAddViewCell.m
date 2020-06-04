@@ -58,6 +58,10 @@
 {
     
 }
+- (void)changeVolume:(float)volume
+{
+    
+}
 -(void)makeCellData:(NSString *)icon
 {
     _titleImageView.image = UIImageWithFileName(icon);

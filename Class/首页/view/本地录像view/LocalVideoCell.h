@@ -13,6 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 @class CarmeaVideosModel;
 @interface LocalVideoCell : WWTableViewCell
 
+@property (nonatomic,assign) BOOL isEdit;
+
+@property (nonatomic,strong) UIButton *selectBtn;
+
 -(void)makeCellData:(CarmeaVideosModel*)model;
 
 @end

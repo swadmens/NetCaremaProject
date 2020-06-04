@@ -109,6 +109,10 @@
     [self.playerView resume];
     self.isPlaying = YES;
 }
+- (void)changeVolume:(float)volume
+{
+    [self.playerView changeVolume:volume];
+}
 
 - (void)configureVideo:(BOOL)enableRender {
     [self.playerView configureVideo:enableRender];

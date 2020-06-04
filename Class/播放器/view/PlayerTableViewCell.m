@@ -454,6 +454,20 @@
         [self.delegate getPlayerCellSnapshot:self with:image];
     }
 }
+- (void)changeVolume:(float)volume
+{
+    PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
+    NSArray *array = [self.collectionView visibleCells];
+    for (PlayerTopCollectionViewCell *cell in array) {
+        
+        if (cell == selectCell) {
+            [cell changeVolume:volume];
+        }
+    }
+    if (self.localVideoView !=nil) {
+        [_localVideoView changeVolume:volume];
+    }
+}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

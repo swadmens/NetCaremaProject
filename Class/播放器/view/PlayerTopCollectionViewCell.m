@@ -169,6 +169,10 @@
         [self.delegate getTopCellSnapshot:self with:image];
     }
 }
+- (void)changeVolume:(float)volume
+{
+    [self.playerView changeVolume:volume];
+}
 -(void)makeCellData:(id)obj
 {
     LivingModel *model = obj;

@@ -79,7 +79,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"866262045665618";
+    self.title = self.title_value;
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     
@@ -159,10 +159,11 @@
             
             cell.allBtn = ^{
                  
+                LivingModel *lmd = [self.allDataArray objectAtIndex:0];
                 LocalVideoViewController *vc = [LocalVideoViewController new];
                 vc.delegate = self;
                 vc.isFromIndex = NO;
-                vc.dataArray = [NSArray arrayWithArray:weakSelf.localVideosArray];
+                vc.device_id = lmd.session_id;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
                
             };
@@ -207,10 +208,16 @@
             break;
         case videoSateVoice://声音控制
             
+            self.controlBtn.selected = !self.controlBtn.selected;
+            float volume = self.controlBtn.selected?0.01:1.0;
             
+            [self.topCell changeVolume:volume];
+
             break;
         case videoSateGongge://宫格变化
-            self.controlBtn.selected = !self.controlBtn.selected;
+            if (_isLiving) {
+                self.controlBtn.selected = !self.controlBtn.selected;
+            }
             [self.topCell makeCellScale:self.controlBtn.selected];
             
             break;

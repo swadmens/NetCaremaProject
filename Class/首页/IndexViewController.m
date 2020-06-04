@@ -225,7 +225,7 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
 //    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
     
     
@@ -234,6 +234,7 @@
     vc.hidesBottomBarWhenPushed = YES;
     vc.allDataArray = [NSArray arrayWithArray:[self.modelDic objectForKey:@(indexPath.row)]];
     vc.isLiving = YES;
+    vc.title_value = model.equipment_name;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 //    }
@@ -414,11 +415,12 @@
 }
 -(void)allPlayerBtn
 {
-//    IndexDataModel *model = [self.dataArray objectAtIndex:0];
+    IndexDataModel *model = [self.dataArray objectAtIndex:0];
     
     SuperPlayerViewController *vc = [SuperPlayerViewController new];
     vc.hidesBottomBarWhenPushed = YES;
     vc.isLiving = YES;
+    vc.title_value = model.equipment_name;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }

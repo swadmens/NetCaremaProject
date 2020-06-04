@@ -46,6 +46,8 @@
 
 -(void)clickSnapshotButton;
 
+- (void)changeVolume:(float)volume;
+
 @end
 
 

@@ -34,6 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)play;
 -(void)clickSnapshotButton;
 -(void)makePlayerViewFullScreen;
+- (void)changeVolume:(float)volume;
+
 
 @end
 

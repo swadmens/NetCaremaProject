@@ -238,6 +238,7 @@
 //        vc.allDataArray = [NSArray arrayWithArray:self.dataArray];
         vc.allDataArray = [NSArray arrayWithObjects:model, nil];
         vc.isLiving = YES;
+        vc.title_value = model.name;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
         

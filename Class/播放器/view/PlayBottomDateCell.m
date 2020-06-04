@@ -50,6 +50,19 @@
     
     
     
+    UIImageView *leftArrow = [UIImageView new];
+    leftArrow.image = UIImageWithFileName(@"local_video_left_arrow");
+    [backView addSubview:leftArrow];
+    [leftArrow yCenterToView:backView];
+    [leftArrow leftToView:backView withSpace:15];
+   
+   
+    UIImageView *rightArrow = [UIImageView new];
+    rightArrow.image = UIImageWithFileName(@"local_video_right_arrow");
+    [backView addSubview:rightArrow];
+    [rightArrow yCenterToView:backView];
+    [rightArrow rightToView:backView withSpace:15];
+    
 }
 -(void)tapBackViewClick:(UITapGestureRecognizer*)tp
 {

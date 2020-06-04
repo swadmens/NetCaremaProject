@@ -412,7 +412,10 @@ UIGestureRecognizerDelegate
         }
     }
 }
-
+-(void)changeVolume:(float)volume
+{
+    [self.player setVolume:volume];
+}
 - (void)singleTap:(UIGestureRecognizer *)gesture {
     
     // 如果还木有初始化，直接初始化播放

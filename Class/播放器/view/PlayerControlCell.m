@@ -49,7 +49,7 @@
     
     _gongGeBtn = [UIButton new];
     [_gongGeBtn setImage:UIImageWithFileName(@"player_gongge_image") forState:UIControlStateNormal];
-    [_gongGeBtn setImage:UIImageWithFileName(@"player_full_image") forState:UIControlStateSelected];
+    [_gongGeBtn setImage:UIImageWithFileName(@"player_gongge_select_image") forState:UIControlStateSelected];
     [topView addSubview:_gongGeBtn];
     [_gongGeBtn xCenterToView:topView];
     [_gongGeBtn yCenterToView:topView];
@@ -60,6 +60,7 @@
     
     _voiceBtn = [UIButton new];
     [_voiceBtn setImage:UIImageWithFileName(@"player_voice_image") forState:UIControlStateNormal];
+    [_voiceBtn setImage:UIImageWithFileName(@"player_voice_select_image") forState:UIControlStateSelected];
     [topView addSubview:_voiceBtn];
     [_voiceBtn yCenterToView:topView];
     [_voiceBtn addCenterX:-space toView:topView];
@@ -88,7 +89,8 @@
     [_fullBtn addHeight:btnWidth];
     
     _playerBtn = [UIButton new];
-    [_playerBtn setImage:UIImageWithFileName(@"player_full_image") forState:UIControlStateNormal];
+    [_playerBtn setImage:UIImageWithFileName(@"player_play_image") forState:UIControlStateNormal];
+    [_playerBtn setImage:UIImageWithFileName(@"player_play_select_image") forState:UIControlStateSelected];
     [topView addSubview:_playerBtn];
     [_playerBtn yCenterToView:topView];
     [_playerBtn addCenterX:-space toView:_voiceBtn];
@@ -139,7 +141,8 @@
     
     if (isLiving) {
         _controlBtn.hidden = NO;
-        
+        _gongGeBtn.enabled = YES;
+
         [_videoBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
             make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter);
             make.bottomEdge.lgx_equalTo(self.contentView.lgx_bottomEdge).lgx_floatOffset(-15);
@@ -152,6 +155,8 @@
         
     }else{
         _controlBtn.hidden = YES;
+        _gongGeBtn.selected = YES;
+        _gongGeBtn.enabled = NO;
         
         [_videoBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
             make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter).lgx_floatOffset(40);

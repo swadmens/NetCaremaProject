@@ -231,6 +231,7 @@
                     [[GCDQueue mainQueue] queueBlock:^{
 //                        weak_self.showImageView.image = [UIImage imageWithColor:kColorThirdTextColor];
                         weak_self.timeLabel.text = weak_self.model.updateAt;
+                        weak_self.titleLabel.text = weak_self.model.name;
                         weak_self.isLiving = NO;
                         weak_self.coverView.hidden = NO;
                     }];
