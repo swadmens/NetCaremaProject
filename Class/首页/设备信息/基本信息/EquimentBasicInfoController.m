@@ -145,7 +145,7 @@
                                   };
         
     //提交数据
-    NSString *url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/inventory/managedObjects/%@",[self.dicData objectForKey:@"id"]];
+    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/inventory/managedObjects/%@",[self.dicData objectForKey:@"id"]];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0

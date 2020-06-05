@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *nvr_channel;
 
 @property (nonatomic,assign) BOOL isLiving;//是否是直播
-@property (nonatomic,strong) NSString *video_id;
 @property (nonatomic,strong) NSString *title_value;
 @property (nonatomic,strong) DemandModel *model;
 @property (nonatomic,strong) CarmeaVideosModel *carmeaModel;

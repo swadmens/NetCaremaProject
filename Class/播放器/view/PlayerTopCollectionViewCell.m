@@ -183,6 +183,12 @@
     }else{
         _coverView.hidden = YES;
         _titleImageView.hidden = YES;
+        
+        
+        [self.playerView stop];
+        [self.playerView removeFromSuperview];
+
+        
         NSDictionary *dic = @{ @"name":model.name,
                                 @"snapUrl":model.url,
                                 @"videoUrl":model.RTMP,

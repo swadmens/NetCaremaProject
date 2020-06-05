@@ -421,7 +421,7 @@
     }
     
     //提交数据
-    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/vod/list";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/list";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mutData
                                                        options:0
@@ -548,7 +548,7 @@
 -(void)getSubcatalogList
 {
         
-    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/vod/subcataloglist";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/subcataloglist";
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
     NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];

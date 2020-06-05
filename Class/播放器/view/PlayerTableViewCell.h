@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @class PlayerTableViewCell;
+@class LivingModel;
 @protocol PlayerTableViewCellDelegate <NSObject>
 
 - (void)tableViewWillPlay:(PlayerTableViewCell *)cell;
@@ -19,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)tableViewCellExitFullScreen:(PlayerTableViewCell *)cell;
 
 - (void)getPlayerCellSnapshot:(PlayerTableViewCell *_Nullable)cell with:(UIImage*_Nullable)image;
+
+- (void)selectCellCarmera:(PlayerTableViewCell *_Nullable)cell withData:(LivingModel*)model;
 
 @end
 

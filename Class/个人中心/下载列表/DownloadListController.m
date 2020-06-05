@@ -260,9 +260,9 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     NSString *urlString;
     if (_isRecord) {
         //如果是录像文件
-        urlString = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/record/download/%@/%@",self.downLoad_id,start_time];
+        urlString = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/record/download/%@/%@",self.downLoad_id,start_time];
     }else{
-        urlString = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/vod/download/%@",start_time];
+        urlString = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/vod/download/%@",start_time];
     }
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];

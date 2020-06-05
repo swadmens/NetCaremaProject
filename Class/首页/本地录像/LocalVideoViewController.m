@@ -25,7 +25,7 @@
 }
 @property (nonatomic,strong) WWTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
-@property(nonatomic,assign) NSInteger page;
+//@property(nonatomic,assign) NSInteger page;
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
 
@@ -83,7 +83,6 @@
     [rightArrow leftToView:_dateButton];
     
 
-    
     self.tableView = [[WWTableView alloc] init];
     self.tableView.backgroundColor = kColorBackgroundColor;
     [self.view addSubview:self.tableView];
@@ -93,26 +92,6 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[LocalVideoCell class] forCellReuseIdentifier:[LocalVideoCell getCellIDStr]];
- 
-    self.tableView.refreshEnable = YES;
-    self.tableView.loadingMoreEnable = NO;
-    __unsafe_unretained typeof(self) weak_self = self;
-    self.tableView.actionHandle = ^(WWScrollingState state){
-        switch (state) {
-            case WWScrollingStateRefreshing:
-            {
-                [weak_self loadNewData];
-            }
-                break;
-            case WWScrollingStateLoadingMore:
-            {
-                [weak_self loadMoreData];
-            }
-                break;
-            default:
-                break;
-        }
-    };
 }
 - (void)setupNoDataView
 {
@@ -132,15 +111,14 @@
     self.date_value = [_kDatePicker getCurrentTimes:@"YYYYMMdd"];
     self.default_date = [_kDatePicker getCurrentTimes:@"YYYY-MM-dd"];
     
-    self.page = 1;
-    [self loadNewData];
     
+    [self startLoadDataRequest];
     
     self.editView = [UIView new];
     [self.editView addTopLineByColor:kColorLineColor];
     self.editView.backgroundColor = [UIColor whiteColor];
     [[UIApplication sharedApplication].keyWindow addSubview:self.editView];
-    self.editView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, 48);
+    self.editView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, 45);
     
     LGXVerticalButton *deleteBtn = [LGXVerticalButton new];
     [deleteBtn setImage:UIImageWithFileName(@"video_delete_image") forState:UIControlStateNormal];
@@ -200,6 +178,11 @@
     }
     [UIView animateWithDuration:0.3 animations:^{
         self.editView.transform = CGAffineTransformMakeTranslation(0, -48);
+//        self.tableView.transform = CGAffineTransformMakeTranslation(0, -48);
+    }];
+    
+    [self.tableView lgx_remakeConstraints:^(LGXLayoutMaker *make) {
+        make.bottomEdge.lgx_equalTo(self.view.lgx_bottomEdge).lgx_floatOffset(-45);
     }];
     
 }
@@ -217,8 +200,12 @@
     }
     [UIView animateWithDuration:0.3 animations:^{
         self.editView.transform = CGAffineTransformIdentity;
+//        self.tableView.transform = CGAffineTransformIdentity;
     }];
-   
+    
+   [self.tableView lgx_remakeConstraints:^(LGXLayoutMaker *make) {
+       make.bottomEdge.lgx_equalTo(self.view.lgx_bottomEdge);
+   }];
 }
 -(void)action_goback
 {
@@ -281,19 +268,6 @@
         }
     }
 }
-- (void)loadNewData
-{
-    self.page = 1;
-    [self loadData];
-}
-- (void)loadMoreData
-{
-    [self loadData];
-}
--(void)loadData
-{
-    [self startLoadDataRequest];
-}
 - (void)startLoadDataRequest
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
@@ -302,17 +276,13 @@
         return;
     }
     
-    NSString *start = [NSString stringWithFormat:@"%ld",(self.page - 1)*10];
-
     NSDictionary *finalParams = @{
                                   @"id":self.device_id,
                                   @"day":self.date_value,
-                                  @"start":start,
-                                  @"limit":@"10",
                                   };
         
     //提交数据
-    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/record/query_records";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/record/query_records";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
@@ -372,8 +342,6 @@
     _isHadFirst = YES;
     [_kHUDManager hideAfter:0.1 onHide:nil];
     [_kHUDManager showMsgInView:nil withTitle:@"请求失败" isSuccess:NO];
-    self.tableView.loadingMoreEnable = NO;
-    [self.tableView stopLoading];
     [self changeNoDataViewHiddenStatus];
 }
 - (void)handleObject:(id)obj
@@ -382,60 +350,34 @@
     [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
+        
+        NSString *monthsKey = [self.date_value substringWithRange:NSMakeRange(0, 6)];
+        NSString *dayKey = self.date_value;
+        
         NSDictionary *data = [obj objectForKey:@"data"];
-        NSArray *months = [data objectForKey:@"months"];
-        
+        NSDictionary *monthsDic = (NSDictionary*)[data objectForKey:monthsKey];
+        NSArray *dayDataArr = [monthsDic objectForKey:dayKey];
         NSMutableArray *tempArray = [NSMutableArray array];
-
-        [months enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            
-            NSString *keys = obj;
-            NSDictionary *mothsDic = [data objectForKey:keys];
-            NSArray *days = [mothsDic objectForKey:@"days"];
-            NSMutableArray *daysMutArray = [NSMutableArray new];
-            [days enumerateObjectsUsingBlock:^(id  _Nonnull obj2, NSUInteger idx2, BOOL * _Nonnull stop2) {
-                NSString *dayKeys = obj2;
-                NSArray *allData = [mothsDic objectForKey:dayKeys];
-                [daysMutArray addObjectsFromArray:allData];
-            }];
-            
-            [tempArray addObjectsFromArray:daysMutArray];
-        }];
         
-        if (weak_self.page == 1) {
-            [weak_self.dataArray removeAllObjects];
-        }
-        NSMutableArray *modelArray = [NSMutableArray new];
+        [self.dataArray removeAllObjects];
         
-        
-        [tempArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [dayDataArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             
-            NSString *originalSnap = [dic objectForKey:@"snap"];
-            NSString *start_time = [dic objectForKey:@"start_time"];
-
-            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-            NSString *startTime = [mutDic objectForKey:@"start_time"];
-            NSString *snap = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/record/getsnap?id=%@&period=%@",self.device_id,startTime];
-            if (![WWPublicMethod isStringEmptyText:originalSnap]) {
-                [mutDic setValue:snap forKey:@"snap"];
-                [self getRecordCoverPhoto:start_time withData:idx];
-            }
-            CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
-            [modelArray addObject:model];
+//            NSString *originalSnap = [dic objectForKey:@"snap"];
+//            NSString *start_time = [dic objectForKey:@"start_time"];
+//
+//            if (![WWPublicMethod isStringEmptyText:originalSnap]) {
+//                [self getRecordCoverPhoto:start_time withData:idx];
+//            }
+            CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:dic];
+            [tempArray addObject:model];
         }];
-        [weak_self.dataArray addObjectsFromArray:modelArray];
-
+        [self.dataArray addObjectsFromArray:tempArray];
+        
         [[GCDQueue mainQueue] queueBlock:^{
 
             [weak_self.tableView reloadData];
-            if (tempArray.count >0) {
-                weak_self.page++;
-                weak_self.tableView.loadingMoreEnable = YES;
-            } else {
-                weak_self.tableView.loadingMoreEnable = NO;
-            }
-            [weak_self.tableView stopLoading];
             [weak_self changeNoDataViewHiddenStatus];
         }];
     }];
@@ -461,7 +403,7 @@
 //获取录像封面快照
 -(void)getRecordCoverPhoto:(NSString*)period withData:(NSInteger)indexInteger
 {
-    NSString *url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.device_id,period];
+    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.device_id,period];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
@@ -522,7 +464,7 @@
                                       @"period": startime,
                                       };
     //提交数据
-    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/record/remove";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/record/remove";
         
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
@@ -591,6 +533,9 @@
 //时间选择器
 -(void)chooseDateClick
 {
+    if (self.isEdit) {
+        [self exitTheEditStates];
+    }
     [CGXPickerView showDatePickerWithTitle:@"选择日期" DateType:UIDatePickerModeDate DefaultSelValue:self.default_date MinDateStr:nil MaxDateStr:[_kDatePicker getCurrentTimes:@"YYYY-MM-dd"] IsAutoSelect:NO Manager:nil ResultBlock:^(NSString *selectValue) {
         DLog(@"选择的日期 ==  %@",selectValue);
         self.default_date = selectValue;
@@ -601,7 +546,7 @@
         
         [self.dateButton setTitle:btn_title forState:UIControlStateNormal];
         
-        [self loadNewData];
+        [self startLoadDataRequest];
     }];
     
 }

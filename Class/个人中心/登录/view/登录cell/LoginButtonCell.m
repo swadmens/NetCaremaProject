@@ -20,7 +20,7 @@
 -(void)dosetup
 {
     [super dosetup];
-    self.contentView.backgroundColor = [UIColor whiteColor];
+    self.contentView.backgroundColor = kColorBackgroundColor;
     
     
     _loginButton = [UIButton new];

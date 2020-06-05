@@ -135,6 +135,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     id obj = [self.dataArray objectAtIndex:indexPath.row];
+
     if ([obj isKindOfClass:[NSString class]]) {
         PlayerTopAddViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PlayerTopAddViewCell getCellIDStr] forIndexPath:indexPath];
         [cell makeCellData:obj];
@@ -158,9 +159,8 @@
 {
     self.selectIndexPath = indexPath;
     
-    [[NSNotificationCenter defaultCenter] removeObserver:@"FullScreebInfomation"];
-
     id obj = [self.dataArray objectAtIndex:indexPath.row];
+    
     if ([obj isKindOfClass:[NSString class]]) {
         self.selectIndex = indexPath.row;
         MyEquipmentsViewController *mvc = [MyEquipmentsViewController new];
@@ -169,6 +169,9 @@
         [[SuperPlayerViewController viewController:self].navigationController pushViewController:mvc animated:YES];
     }else{
         self.playingCell = (PlayerTopCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+        if ([self.delegate respondsToSelector:@selector(selectCellCarmera:withData:)]) {
+            [self.delegate selectCellCarmera:self withData:obj];
+        }
     }
 }
 
@@ -181,8 +184,17 @@
 //完成移动更新数据
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    [self.dataArray exchangeObjectAtIndex:sourceIndexPath.item withObjectAtIndex:destinationIndexPath.item];
+
+//    [self.dataArray exchangeObjectAtIndex:sourceIndexPath.item withObjectAtIndex:destinationIndexPath.item];
+        
+    id obj = [self.dataArray objectAtIndex:sourceIndexPath.item];
+    
+    [self.dataArray removeObjectAtIndex:sourceIndexPath.item];
+    
+    [self.dataArray insertObject:obj atIndex:destinationIndexPath.item];
+    
     [self.collectionView reloadData];
+    
 }
 - (void)onLongPressed:(UILongPressGestureRecognizer *)sender
 {
@@ -190,14 +202,13 @@
     if (self.moveIndexPath == nil) {
         self.moveIndexPath = [self.collectionView indexPathForItemAtPoint:point];
     }
-    
     switch (sender.state) {
-    
+
         case UIGestureRecognizerStateBegan: {
             if (self.showDeleteView) {
                 [self showDeleteViewAnimation];
             }
-          
+
             if (self.moveIndexPath) {
                 [self.collectionView selectItemAtIndexPath:self.moveIndexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
                 self.selectIndexPath = self.moveIndexPath;
@@ -206,11 +217,10 @@
           break;
         }
         case UIGestureRecognizerStateChanged: {
-            
-            [self.collectionView updateInteractiveMovementTargetPosition:point];
-            
+
+
             NSLog(@"当前视图在View的位置:%@",NSStringFromCGPoint(point));
-            
+
             if (self.showDeleteView) {
                 if (point.y  <  50) {
                     [self setDeleteViewDeleteState];
@@ -218,7 +228,9 @@
                     [self setDeleteViewNormalState];
                 }
             }
-            
+
+            [self.collectionView updateInteractiveMovementTargetPosition:point];
+
           break;
         }
         case UIGestureRecognizerStateEnded: {
@@ -227,15 +239,21 @@
                 if (point.y  <  50) {
                     //删除
                     [self.dataArray replaceObjectAtIndex:self.moveIndexPath.row withObject:@"Player_add_video_image"];
+
                     PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.moveIndexPath];
                     [selectCell stop];
+                    
+                    [self.collectionView deleteItemsAtIndexPaths:@[self.moveIndexPath]];
                     [self.collectionView reloadData];
+                    
                 }
             }
-            [self.collectionView endInteractiveMovement];
             self.moveIndexPath = nil;
             //删除后默认选择第一个
             self.selectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            
+            [self.collectionView endInteractiveMovement];
+            
           break;
         }
         default: {
@@ -344,21 +362,28 @@
         NSArray *arr = [array subarrayWithRange:NSMakeRange(0, 4)];
         [self.dataArray addObjectsFromArray:arr];
     }else{
-        
+
         [self.dataArray addObjectsFromArray:array];
-        
+
         for (int i = 0; i < 4 - array.count; i++) {
             [self.dataArray addObject:@"Player_add_video_image"];
         }
     }
+
     [self.collectionView reloadData];
 }
 #pragma mark - MyEquipmentsDelegate
 -(void)selectCarmeraModel:(LivingModel *)model
 {
     [self.dataArray replaceObjectAtIndex:self.selectIndex withObject:model];
-//    [self.collectionView reloadData];
-    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.selectIndex inSection:0]]];
+    
+    [UIView performWithoutAnimation:^{
+       [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.selectIndex inSection:0]]];
+   }];
+    
+    if ([self.delegate respondsToSelector:@selector(selectCellCarmera:withData:)]) {
+        [self.delegate selectCellCarmera:self withData:model];
+    }
 }
 #pragma mark - PlayLocalVideoViewDelegate
 - (void)tableViewWillPlay:(PlayLocalVideoView *)view

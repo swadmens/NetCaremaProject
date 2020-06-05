@@ -162,7 +162,7 @@
     [_kHUDManager showActivityInView:nil withTitle:@"登录中..."];
     
     //http的get请求地址
-    NSString *urlStr = @"https://homebay.quarkioe.com/user/currentUser";
+    NSString *urlStr = @"http://ncore.iot/user/currentUser";
 
     NSURL *url = [NSURL URLWithString:urlStr];
     //自定义的request

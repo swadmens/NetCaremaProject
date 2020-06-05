@@ -153,7 +153,7 @@
                                   @"q":device_id,
                                   };
     //提交数据
-    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/live/list";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/live/list";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
@@ -244,7 +244,7 @@
 //获取直播快照
 -(void)getLivingCoverPhoto:(NSString*)live_id
 {
-    NSString *url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/snap/current?id=%@",live_id];
+    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/snap/current?id=%@",live_id];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码

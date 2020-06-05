@@ -152,7 +152,7 @@
                                   @"q":device_id,
                                   };
     //提交数据
-    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/live/list";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/live/list";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
@@ -190,12 +190,12 @@
             return ;
         }
         DLog(@"responseObject  ==  %@",responseObject);
-        [weak_self handleObject:responseObject];
+        [weak_self handleObject:responseObject withDeviceId:device_id];
     }];
     [task resume];
 }
 
-- (void)handleObject:(id)obj
+- (void)handleObject:(id)obj withDeviceId:(NSString*)device_id
 {
     [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
@@ -204,6 +204,7 @@
         NSArray *rows= [data objectForKey:@"rows"];
         if (rows.count == 0) {
             LivingModel *models = [LivingModel new];
+            
             if (self.getModelBackdata) {
                 self.getModelBackdata(models);
             }
@@ -216,8 +217,11 @@
         }
         [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
+            
             if (idx == 0) {
                 weak_self.model = [LivingModel makeModelData:dic];
+                weak_self.model.session_id = device_id;
+                
                 if (self.getModelBackdata) {
                     self.getModelBackdata(weak_self.model);
                 }
@@ -244,7 +248,7 @@
 //获取直播快照
 -(void)getLivingCoverPhoto:(NSString*)live_id
 {
-    NSString *url = [NSString stringWithFormat:@"https://homebay.quarkioe.com/service/video/liveqing/snap/current?id=%@",live_id];
+    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/snap/current?id=%@",live_id];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码

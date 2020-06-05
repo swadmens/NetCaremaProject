@@ -9,6 +9,7 @@
 #import "PersonInfoViewController.h"
 #import "WWTableView.h"
 #import "PersonInfoViewCell.h"
+#import "LoginButtonCell.h"
 
 @interface PersonInfoViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -37,6 +38,9 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[PersonInfoViewCell class] forCellReuseIdentifier:[PersonInfoViewCell getCellIDStr]];
+    [self.tableView registerClass:[LoginButtonCell class] forCellReuseIdentifier:[LoginButtonCell getCellIDStr]];
+
+    
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -46,7 +50,7 @@
     NSArray *arr = @[@{@"title":@"昵称",@"describe":_kUserModel.userInfo.user_name},
                      @{@"title":@"手机号码",@"describe":@"13162288787"},
                      @{@"title":@"邮箱",@"describe":_kUserModel.userInfo.email},
-//                     @{@"title":@"更改密码",@"describe":@"****"},
+                     @{@"title":@"退出登录",@"describe":@"退出登录"},
                      ];
     self.dataArray = arr;
     [self setupTableView];
@@ -58,16 +62,34 @@
 #pragma mark - UITableViewDelegate
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    PersonInfoViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[PersonInfoViewCell getCellIDStr] forIndexPath:indexPath];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.lineHidden = NO;
-    
     NSDictionary *dic = [self.dataArray objectAtIndex:indexPath.row];
+
+    if (indexPath.row == 3) {
+        LoginButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:[LoginButtonCell getCellIDStr] forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        NSString *title = [dic objectForKey:@"title"];
+        [cell makeCellData:title];
+        
+        cell.loginButtonClick = ^{
+            
+            _kUserModel.isLogined = NO;
+            [_kUserModel showLoginView];
+        };
+        
+        return cell;
+    }else{
+        PersonInfoViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[PersonInfoViewCell getCellIDStr] forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.lineHidden = NO;
+        
+        [cell makeCellData:dic];
+        
+        
+        return cell;
+    }
     
-    [cell makeCellData:dic];
     
-    return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -84,6 +106,8 @@
 //        [TargetEngine controller:self pushToController:PushTargetAboutUsView WithTargetId:nil];
     }else{
         //更改密码
+        
+
     }
 }
 

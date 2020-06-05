@@ -42,7 +42,7 @@
 - (NSString *)tenant_name
 {
     if (!_tenant_name) {
-        _tenant_name = @"homebay";
+        _tenant_name = @"lpc";
     }
     return _tenant_name;
 }

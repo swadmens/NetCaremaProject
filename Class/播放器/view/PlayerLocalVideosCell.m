@@ -17,6 +17,8 @@
 @property (nonatomic, strong) WWCollectionView *collectionView;
 @property (strong, nonatomic) NSMutableArray *dataArray;
 
+@property (strong, nonatomic) UIView *noDataView;
+
 @end
 
 @implementation PlayerLocalVideosCell
@@ -102,6 +104,27 @@
     [backView addSubview:self.collectionView];
     [self.collectionView alignTop:@"45" leading:@"0" bottom:nil trailing:@"0" toView:backView];
     [self.collectionView addHeight:130];
+    
+    
+    self.noDataView = [UIView new];
+    self.noDataView.backgroundColor = kColorBackgroundColor;
+    self.noDataView.hidden = YES;
+    [backView addSubview:self.noDataView];
+    [self.noDataView alignTop:@"45" leading:@"0" bottom:nil trailing:@"0" toView:backView];
+    [self.noDataView addHeight:130];
+    
+    UILabel *tipLabel = [[UILabel alloc] init];
+    tipLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+    tipLabel.textColor = kColorThirdTextColor;
+    tipLabel.textAlignment = NSTextAlignmentCenter;
+    tipLabel.text = @"所选设备今日无录像!";
+    [self.noDataView addSubview:tipLabel];
+    [tipLabel xCenterToView:self.noDataView];
+    [tipLabel yCenterToView:self.noDataView];
+    
+    
+    
+    
 }
 -(void)allVideosClick
 {
@@ -115,9 +138,16 @@
 }
 -(void)makeCellData:(NSArray *)array
 {
-    [self.dataArray removeAllObjects];
-    [self.dataArray addObjectsFromArray:array];
-    [self.collectionView reloadData];
+    if (array.count == 0) {
+        self.collectionView.hidden = YES;
+        self.noDataView.hidden = NO;
+    }else{
+        self.collectionView.hidden = NO;
+        self.noDataView.hidden = YES;
+        [self.dataArray removeAllObjects];
+        [self.dataArray addObjectsFromArray:array];
+        [self.collectionView reloadData];
+    }
 }
 #pragma mark - UICollectionViewDataSourec
 //定义展示的Section的个数

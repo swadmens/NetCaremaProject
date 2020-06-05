@@ -315,7 +315,7 @@
 {
     [_kHUDManager showActivityInView:nil withTitle:@"正在上传..."];
 
-    NSString *url = @"https://homebay.quarkioe.com/service/video/liveqing/vod/upload_addr";
+    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/upload_addr";
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     //配置用户名 密码
     NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
