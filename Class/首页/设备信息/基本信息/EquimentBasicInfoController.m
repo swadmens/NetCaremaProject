@@ -10,8 +10,8 @@
 #import "WWTableView.h"
 #import "ConfigurationFileCell.h"
 #import "ConnectionMonitoringCell.h"
-#import "AFHTTPSessionManager.h"
 #import "AddCarmeraAddressController.h"
+#import "RequestSence.h"
 
 
 @interface EquimentBasicInfoController ()<UITableViewDelegate,UITableViewDataSource,AddCarmeraAddressDelegate>
@@ -145,51 +145,33 @@
                                   };
         
     //提交数据
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/inventory/managedObjects/%@",[self.dicData objectForKey:@"id"]];
+    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",[self.dicData objectForKey:@"id"]];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
                                                          error:nil];
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
-    
-    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"PUT" URLString:url parameters:nil error:nil];
-    
-    // 设置请求头
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    //配置用户名 密码
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-    // 设置Authorization的方法设置header
-    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
-    
-    // 设置body
-    [request setHTTPBody:jsonData];
-    
-    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
-    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"BODY";
+    sence.pathHeader = @"application/json";
+    sence.body = jsonData;
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-        
-        if (error) {
-            // 请求失败
-            DLog(@"error  ==  %@",error.userInfo);
-            [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
-            
-            return ;
-        }
-        DLog(@"responseObject  ==  %@",responseObject);
-        
+        DLog(@"Received: %@", obj);
         [_kHUDManager showMsgInView:nil withTitle:@"保存成功" isSuccess:YES];
-//        [self.navigationController popToRootViewControllerAnimated:YES];
+        weak_self.isSave = YES;
 
-        self.isSave = YES;
-        
-    }];
-    [task resume];
+    };
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+        [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
+    };
+    [sence sendRequest];
 }
 
 #pragma AddCarmeraAddressDelegate

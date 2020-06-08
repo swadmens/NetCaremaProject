@@ -10,7 +10,7 @@
 #import "WWTableView.h"
 #import "DownloadListCell.h"
 #import "DownLoadSence.h"
-#import "AFHTTPSessionManager.h"
+#import "RequestSence.h"
 #import "CarmeaVideosModel.h"
 #import "DemandModel.h"
 #import <MJExtension.h>
@@ -260,42 +260,36 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     NSString *urlString;
     if (_isRecord) {
         //如果是录像文件
-        urlString = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/record/download/%@/%@",self.downLoad_id,start_time];
+        urlString = [NSString stringWithFormat:@"service/video/liveqing/record/download/%@/%@",self.downLoad_id,start_time];
     }else{
-        urlString = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/vod/download/%@",start_time];
+        urlString = [NSString stringWithFormat:@"service/video/liveqing/vod/download/%@",start_time];
     }
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    //配置用户名 密码
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-    // 设置Authorization的方法设置header
-    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
     
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = urlString;
     __unsafe_unretained typeof(self) weak_self = self;
-
-    [manager GET:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-        
-        DLog(@"Received: %@", responseObject);
-        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-        
-        CLVoiceApplyAddressModel *model = [weak_self.showDataArray objectAtIndex:idx];
-        model.url = [responseObject objectForKey:@"url"];
-        [weak_self.showDataArray replaceObjectAtIndex:idx withObject:model];
-        //更新缓存
-        [CLInvoiceApplyAddressModelTool updateInfoAtIndex:idx withInfo:model];
-        
-        [weak_self.tableView reloadData];
+        DLog(@"Received: %@", obj);
 
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+         CLVoiceApplyAddressModel *model = [weak_self.showDataArray objectAtIndex:idx];
+         model.url = [obj objectForKey:@"url"];
+         [weak_self.showDataArray replaceObjectAtIndex:idx withObject:model];
+         //更新缓存
+         [CLInvoiceApplyAddressModelTool updateInfoAtIndex:idx withInfo:model];
+         
+         [weak_self.tableView reloadData];
+    };
+
+    sence.errorBlock = ^(NSError *error) {
+
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error: %@", error);
-        
-    }];
-        
+    };
+    [sence sendRequest];
 }
 
 //处理原始数据

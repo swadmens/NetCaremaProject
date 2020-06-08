@@ -14,6 +14,7 @@
 #import "DemandModel.h"
 #import "HKVideoPlaybackController.h"
 #import "SuperPlayerViewController.h"
+#import "RequestSence.h"
 
 @interface DemandViewController ()<UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource>
 {
@@ -427,6 +428,28 @@
                                                        options:0
                                                          error:nil];
     
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"BODY";
+    sence.pathHeader = @"application/json";
+    sence.body = jsonData;
+    sence.pathURL = @"service/video/liveqing/vod/list";
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+        [weak_self handleObject:obj];
+    };
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+        [weak_self failedOperation];
+    };
+    [sence sendRequest];
+
+    return;
+
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
@@ -445,7 +468,7 @@
     
     // 设置body
     [request setHTTPBody:jsonData];
-    __unsafe_unretained typeof(self) weak_self = self;
+//    __unsafe_unretained typeof(self) weak_self = self;
 
     NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
     
@@ -547,31 +570,24 @@
 //获取子目录
 -(void)getSubcatalogList
 {
-        
-    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/subcataloglist";
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    //配置用户名 密码
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-    // 设置Authorization的方法设置header
-    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
-       
+    
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = @"service/video/liveqing/vod/subcataloglist";
     __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+        
+        [weak_self handleSubcatalogObject:obj];
+        
+    };
+    sence.errorBlock = ^(NSError *error) {
 
-    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-        
-        DLog(@"getSubcatalogList.Received: %@", responseObject);
-        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-        
-        [weak_self handleSubcatalogObject:responseObject];
-         
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"error: %@", error);
-        
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
         NSArray *rows= @[@{@"createAt":@"2020-03-16 23:34:12",
                            @"desc":@"",
                            @"folder":@"",
@@ -601,9 +617,8 @@
         [[GCDQueue mainQueue] queueBlock:^{
             [weak_self.collectionUpView reloadData];
         }];
-        
-    }];
-            
+    };
+    [sence sendRequest];
 }
 - (void)handleSubcatalogObject:(id)obj
 {

@@ -11,7 +11,6 @@
 #import "ShowCarmerasTableViewCell.h"
 #import "RequestSence.h"
 #import "MyEquipmentsModel.h"
-#import "AFHTTPSessionManager.h"
 
 @interface ShowCarmerasViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -230,44 +229,28 @@
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=%ld",self.equipment_id,(long)self.page];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    //配置用户名 密码
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-    // 设置Authorization的方法设置header
-    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
-       
+    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=%ld",self.equipment_id,(long)self.page];
+    
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
     __unsafe_unretained typeof(self) weak_self = self;
-
-    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-        
-        DLog(@"Received: %@", responseObject);
-        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-        
-         [weak_self handleObject:responseObject];
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        DLog(@"Received: %@", obj);
+
+         [weak_self handleObject:obj];
+    };
+
+    sence.errorBlock = ^(NSError *error) {
+
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error: %@", error);
         [self failedOperation];
-        self.refreshtoken++;
-        if (self.refreshtoken > 1) {
-            return ;
-        }
-        NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
-//        int statusCode = [[task.response objectForKey:@"code"] intValue];
-        if ([unauthorized containsString:@"500"]) {
-            [WWPublicMethod refreshToken:^(id obj) {
-                [self loadNewData];
-            }];
-        }
 
-    }];
-        
+    };
+    [sence sendRequest];
 }
 - (void)failedOperation
 {

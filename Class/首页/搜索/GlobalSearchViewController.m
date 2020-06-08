@@ -196,6 +196,7 @@
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/vnd.com.nsn.cumulocity.managedobjectcollection+json";
     sence.pathURL = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_IsCameraManageDevice&currentPage=%ld",(long)self.page];;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {

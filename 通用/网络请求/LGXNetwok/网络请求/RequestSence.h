@@ -38,8 +38,12 @@ typedef void(^RequestCacheBlock)(id obj);
 @property (nonatomic, strong) NSString *pathURL;
 /// 请求参数
 @property (nonatomic, strong) NSMutableDictionary *params;
+/// 上传文件集合
+@property (nonatomic, strong) NSArray *fileArray;
 /// 请求Body
 @property (nonatomic, strong) NSData *body;
+/// 请求头
+@property (nonatomic, strong) NSString *pathHeader;
 @property (nonatomic, strong) NSString *api_key;
 
 /// 网络状态

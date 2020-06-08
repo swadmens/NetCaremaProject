@@ -20,7 +20,6 @@
 #import "WMZDialog.h"
 #import "QRScanCodeViewController.h"//二维码
 #import "SuperPlayerViewController.h"
-#import "AFHTTPSessionManager.h"
 
 #import "LocalVideoViewController.h"
 
@@ -260,6 +259,7 @@
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/vnd.com.nsn.cumulocity.managedobjectcollection+json";
     sence.pathURL = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_IsCameraManageDevice&currentPage=%ld",(long)self.page];;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
@@ -336,31 +336,27 @@
 //获取设备信息
 -(void)getDeviceInfo:(NSString*)device_id withIndex:(NSInteger)index
 {
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    //配置用户名 密码
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-    // 设置Authorization的方法设置header
-    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
-    __unsafe_unretained typeof(self) weak_self = self;
     
-    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
+
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-        
-        DLog(@"Received: %@", responseObject);
-        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-        
-         [weak_self handleDeviceInfoObject:responseObject withIndex:index];
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        DLog(@"Received: %@", obj);
+
+         [weak_self handleDeviceInfoObject:obj withIndex:index];
+    };
+
+    sence.errorBlock = ^(NSError *error) {
+
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error: %@", error);
-//        [self failedOperation];
-    }];
-        
+    };
+    [sence sendRequest];
 }
 - (void)handleDeviceInfoObject:(id)obj withIndex:(NSInteger)index
 {

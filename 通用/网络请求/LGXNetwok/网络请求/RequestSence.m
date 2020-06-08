@@ -101,9 +101,12 @@ NSString *_kStaticURL;
         [self cancel];
     }
     
-    
-    [[SharedClient sharedInstance].requestSerializer setValue:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json" forHTTPHeaderField:@"Accept"];
-    [[SharedClient sharedInstance].requestSerializer setValue:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json" forHTTPHeaderField:@"Content-Type"];
+    [SharedClient sharedInstance].responseSerializer = [AFJSONResponseSerializer serializer];
+
+    if ([WWPublicMethod isStringEmptyText:_pathHeader]) {
+        [[SharedClient sharedInstance].requestSerializer setValue:_pathHeader forHTTPHeaderField:@"Accept"];
+        [[SharedClient sharedInstance].requestSerializer setValue:_pathHeader forHTTPHeaderField:@"Content-Type"];
+    }
     
     //配置用户名 密码
     NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
@@ -111,11 +114,8 @@ NSString *_kStaticURL;
     NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
     // 设置Authorization的方法设置header
     [[SharedClient sharedInstance].requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
-//    [[SharedClient sharedInstance].requestSerializer setValue:@"Basic bHBjL2FkbWluOmFkbWluMTIz" forHTTPHeaderField:@"Authorization"];
     
-    
-    
-    [SharedClient sharedInstance].responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json", @"text/html",nil];
+    [SharedClient sharedInstance].responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json", @"application/vnd.com.nsn.cumulocity.currentuser+json",@"application/json", @"text/json", @"text/javascript",@"text/html", @"text/plain",@"multipart/form-data",nil];
     
     
     
@@ -134,20 +134,32 @@ NSString *_kStaticURL;
             NSDictionary *dic = results;
             DLog(@"errorMsg == %@",[dic objectForKey:@"errorMsg"]);
             [self handleResult:results andError:error];
-            
         }];
+        
     }else if ([self.requestMethod isEqual:@"BODY"]){
+        
         self.task = [[SharedClient sharedInstance] requestBody:self.pathURL parameters:self.params body:self.body completion:^(id results, NSError *error) {
             NSDictionary *dic = results;
             DLog(@"errorMsg == %@",[dic objectForKey:@"errorMsg"]);
             [self handleResult:results andError:error];
         }];
+        
     }else if ([self.requestMethod isEqual:@"PUT"]){
+        
         self.task = [[SharedClient sharedInstance] requestPUTWithURLStr:self.pathURL paramDic:self.params Api_key:self.api_key completion:^(id results, NSError *error) {
             NSDictionary *dic = results;
             DLog(@"errorMsg == %@",[dic objectForKey:@"errorMsg"]);
             [self handleResult:results andError:error];
         }];
+        
+    }else if ([self.requestMethod isEqual:@"UPLOAD"]){
+        
+        self.task  = [[SharedClient sharedInstance] uploadFiles:self.fileArray with:self.params to:self.pathURL completion:^(id results, NSError *error) {
+            NSDictionary *dic = results;
+            DLog(@"errorMsg == %@",[dic objectForKey:@"errorMsg"]);
+            [self handleResult:results andError:error];
+        }];
+        
     }
 }
 - (void)handleResult:(id)results andError:(NSError *)error

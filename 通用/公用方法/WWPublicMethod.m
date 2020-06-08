@@ -12,7 +12,6 @@
 #import <objc/runtime.h>
 //#import "YHPhotoBrowser.h"
 #import <CoreLocation/CoreLocation.h>
-#import "AFHTTPSessionManager.h"
 
 
 @implementation WWPublicMethod
@@ -677,67 +676,41 @@
 }
 +(void)refreshToken:(RefreshTokenSuccessBlock)tokenBlock
 {
-    NSString *url = @"http://ncore.iot/service/video/account/refreshtoken";
+    NSString *url = @"service/video/account/refreshtoken";
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    //配置用户名 密码
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-    // 设置Authorization的方法设置header
-    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
-
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
-    
-    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-        
-        DLog(@"Received: %@", responseObject);
-        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-        
-        tokenBlock(responseObject);
-        
-
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    sence.successBlock = ^(id obj) {
+        DLog(@"Received: %@", obj);
+        tokenBlock(obj);
+    };
+    sence.errorBlock = ^(NSError *error) {
         DLog(@"error: %@", error);
-    }];
+    };
+    [sence sendRequest];
 }
 
 +(void)timeOneMinutesUploadDevicestatus
 {
     [NSTimer scheduledTimerWithTimeInterval:60 repeats:YES block:^(NSTimer * _Nonnull timer) {
-         
-//        NSDate *timeDate = [NSDate date];
-//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-//        [dateFormatter setDateFormat:@"YYYY-MM-dd hh:mm:ss"];
-//        NSString *locationString = [dateFormatter stringFromDate:timeDate];
-//
-//        DLog(@"当前时间  ==  %@",locationString);
-//
+
+        NSString *url = @"service/video/ncore/sync/device/status";
         
-       NSString *url = @"http://ncore.iot/service/video/ncore/sync/device/status";
+        RequestSence *sence = [[RequestSence alloc] init];
+        sence.requestMethod = @"POST";
+        sence.pathHeader = @"application/json";
+        sence.pathURL = url;
+        sence.successBlock = ^(id obj) {
+            DLog(@"Received: %@", obj);
+        };
+        sence.errorBlock = ^(NSError *error) {
+            DLog(@"error: %@", error);
+        };
+        [sence sendRequest];
 
-       AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-       //配置用户名 密码
-       NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-       //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-       NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-       // 设置Authorization的方法设置header
-       [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
-
-       [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-       [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-
-       manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
-
-        [manager POST:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            DLog(@"status.Received: %@", responseObject);
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            DLog(@"status.error: %@", error);
-        }];
+      
       
     }];
 }
@@ -745,26 +718,19 @@
 {
     [NSTimer scheduledTimerWithTimeInterval:120 repeats:YES block:^(NSTimer * _Nonnull timer) {
          
-        NSString *url = @"http://ncore.iot/service/video/ncore/sync/device";
+        NSString *url = @"service/video/ncore/sync/device";
         
-        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-        //配置用户名 密码
-        NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-        //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-        NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-        // 设置Authorization的方法设置header
-        [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
-
-        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-        
-        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
-        
-        [manager POST:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-            DLog(@"device.Received: %@", responseObject);
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            DLog(@"device.error: %@", error);
-        }];
+        RequestSence *sence = [[RequestSence alloc] init];
+        sence.requestMethod = @"POST";
+        sence.pathHeader = @"application/json";
+        sence.pathURL = url;
+        sence.successBlock = ^(id obj) {
+            DLog(@"Received: %@", obj);
+        };
+        sence.errorBlock = ^(NSError *error) {
+            DLog(@"error: %@", error);
+        };
+        [sence sendRequest];
       
     }];
     

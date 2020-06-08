@@ -12,6 +12,7 @@
 #import "RIButtonItem.h"
 #import "RACDelegateProxy.h"
 #import "AFHTTPSessionManager.h"
+#import "RequestSence.h"
 
 
 
@@ -315,39 +316,60 @@
 {
     [_kHUDManager showActivityInView:nil withTitle:@"正在上传..."];
 
-    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/upload_addr";
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    //配置用户名 密码
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-    // 设置Authorization的方法设置header
-    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
-       
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"";
+    sence.pathURL = @"service/video/liveqing/vod/upload_addr";
     __unsafe_unretained typeof(self) weak_self = self;
-
-    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        [_kHUDManager hideAfter:0.1 onHide:nil];
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-        
-        DLog(@"getSubcatalogList.Received: %@", responseObject);
-        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-        NSDictionary *dic = responseObject;
+    sence.successBlock = ^(id obj) {
+        DLog(@"responseObject  ==  %@",obj);
+        NSDictionary *dic = obj;
         NSString *url = [dic objectForKey:@"url"];
         NSString *token = [dic objectForKey:@"token"];
         [weak_self uploadVideo:value withFileName:fileName withToken:token withUrl:url];
+
+    };
+    
+    sence.errorBlock = ^(NSError *error) {
         
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error  ==  %@",error);
         [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
-    }];
+    };
+    [sence sendRequest];
 }
 
 
 //上传视频
 -(void)uploadVideo:(NSData*)value withFileName:(NSString*)fileName withToken:(NSString*)token withUrl:(NSString*)url
 {
+    NSArray *fileArray = @[@{@"name":@"file",@"fileName":fileName,@"mimeType":@"video/mp4",@"data":value}];
+    
+    
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"UPLOAD";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    sence.fileArray = fileArray;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
+
+        DLog(@"responseObject  ==  %@",obj);
+        [weak_self.navigationController popViewControllerAnimated:YES];
+    };
+    sence.errorBlock = ^(NSError *error) {
+        
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error  ==  %@",error);
+        [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
+    };
+    [sence sendRequest];
+
+    return;
+
     //提交数据
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];

@@ -12,7 +12,6 @@
 #import "PlayerControlCell.h"
 #import "PlayerLocalVideosCell.h"
 #import "CameraControlView.h"
-#import "AFHTTPSessionManager.h"
 #import "LGXVerticalButton.h"
 #import "PlayBottomDateCell.h"
 #import "LGXThirdEngine.h"
@@ -21,6 +20,7 @@
 #import "DemandModel.h"
 #import "CarmeaVideosModel.h"
 #import "LivingModel.h"
+#import "RequestSence.h"
 
 #define KTopviewheight kScreenWidth*0.68
 
@@ -365,32 +365,26 @@
     NSString *url;
     
     if ([self.live_type isEqualToString:@"LiveGBS"]) {
-        url = [NSString stringWithFormat:@"http://ncore.iot/service/video/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.gbs_serial,self.gbs_code,controls];
+        url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.gbs_serial,self.gbs_code,controls];
     }else{
-        url = [NSString stringWithFormat:@"http://ncore.iot/service/video/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
+        url = [NSString stringWithFormat:@"service/video/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
     }
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    //配置用户名 密码
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-    // 设置Authorization的方法设置header
-    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+    };
+    sence.errorBlock = ^(NSError *error) {
 
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
-
-    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-//        DLog(@"RecordCoverPhoto.Received: %@", responseObject);
-//        DLog(@"RecordCoverPhoto.Received HTTP %ld", (long)httpResponse.statusCode);
-
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        DLog(@"error: %@", error);
-    }];
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error: %@", error);
+    };
+    [sence sendRequest];
 }
 
 #pragma mark - PlayerTableViewCellDelegate
@@ -591,48 +585,30 @@
                                   @"id":carmeraId,
                                   @"day":[_kDatePicker getCurrentTimes:@"YYYYMMdd"],
                                   };
-    //提交数据
-    NSString *url = @"http://ncore.iot/service/video/liveqing/record/query_records";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
                                                          error:nil];
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
-    
-    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:nil error:nil];
-    
-    // 设置请求头
-    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    //配置用户名 密码
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-    // 设置Authorization的方法设置header
-    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
-    
-    // 设置body
-    [request setHTTPBody:jsonData];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"BODY";
+    sence.pathHeader = @"application/json";
+    sence.body = jsonData;
+    sence.pathURL = @"service/video/liveqing/record/query_records";
     __unsafe_unretained typeof(self) weak_self = self;
-
-    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
-    
-    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+    sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-        
-        if (error) {
-            // 请求失败
-            DLog(@"error  ==  %@",error.userInfo);
-            DLog(@"responseObject  ==  %@",responseObject);
-            [self failedOperation];
-        }
-        DLog(@"responseObject  ==  %@",responseObject);
-        [weak_self handleObject:responseObject];
-    }];
-    [task resume];
+        DLog(@"Received: %@", obj);
+        [weak_self handleObject:obj];
+    };
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+        [weak_self failedOperation];
+    };
+    [sence sendRequest];
 }
 - (void)failedOperation
 {
@@ -684,32 +660,25 @@
         return;
     }
     
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",mdl.session_id,period];
+    NSString *url = [NSString stringWithFormat:@"service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",mdl.session_id,period];
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    //配置用户名 密码
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-    // 设置Authorization的方法设置header
-    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+        [self dealWithCoverPhoto:obj withData:indexInteger];
 
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    };
+    sence.errorBlock = ^(NSError *error) {
 
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json",@"text/html", nil];
-
-    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-
-        DLog(@"RecordCoverPhoto.Received: %@", responseObject);
-        DLog(@"RecordCoverPhoto.Received HTTP %ld", (long)httpResponse.statusCode);
-
-        [self dealWithCoverPhoto:responseObject withData:indexInteger];
-
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error: %@", error);
-    }];
+    };
+    [sence sendRequest];
 }
 
 -(void)dealWithCoverPhoto:(id)obj withData:(NSInteger)indexInteger

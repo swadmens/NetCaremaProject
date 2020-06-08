@@ -243,7 +243,6 @@
                     PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.moveIndexPath];
                     [selectCell stop];
                     
-                    [self.collectionView deleteItemsAtIndexPaths:@[self.moveIndexPath]];
                     [self.collectionView reloadData];
                     
                 }

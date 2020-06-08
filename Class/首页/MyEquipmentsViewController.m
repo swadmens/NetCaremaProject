@@ -11,7 +11,6 @@
 #import "MyEquipmentsCell.h"
 #import "RequestSence.h"
 #import "MyEquipmentsModel.h"
-#import "AFHTTPSessionManager.h"
 #import "LivingModel.h"
 
 @interface MyEquipmentsViewController ()<UITableViewDelegate,UITableViewDataSource>
