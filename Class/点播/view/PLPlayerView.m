@@ -721,6 +721,15 @@ UIGestureRecognizerDelegate
     [self unsetupPlayer];
     
     NSLog(@"播放地址: %@", _media.videoUrl);
+    
+    if (![WWPublicMethod isStringEmptyText:_media.videoUrl]) {
+        [_kHUDManager showMsgInView:nil withTitle:@"视频播放有误！" isSuccess:YES];
+        if (_isFullScreen){
+            [self clickExitFullScreenButton];
+        }
+        return;
+    }
+    
     self.thumbImageView.hidden = NO;
     [self.thumbImageView yy_setImageWithURL:[NSURL URLWithString:_media.snapUrl] options:YYWebImageOptionProgressive];
     

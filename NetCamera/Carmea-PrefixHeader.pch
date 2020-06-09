@@ -49,7 +49,6 @@
 #import <Masonry.h>
 #import "LGXAutoLayout.h"
 
-
 // category
 #import "UIView+Alert.h"
 #import "UIButton+Animate.h"
@@ -57,8 +56,5 @@
 #import "NSDate+Covert.h"
 #import "NSObject+Auth.h"
 #import "MacroDefine.h"
-
-#import "YCDownloadSession.h"
-
 
 #endif /* PrefixHeader_pch */

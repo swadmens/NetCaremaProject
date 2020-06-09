@@ -11,41 +11,7 @@
 
 @implementation UserInfoModel
 @synthesize user_id = _user_id;
-- (NSString *)user_avatar
-{
-    if (_kUserModel.isLogined) {
-        return _user_avatar;
-    }
-    return @"";
-}
-- (NSString *)collect
-{
-    if (!_collect) {
-        _collect = @"0";
-    }
-    return _collect;
-}
-- (NSString *)message_num
-{
-    if (!_message_num) {
-        _message_num = @"0";
-    }
-    return _message_num;
-}
-- (NSString *)language_lang
-{
-    if (!_language_lang) {
-        _language_lang = @"0";
-    }
-    return _language_lang;
-}
-- (NSString *)tenant_name
-{
-    if (!_tenant_name) {
-        _tenant_name = @"lpc";
-    }
-    return _tenant_name;
-}
+
 -(BOOL)isTest
 {
     
@@ -69,17 +35,7 @@
     return _isTest;
 }
 
-- (NSString *)sellerStatus
-{
-    if (_kUserModel.isLogined == NO || _sellerStatus == nil) {
-        _sellerStatus = @"0";
-    }
-    return _sellerStatus;
-}
--(int)indexShowNum
-{
-    return 0;
-}
+
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     NSDictionary *valueDic = [self getPropertiesValues];
@@ -127,69 +83,16 @@
     self.shouldResetPassword = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"shouldResetPassword"]];
     self.user_id = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"id"]];
     self.user_name = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"userName"]];
+    self.user_phone = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"phone"]];
+    self.Authorization = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"Authorization"]];
+    self.save_password = [[NSString stringWithFormat:@"%@",[uInfo objectForKey:@"save_password"]] boolValue];
 
     [self save];
     
-    int user_id = [[NSString stringWithFormat:@"%@",[uInfo objectForKey:@"id"]] intValue];
-    
-    // 说明没有取到用户id，则认为退出
-    if (user_id <=0) {
-        _kUserModel.isLogined = NO;
-    }
-    
-    return;
-
-    self.user_name = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"user_name"]];
-    self.sex = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"sex"]];
-    self.integration = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"integration"]];
-    self.email = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"email"]];
-    self.user_money = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"user_money"]];
-    self.birthday = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"birthday"]];
-    
-    self.pet_number = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"pet_number"]];
-    self.user_age = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"age"]];
-    self.user_remark = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"remark"]];
-    self.user_region = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"region"]];
-    self.user_qrcode = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"qrcode"]];
-    self.notifys_number = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"notify_number"]];
-
-    self.collect_word = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"collect_word"]];
-    self.collect = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"collect"]];
-
-    self.user_avatar = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"user_photo"]];
-    self.mobile = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"mobile_phone"]];
-    self.service_phone = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"service_phone"]];
-    self.resource_url = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"resource_url"]];
-    self.user_code = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"user_code"]];
-    self.zone_number = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"zone_number"]];
-    self.email = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"email"]];
-
-    
-    
-    self.sns_wechat = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"sns_wechat"]];
-    self.sns_qq = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"sns_qq"]];
-    self.sns_weibo = [NSString stringWithFormat:@"%@",[uInfo objectForKey:@"sns_weibo"]];
-    self.is_password = [[NSString stringWithFormat:@"%@",[uInfo objectForKey:@"is_password"]] boolValue];
-
-    
-    /// 状态信息
-    NSDictionary *seller = [uInfo objectForKey:@"agent"];
-    self.sellerStatus = [NSString stringWithFormat:@"%@",[seller objectForKey:@"status"]];
-  
-//    int user_id = [[NSString stringWithFormat:@"%@",[uInfo objectForKey:@"user_id"]] intValue];
-    self.user_id = [NSString stringWithFormat:@"%d",user_id];
-    
-    [self save];
-    
-    // 注册推送
-    NSString *jalias = [uInfo objectForKey:@"jalias"];
-    NSString *jtags = [uInfo objectForKey:@"jtags"];
-    [self setTags:jtags andAlias:jalias];
-    
-    // 说明没有取到用户id，则认为退出
-    if (user_id <=0) {
-        _kUserModel.isLogined = NO;
-    }
+//    // 注册推送
+//    NSString *jalias = [uInfo objectForKey:@"jalias"];
+//    NSString *jtags = [uInfo objectForKey:@"jtags"];
+//    [self setTags:jtags andAlias:jalias];
 }
 // tags 以,号为分割
 - (void)setTags:(NSString *)tags andAlias:(NSString *)alias
@@ -206,15 +109,12 @@
 }
 - (void)save
 {
-    // vip信息保存
-//    [self.vipModel save];
-    
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self];
-//    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self requiringSecureCoding:NO error:nil];
-
+    
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     [user setObject:data forKey:_kUserInfoModelKey];
     [user synchronize];
+ 
 }
 
 + (UserInfoModel *)read
@@ -222,9 +122,7 @@
     NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     NSData *data = [user objectForKey:_kUserInfoModelKey];
     UserInfoModel *uInfo = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-//    UserInfoModel *uInfo = [NSKeyedUnarchiver unarchivedObjectOfClass:self fromData:data error:nil];
 
-    
     return uInfo;
 }
 

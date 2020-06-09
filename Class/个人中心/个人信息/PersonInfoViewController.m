@@ -47,9 +47,15 @@
     // Do any additional setup after loading the view.
     self.title = @"个人信息";
 
-    NSArray *arr = @[@{@"title":@"昵称",@"describe":_kUserModel.userInfo.user_name},
-                     @{@"title":@"手机号码",@"describe":@"13162288787"},
-                     @{@"title":@"邮箱",@"describe":_kUserModel.userInfo.email},
+    
+    NSString *phone = [WWPublicMethod isStringEmptyText:_kUserModel.userInfo.user_phone]?_kUserModel.userInfo.user_phone:@"";
+    if ([phone containsString:@"+86"]) {
+        phone = [phone stringByReplacingOccurrencesOfString:@"+86" withString:@""];
+    }
+    
+    NSArray *arr = @[@{@"title":@"昵称",@"describe":[WWPublicMethod isStringEmptyText:_kUserModel.userInfo.user_name]?_kUserModel.userInfo.user_name:@""},
+                     @{@"title":@"手机号码",@"describe":phone},
+                     @{@"title":@"邮箱",@"describe":[WWPublicMethod isStringEmptyText:_kUserModel.userInfo.email]?_kUserModel.userInfo.email:@""},
                      @{@"title":@"退出登录",@"describe":@"退出登录"},
                      ];
     self.dataArray = arr;
@@ -72,7 +78,7 @@
         [cell makeCellData:title];
         
         cell.loginButtonClick = ^{
-            
+            [self.navigationController popToRootViewControllerAnimated:YES];
             _kUserModel.isLogined = NO;
             [_kUserModel showLoginView];
         };

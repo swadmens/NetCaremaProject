@@ -459,12 +459,7 @@
     // 设置请求头
     [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    //配置用户名 密码
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-    // 设置Authorization的方法设置header
-    [request setValue:str2 forHTTPHeaderField:@"Authorization"];
+    [request setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
     
     // 设置body
     [request setHTTPBody:jsonData];

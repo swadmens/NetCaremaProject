@@ -271,9 +271,6 @@
                                  @"start":start,
                                  @"limit":@"10",
                                  };
-       
-    //提交数据
-    NSString *url = @"http://ncore.iot/service/video/liveqing/live/list";
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                       options:0

@@ -116,6 +116,9 @@
 }
 -(void)makeCellScale:(BOOL)scale
 {
+    if (![self chengkVideoNormalPlay]) {
+        return;
+    }
     self.changeUI = scale;
     [self.collectionView reloadData];
 }
@@ -425,6 +428,10 @@
 
 - (void)stop {
     
+    if (![self chengkVideoNormalPlay]) {
+        return;
+    }
+    
     NSArray *array = [self.collectionView visibleCells];
     for (PlayerTopCollectionViewCell *cell in array) {
         [cell stop];
@@ -435,6 +442,10 @@
 }
 -(void)play
 {
+    if (![self chengkVideoNormalPlay]) {
+        return;
+    }
+    
     NSArray *array = [self.collectionView visibleCells];
     for (PlayerTopCollectionViewCell *cell in array) {
         [cell play];
@@ -446,6 +457,10 @@
 
 -(void)makePlayerViewFullScreen
 {
+    if (![self chengkVideoNormalPlay]) {
+        return;
+    }
+    
     PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
     NSArray *array = [self.collectionView visibleCells];
     for (PlayerTopCollectionViewCell *cell in array) {
@@ -458,6 +473,10 @@
 }
 -(void)clickSnapshotButton
 {
+    if (![self chengkVideoNormalPlay]) {
+        return;
+    }
+    
     PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
     NSArray *array = [self.collectionView visibleCells];
     for (PlayerTopCollectionViewCell *cell in array) {
@@ -480,6 +499,10 @@
 }
 - (void)changeVolume:(float)volume
 {
+    if (![self chengkVideoNormalPlay]) {
+        return;
+    }
+    
     PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
     NSArray *array = [self.collectionView visibleCells];
     for (PlayerTopCollectionViewCell *cell in array) {
@@ -490,6 +513,22 @@
     }
     if (self.localVideoView !=nil) {
         [_localVideoView changeVolume:volume];
+    }
+}
+
+//视频是否可以正常播放
+-(BOOL)chengkVideoNormalPlay
+{
+    id obj = [self.dataArray objectAtIndex:self.selectIndex];
+    if ([obj isKindOfClass:[LivingModel class]]) {
+        LivingModel *model = obj;
+        if (![WWPublicMethod isStringEmptyText:model.RTMP]) {
+            return NO;
+        }else{
+            return YES;
+        }
+    }else{
+       return NO;
     }
 }
 

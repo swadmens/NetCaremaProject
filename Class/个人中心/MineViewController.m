@@ -86,7 +86,6 @@
     
     
     _user_name = [UILabel new];
-    _user_name.text = _kUserModel.userInfo.user_name;
     _user_name.textColor = kColorMainTextColor;
     _user_name.font = [UIFont customFontWithSize:kFontSizeEighTeen];
     [_user_name sizeToFit];
@@ -96,7 +95,6 @@
     
     
     _user_phone = [UILabel new];
-    _user_phone.text = @"13162288787";
     _user_phone.textColor = kColorThirdTextColor;
     _user_phone.font = [UIFont customFontWithSize:kFontSizeTwelve];
     [_user_phone sizeToFit];
@@ -105,6 +103,24 @@
     [_user_phone addCenterY:12 toView:cardView];
     
     
+    @weakify(self);
+    /// 用户名变化监听
+    [RACObserve(_kUserModel.userInfo, user_name) subscribeNext:^(id x) {
+        @strongify(self);
+        self.user_name.text = x;
+    }];
+    /// 手机号变化监听
+    [RACObserve(_kUserModel.userInfo, user_phone) subscribeNext:^(id x) {
+        @strongify(self);
+        NSString *phone = x;
+        if ([phone containsString:@"+86"]) {
+            self.user_phone.text = [phone stringByReplacingOccurrencesOfString:@"+86" withString:@""];
+        }else{
+            self.user_phone.text = phone;
+        }
+    }];
+    
+
     self.tableView = [WWTableView new];
     self.tableView.backgroundColor = kColorBackgroundColor;
     self.tableView.rowHeight = UITableViewAutomaticDimension;

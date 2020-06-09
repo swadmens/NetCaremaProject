@@ -195,8 +195,6 @@
 //    self.clView.transform = CGAffineTransformIdentity;
     
     self.controlBtn = (LGXVerticalButton*)sender;
-
-    
     switch (state) {
         case videoSatePlay://播放暂停
             
@@ -219,10 +217,11 @@
 
             break;
         case videoSateGongge://宫格变化
-            if (_isLiving) {
+            
+            if (_isLiving && [WWPublicMethod isStringEmptyText:self.carmer_id]) {
                 self.controlBtn.selected = !self.controlBtn.selected;
+                [self.topCell makeCellScale:self.controlBtn.selected];
             }
-            [self.topCell makeCellScale:self.controlBtn.selected];
             
             break;
         case videoSateClarity://清晰度
@@ -670,7 +669,7 @@
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"Received: %@", obj);
-        [self dealWithCoverPhoto:obj withData:indexInteger];
+        [weak_self dealWithCoverPhoto:obj withData:indexInteger];
 
     };
     sence.errorBlock = ^(NSError *error) {

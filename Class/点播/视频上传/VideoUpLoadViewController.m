@@ -367,47 +367,6 @@
         [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
     };
     [sence sendRequest];
-
-    return;
-
-    //提交数据
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-           
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain", @"image/jpeg",@"image/png",@"multipart/form-data", nil];
-           
-    //配置用户名 密码
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",_kUserModel.userInfo.tenant_name,_kUserModel.userInfo.user_name,_kUserModel.userInfo.password];
-    //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
-    NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
-    
-    // 设置Authorization的方法设置header
-    [manager.requestSerializer setValue:str2 forHTTPHeaderField:@"Authorization"];
-           
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    
-    [manager POST:url parameters:@{@"token":token} constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-        
-        [formData appendPartWithFileData:value name:@"file" fileName:fileName mimeType:@"video/mp4"];
-        
-    } progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
-
-        DLog(@"responseObject  ==  %@",responseObject);
-        [self.navigationController popViewControllerAnimated:YES];
-        
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"error  ==  %@",error);
-        [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
-
-    }];
 }
 
 //根据本地视频地址获取视频缩略图
