@@ -113,8 +113,6 @@ NSString *_kStaticURL;
     
     [SharedClient sharedInstance].responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json", @"application/vnd.com.nsn.cumulocity.currentuser+json",@"application/json", @"text/json", @"text/javascript",@"text/html", @"text/plain",@"multipart/form-data",nil];
     
-    
-    
     if ([self.requestMethod isEqual:@"GET"]) {
         
         self.task = [[SharedClient sharedInstance] requestGet:self.pathURL parameters:self.params completion:^(id results, NSError *error) {
@@ -134,11 +132,7 @@ NSString *_kStaticURL;
         
     }else if ([self.requestMethod isEqual:@"BODY"]){
         
-        self.task = [[SharedClient sharedInstance] requestBody:self.pathURL parameters:self.params body:self.body completion:^(id results, NSError *error) {
-            NSDictionary *dic = results;
-            DLog(@"errorMsg == %@",[dic objectForKey:@"errorMsg"]);
-            [self handleResult:results andError:error];
-        }];
+        [self bodyMutRequest];
         
     }else if ([self.requestMethod isEqual:@"PUT"]){
         
@@ -158,6 +152,26 @@ NSString *_kStaticURL;
         
     }
 }
+-(void)bodyMutRequest
+{
+    NSString *url = [NSString stringWithFormat:@"%@%@",[SharedClient requestURL],self.pathURL];
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:nil error:nil];
+    // 设置请求头
+    [request setValue:self.pathHeader forHTTPHeaderField:@"Accept"];
+    [request setValue:self.pathHeader forHTTPHeaderField:@"Content-Type"];
+    // 设置Authorization的方法设置header
+    [request setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
+    // 设置body
+    [request setHTTPBody:self.body];
+    
+    NSURLSessionDataTask *task = [[SharedClient sharedInstance] uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        [self handleResult:responseObject andError:error];
+    }];
+    [task resume];
+}
+
 - (void)handleResult:(id)results andError:(NSError *)error
 {
     /// 调统一的target判断
@@ -165,7 +179,7 @@ NSString *_kStaticURL;
     if (error) {
         DLog(@"\n ~~~~~~ 报错啦 : %@ \n ~~~~~~ \n",results);
         DLog(@"\n ~~~~~~ 报错啦 : %@ \n ~~~~~~ \n",error);
-        [self requestError:self.customError];
+        [self requestError:error];
         return ;
     }
     @try {

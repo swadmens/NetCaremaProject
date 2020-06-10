@@ -94,17 +94,6 @@
 - (void)setupNoDataView
 {
     self.noDataView = [self setupnoDataContentViewWithTitle:@"暂无直播" andImageNamed:@"device_empty_backimage" andTop:@"60"];
-//    // label
-//    UILabel *tipLabel = [self getNoDataTipLabel];
-//
-//    UIButton *againBtn = [UIButton new];
-//    [againBtn setTitle:@"暂无数据，轻触重试" forState:UIControlStateNormal];
-//    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
-//    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-//    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
-//    [self.noDataView addSubview:againBtn];
-//    [againBtn xCenterToView:self.noDataView];
-//    [againBtn topToView:tipLabel withSpace:-8];
 }
 -(void)againLoadDataBtn
 {
@@ -134,7 +123,6 @@
     };
     
     _coverView = [UIView new];
-//    _coverView.hidden = YES;
     _coverView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight-450);
     _coverView.backgroundColor = UIColorFromRGB(0x000000, 0.7);
     [[UIApplication sharedApplication].keyWindow addSubview:_coverView];
@@ -142,6 +130,13 @@
     [self creadLivingUI];
     [self setupNoDataView];
     [self loadNewData];
+}
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+//    if (self.dataArray.count == 0) {
+//        [self loadNewData];
+//    }
 }
 //创建UI
 -(void)creadLivingUI
@@ -212,27 +207,6 @@
     LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
     if ([WWPublicMethod isStringEmptyText:model.RTMP]) {
         //live直播
-//        LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//        NSDictionary *dic = @{ @"name":model.name,
-//                               @"snapUrl":model.url,
-//                               @"videoUrl":model.RTMP,
-//                               @"sharedLink":model.sharedLink,
-//                               @"createAt":model.createAt,
-//                             };
-//        DemandModel *models = [DemandModel makeModelData:dic];
-//        HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
-//        vc.model = models;
-//        vc.isLiving = YES;
-//        vc.isRecordFile = YES;
-//        vc.device_id = model.session_id;
-//        vc.gbs_code = model.code;
-//        vc.gbs_serial = model.serial;
-//        vc.live_type = model.type;
-//        vc.nvr_channel = model.session_id;
-//        vc.hidesBottomBarWhenPushed = YES;
-//        [self.navigationController pushViewController:vc animated:YES];
-//        self.hidesBottomBarWhenPushed = NO;
-        
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
         vc.hidesBottomBarWhenPushed = YES;
 //        vc.allDataArray = [NSArray arrayWithArray:self.dataArray];
