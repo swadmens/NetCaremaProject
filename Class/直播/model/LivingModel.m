@@ -13,7 +13,40 @@
 {
     LivingModel *model = [LivingModel new];
     
+    model.AudioEnable = [NSString stringWithFormat:@"%@",[dic objectForKey:@"AudioEnable"]];
+    model.CDN = [NSString stringWithFormat:@"%@",[dic objectForKey:@"CDN"]];
+    model.CascadeSize = [NSString stringWithFormat:@"%@",[dic objectForKey:@"CascadeSize"]];
+    model.ChannelID = [NSString stringWithFormat:@"%@",[dic objectForKey:@"ChannelID"]];
+    model.ChannelName = [NSString stringWithFormat:@"%@",[dic objectForKey:@"ChannelName"]];
+    model.DeviceID = [NSString stringWithFormat:@"%@",[dic objectForKey:@"DeviceID"]];
+    model.Duration = [NSString stringWithFormat:@"%@",[dic objectForKey:@"Duration"]];
+    model.FLV = [NSString stringWithFormat:@"%@",[dic objectForKey:@"FLV"]];
+    model.HLS = [NSString stringWithFormat:@"%@",[dic objectForKey:@"HLS"]];
+    model.InBitRate = [NSString stringWithFormat:@"%@",[dic objectForKey:@"InBitRate"]];
+    model.InBytes = [NSString stringWithFormat:@"%@",[dic objectForKey:@"InBytes"]];
+    model.NumOutputs = [NSString stringWithFormat:@"%@",[dic objectForKey:@"NumOutputs"]];
+    model.Ondemand = [NSString stringWithFormat:@"%@",[dic objectForKey:@"Ondemand"]];
+    model.OutBytes = [NSString stringWithFormat:@"%@",[dic objectForKey:@"OutBytes"]];
+    model.RTMP = [NSString stringWithFormat:@"%@",[dic objectForKey:@"RTMP"]];
+    model.RTSP = [NSString stringWithFormat:@"%@",[dic objectForKey:@"RTSP"]];
+    model.RecordStartAt = [NSString stringWithFormat:@"%@",[dic objectForKey:@"RecordStartAt"]];
+    model.RelaySize = [NSString stringWithFormat:@"%@",[dic objectForKey:@"RelaySize"]];
+    model.SnapURL = [NSString stringWithFormat:@"%@",[dic objectForKey:@"SnapURL"]];
+    model.SourceAudioCodecName = [NSString stringWithFormat:@"%@",[dic objectForKey:@"SourceAudioCodecName"]];
+    model.SourceAudioSampleRate = [NSString stringWithFormat:@"%@",[dic objectForKey:@"SourceAudioSampleRate"]];
+    model.SourceVideoCodecName = [NSString stringWithFormat:@"%@",[dic objectForKey:@"SourceVideoCodecName"]];
+    model.SourceVideoFrameRate = [NSString stringWithFormat:@"%@",[dic objectForKey:@"SourceVideoFrameRate"]];
+    model.SourceVideoHeight = [NSString stringWithFormat:@"%@",[dic objectForKey:@"SourceVideoHeight"]];
+    model.SourceVideoWidth = [NSString stringWithFormat:@"%@",[dic objectForKey:@"SourceVideoWidth"]];
+    model.StartAt = [NSString stringWithFormat:@"%@",[dic objectForKey:@"StartAt"]];
+    model.StreamID = [NSString stringWithFormat:@"%@",[dic objectForKey:@"StreamID"]];
+    model.Transport = [NSString stringWithFormat:@"%@",[dic objectForKey:@"Transport"]];
+    model.WS_FLV = [NSString stringWithFormat:@"%@",[dic objectForKey:@"WS_FLV"]];
 
+    
+    
+    
+/*
     model.actived = [NSString stringWithFormat:@"%@",[dic objectForKey:@"actived"]];
     model.authed = [NSString stringWithFormat:@"%@",[dic objectForKey:@"authed"]];
     model.beginAt = [NSString stringWithFormat:@"%@",[dic objectForKey:@"beginAt"]];
@@ -60,7 +93,7 @@
     model.session_type = [NSString stringWithFormat:@"%@",[session objectForKey:@"Type"]];
     model.VideoBitrate = [NSString stringWithFormat:@"%@",[session objectForKey:@"VideoBitrate"]];
     model.WSFLV = [NSString stringWithFormat:@"%@",[session objectForKey:@"WSFLV"]];
-
+*/
  
     return model;
 }

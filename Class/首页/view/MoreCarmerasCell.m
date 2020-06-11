@@ -12,6 +12,8 @@
 #import "MoreCarmerasCollectionViewCell.h"
 #import "MyEquipmentsModel.h"
 #import "LivingModel.h"
+#import "RequestSence.h"
+
 
 @interface MoreCarmerasCell ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -21,6 +23,8 @@
 
 @property (nonatomic, strong) WWCollectionView *collectionView;
 @property (nonatomic,strong) NSArray *dataArray;
+@property (nonatomic,strong) NSArray *infoArray;
+
 @property (nonatomic,strong) NSMutableArray *modelArray;
 
 @end
@@ -152,13 +156,16 @@
 {
     _equipmentName.text = model.equipment_name;
     _equipmentStates.text = model.equipment_states;
-    
+    _equipmentAddress.text = model.equipment_address;
+
     if ([model.equipment_states isEqualToString:@"离线"]) {
         _equipmentStates.backgroundColor = UIColorFromRGB(0xAEAEAE, 1);
     }else{
         _equipmentStates.backgroundColor = UIColorFromRGB(0xF39700, 1);
     }
-    self.dataArray = [NSArray arrayWithArray:model.equipment_nums];
+    self.dataArray = [NSArray arrayWithArray:model.liveModelArray];
+    self.infoArray = [NSArray arrayWithArray:model.childDevices_info];
+    
     [self.collectionView reloadData];
 }
 #pragma mark -- collectionDelegate
@@ -171,8 +178,9 @@
 {
     MoreCarmerasCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MoreCarmerasCollectionViewCell getCellIDStr] forIndexPath:indexPath];
     
-    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    [cell makeCellData:model];
+    LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    MyEquipmentsModel *myMdl = [self.infoArray objectAtIndex:indexPath.row];
+    [cell makeCellData:model withOnline:myMdl.online];
 
     cell.moreBtnClick = ^(BOOL offline) {
         if (self.moreDealClick) {
@@ -234,6 +242,31 @@
 -(void)playAllButtonClick
 {
    
+}
+//获取数据
+-(void)getChildDevicedData:(NSString*)device_id
+{
+    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/stream/list?serial=%@",device_id];
+
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+//    sence.body = jsonData;
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+//            [weak_self handleObject:obj withDeviceId:device_id];
+    };
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+    };
+
+    [sence sendRequest];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

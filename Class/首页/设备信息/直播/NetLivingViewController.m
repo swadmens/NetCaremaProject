@@ -147,11 +147,11 @@
         return;
     }
     //live直播
-    NSDictionary *dic = @{ @"name":_model.name,
-                            @"snapUrl":_model.url,
-                            @"videoUrl":_model.RTMP,
-                            @"sharedLink":_model.sharedLink,
-                            @"createAt":_model.createAt,
+    NSDictionary *dic = @{ @"name":_model.ChannelName,
+                            @"snapUrl":_model.SnapURL,
+                            @"videoUrl":_model.HLS,
+                            @"sharedLink":_model.StreamID,
+                            @"createAt":_model.StartAt,
                           };
     DemandModel *models = [DemandModel makeModelData:dic];
     HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
@@ -215,14 +215,14 @@
             if (idx == 0) {
                 weak_self.model = [LivingModel makeModelData:dic];
                 if ([dic.allKeys containsObject:@"session"]) {
-                    [weak_self getLivingCoverPhoto:weak_self.model.live_id];
+                    [weak_self getLivingCoverPhoto:weak_self.model.DeviceID];
                     [[GCDQueue mainQueue] queueBlock:^{
                         weak_self.isLiving = YES;
                     }];
                 }else{
                     [[GCDQueue mainQueue] queueBlock:^{
                         weak_self.showImageView.image = [UIImage imageWithColor:kColorThirdTextColor];
-                        weak_self.nameLabel.text = weak_self.model.name;
+                        weak_self.nameLabel.text = weak_self.model.ChannelName;
                         weak_self.tagLabel.text = @"离线";
                         weak_self.isLiving = NO;
                     }];
@@ -235,8 +235,8 @@
 //获取直播快照
 -(void)getLivingCoverPhoto:(NSString*)live_id
 {
-    NSString *url = [NSString stringWithFormat:@"service/video/liveqing/snap/current?id=%@",live_id];
-    
+    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/channelsnap?serial=%@&code=%@&realtime=true",live_id,live_id];
+
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
@@ -263,12 +263,12 @@
         return;
     }
     
-    NSDictionary *data = [obj objectForKey:@"data"];
-    NSString *snapUrl = [NSString stringWithFormat:@"%@",[data objectForKey:self.model.live_id]];
-    
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:snapUrl] placeholder:[UIImage imageWithColor:kColorLineColor]];
-    _nameLabel.text = self.model.name;
-    _tagLabel.text = @"直播中";
+//    NSDictionary *data = [obj objectForKey:@"data"];
+//    NSString *snapUrl = [NSString stringWithFormat:@"%@",[data objectForKey:self.model.live_id]];
+//
+//    [_showImageView yy_setImageWithURL:[NSURL URLWithString:snapUrl] placeholder:[UIImage imageWithColor:kColorLineColor]];
+//    _nameLabel.text = self.model.name;
+//    _tagLabel.text = @"直播中";
 }
 
 /*

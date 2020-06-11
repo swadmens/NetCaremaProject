@@ -522,7 +522,7 @@
     id obj = [self.dataArray objectAtIndex:self.selectIndex];
     if ([obj isKindOfClass:[LivingModel class]]) {
         LivingModel *model = obj;
-        if (![WWPublicMethod isStringEmptyText:model.RTMP]) {
+        if (![WWPublicMethod isStringEmptyText:model.HLS]) {
             return NO;
         }else{
             return YES;

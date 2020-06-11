@@ -212,7 +212,7 @@
 //        vc.allDataArray = [NSArray arrayWithArray:self.dataArray];
         vc.allDataArray = [NSArray arrayWithObjects:model, nil];
         vc.isLiving = YES;
-        vc.title_value = model.name;
+        vc.title_value = model.ChannelName;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
         
@@ -307,7 +307,9 @@
         //获取直播封面
         [weak_self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             LivingModel *model = obj;
-            [weak_self getLivingCoverPhoto:model.live_id withIndex:idx];
+            if (![WWPublicMethod isStringEmptyText:model.SnapURL]) {
+                [weak_self getLivingCoverPhoto:model.DeviceID withIndex:idx];
+            }
         }];
 
         [[GCDQueue mainQueue] queueBlock:^{
@@ -372,11 +374,11 @@
         return;
     }
     
-    NSDictionary *data = [obj objectForKey:@"data"];
-    LivingModel *model = [self.dataArray objectAtIndex:indexPath];
-    model.snapUrl = [NSString stringWithFormat:@"%@",[data objectForKey:model.live_id]];
-    [self.dataArray replaceObjectAtIndex:indexPath withObject:model];
-    [self.collectionView reloadData];
+//    NSDictionary *data = [obj objectForKey:@"data"];
+//    LivingModel *model = [self.dataArray objectAtIndex:indexPath];
+//    model.SnapURL = [NSString stringWithFormat:@"%@",[data objectForKey:model.DeviceID]];
+//    [self.dataArray replaceObjectAtIndex:indexPath withObject:model];
+//    [self.collectionView reloadData];
 }
 
 

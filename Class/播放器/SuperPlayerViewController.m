@@ -21,6 +21,7 @@
 #import "CarmeaVideosModel.h"
 #import "LivingModel.h"
 #import "RequestSence.h"
+#import "MyEquipmentsModel.h"
 
 #define KTopviewheight kScreenWidth*0.68
 
@@ -115,11 +116,17 @@
     
     
 //    [self setupSaveView];
-    if (_isLiving) {
-        LivingModel *mdl = self.allDataArray.firstObject;
-        self.carmer_id = mdl.session_id;
-        [self startLoadDataRequest:mdl.session_id];
-    }
+//    if (_isLiving) {
+//        LivingModel *mdl = self.allDataArray.firstObject;
+//        self.carmer_id = mdl.DeviceID;
+//        [self startLoadDataRequest:mdl.DeviceID];
+//        MyEquipmentsModel *myMdl = self.allDataArray.firstObject;
+//        [self getLivingAllData:self.device_id];
+//    }
+    
+
+    
+    
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -135,8 +142,7 @@
         
         self.topCell = [tableView dequeueReusableCellWithIdentifier:[PlayerTableViewCell getCellIDStr] forIndexPath:indexPath];
         self.topCell.selectionStyle = UITableViewCellSelectionStyleNone;
-//        cell.isLiving = _isLiving;
-//        cell.model = self.model;
+        
         [self.topCell makeCellDataNoLiving:self.model witnLive:_isLiving];
         [self.topCell makeCellDataLiving:self.allDataArray witnLive:_isLiving];
         self.topCell.delegate = self;
@@ -448,8 +454,8 @@
 }
 - (void)selectCellCarmera:(PlayerTableViewCell *)cell withData:(LivingModel *)model
 {
-    self.carmer_id = model.session_id;
-    [self startLoadDataRequest:model.session_id];
+    self.carmer_id = model.DeviceID;
+    [self startLoadDataRequest:model.DeviceID];
     
 }
 //右上角按钮
@@ -573,7 +579,6 @@
 //如果是直播，获取该摄像头下的录像文件
 - (void)startLoadDataRequest:(NSString*)carmeraId;
 {
-//    [_kHUDManager showActivityInView:nil withTitle:nil];
    if (self.allDataArray.count == 0) {
           return;
       }
@@ -589,11 +594,13 @@
                                                        options:0
                                                          error:nil];
     
+    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/record/query?streamid=stream:%@:%@",carmeraId,carmeraId];
+    
     RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"BODY";
+    sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
     sence.body = jsonData;
-    sence.pathURL = @"service/video/liveqing/record/query_records";
+    sence.pathURL = url;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
@@ -655,11 +662,11 @@
 -(void)getRecordCoverPhoto:(NSString*)period withData:(NSInteger)indexInteger
 {
     LivingModel *mdl = self.allDataArray.firstObject;
-    if (![WWPublicMethod isStringEmptyText:mdl.session_id]) {
+    if (![WWPublicMethod isStringEmptyText:mdl.DeviceID]) {
         return;
     }
     
-    NSString *url = [NSString stringWithFormat:@"service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",mdl.session_id,period];
+    NSString *url = [NSString stringWithFormat:@"service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",mdl.DeviceID,period];
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -706,6 +713,93 @@
     [super viewWillAppear:animated];
     [self.topCell play];
 }
+
+
+//获取直播数据
+- (void)getLivingAllData:(NSString*)device_id
+{
+    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/stream/list?serial=%@",device_id];
+
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+//    sence.body = jsonData;
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+        [weak_self handleObject:obj withDeviceId:device_id];
+    };
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+        [_kHUDManager showMsgInView:nil withTitle:@"无法获取直播数据，请重试！" isSuccess:YES];
+    };
+    [sence sendRequest];
+}
+
+- (void)handleObject:(id)obj withDeviceId:(NSString*)device_id
+{
+    [_kHUDManager hideAfter:0.1 onHide:nil];
+    __unsafe_unretained typeof(self) weak_self = self;
+    [[GCDQueue globalQueue] queueBlock:^{
+        NSArray *data= [obj objectForKey:@"Streams"];
+        NSMutableArray *tempArray = [NSMutableArray array];
+        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *dic = obj;
+            LivingModel *model = [LivingModel makeModelData:dic];
+            [tempArray addObject:model];
+        }];
+        [weak_self.dataArray addObjectsFromArray:tempArray];
+        
+        [[GCDQueue mainQueue] queueBlock:^{
+            [weak_self.tableView reloadData];
+        }];
+        
+    }];
+}
+//获取直播快照
+-(void)getLivingCoverPhoto:(NSString*)live_id
+{
+    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/channelsnap?serial=%@&code=%@&realtime=true",live_id,live_id];
+
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+
+         [weak_self dealWithCoverPhoto:obj];
+    };
+
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error: %@", error);
+    };
+    [sence sendRequest];
+}
+
+-(void)dealWithCoverPhoto:(id)obj
+{
+    if (obj == nil) {
+        return;
+    }
+    
+//    NSDictionary *data = [obj objectForKey:@"data"];
+//    NSString *snapUrl = [NSString stringWithFormat:@"%@",[data objectForKey:self.model.live_id]];
+//
+//    [_showImageView yy_setImageWithURL:[NSURL URLWithString:snapUrl] placeholder:[UIImage imageWithColor:kColorLineColor]];
+//    _titleLabel.text = self.model.name;
+
+}
+
 
 
 /*

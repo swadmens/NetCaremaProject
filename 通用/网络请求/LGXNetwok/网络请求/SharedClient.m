@@ -37,12 +37,12 @@
 #ifdef DEBUG
     url = [[NSUserDefaults standardUserDefaults] objectForKey:_DEVURLKey];
     if (url == nil) {
-        url = @"http://ncore.iot/"; // 开发用的
-//        url = @"https://192.168.10.12:9090/outer/"; http://ncore.iot
+//        url = @"http://ncore.iot/"; // 开发用的
+        url = @"https://homebay.quarkioe.com/";
     }
 #else
-    url = @"http://ncore.iot/"; // 正式服务器
-//    url = @"https://192.168.10.12:9090/outer/";
+//    url = @"http://ncore.iot/"; // 正式服务器
+    url = @"https://homebay.quarkioe.com/";
 #endif
     return url;
 }
@@ -204,8 +204,8 @@
             [self.returnDic setValue:responseObject forKey:@"moid"];
         }
 
-        DLog(@"Received: %@", responseObject);
-        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+//        DLog(@"Received: %@", responseObject);
+//        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败
         completion(nil, error);
@@ -227,9 +227,10 @@
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        DLog(@"\n~~~~~完成请求地址:%@\n",httpResponse.URL.absoluteString);
         completion(responseObject, nil);
-        DLog(@"Received: %@", responseObject);
-        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+//        DLog(@"Received: %@", responseObject);
+//        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败
         completion(nil, error);
@@ -297,9 +298,10 @@
     NSURLSessionDataTask *task = [self PUT:urlStr parameters:finalParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+        DLog(@"\n~~~~~完成请求地址:%@\n",httpResponse.URL.absoluteString);
         completion(responseObject, nil);
-        DLog(@"Received: %@", responseObject);
-        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+//        DLog(@"Received: %@", responseObject);
+//        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败
         completion(nil, error);

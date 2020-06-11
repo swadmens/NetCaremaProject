@@ -12,6 +12,11 @@
 #import "AFHTTPSessionManager.h"
 #import "RequestSence.h"
 
+
+//设置租户
+#define KAPPTenant @"homebay"
+
+
 @interface LoginViewController ()<UITextFieldDelegate>
 
 @property (nonatomic,strong) UITextField *nameTextField;
@@ -160,7 +165,7 @@
     }
     
     //配置租户(lpc)、用户名、密码，保存授权
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",@"lpc",_nameTextField.text,_passwordTextField.text];
+    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",KAPPTenant,_nameTextField.text,_passwordTextField.text];
     //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
     NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
     _kUserModel.userInfo.Authorization = str2;

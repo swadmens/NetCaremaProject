@@ -26,7 +26,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *lastUpdated;
 @property (nonatomic,strong) NSString *creationTime;
 @property (nonatomic,strong) NSString *responseInterval;
+@property (nonatomic,assign) BOOL online;//是否在线
 
+
+@property (nonatomic,strong) NSString *address;
+@property (nonatomic,strong) NSString *createdAt;
+@property (nonatomic,strong) NSString *deviceID;
+@property (nonatomic,strong) NSString *childDevice_id;
+@property (nonatomic,strong) NSString *snapURL;
+@property (nonatomic,strong) NSString *updatedAt;
+@property (nonatomic,strong) NSString *manufacturer;
 
 
 

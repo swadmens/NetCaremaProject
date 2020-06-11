@@ -287,11 +287,13 @@
                                                        options:0
                                                          error:nil];
     
+    NSString *url = [NSString stringWithFormat:@"api/v1/cloudrecord/querydaily?serial=%@&code=%@&period=%@",self.device_id,self.device_id,self.date_value];
+    
     RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"BODY";
+    sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
-    sence.body = jsonData;
-    sence.pathURL = @"service/video/liveqing/record/query_records";
+//    sence.body = jsonData;
+    sence.pathURL = url;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];

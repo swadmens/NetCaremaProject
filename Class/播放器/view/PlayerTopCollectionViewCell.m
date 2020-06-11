@@ -22,6 +22,7 @@
 @property (nonatomic, assign) BOOL isLiving;//是否是直播
 
 @property (nonatomic,strong) DemandModel *model;
+@property (nonatomic,strong) LivingModel *lvModel;
 
 @property (nonatomic,strong) UIView *coverView;
 @property (nonatomic,strong) UILabel *timeLabel;
@@ -175,11 +176,14 @@
 }
 -(void)makeCellData:(id)obj
 {
-    LivingModel *model = obj;
-    if (![WWPublicMethod isStringEmptyText:model.RTMP]) {
+    if (self.lvModel != nil) {
+        return;
+    }
+    self.lvModel = obj;
+    if (![WWPublicMethod isStringEmptyText:self.lvModel.HLS]) {
         _coverView.hidden = NO;
         _titleImageView.hidden = NO;
-        _timeLabel.text = model.updateAt;
+        _timeLabel.text = self.lvModel.StartAt;
     }else{
         _coverView.hidden = YES;
         _titleImageView.hidden = YES;
@@ -189,11 +193,11 @@
         [self.playerView removeFromSuperview];
 
         
-        NSDictionary *dic = @{ @"name":model.name,
-                                @"snapUrl":model.url,
-                                @"videoUrl":model.RTMP,
-                                @"sharedLink":model.sharedLink,
-                                @"createAt":model.createAt,
+        NSDictionary *dic = @{ @"name":self.lvModel.ChannelName,
+                                @"snapUrl":self.lvModel.SnapURL,
+                                @"videoUrl":self.lvModel.HLS,
+                                @"sharedLink":self.lvModel.StreamID,
+                               @"createAt":self.lvModel.StartAt,
                               };
         DemandModel *models = [DemandModel makeModelData:dic];
         self.playerView = [[PLPlayerView alloc] init];

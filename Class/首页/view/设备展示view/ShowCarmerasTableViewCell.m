@@ -8,6 +8,7 @@
 
 #import "ShowCarmerasTableViewCell.h"
 #import "MyEquipmentsModel.h"
+#import <UIImageView+YYWebImage.h>
 
 @interface ShowCarmerasTableViewCell ()
 
@@ -70,10 +71,11 @@
     [rightImageView rightToView:self.contentView withSpace:10];
     
 }
--(void)makeCellData:(MyEquipmentsModel *)model
+-(void)makeCellData:(MyEquipmentsModel *)model witnSnap:(nonnull NSString *)snap
 {
     _titleLabel.text = model.equipment_name;
     _statesLabel.text = model.equipment_states;
+    [_titleImageView yy_setImageWithURL:[NSURL URLWithString:snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
     if ([model.equipment_states isEqualToString:@"离线"]) {
         _statesLabel.backgroundColor = UIColorFromRGB(0xAEAEAE, 1);
     }else{

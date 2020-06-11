@@ -696,7 +696,8 @@
 {
     [NSTimer scheduledTimerWithTimeInterval:60 repeats:YES block:^(NSTimer * _Nonnull timer) {
 
-        NSString *url = @"service/video/ncore/sync/device/status";
+//        NSString *url = @"service/video/ncore/sync/device/status";
+        NSString *url = @"service/video/ncore/sync/gbs/device/";
         
         RequestSence *sence = [[RequestSence alloc] init];
         sence.requestMethod = @"POST";
@@ -718,7 +719,8 @@
 {
     [NSTimer scheduledTimerWithTimeInterval:120 repeats:YES block:^(NSTimer * _Nonnull timer) {
          
-        NSString *url = @"service/video/ncore/sync/device";
+//        NSString *url = @"service/video/ncore/sync/device";
+        NSString *url = @"localhost:9191/ncore/sync/gbs/device/status";
         
         RequestSence *sence = [[RequestSence alloc] init];
         sence.requestMethod = @"POST";

@@ -20,6 +20,7 @@
 #import "WMZDialog.h"
 #import "QRScanCodeViewController.h"//二维码
 #import "SuperPlayerViewController.h"
+#import "LivingModel.h"
 
 #import "LocalVideoViewController.h"
 
@@ -190,7 +191,8 @@
             vc.equipment_id = model.equipment_id;
             vc.delegate = self;
             vc.indexRow = indexPath.row;
-            vc.dataArray = [NSMutableArray arrayWithArray:model.equipment_nums];
+            vc.dataArray = [NSMutableArray arrayWithArray:model.childDevices_info];
+            vc.liveDataArray = [NSMutableArray arrayWithArray:model.liveModelArray];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
             self.hidesBottomBarWhenPushed = NO;
@@ -227,16 +229,15 @@
     IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
 //    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
     
-    
-//    if (indexPath.row > 0) {
     SuperPlayerViewController *vc = [SuperPlayerViewController new];
     vc.hidesBottomBarWhenPushed = YES;
-    vc.allDataArray = [NSArray arrayWithArray:[self.modelDic objectForKey:@(indexPath.row)]];
+    vc.allDataArray = [NSArray arrayWithArray:model.liveModelArray];
+//    vc.allDataArray = [NSArray arrayWithArray:model.childDevices_info];
     vc.isLiving = YES;
+    vc.device_id = model.childDevices_id;
     vc.title_value = model.equipment_name;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
-//    }
     
 }
 
@@ -257,13 +258,18 @@
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
+//    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_IsCameraManageDevice&currentPage=%ld",(long)self.page];
+    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_GBSManageDevice&currentPage=%ld",(long)self.page];
+    
+    
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/vnd.com.nsn.cumulocity.managedobjectcollection+json";
-    sence.pathURL = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_IsCameraManageDevice&currentPage=%ld",(long)self.page];;
+    sence.pathURL = url;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
-
+       
+        DLog(@"Index ==  Received: %@", obj);
         [weak_self handleObject:obj];
     };
     sence.errorBlock = ^(NSError *error) {
@@ -284,8 +290,8 @@
 - (void)handleObject:(id)obj
 {
     _isHadFirst = YES;
-    [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
+    [_kHUDManager hideAfter:0.1 onHide:nil];
     [[GCDQueue globalQueue] queueBlock:^{
         NSArray *data = [obj objectForKey:@"managedObjects"];
         NSMutableArray *tempArray = [NSMutableArray array];
@@ -299,6 +305,7 @@
             IndexDataModel *model = [IndexDataModel makeModelData:dic];
             [tempArray addObject:model];
             [weak_self getDeviceInfo:model.equipment_id withIndex:idx];
+            [weak_self getDeviceLivingData:model.childDevices_id withIndex:idx];
         }];
         [weak_self.dataArray addObjectsFromArray:tempArray];
         
@@ -336,8 +343,8 @@
 //获取设备信息
 -(void)getDeviceInfo:(NSString*)device_id withIndex:(NSInteger)index
 {
-    
     NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
+//    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
 
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -345,14 +352,10 @@
     sence.pathURL = url;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"Received: %@", obj);
-
          [weak_self handleDeviceInfoObject:obj withIndex:index];
     };
-
     sence.errorBlock = ^(NSError *error) {
-
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error: %@", error);
     };
@@ -361,7 +364,6 @@
 - (void)handleDeviceInfoObject:(id)obj withIndex:(NSInteger)index
 {
     _isHadFirst = YES;
-    [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
         NSArray *data = [obj objectForKey:@"references"];
@@ -372,18 +374,64 @@
             MyEquipmentsModel *model = [MyEquipmentsModel makeModelData:dic];
             [tempArray addObject:model];
         }];
-        
+
         IndexDataModel *model = [self.dataArray objectAtIndex:index];
-        model.equipment_nums = tempArray;
+        model.childDevices_info = [NSArray arrayWithArray:tempArray];
         [self.dataArray replaceObjectAtIndex:index withObject:model];
-        
-        
+
+
         [[GCDQueue mainQueue] queueBlock:^{
-            
+
             [weak_self.tableView reloadData];
         }];
     }];
 }
+//获取直播数据
+-(void)getDeviceLivingData:(NSString*)living_id withIndex:(NSInteger)index
+{
+    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/stream/list?serial=%@",living_id];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+        [weak_self handleDeviceLivingObject:obj withIndex:index];
+    };
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+    };
+    [sence sendRequest];
+}
+
+- (void)handleDeviceLivingObject:(id)obj  withIndex:(NSInteger)index
+{
+    [_kHUDManager hideAfter:0.1 onHide:nil];
+    __unsafe_unretained typeof(self) weak_self = self;
+    [[GCDQueue globalQueue] queueBlock:^{
+        NSArray *data= [obj objectForKey:@"Streams"];
+        NSMutableArray *tempArray = [NSMutableArray array];
+        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *dic = obj;
+            LivingModel *model = [LivingModel makeModelData:dic];
+            [tempArray addObject:model];
+        }];
+        IndexDataModel *model = [self.dataArray objectAtIndex:index];
+        model.liveModelArray = [NSArray arrayWithArray:tempArray];
+        [self.dataArray replaceObjectAtIndex:index withObject:model];
+
+        [[GCDQueue mainQueue] queueBlock:^{
+            [weak_self.tableView reloadData];
+        }];
+
+    }];
+}
+
 
 #pragma IndexTopDelegate
 -(void)collectionSelect:(NSInteger)index
@@ -429,16 +477,16 @@
 -(void)clickAllVideos
 {
     
-    NSString *ClientId = [WWPublicMethod isStringEmptyText:self.selectModel.ClientId]?self.selectModel.ClientId:@"";
-    NSString *DeviceId = [WWPublicMethod isStringEmptyText:self.selectModel.DeviceId]?self.selectModel.DeviceId:@"";
-    NSString *CameraId = [WWPublicMethod isStringEmptyText:self.selectModel.CameraId]?self.selectModel.CameraId:@"";
+//    NSString *ClientId = [WWPublicMethod isStringEmptyText:self.selectModel.ClientId]?self.selectModel.ClientId:@"";
+//    NSString *DeviceId = [WWPublicMethod isStringEmptyText:self.selectModel.DeviceId]?self.selectModel.DeviceId:@"";
+//    NSString *CameraId = [WWPublicMethod isStringEmptyText:self.selectModel.CameraId]?self.selectModel.CameraId:@"";
 
     
     LocalVideoViewController *vc = [LocalVideoViewController new];
     vc.delegate = self;
     vc.hidesBottomBarWhenPushed = YES;
     vc.isFromIndex = YES;
-    vc.device_id = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
+    vc.device_id = self.selectModel.deviceID;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }
@@ -467,10 +515,11 @@
     
 }
 #pragma showCarmeraDelegate
--(void)getNewArray:(NSArray *)array withIndex:(NSInteger)index
+-(void)getNewInfoArray:(NSArray *)infoArray withModelArray:(NSArray *)mdArray withIndex:(NSInteger)index
 {
     IndexDataModel *model = [self.dataArray objectAtIndex:index];
-    model.equipment_nums = array;
+    model.childDevices_info = infoArray;
+    model.liveModelArray = mdArray;
     [self.dataArray replaceObjectAtIndex:index withObject:model];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     

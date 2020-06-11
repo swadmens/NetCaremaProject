@@ -108,8 +108,9 @@
 }
 -(void)makeCellData:(IndexDataModel *)model
 {
-    _equipmentName.text = model.equipment_name;
+    _equipmentName.text = model.equipment_id;
     _equipmentStates.text = model.equipment_states;
+    _equipmentAddress.text = model.equipment_address;
     
     if ([model.equipment_states isEqualToString:@"离线"]) {
         _equipmentStates.backgroundColor = UIColorFromRGB(0xAEAEAE, 1);

@@ -92,7 +92,7 @@
 //}
 -(void)makeCellData:(LivingModel *)model
 {
-    _equipmentName.text = model.name;
+    _equipmentName.text = model.ChannelName;
 //    _equipmentDeatil.text = model.;
 //    _equipmentStates.text = model.;
 //    if ([model.equipment_states isEqualToString:@"离线"]) {
