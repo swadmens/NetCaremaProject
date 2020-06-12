@@ -40,6 +40,7 @@
 
 @property (nonatomic,assign) BOOL isLogion;//是否登录
 @property (nonatomic,strong) MyEquipmentsModel *selectModel;
+@property (nonatomic,strong) LivingModel *selectLvModel;
 
 //直播数据源
 @property (nonatomic,strong) NSMutableDictionary *modelDic;
@@ -175,14 +176,16 @@
     
     IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
    
-    if (model.equipment_nums.count > 1) {
+    if (model.childDevices_info.count > 1) {
         MoreCarmerasCell *cell = [tableView dequeueReusableCellWithIdentifier:[MoreCarmerasCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         [cell makeCellData:model];
         
         cell.moreDealClick = ^(NSInteger selectRow, BOOL offline) {
-            self.selectModel = [model.equipment_nums objectAtIndex:selectRow];
+            self.selectModel = [model.childDevices_info objectAtIndex:selectRow];
+            self.selectLvModel = [model.liveModelArray objectAtIndex:selectRow];
+
             [self moreDealwith:offline];
         };
         
@@ -212,6 +215,8 @@
         [cell makeCellData:model];
         
         cell.moreClick = ^{
+            self.selectModel = model.childDevices_info.firstObject;
+            self.selectLvModel = model.liveModelArray.firstObject;
             [self moreDealwith:[model.equipment_states isEqualToString:@"离线"]];
         };
         cell.getSingleModelBackdata = ^(LivingModel * _Nonnull model) {
@@ -487,6 +492,7 @@
     vc.hidesBottomBarWhenPushed = YES;
     vc.isFromIndex = YES;
     vc.device_id = self.selectModel.deviceID;
+    vc.code = self.selectLvModel.DeviceID;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }
@@ -495,11 +501,12 @@
     NSDictionary *dic = @{
                           @"id":self.selectModel.equipment_id,
                           @"name":self.selectModel.equipment_name,
-                          @"c8y_Notes":self.selectModel.c8y_Notes,
-                          @"CameraId":self.selectModel.CameraId,
-                          @"Channel":self.selectModel.equipment_Channel,
-                          @"ClientId":self.selectModel.ClientId,
-                          @"DeviceId":self.selectModel.DeviceId,
+//                          @"c8y_Notes":self.selectModel.c8y_Notes,
+//                          @"CameraId":self.selectModel.CameraId,
+//                          @"Channel":self.selectModel.equipment_Channel,
+//                          @"ClientId":self.selectModel.ClientId,
+                          @"serial":self.selectModel.deviceID,
+                          @"code":self.selectLvModel.DeviceID,
                           @"owner":self.selectModel.owner,
                           @"lastUpdated":self.selectModel.lastUpdated,
                           @"responseInterval":self.selectModel.responseInterval,
@@ -534,18 +541,18 @@
      NSArray *arr2 = @[@{@"title":@"全部录像",@"image":@"index_all_video_image"},
                      @{@"title":@"通道详情",@"image":@"index_channel_detail_image"}];
      
-     NSString *ClientId = [WWPublicMethod isStringEmptyText:self.selectModel.ClientId]?self.selectModel.ClientId:@"";
-     NSString *DeviceId = [WWPublicMethod isStringEmptyText:self.selectModel.DeviceId]?self.selectModel.DeviceId:@"";
-     NSString *CameraId = [WWPublicMethod isStringEmptyText:self.selectModel.CameraId]?self.selectModel.CameraId:@"";
-     
-     NSString *device_id = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
+//     NSString *ClientId = [WWPublicMethod isStringEmptyText:self.selectModel.ClientId]?self.selectModel.ClientId:@"";
+//     NSString *DeviceId = [WWPublicMethod isStringEmptyText:self.selectModel.DeviceId]?self.selectModel.DeviceId:@"";
+//     NSString *CameraId = [WWPublicMethod isStringEmptyText:self.selectModel.CameraId]?self.selectModel.CameraId:@"";
+//
+//     NSString *device_id = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
      
      CGFloat height;
      if (offline) {
-         [self.bottomView makeViewData:arr2 with:device_id];
+         [self.bottomView makeViewData:arr2 with:self.selectModel.deviceID];
          height = arr2.count * 35 + 50;
      }else{
-         [self.bottomView makeViewData:arr with:device_id];
+         [self.bottomView makeViewData:arr with:self.selectModel.deviceID];
          height = arr.count * 35 + 50;
      }
      

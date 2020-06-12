@@ -287,7 +287,7 @@
                                                        options:0
                                                          error:nil];
     
-    NSString *url = [NSString stringWithFormat:@"api/v1/cloudrecord/querydaily?serial=%@&code=%@&period=%@",self.device_id,self.device_id,self.date_value];
+    NSString *url = [NSString stringWithFormat:@"api/v1/cloudrecord/querydaily?serial=%@&code=%@&period=%@",self.device_id,self.code,self.date_value];
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";

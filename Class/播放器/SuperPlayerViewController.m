@@ -22,6 +22,7 @@
 #import "LivingModel.h"
 #import "RequestSence.h"
 #import "MyEquipmentsModel.h"
+#import "DownLoadSence.h"
 
 #define KTopviewheight kScreenWidth*0.68
 
@@ -43,6 +44,9 @@
 @property (nonatomic, strong) NSMutableArray *localVideosArray;
 
 @property (nonatomic,strong) NSString *carmer_id;//摄像头ID
+@property (nonatomic,strong) NSString *streamid;
+
+
 
 
 @end
@@ -116,13 +120,11 @@
     
     
 //    [self setupSaveView];
-//    if (_isLiving) {
-//        LivingModel *mdl = self.allDataArray.firstObject;
-//        self.carmer_id = mdl.DeviceID;
-//        [self startLoadDataRequest:mdl.DeviceID];
-//        MyEquipmentsModel *myMdl = self.allDataArray.firstObject;
-//        [self getLivingAllData:self.device_id];
-//    }
+    if (_isLiving) {
+        LivingModel *mdl = self.allDataArray.firstObject;
+        self.carmer_id = mdl.DeviceID;
+        self.streamid = mdl.StreamID;
+    }
     
 
     
@@ -250,8 +252,8 @@
         case videoSateVideing://录像
         
             self.controlBtn.selected = !self.controlBtn.selected;
-            self.saveBackView.hidden = !self.controlBtn.selected;
-
+            [self startOrStopVideo:self.controlBtn.selected?@"start":@"stop"];
+            
             break;
         case videoSateYuntai://云台控制
             self.controlBtn.selected = !self.controlBtn.selected;
@@ -367,13 +369,15 @@
 -(void)cameraControl:(NSString*)controls
 {
     //提交数据
-    NSString *url;
+//    NSString *url;
+//
+//    if ([self.live_type isEqualToString:@"LiveGBS"]) {
+//        url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.gbs_serial,self.gbs_code,controls];
+//    }else{
+//        url = [NSString stringWithFormat:@"service/video/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
+//    }
     
-    if ([self.live_type isEqualToString:@"LiveGBS"]) {
-        url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.gbs_serial,self.gbs_code,controls];
-    }else{
-        url = [NSString stringWithFormat:@"service/video/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
-    }
+    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.device_id,self.carmer_id,controls];
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -452,11 +456,93 @@
     }
     
 }
+
+//开始或停止录像
+-(void)startOrStopVideo:(NSString*)states
+{
+//    "raw": "https://homebay.quarkioe.com/service/video/livegbs/api/v1/record/start?streamid=stream:34020000001320000001:34020000001320000001",
+//    "raw": "https://homebay.quarkioe.com/service/video/livegbs/api/v1/record/stop?streamid=stream:34020000001320000001:34020000001320000001",
+
+    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/record/%@?streamid=%@",states,self.streamid];
+    
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+        if ([states isEqualToString:@"stop"]) {
+            [weak_self videoFinishDownload:obj];
+        }
+    };
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+        [weak_self failedOperation];
+    };
+    [sence sendRequest];
+}
+//录像完成，下载录像
+-(void)videoFinishDownload:(id)obj
+{
+    if (obj == nil) {
+        return;
+    }
+    NSArray *data = [obj objectForKey:@"RecordList"];
+    NSDictionary *dic = (NSDictionary*)data.firstObject;
+    
+    NSString *DownloadURL = [dic objectForKey:@"DownloadURL"];
+    NSString *EndTime = [dic objectForKey:@"EndTime"];
+    NSString *StartTime = [dic objectForKey:@"StartTime"];
+
+    
+    DownLoadSence *sence = [[DownLoadSence alloc]init];
+    sence.url = DownloadURL;
+//    sence.filePath = @"";
+//    sence.fileName = @"";
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.finishedBlock = ^(NSString *filePath) {
+        DLog(@"filePath ==  %@",filePath);
+        NSURL *url = [NSURL URLWithString:filePath];
+        BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([url path]);
+        if (compatible){
+            //保存相册核心代码
+            UISaveVideoAtPathToSavedPhotosAlbum([url path], weak_self, @selector(savedVideo:didFinishSavingWithError:contextInfo:), nil);
+        }
+    };
+    sence.progressBlock = ^(float progress, NSString *writeBytes) {
+    
+        DLog(@"writeBytes ==  %@",writeBytes);
+
+    };
+    [sence startDownload];
+}
+//下载完成保存视频到本地相册
+- (void)savedVideo:(UIImage*)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    if (error) {
+        NSLog(@"保存图片失败%@", error.localizedDescription);
+    }else {
+        
+        [self setupSaveView:image];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            __weak __typeof(&*self)weakSelf = self;
+            [weakSelf.saveBackView removeFromSuperview];
+        });
+
+    }
+}
+
+
 - (void)selectCellCarmera:(PlayerTableViewCell *)cell withData:(LivingModel *)model
 {
     self.carmer_id = model.DeviceID;
+    self.streamid = model.StreamID;
     [self startLoadDataRequest:model.DeviceID];
-    
 }
 //右上角按钮
 -(void)sharaBtnCLick

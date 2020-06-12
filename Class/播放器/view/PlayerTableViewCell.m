@@ -191,11 +191,8 @@
 //    [self.dataArray exchangeObjectAtIndex:sourceIndexPath.item withObjectAtIndex:destinationIndexPath.item];
         
     id obj = [self.dataArray objectAtIndex:sourceIndexPath.item];
-    
     [self.dataArray removeObjectAtIndex:sourceIndexPath.item];
-    
     [self.dataArray insertObject:obj atIndex:destinationIndexPath.item];
-    
     [self.collectionView reloadData];
     
 }

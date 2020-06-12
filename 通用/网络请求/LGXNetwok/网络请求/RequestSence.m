@@ -102,6 +102,7 @@ NSString *_kStaticURL;
     }
     
     [SharedClient sharedInstance].responseSerializer = [AFJSONResponseSerializer serializer];
+//    [SharedClient sharedInstance].responseSerializer = [AFHTTPResponseSerializer serializer];
 
     if ([WWPublicMethod isStringEmptyText:_pathHeader]) {
         [[SharedClient sharedInstance].requestSerializer setValue:_pathHeader forHTTPHeaderField:@"Accept"];

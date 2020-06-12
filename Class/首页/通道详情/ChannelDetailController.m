@@ -9,6 +9,7 @@
 #import "ChannelDetailController.h"
 #import "WWTableView.h"
 #import "WWTableViewCell.h"
+#import "RequestSence.h"
 
 @interface ChannelDetailCell : WWTableViewCell
 
@@ -17,7 +18,8 @@
 @property (nonatomic,strong) UISwitch *switchView;
 @property (nonatomic,strong) UIImageView *rightImageView;
 
-
+@property (nonatomic,strong) NSString *serial;
+@property (nonatomic,strong) NSString *code;
 
 @end
 
@@ -25,6 +27,10 @@
 
 @property (nonatomic,strong) WWTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+
+@property (nonatomic,strong) NSString *serial;
+@property (nonatomic,strong) NSString *code;
+
 
 @end
 
@@ -58,6 +64,10 @@
       
        
     NSDictionary *data = [NSDictionary dictionaryWithDictionary:[WWPublicMethod objectTransFromJson:self.device_id]];
+    
+    self.serial = [data objectForKey:@"serial"];
+    self.code = [data objectForKey:@"code"];
+
     NSArray *arr = @[[data objectForKey:@"name"],@"通知",@"设备音频采集",@"设备分享",@"更多设置"];
        
     [self.dataArray addObjectsFromArray:arr];
@@ -91,6 +101,10 @@
         cell.detailLabel.hidden = YES;
         cell.switchView.hidden = NO;
         cell.rightImageView.hidden = YES;
+        
+        cell.serial = self.serial;
+        cell.code = self.code;
+        
     }else if (indexPath.row == 3){
         cell.detailLabel.hidden = NO;
         cell.switchView.hidden = YES;
@@ -180,7 +194,20 @@
 }
 -(void)valueChanged:(UISwitch*)mySwitch
 {
-    [_kHUDManager showMsgInView:nil withTitle:mySwitch.on?@"1":@"0" isSuccess:YES];
+    NSString *shared = mySwitch.on?@"true":@"false";
+    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/setchannelshared?serial=%@&code=%@&shared=%@",self.serial,self.code,shared];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    sence.successBlock = ^(id obj) {
+        DLog(@"Received: %@", obj);
+    };
+    sence.errorBlock = ^(NSError *error) {
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+    };
+    [sence sendRequest];
 }
 
 @end

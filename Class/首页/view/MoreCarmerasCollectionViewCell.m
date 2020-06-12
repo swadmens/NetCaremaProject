@@ -152,7 +152,7 @@
 }
 -(void)moreButtonClick
 {
-    BOOL offline = ![WWPublicMethod isStringEmptyText:self.model.RTMP];
+    BOOL offline = ![WWPublicMethod isStringEmptyText:self.model.HLS];
     if (self.moreBtnClick) {
         self.moreBtnClick(offline);
     }

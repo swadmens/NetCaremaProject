@@ -108,6 +108,7 @@
 }
 
 - (void)stop {
+    
     [self.playerView stop];
     self.isPlaying = NO;
 }
@@ -176,22 +177,26 @@
 }
 -(void)makeCellData:(id)obj
 {
-    if (self.lvModel != nil) {
-        return;
-    }
+//    if (self.lvModel != nil) {
+//        return;
+//    }
     self.lvModel = obj;
     if (![WWPublicMethod isStringEmptyText:self.lvModel.HLS]) {
         _coverView.hidden = NO;
         _titleImageView.hidden = NO;
         _timeLabel.text = self.lvModel.StartAt;
     }else{
+        if (self.playerView != nil) {
+            [self.playerView play];
+            return;
+        }
+        
         _coverView.hidden = YES;
         _titleImageView.hidden = YES;
         
         
         [self.playerView stop];
         [self.playerView removeFromSuperview];
-
         
         NSDictionary *dic = @{ @"name":self.lvModel.ChannelName,
                                 @"snapUrl":self.lvModel.SnapURL,
@@ -208,9 +213,8 @@
         [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self.playView);
         }];
-        [self configureVideo:NO];
-        
-        [self play];
+        [self configureVideo:YES];
+        [self.playerView play];
         self.playerView.userInteractionEnabled = NO;
     }
 }

@@ -723,7 +723,7 @@ UIGestureRecognizerDelegate
     NSLog(@"播放地址: %@", _media.videoUrl);
     
     if (![WWPublicMethod isStringEmptyText:_media.videoUrl]) {
-        [_kHUDManager showMsgInView:nil withTitle:@"视频播放有误！" isSuccess:YES];
+//        [_kHUDManager showMsgInView:nil withTitle:@"视频播放有误！" isSuccess:YES];
         if (_isFullScreen){
             [self clickExitFullScreenButton];
         }

@@ -15,6 +15,7 @@
 #import "SuperPlayerViewController.h"
 #import "DemandModel.h"
 #import "RequestSence.h"
+#import "MyEquipmentsModel.h"
 
 
 @interface LiveViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
@@ -250,20 +251,21 @@
                                                       options:0
                                                         error:nil];
     
+    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_GBSCameraDevice&currentPage=%ld",(long)self.page];
+//    service/video/liveqing/live/list
+    
+    
     RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"BODY";
+    sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
-    sence.body = jsonData;
-    sence.pathURL = @"service/video/liveqing/live/list";
+//    sence.body = jsonData;
+    sence.pathURL = url;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"Received: %@", obj);
         [weak_self handleObject:obj];
     };
     sence.errorBlock = ^(NSError *error) {
-
-        [_kHUDManager hideAfter:0.1 onHide:nil];
         // 请求失败
         DLog(@"error  ==  %@",error.userInfo);
         [weak_self failedOperation];
@@ -282,35 +284,42 @@
 - (void)handleObject:(id)obj
 {
     _isHadFirst = YES;
-    [_kHUDManager hideAfter:0.1 onHide:nil];
+//    [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
 //        NSArray *data = [obj objectForKey:@"references"];
-        NSDictionary *data = [obj objectForKey:@"data"];
-        NSArray *rows= [data objectForKey:@"rows"];
-        NSMutableArray *tempArray = [NSMutableArray array];
-
-        if (weak_self.page == 1) {
-            [weak_self.dataArray removeAllObjects];
-        }
-
-        [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSDictionary *dic = obj;
-            LivingModel *model = [LivingModel makeModelData:dic];
-            //只展示正在直播的设备
-            if ([WWPublicMethod isStringEmptyText:model.RTMP]) {
-                [tempArray addObject:model];
-            }
-        }];
-        [weak_self.dataArray addObjectsFromArray:tempArray];
+//        NSDictionary *data = [obj objectForKey:@"data"];
+//        NSArray *rows= [data objectForKey:@"rows"];
+//        NSMutableArray *tempArray = [NSMutableArray array];
+//
+//        [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//            NSDictionary *dic = obj;
+//            LivingModel *model = [LivingModel makeModelData:dic];
+//            //只展示正在直播的设备
+//            if ([WWPublicMethod isStringEmptyText:model.RTMP]) {
+//                [tempArray addObject:model];
+//            }
+//        }];
+//        [weak_self.dataArray addObjectsFromArray:tempArray];
+//
+//        //获取直播封面
+//        [weak_self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//            LivingModel *model = obj;
+//            if (![WWPublicMethod isStringEmptyText:model.SnapURL]) {
+//                [weak_self getLivingCoverPhoto:model.DeviceID withIndex:idx];
+//            }
+//        }];
         
-        //获取直播封面
-        [weak_self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            LivingModel *model = obj;
-            if (![WWPublicMethod isStringEmptyText:model.SnapURL]) {
-                [weak_self getLivingCoverPhoto:model.DeviceID withIndex:idx];
-            }
+        NSArray *data = [obj objectForKey:@"managedObjects"];
+        NSMutableArray *tempArray = [NSMutableArray arrayWithCapacity:data.count];
+        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *dic = obj;
+            NSDictionary *quark_GBSCameraDevice = [dic objectForKey:@"quark_GBSCameraDevice"];
+            NSString *deviceID = [quark_GBSCameraDevice objectForKey:@"id"];
+//            MyEquipmentsModel *model = [MyEquipmentsModel makeModelData:dic];
+            [weak_self getLivingData:deviceID];
         }];
+        
 
         [[GCDQueue mainQueue] queueBlock:^{
             
@@ -322,7 +331,7 @@
                 weak_self.collectionView.loadingMoreEnable = NO;
             }
             [weak_self.collectionView stopLoading];
-            [weak_self changeNoDataViewHiddenStatus];
+//            [weak_self changeNoDataViewHiddenStatus];
         }];
     }];
 }
@@ -381,6 +390,58 @@
 //    [self.collectionView reloadData];
 }
 
+//获取直播数据
+-(void)getLivingData:(NSString*)serial
+{
+     NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/stream/list?serial=%@",serial];
+    //    service/video/liveqing/live/list
+        
+        
+        RequestSence *sence = [[RequestSence alloc] init];
+        sence.requestMethod = @"GET";
+        sence.pathHeader = @"application/json";
+    //    sence.body = jsonData;
+        sence.pathURL = url;
+        __unsafe_unretained typeof(self) weak_self = self;
+        sence.successBlock = ^(id obj) {
+            DLog(@"Received: %@", obj);
+            [weak_self handleLivingObject:obj];
+        };
+        sence.errorBlock = ^(NSError *error) {
+
+            [_kHUDManager hideAfter:0.1 onHide:nil];
+            // 请求失败
+            DLog(@"error  ==  %@",error.userInfo);
+//            [weak_self failedOperation];
+        };
+        [sence sendRequest];
+}
+-(void)handleLivingObject:(id)obj
+{
+    [_kHUDManager hideAfter:0.1 onHide:nil];
+    __unsafe_unretained typeof(self) weak_self = self;
+    [[GCDQueue globalQueue] queueBlock:^{
+        
+        if (weak_self.page == 1) {
+            [weak_self.dataArray removeAllObjects];
+        }
+        
+        NSArray *data= [obj objectForKey:@"Streams"];
+        NSMutableArray *tempArray = [NSMutableArray array];
+        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *dic = obj;
+            LivingModel *model = [LivingModel makeModelData:dic];
+            [tempArray addObject:model];
+        }];
+        [self.dataArray addObjectsFromArray:tempArray];
+
+        [[GCDQueue mainQueue] queueBlock:^{
+            [weak_self.collectionView reloadData];
+            [weak_self changeNoDataViewHiddenStatus];
+        }];
+
+    }];
+}
 
 /*
 #pragma mark - Navigation
