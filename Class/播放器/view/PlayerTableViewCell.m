@@ -29,6 +29,7 @@
 
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSArray *allDataArray;
+@property (nonatomic, strong) NSMutableDictionary *cellDic;
 
 @property (nonatomic,strong) PlayLocalVideoView *localVideoView;
 @property (nonatomic, weak) PlayerTopCollectionViewCell *playingCell;
@@ -98,7 +99,7 @@
     _collectionView = [[WWCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:_flowLayout];
     _collectionView.backgroundColor = [UIColor whiteColor];
     // 注册
-    [_collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr]];
+//    [_collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr]];
     [_collectionView registerClass:[PlayerTopAddViewCell class] forCellWithReuseIdentifier:[PlayerTopAddViewCell getCellIDStr]];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
@@ -121,6 +122,8 @@
     }
     self.changeUI = scale;
     [self.collectionView reloadData];
+//    [self.collectionView scrollToItemAtIndexPath:self.selectIndexPath atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+
 }
 
 -(void)setIsLiving:(BOOL)isLiving
@@ -144,15 +147,25 @@
         [cell makeCellData:obj];
         return cell;
     }else{
-        PlayerTopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr] forIndexPath:indexPath];
+        // 每次先从字典中根据IndexPath取出唯一标识符
+        NSString *identifier = [_cellDic objectForKey:[NSString stringWithFormat:@"%@", indexPath]];
+        // 如果取出的唯一标示符不存在，则初始化唯一标示符，并将其存入字典中，对应唯一标示符注册Cell
+        if (identifier == nil) {
+           identifier = [NSString stringWithFormat:@"%@%@", [PlayerTopCollectionViewCell getCellIDStr], [NSString stringWithFormat:@"%@", indexPath]];
+           [_cellDic setValue:identifier forKey:[NSString stringWithFormat:@"%@", indexPath]];
+           // 注册Cell
+           [self.collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:identifier];
+        }
+        PlayerTopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+        
         cell.delegate = self;
         
         [cell makeCellData:obj];
         
-        if (indexPath == self.selectIndexPath && self.changeUI) {
-            [collectionView scrollToItemAtIndexPath:self.selectIndexPath atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
+        if (self.changeUI) {
+            [collectionView scrollToItemAtIndexPath:self.selectIndexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
         }
-        
+
         return cell;
     }
 
@@ -160,10 +173,7 @@
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    self.selectIndexPath = indexPath;
-    
     id obj = [self.dataArray objectAtIndex:indexPath.row];
-    
     if ([obj isKindOfClass:[NSString class]]) {
         self.selectIndex = indexPath.row;
         MyEquipmentsViewController *mvc = [MyEquipmentsViewController new];
@@ -171,6 +181,7 @@
         mvc.delegate = self;
         [[SuperPlayerViewController viewController:self].navigationController pushViewController:mvc animated:YES];
     }else{
+        self.selectIndexPath = indexPath;
         self.playingCell = (PlayerTopCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
         if ([self.delegate respondsToSelector:@selector(selectCellCarmera:withData:)]) {
             [self.delegate selectCellCarmera:self withData:obj];
@@ -244,6 +255,9 @@
                     [selectCell stop];
                     
                     [self.collectionView reloadData];
+//                    [UIView performWithoutAnimation:^{
+//                        [self.collectionView reloadItemsAtIndexPaths:@[self.moveIndexPath]];
+//                    }];
                     
                 }
             }
@@ -274,6 +288,11 @@
     }else{
         return CGSizeMake(width, width*0.68);
     }
+//    if (self.changeUI) {
+//        return CGSizeMake(kScreenWidth, totalHeight);
+//    }else{
+//        return CGSizeMake(width, width*0.68);
+//    }
 }
 
  
@@ -374,11 +393,15 @@
 #pragma mark - MyEquipmentsDelegate
 -(void)selectCarmeraModel:(LivingModel *)model
 {
+    if (model == nil) {
+        return;
+    }
     [self.dataArray replaceObjectAtIndex:self.selectIndex withObject:model];
-    
+        
     [UIView performWithoutAnimation:^{
        [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.selectIndex inSection:0]]];
    }];
+//    [self.collectionView reloadData];
     
     if ([self.delegate respondsToSelector:@selector(selectCellCarmera:withData:)]) {
         [self.delegate selectCellCarmera:self withData:model];
@@ -410,14 +433,12 @@
 #pragma mark - PlayerTopCollectionDelegate
 - (void)playerViewCellEnterFullScreen:(PlayerTopCollectionViewCell *_Nullable)cell
 {
-    
-}
 
+}
 - (void)playerViewCellExitFullScreen:(PlayerTopCollectionViewCell *_Nullable)cell
 {
     
 }
-
 - (void)playerViewCellWillPlay:(PlayerTopCollectionViewCell *_Nullable)cell
 {
     
@@ -429,13 +450,15 @@
         return;
     }
     
-    NSArray *array = [self.collectionView visibleCells];
-    for (PlayerTopCollectionViewCell *cell in array) {
-        [cell stop];
-    }
-    if (self.localVideoView !=nil) {
+    if (self.isPlayerVideo) {
         [self.localVideoView stop];
+    }else{
+        NSArray *array = [self.collectionView visibleCells];
+        for (PlayerTopCollectionViewCell *cell in array) {
+            [cell stop];
+        }
     }
+ 
 }
 -(void)play
 {
@@ -443,13 +466,15 @@
         return;
     }
     
-    NSArray *array = [self.collectionView visibleCells];
-    for (PlayerTopCollectionViewCell *cell in array) {
-        [cell play];
-    }
-    if (self.localVideoView !=nil) {
+    if (self.isPlayerVideo) {
         [self.localVideoView play];
+    }else{
+        NSArray *array = [self.collectionView visibleCells];
+        for (PlayerTopCollectionViewCell *cell in array) {
+            [cell play];
+        }
     }
+ 
 }
 
 -(void)makePlayerViewFullScreen
@@ -458,15 +483,16 @@
         return;
     }
     
-    PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
-    NSArray *array = [self.collectionView visibleCells];
-    for (PlayerTopCollectionViewCell *cell in array) {
-        [cell makePlayerViewFullScreen:cell == selectCell];
+    if (self.isPlayerVideo) {
+        [_localVideoView makePlayerViewFullScreen];
+    }else{
+        PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
+        NSArray *array = [self.collectionView visibleCells];
+        for (PlayerTopCollectionViewCell *cell in array) {
+            [cell makePlayerViewFullScreen:cell == selectCell];
+        }
     }
-    
-    if (self.localVideoView !=nil) {
-           [_localVideoView makePlayerViewFullScreen];
-       }
+ 
 }
 -(void)clickSnapshotButton
 {
@@ -474,19 +500,19 @@
         return;
     }
     
-    PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
-    NSArray *array = [self.collectionView visibleCells];
-    for (PlayerTopCollectionViewCell *cell in array) {
-        
-        if (cell == selectCell) {
-            [cell clickSnapshotButton];
+    if (self.isPlayerVideo) {
+        [_localVideoView clickSnapshotButton];
+    }else{
+        PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
+        NSArray *array = [self.collectionView visibleCells];
+        for (PlayerTopCollectionViewCell *cell in array) {
+            
+            if (cell == selectCell) {
+                [cell clickSnapshotButton];
+            }
         }
     }
-    
-    if (self.localVideoView !=nil) {
-        [_localVideoView clickSnapshotButton];
-    }
-    
+ 
 }
 -(void)getTopCellSnapshot:(PlayerTopCollectionViewCell *)cell with:(UIImage *)image
 {
@@ -500,23 +526,25 @@
         return;
     }
     
-    PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
-    NSArray *array = [self.collectionView visibleCells];
-    for (PlayerTopCollectionViewCell *cell in array) {
-        
-        if (cell == selectCell) {
-            [cell changeVolume:volume];
+    if (self.isPlayerVideo) {
+        [_localVideoView changeVolume:volume];
+    }else{
+        PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
+        NSArray *array = [self.collectionView visibleCells];
+        for (PlayerTopCollectionViewCell *cell in array) {
+            
+            if (cell == selectCell) {
+                [cell changeVolume:volume];
+            }
         }
     }
-    if (self.localVideoView !=nil) {
-        [_localVideoView changeVolume:volume];
-    }
+ 
 }
 
 //视频是否可以正常播放
 -(BOOL)chengkVideoNormalPlay
 {
-    id obj = [self.dataArray objectAtIndex:self.selectIndex];
+    id obj = [self.dataArray objectAtIndex:self.selectIndexPath.row];
     if ([obj isKindOfClass:[LivingModel class]]) {
         LivingModel *model = obj;
         if (![WWPublicMethod isStringEmptyText:model.HLS]) {

@@ -10,6 +10,8 @@
 
 @class PLPlayerView;
 @class DemandModel;
+@class LivingModel;
+
 @protocol PLPlayerViewDelegate <NSObject>
 
 - (void)playerViewEnterFullScreen:(PLPlayerView *)playerView;
@@ -31,7 +33,6 @@
 
 @property (nonatomic,assign) BOOL isLocalVideo;//是否是本地视频
 
-
 - (void)play;
 
 - (void)stop;
@@ -47,6 +48,7 @@
 -(void)clickSnapshotButton;
 
 - (void)changeVolume:(float)volume;
+
 
 @end
 

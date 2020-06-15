@@ -33,12 +33,6 @@
 @implementation PlayerTopCollectionViewCell
 - (void)dealloc {
     [self stop];
-    [[NSNotificationCenter defaultCenter] removeObserver:@"FullScreebInfomation"];
-}
-- (void)prepareForReuse {
-    [self stop];
-    [[NSNotificationCenter defaultCenter] removeObserver:@"FullScreebInfomation"];
-    [super prepareForReuse];
 }
 -(void)doSetup
 {
@@ -53,6 +47,17 @@
     _playView.backgroundColor = UIColorFromRGB(0x47484D, 1);
     [self.contentView addSubview:_playView];
     [_playView alignTop:@"1" leading:@"1" bottom:@"1" trailing:@"1" toView:self.contentView];
+    
+    
+    self.playerView = [[PLPlayerView alloc] init];
+    self.playerView.delegate = self;
+    [_playView addSubview:self.playerView];
+    self.playerView.isLocalVideo = NO;
+    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.playView);
+    }];
+    [self configureVideo:NO];
+    self.playerView.userInteractionEnabled = NO;
 
     
     _titleImageView = [UIImageView new];
@@ -118,12 +123,10 @@
 }
 
 - (void)playerViewEnterFullScreen:(PLPlayerView *)playerView {
-    
-//    UIView *superView = [UIApplication sharedApplication].delegate.window.rootViewController.view;
+
     UIView *superView = [[UIApplication sharedApplication] keyWindow];
     [self.playerView removeFromSuperview];
     [superView addSubview:self.playerView];
-    self.playerView.userInteractionEnabled = YES;
     [self.playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(superView.mas_height);
         make.height.equalTo(superView.mas_width);
@@ -138,6 +141,7 @@
     }];
 
     self.isFullScreen = YES;
+    self.playerView.userInteractionEnabled = YES;
     [self.delegate playerViewCellEnterFullScreen:self];
 }
 
@@ -146,7 +150,6 @@
     [self.playerView removeFromSuperview];
     [self.playView addSubview:self.playerView];
     self.playerView.userInteractionEnabled = NO;
-
     [self.playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.playView);
     }];
@@ -177,26 +180,18 @@
 }
 -(void)makeCellData:(id)obj
 {
-//    if (self.lvModel != nil) {
-//        return;
-//    }
+    if (self.lvModel != nil) {
+        return;
+    }
     self.lvModel = obj;
     if (![WWPublicMethod isStringEmptyText:self.lvModel.HLS]) {
         _coverView.hidden = NO;
         _titleImageView.hidden = NO;
         _timeLabel.text = self.lvModel.StartAt;
     }else{
-        if (self.playerView != nil) {
-            [self.playerView play];
-            return;
-        }
         
         _coverView.hidden = YES;
         _titleImageView.hidden = YES;
-        
-        
-        [self.playerView stop];
-        [self.playerView removeFromSuperview];
         
         NSDictionary *dic = @{ @"name":self.lvModel.ChannelName,
                                 @"snapUrl":self.lvModel.SnapURL,
@@ -205,17 +200,9 @@
                                @"createAt":self.lvModel.StartAt,
                               };
         DemandModel *models = [DemandModel makeModelData:dic];
-        self.playerView = [[PLPlayerView alloc] init];
-        self.playerView.delegate = self;
-        [_playView addSubview:self.playerView];
         self.playerView.media = models;
-        self.playerView.isLocalVideo = NO;
-        [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.playView);
-        }];
-        [self configureVideo:YES];
         [self.playerView play];
-        self.playerView.userInteractionEnabled = NO;
+        
     }
 }
 

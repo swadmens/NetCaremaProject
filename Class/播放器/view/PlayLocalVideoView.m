@@ -67,19 +67,8 @@
     [_coverView addSubview:outlineLabel];
     [outlineLabel xCenterToView:_coverView];
     [outlineLabel yCenterToView:_coverView];
-//    //接收通知
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fullScreenInfoNotica:) name:@"FullScreebInfomation" object:nil];
-//
+
 }
-////接收通知并操作
-//- (void)fullScreenInfoNotica:(NSNotification *)notification
-//{
-//    [UIView animateWithDuration:0.5 animations:^{
-//        self.playerView.transform = CGAffineTransformMakeRotation(M_PI/2);
-//        //        : CGAffineTransformMakeRotation(3*M_PI/2);
-//    }];
-//    [self playerViewEnterFullScreen:self.playerView];
-//}
 -(void)setModel:(DemandModel *)model
 {
     self.playerView = [[PLPlayerView alloc] init];

@@ -122,7 +122,7 @@
 //    [self setupSaveView];
     if (_isLiving) {
         LivingModel *mdl = self.allDataArray.firstObject;
-        self.carmer_id = mdl.DeviceID;
+        self.carmer_id = mdl.ChannelID;
         self.streamid = mdl.StreamID;
     }
     
@@ -383,14 +383,10 @@
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
     sence.pathURL = url;
-    __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"Received: %@", obj);
     };
     sence.errorBlock = ^(NSError *error) {
-
-        [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error: %@", error);
     };
     [sence sendRequest];
@@ -540,7 +536,7 @@
 
 - (void)selectCellCarmera:(PlayerTableViewCell *)cell withData:(LivingModel *)model
 {
-    self.carmer_id = model.DeviceID;
+    self.carmer_id = model.ChannelID;
     self.streamid = model.StreamID;
     [self startLoadDataRequest:model.DeviceID];
 }

@@ -9,6 +9,7 @@
 #import "PLPlayerView.h"
 #import <AVFoundation/AVFoundation.h>
 #import "DemandModel.h"
+#import "LivingModel.h"
 #import <UIImageView+YYWebImage.h>
 #import <UIImageView+WebCache.h>
 @class PLControlView;
@@ -76,7 +77,6 @@ UIGestureRecognizerDelegate
 
 -(void)dealloc {
     [self unsetupPlayer];
-    [[NSNotificationCenter defaultCenter] removeObserver:@"FullScreebInfomation"];
 }
 - (void)configureVideo:(BOOL)enableRender {
     self.player.enableRender = enableRender;
@@ -116,24 +116,11 @@ UIGestureRecognizerDelegate
         
         self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGesture:)];
         self.panGesture.delegate = self;
-
-        //接收通知
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fullScreenInfoNotica:) name:@"FullScreebInfomation" object:nil];
     }
     return self;
    
         
 }
-//接收通知并操作
-- (void)fullScreenInfoNotica:(NSNotification *)notification
-{
-//    NSDictionary *dic = notification.userInfo;
-//    BOOL select = [[dic objectForKey:@"select"] boolValue];
-    if (self.isStartPlay) {
-        [self clickEnterFullScreenButton];
-    }
-}
-
 - (BOOL)isFullScreen {
     return UIDeviceOrientationPortrait != self.deviceOrientation;
 }
@@ -498,11 +485,16 @@ UIGestureRecognizerDelegate
     if (self.isLocalVideo) {
         [self.player stop];
     }
+    
+    [self hideBottomBar];
+    [self hideBottomProgressView];
+    
     self.isFullScreen = NO;
     [self transformWithOrientation:UIDeviceOrientationPortrait];
 }
 
 - (void)clickEnterFullScreenButton {
+
     self.isFullScreen = YES;
     if (UIDeviceOrientationLandscapeRight == [[UIDevice currentDevice]orientation]) {
         [self transformWithOrientation:UIDeviceOrientationLandscapeRight];
@@ -510,7 +502,6 @@ UIGestureRecognizerDelegate
         [self transformWithOrientation:UIDeviceOrientationLandscapeLeft];
     }
 }
-
 - (void)clickMoreButton {
     [self removeGestureRecognizer:self.tapGesture];
     [self removeGestureRecognizer:self.panGesture];
@@ -648,7 +639,7 @@ UIGestureRecognizerDelegate
            }];
            
        } else {
-           
+
            if (![[self gestureRecognizers] containsObject:self.panGesture]) {
                [self addGestureRecognizer:self.panGesture];
            }
@@ -1067,7 +1058,7 @@ UIGestureRecognizerDelegate
         return;
     }
     
-    [_kHUDManager showMsgInView:nil withTitle:@"播放错误" isSuccess:YES];
+//    [_kHUDManager showMsgInView:nil withTitle:@"播放错误" isSuccess:YES];
     
 }
 
