@@ -125,12 +125,7 @@
 }
 -(void)makeCellData:(LivingModel *)model withOnline:(BOOL)online
 {
-//    NSString *ClientId = [WWPublicMethod isStringEmptyText:model.ClientId]?model.ClientId:@"";
-//    NSString *DeviceId = [WWPublicMethod isStringEmptyText:model.DeviceId]?model.DeviceId:@"";
-//    NSString *CameraId = [WWPublicMethod isStringEmptyText:model.CameraId]?model.CameraId:@"";
-    
-    
-    
+    self.model = model;
     _titleLabel.text = model.ChannelName;
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.SnapURL] placeholder:UIImageWithFileName(@"player_hoder_image")];
     
@@ -142,8 +137,7 @@
         self.isLiving = NO;
         self.coverView.hidden = NO;
     }
-
-//    [self startLoadDataRequest:model.deviceID];
+    
 }
 -(void)checkHelpClick
 {
@@ -156,133 +150,5 @@
     if (self.moreBtnClick) {
         self.moreBtnClick(offline);
     }
-    
-}
-- (void)startLoadDataRequest:(NSString*)device_id
-{    
-    NSDictionary *finalParams = @{
-                                  @"q":device_id,
-                                  };
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
-                                                       options:0
-                                                         error:nil];
-    
-    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/stream/list?serial=%@",device_id];
-
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathHeader = @"application/json";
-//    sence.body = jsonData;
-    sence.pathURL = url;
-    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"Received: %@", obj);
-        [weak_self handleObject:obj withDeviceId:device_id];
-    };
-    sence.errorBlock = ^(NSError *error) {
-
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        // 请求失败
-        DLog(@"error  ==  %@",error.userInfo);
-    };
-    [sence sendRequest];
-}
-
-- (void)handleObject:(id)obj withDeviceId:(NSString*)device_id
-{
-    [_kHUDManager hideAfter:0.1 onHide:nil];
-    __unsafe_unretained typeof(self) weak_self = self;
-    [[GCDQueue globalQueue] queueBlock:^{
-//        NSDictionary *data = [obj objectForKey:@"data"];
-        NSArray *rows= [obj objectForKey:@"Streams"];
-        if (rows.count == 0) {
-            LivingModel *models = [LivingModel new];
-            
-            if (self.getModelBackdata) {
-                self.getModelBackdata(models);
-            }
-            [[GCDQueue mainQueue] queueBlock:^{
-//                weak_self.showImageView.image = [UIImage imageWithColor:kColorThirdTextColor];
-                weak_self.isLiving = NO;
-                weak_self.coverView.hidden = NO;
-            }];
-            return ;
-        }
-        [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSDictionary *dic = obj;
-            
-            if (idx == 0) {
-                weak_self.model = [LivingModel makeModelData:dic];
-                
-                if (self.getModelBackdata) {
-                    self.getModelBackdata(weak_self.model);
-                }
-                
-                //如果没有直播链接，视为离线
-                if (![WWPublicMethod isStringEmptyText:weak_self.model.HLS]) {
-                    [[GCDQueue mainQueue] queueBlock:^{
-                        [weak_self.showImageView yy_setImageWithURL:[NSURL URLWithString:weak_self.model.SnapURL] placeholder:[UIImage imageWithColor:kColorLineColor]];
-                        weak_self.timeLabel.text = weak_self.model.StartAt;
-                        weak_self.titleLabel.text = weak_self.model.ChannelName;
-                        weak_self.isLiving = NO;
-                        weak_self.coverView.hidden = NO;
-                    }];
-                    
-                }else{
-                    [[GCDQueue mainQueue] queueBlock:^{
-                        [weak_self.showImageView yy_setImageWithURL:[NSURL URLWithString:weak_self.model.SnapURL] placeholder:[UIImage imageWithColor:kColorLineColor]];
-                        weak_self.isLiving = YES;
-                        weak_self.coverView.hidden = YES;
-                    }];
-                }
-                
-                //如果没有封面，获取封面
-                if (![WWPublicMethod isStringEmptyText:weak_self.model.SnapURL]) {
-                    [weak_self getLivingCoverPhoto:weak_self.model.DeviceID];
-                }
-            }
-        }];
-        
-    }];
-}
-//获取直播快照
--(void)getLivingCoverPhoto:(NSString*)live_id
-{
-    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/channelsnap?serial=%@&code=%@&realtime=true",live_id,live_id];
-
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathHeader = @"application/json";
-    sence.pathURL = url;
-    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"Received: %@", obj);
-
-         [weak_self dealWithCoverPhoto:obj];
-    };
-
-    sence.errorBlock = ^(NSError *error) {
-
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"error: %@", error);
-    };
-    [sence sendRequest];
-}
-
--(void)dealWithCoverPhoto:(id)obj
-{
-    if (obj == nil) {
-        return;
-    }
-    
-//    NSDictionary *data = [obj objectForKey:@"data"];
-//    NSString *snapUrl = [NSString stringWithFormat:@"%@",[data objectForKey:self.model.live_id]];
-//
-//    [_showImageView yy_setImageWithURL:[NSURL URLWithString:snapUrl] placeholder:[UIImage imageWithColor:kColorLineColor]];
-//    _titleLabel.text = self.model.name;
-
 }
 @end

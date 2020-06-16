@@ -145,12 +145,8 @@
     [playBtn addHeight:25];
     
     
-    
-    
     [backView addSubview:self.collectionView];
     self.collectionView.frame = CGRectMake(0,  60, kScreenWidth-30, backHeight-60);
-    
-      
 }
 -(void)makeCellData:(IndexDataModel *)model
 {
@@ -243,32 +239,6 @@
 {
    
 }
-//获取数据
--(void)getChildDevicedData:(NSString*)device_id
-{
-    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/stream/list?serial=%@",device_id];
-
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathHeader = @"application/json";
-//    sence.body = jsonData;
-    sence.pathURL = url;
-    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"Received: %@", obj);
-//            [weak_self handleObject:obj withDeviceId:device_id];
-    };
-    sence.errorBlock = ^(NSError *error) {
-
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        // 请求失败
-        DLog(@"error  ==  %@",error.userInfo);
-    };
-
-    [sence sendRequest];
-}
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

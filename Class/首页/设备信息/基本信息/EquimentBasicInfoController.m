@@ -145,16 +145,17 @@
                                   };
         
     //提交数据
-    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",[self.dicData objectForKey:@"id"]];
-    
+//    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",[self.dicData objectForKey:@"serial"]];
+    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/setinfo?serial=%@&name=%@&media_transport=%@",[self.dicData objectForKey:@"serial"],self.name,[self.dicData objectForKey:@"media_transport"]];
+
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
                                                          error:nil];
     
     RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"BODY";
+    sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
-    sence.body = jsonData;
+//    sence.body = jsonData;
     sence.pathURL = url;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {

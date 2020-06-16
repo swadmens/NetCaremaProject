@@ -235,11 +235,7 @@
 
 -(void)addGroupClick:(UIButton*)sender
 {
-    
-    
-    
     NSMutableArray *obj = [NSMutableArray array];
-     
      for (NSInteger i = 0; i < [self titles].count; i++) {
          
          WBPopMenuModel * info = [WBPopMenuModel new];

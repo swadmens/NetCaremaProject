@@ -176,13 +176,14 @@
     
     IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
    
-    if (model.childDevices_info.count > 1) {
+    if (model.liveModelArray.count > 1) {
         MoreCarmerasCell *cell = [tableView dequeueReusableCellWithIdentifier:[MoreCarmerasCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         [cell makeCellData:model];
         
         cell.moreDealClick = ^(NSInteger selectRow, BOOL offline) {
+            
             self.selectModel = [model.childDevices_info objectAtIndex:selectRow];
             self.selectLvModel = [model.liveModelArray objectAtIndex:selectRow];
 
@@ -504,8 +505,8 @@
 //                          @"c8y_Notes":self.selectModel.c8y_Notes,
 //                          @"CameraId":self.selectModel.CameraId,
 //                          @"Channel":self.selectModel.equipment_Channel,
-//                          @"ClientId":self.selectModel.ClientId,
-                          @"serial":self.selectModel.deviceID,
+                          @"media_transport":self.selectLvModel.Transport,
+                          @"serial":self.selectModel.childDevice_id,
                           @"code":self.selectLvModel.DeviceID,
                           @"owner":self.selectModel.owner,
                           @"lastUpdated":self.selectModel.lastUpdated,

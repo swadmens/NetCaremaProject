@@ -54,7 +54,5 @@
         _titleLabel.textColor = kColorThirdTextColor;
         _lineImageView.hidden = YES;
     }
-    
-    
 }
 @end

@@ -122,8 +122,6 @@
     }
     self.changeUI = scale;
     [self.collectionView reloadData];
-//    [self.collectionView scrollToItemAtIndexPath:self.selectIndexPath atScrollPosition:UICollectionViewScrollPositionTop animated:YES];
-
 }
 
 -(void)setIsLiving:(BOOL)isLiving
@@ -233,7 +231,7 @@
             NSLog(@"当前视图在View的位置:%@",NSStringFromCGPoint(point));
 
             if (self.showDeleteView) {
-                if (point.y  <  50) {
+                if (point.y  <  30) {
                     [self setDeleteViewDeleteState];
                 }else {
                     [self setDeleteViewNormalState];
@@ -247,7 +245,7 @@
         case UIGestureRecognizerStateEnded: {
             if (self.showDeleteView) {
                 [self hiddenDeleteViewAnimation];
-                if (point.y  <  50) {
+                if (point.y  <  30) {
                     //删除
                     [self.dataArray replaceObjectAtIndex:self.moveIndexPath.row withObject:@"Player_add_video_image"];
 
@@ -281,18 +279,18 @@
     CGFloat totalHeight = kScreenWidth * 0.68 + 0.5;
     CGFloat width = (kScreenWidth-1)/2;
     
-    if (indexPath == self.selectIndexPath && self.changeUI) {
-        return CGSizeMake(kScreenWidth, totalHeight);
-    }else if (indexPath != self.selectIndexPath && self.changeUI){
-        return CGSizeMake(10, 10);
-    }else{
-        return CGSizeMake(width, width*0.68);
-    }
-//    if (self.changeUI) {
+//    if (indexPath == self.selectIndexPath && self.changeUI) {
 //        return CGSizeMake(kScreenWidth, totalHeight);
+//    }else if (indexPath != self.selectIndexPath && self.changeUI){
+//        return CGSizeMake(10, 10);
 //    }else{
 //        return CGSizeMake(width, width*0.68);
 //    }
+    if (self.changeUI) {
+        return CGSizeMake(kScreenWidth, totalHeight);
+    }else{
+        return CGSizeMake(width, width*0.68);
+    }
 }
 
  

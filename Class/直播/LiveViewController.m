@@ -422,9 +422,9 @@
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
         
-        if (weak_self.page == 1) {
-            [weak_self.dataArray removeAllObjects];
-        }
+//        if (weak_self.page == 1) {
+//            [weak_self.dataArray removeAllObjects];
+//        }
         
         NSArray *data= [obj objectForKey:@"Streams"];
         NSMutableArray *tempArray = [NSMutableArray array];

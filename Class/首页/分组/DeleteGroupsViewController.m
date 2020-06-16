@@ -84,33 +84,21 @@
     if (self.selectedIndexSet.count == 0) {
         return;
     }
-    [self.dataArray removeObjectsAtIndexes:self.selectedIndexSet];
     
+    [self.dataArray removeObjectsAtIndexes:self.selectedIndexSet];
     [self changeNoDataViewHiddenStatus];
     [self.selectedIndexSet removeAllIndexes];
-    
-    
-    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 
+    [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         DeleteGroupsTableViewCell *cell = (DeleteGroupsTableViewCell*)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:0]];
         cell.selectBtn.selected = NO;
-
     }];
-    
-        
     [self.tableView reloadData];
-
-    
 }
 - (void)setupNoDataView
 {
     self.noDataView = [self setupnoDataContentViewWithTitle:@"暂无分组" andImageNamed:@"device_empty_backimage" andTop:@"60"];
 }
--(void)againLoadDataBtn
-{
-    [self loadNewData];
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -159,11 +147,7 @@
     
     NSDictionary *model = [self.dataArray objectAtIndex:indexPath.row];
     [cell makeCellData:model];
-    
 
-//    //设置首个默认选中
-//    [tableView selectRowAtIndexPath:[NSIndexPath indexPathForItem:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
-    
     
     return cell;
 }

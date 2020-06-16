@@ -42,20 +42,23 @@
     // Initialization code
     self.contentView.backgroundColor = kColorBackgroundColor;
     
+    CGFloat height = (kScreenHeight-145)/2;
+
+    
     UIView *backView = [UIView new];
-    backView.backgroundColor = [UIColor whiteColor];
+    backView.backgroundColor = UIColorClearColor;
     backView.clipsToBounds = YES;
     backView.layer.cornerRadius = 5;
     [self.contentView addSubview:backView];
     [backView alignTop:@"0" leading:@"15" bottom:@"10" trailing:@"15" toView:self.contentView];
-    [backView addHeight:200];
+    [backView addHeight:height];
     
     
     UILabel *markLabel = [UILabel new];
     markLabel.backgroundColor = kColorMainColor;
     [backView addSubview:markLabel];
     [markLabel topToView:backView withSpace:15];
-    [markLabel leftToView:backView withSpace:15];
+    [markLabel leftToView:backView];
     [markLabel addWidth:1.5];
     [markLabel addHeight:12];
     
@@ -76,20 +79,14 @@
     [subTitle addCenterY:3 toView:title];
     [subTitle leftToView:title];
     
-    UILabel *lineLabel = [UILabel new];
-    lineLabel.backgroundColor = kColorLineColor;
-    [backView addSubview:lineLabel];
-    [lineLabel alignTop:@"45" leading:@"15" bottom:nil trailing:@"15" toView:backView];
-    [lineLabel addHeight:0.5];
-
     
     self.tableView = [[WWTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
-    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.backgroundColor = kColorBackgroundColor;
     self.tableView.showsVerticalScrollIndicator = NO;
     self.tableView.showsHorizontalScrollIndicator = NO;
     [backView addSubview:self.tableView];
-    self.tableView.rowHeight = 35;
-    [self.tableView alignTop:@"55" leading:@"0" bottom:@"5" trailing:@"0" toView:backView];
+    self.tableView.rowHeight = 45;
+    [self.tableView alignTop:@"40" leading:@"0" bottom:@"5" trailing:@"0" toView:backView];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[NoChooseCarmerasSubCell class] forCellReuseIdentifier:[NoChooseCarmerasSubCell getCellIDStr]];
@@ -143,6 +140,12 @@
     UIView *headerView = [UIView new];
     headerView.backgroundColor = [UIColor whiteColor];
     
+    UILabel *botLine = [UILabel new];
+    botLine.backgroundColor = kColorLineColor;
+    [headerView addSubview:botLine];
+    [botLine alignTop:nil leading:@"15" bottom:@"0" trailing:@"15" toView:headerView];
+    [botLine addHeight:0.5];
+    
     UIImageView *iconImageView = [UIImageView new];
     iconImageView.image = UIImageWithFileName(@"group_header_image");
     [headerView addSubview:iconImageView];
@@ -172,9 +175,11 @@
     if ([_isExpandArray[section] isEqualToString:@"0"]) {
         //未展开
         [dealBtn setImage:UIImageWithFileName(@"group_up_image") forState:UIControlStateNormal];
+        botLine.hidden = YES;
     }else{
         //展开
         [dealBtn setImage:UIImageWithFileName(@"group_down_image") forState:UIControlStateNormal];
+        botLine.hidden = NO;
     }
     
     
@@ -194,17 +199,17 @@
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     UIView *footerView = [UIView new];
-    footerView.backgroundColor = [UIColor whiteColor];
+    footerView.backgroundColor = kColorBackgroundColor;
     
     return footerView;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 55;
+    return 45;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 0.1;
+    return 5;
 }
 -(void)addEquimentClick:(UIButton*)sender
 {
@@ -239,6 +244,7 @@
 {
     [super dosetup];
     self.contentView.backgroundColor = [UIColor whiteColor];
+    
     
     UIImageView *iconImageView = [UIImageView new];
     iconImageView.image = UIImageWithFileName(@"group_row_image");
