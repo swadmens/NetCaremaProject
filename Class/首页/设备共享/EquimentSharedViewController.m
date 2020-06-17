@@ -44,8 +44,7 @@
     self.tableView = [[WWTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     self.tableView.backgroundColor = kColorBackgroundColor;
     [self.view addSubview:self.tableView];
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 60;
+    self.tableView.rowHeight = 55;
     [self.tableView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -54,22 +53,6 @@
 - (void)setupNoDataView
 {
     self.noDataView = [self setupnoDataContentViewWithTitle:@"还没有好友，赶紧点击右上角添加吧~" andImageNamed:@"friends_empty_backimage" andTop:@"60"];
-//    self.noDataView.backgroundColor = kColorBackgroundColor;
-//    // label
-//    UILabel *tipLabel = [self getNoDataTipLabel];
-//    
-//    UIButton *againBtn = [UIButton new];
-//    [againBtn setTitle:@"暂无好友，轻触重试" forState:UIControlStateNormal];
-//    [againBtn setTitleColor:kColorThirdTextColor forState:UIControlStateNormal];
-//    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-//    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
-//    [self.noDataView addSubview:againBtn];
-//    [againBtn xCenterToView:self.noDataView];
-//    [againBtn topToView:tipLabel withSpace:-8];
-}
--(void)againLoadDataBtn
-{
-//    [self loadNewData];
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -102,12 +85,13 @@
     [TargetEngine controller:self pushToController:PushTargetAddNewFriends WithTargetId:nil];
 }
 #pragma mark 返回分组数
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-//    return self.dataArray.count;
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 1;
 }
 #pragma mark 返回每组行数
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return self.dataArray.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -115,9 +99,9 @@
 
     EquimentSharedCell *cell = [tableView dequeueReusableCellWithIdentifier:[EquimentSharedCell getCellIDStr] forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//    cell.lineHidden = NO;
     
     return cell;
-  
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -183,8 +167,6 @@
     //删除
     UIContextualAction *deleteRowAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleDestructive title:@"delete" handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
         //删除操作
-        DLog(@"点击了删除");
-        
         [self.dataArray removeObjectAtIndex:indexPath.row];
         [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
         [self changeNoDataViewHiddenStatus];
@@ -235,9 +217,8 @@
     _titleImageView.layer.cornerRadius = 16.5;
     _titleImageView.image = UIImageWithFileName(@"friend_header_backimage");
     [self.contentView addSubview:_titleImageView];
-    [_titleImageView topToView:self.contentView withSpace:10];
+    [_titleImageView yCenterToView:self.contentView];
     [_titleImageView leftToView:self.contentView withSpace:12.5];
-    [_titleImageView bottomToView:self.contentView withSpace:10];
     [_titleImageView addWidth:33];
     [_titleImageView addHeight:33];
     

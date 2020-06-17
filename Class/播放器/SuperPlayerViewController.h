@@ -14,15 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 @class CarmeaVideosModel;
 @interface SuperPlayerViewController : WWViewController
 
-@property (nonatomic,strong) NSString *gbs_serial;
-@property (nonatomic,strong) NSString *gbs_code;
 @property (nonatomic,strong) NSString *live_type;
-@property (nonatomic,strong) NSString *nvr_channel;
-
 @property (nonatomic,assign) BOOL isLiving;//是否是直播
 @property (nonatomic,strong) NSString *title_value;
 @property (nonatomic,strong) DemandModel *model;
-@property (nonatomic,strong) CarmeaVideosModel *carmeaModel;
 @property (nonatomic,strong) NSArray *allDataArray;
 @property (nonatomic,assign) NSInteger indexInteger;
 @property (nonatomic, assign) BOOL isRecordFile;

@@ -499,6 +499,9 @@
 }
 -(void)clickChannelDetails
 {
+    if (self.selectLvModel == nil) {
+        return;
+    }
     NSDictionary *dic = @{
                           @"id":self.selectModel.equipment_id,
                           @"name":self.selectModel.equipment_name,

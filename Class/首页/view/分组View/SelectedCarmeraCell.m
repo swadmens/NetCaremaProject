@@ -41,7 +41,7 @@
     // Initialization code
     self.contentView.backgroundColor = kColorBackgroundColor;
     
-    CGFloat height = (kScreenHeight-145)/2;
+    CGFloat height = (kScreenHeight-149)/2;
     
     
     UIView *backView = [UIView new];

@@ -207,6 +207,8 @@ typedef NS_ENUM(NSInteger, LEEBackgroundStyle) {
         return self.LeeAddTitle(^(UILabel *label) {
             
             label.text = str;
+            label.textColor = kColorMainTextColor;
+            label.font = [UIFont customFontWithSize:kFontSizeFourteen];
         });
         
     };
@@ -249,6 +251,8 @@ typedef NS_ENUM(NSInteger, LEEBackgroundStyle) {
             action.type = LEEActionTypeDefault;
             
             action.title = title;
+            action.font = [UIFont customFontWithSize:kFontSizeThirteen];
+            action.titleColor = kColorMainTextColor;
             
             action.clickBlock = block;
         });
@@ -267,7 +271,8 @@ typedef NS_ENUM(NSInteger, LEEBackgroundStyle) {
             
             action.title = title;
             
-            action.font = [UIFont boldSystemFontOfSize:18.0f];
+            action.font = [UIFont customFontWithSize:kFontSizeThirteen];
+            action.titleColor = kColorMainTextColor;
             
             action.clickBlock = block;
         });

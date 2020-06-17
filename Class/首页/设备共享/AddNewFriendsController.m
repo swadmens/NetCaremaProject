@@ -155,8 +155,6 @@
     [sureBtn addHeight:36.5];
     
     
-    
-    
 }
 -(void)sureButtonClick
 {

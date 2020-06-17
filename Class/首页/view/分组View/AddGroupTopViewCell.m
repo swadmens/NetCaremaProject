@@ -41,7 +41,6 @@
     
     
     _titleLabel = [UILabel new];
-    _titleLabel.text = @"公司";
     _titleLabel.textColor = kColorMainTextColor;
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [backView addSubview:_titleLabel];
@@ -53,6 +52,10 @@
     [backView addSubview:rightImageView];
     [rightImageView yCenterToView:backView];
     [rightImageView rightToView:backView withSpace:15];
+}
+-(void)makeCellData:(NSString *)title
+{
+    _titleLabel.text = title;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

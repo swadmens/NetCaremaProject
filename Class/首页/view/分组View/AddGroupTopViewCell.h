@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AddGroupTopViewCell : WWTableViewCell
 
+-(void)makeCellData:(NSString*)title;
+
 @end
 
 NS_ASSUME_NONNULL_END

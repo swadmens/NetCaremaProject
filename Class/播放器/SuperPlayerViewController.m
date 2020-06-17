@@ -200,12 +200,14 @@
 #pragma mark - PlayerControlDelegate
 -(void)playerControlwithState:(videoSate)state withButton:(UIButton *)sender
 {
-//    self.clView.transform = CGAffineTransformIdentity;
+    if (![WWPublicMethod isStringEmptyText:self.streamid]) {
+        return;
+    }
     
     self.controlBtn = (LGXVerticalButton*)sender;
     switch (state) {
         case videoSatePlay://播放暂停
-            
+ 
             if (!_isLiving) {
                 self.controlBtn.selected = !self.controlBtn.selected;
                 if (self.controlBtn.selected) {
@@ -218,15 +220,15 @@
             break;
         case videoSateVoice://声音控制
             
+                
             self.controlBtn.selected = !self.controlBtn.selected;
             float volume = self.controlBtn.selected?0.01:1.0;
-            
             [self.topCell changeVolume:volume];
-
+            
             break;
         case videoSateGongge://宫格变化
             
-            if (_isLiving && [WWPublicMethod isStringEmptyText:self.carmer_id]) {
+            if (_isLiving) {
                 self.controlBtn.selected = !self.controlBtn.selected;
                 [self.topCell makeCellScale:self.controlBtn.selected];
             }
@@ -237,25 +239,23 @@
         
             break;
         case videoSateFullScreen://全屏
-        
+
             [self.topCell makePlayerViewFullScreen];
         
             break;
         case videoSatesSreenshots://截图
-                        
-//            self.controlBtn.selected = !self.controlBtn.selected;
-//            self.saveBackView.hidden = !self.controlBtn.selected;
-            
+
             [self.topCell clickSnapshotButton];
            
             break;
         case videoSateVideing://录像
-        
+
             self.controlBtn.selected = !self.controlBtn.selected;
             [self startOrStopVideo:self.controlBtn.selected?@"start":@"stop"];
             
             break;
         case videoSateYuntai://云台控制
+            
             self.controlBtn.selected = !self.controlBtn.selected;
             
             if (!self.controlBtn.isSelected) {

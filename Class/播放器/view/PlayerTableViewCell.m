@@ -28,6 +28,7 @@
 @property (nonatomic, strong) UICollectionViewFlowLayout *flowLayout;
 
 @property (strong, nonatomic) NSMutableArray *dataArray;
+@property (strong, nonatomic) NSArray *changeDataArray;
 @property (strong, nonatomic) NSArray *allDataArray;
 @property (nonatomic, strong) NSMutableDictionary *cellDic;
 
@@ -99,7 +100,6 @@
     _collectionView = [[WWCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:_flowLayout];
     _collectionView.backgroundColor = [UIColor whiteColor];
     // 注册
-//    [_collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr]];
     [_collectionView registerClass:[PlayerTopAddViewCell class] forCellWithReuseIdentifier:[PlayerTopAddViewCell getCellIDStr]];
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
@@ -121,6 +121,11 @@
         return;
     }
     self.changeUI = scale;
+    if (self.changeUI) {
+        id obj = [self.dataArray objectAtIndex:self.selectIndexPath.row];
+        self.changeDataArray = [NSArray arrayWithObjects:obj, nil];
+    }
+    
     [self.collectionView reloadData];
 }
 
@@ -134,44 +139,46 @@
 //定义展示的Section的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.dataArray.count;
+    return self.changeUI?self.changeDataArray.count:self.dataArray.count;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    id obj = [self.dataArray objectAtIndex:indexPath.row];
+    id obj = [self.changeUI?self.changeDataArray:self.dataArray objectAtIndex:indexPath.row];
 
     if ([obj isKindOfClass:[NSString class]]) {
         PlayerTopAddViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PlayerTopAddViewCell getCellIDStr] forIndexPath:indexPath];
         [cell makeCellData:obj];
         return cell;
     }else{
-        // 每次先从字典中根据IndexPath取出唯一标识符
-        NSString *identifier = [_cellDic objectForKey:[NSString stringWithFormat:@"%@", indexPath]];
-        // 如果取出的唯一标示符不存在，则初始化唯一标示符，并将其存入字典中，对应唯一标示符注册Cell
-        if (identifier == nil) {
-           identifier = [NSString stringWithFormat:@"%@%@", [PlayerTopCollectionViewCell getCellIDStr], [NSString stringWithFormat:@"%@", indexPath]];
-           [_cellDic setValue:identifier forKey:[NSString stringWithFormat:@"%@", indexPath]];
-           // 注册Cell
-           [self.collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:identifier];
-        }
-        PlayerTopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-        
-        cell.delegate = self;
-        
-        [cell makeCellData:obj];
-        
         if (self.changeUI) {
-            [collectionView scrollToItemAtIndexPath:self.selectIndexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
+            [self.collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr]];
+            PlayerTopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr] forIndexPath:indexPath];
+            cell.delegate = self;
+            [cell makeCellData:obj];
+            return cell;
+        }else{
+            // 每次先从字典中根据IndexPath取出唯一标识符
+            NSString *identifier = [_cellDic objectForKey:[NSString stringWithFormat:@"%@", indexPath]];
+            // 如果取出的唯一标示符不存在，则初始化唯一标示符，并将其存入字典中，对应唯一标示符注册Cell
+            if (identifier == nil) {
+               identifier = [NSString stringWithFormat:@"%@%@", [PlayerTopCollectionViewCell getCellIDStr], [NSString stringWithFormat:@"%@", indexPath]];
+               [_cellDic setValue:identifier forKey:[NSString stringWithFormat:@"%@", indexPath]];
+               // 注册Cell
+               [self.collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:identifier];
+            }
+            PlayerTopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+            cell.delegate = self;
+            [cell makeCellData:obj];
+            
+            [collectionView selectItemAtIndexPath:self.selectIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            
+            return cell;
         }
-
-        return cell;
     }
-
-   
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    id obj = [self.dataArray objectAtIndex:indexPath.row];
+    id obj = [self.changeUI?self.changeDataArray:self.dataArray objectAtIndex:indexPath.row];
     if ([obj isKindOfClass:[NSString class]]) {
         self.selectIndex = indexPath.row;
         MyEquipmentsViewController *mvc = [MyEquipmentsViewController new];
@@ -179,18 +186,21 @@
         mvc.delegate = self;
         [[SuperPlayerViewController viewController:self].navigationController pushViewController:mvc animated:YES];
     }else{
-        self.selectIndexPath = indexPath;
-        self.playingCell = (PlayerTopCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-        if ([self.delegate respondsToSelector:@selector(selectCellCarmera:withData:)]) {
-            [self.delegate selectCellCarmera:self withData:obj];
+        if (!self.changeUI) {
+            self.selectIndexPath = indexPath;
+            self.playingCell = (PlayerTopCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
+            if ([self.delegate respondsToSelector:@selector(selectCellCarmera:withData:)]) {
+                [self.delegate selectCellCarmera:self withData:obj];
+            }
         }
+        
     }
 }
 
 //是否允许移动
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return YES;
+    return !self.changeUI;
 }
  
 //完成移动更新数据
@@ -253,10 +263,6 @@
                     [selectCell stop];
                     
                     [self.collectionView reloadData];
-//                    [UIView performWithoutAnimation:^{
-//                        [self.collectionView reloadItemsAtIndexPaths:@[self.moveIndexPath]];
-//                    }];
-                    
                 }
             }
             self.moveIndexPath = nil;
@@ -278,14 +284,7 @@
 {
     CGFloat totalHeight = kScreenWidth * 0.68 + 0.5;
     CGFloat width = (kScreenWidth-1)/2;
-    
-//    if (indexPath == self.selectIndexPath && self.changeUI) {
-//        return CGSizeMake(kScreenWidth, totalHeight);
-//    }else if (indexPath != self.selectIndexPath && self.changeUI){
-//        return CGSizeMake(10, 10);
-//    }else{
-//        return CGSizeMake(width, width*0.68);
-//    }
+
     if (self.changeUI) {
         return CGSizeMake(kScreenWidth, totalHeight);
     }else{

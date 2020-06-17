@@ -117,20 +117,25 @@
     //右上角按钮
     UIButton *rightBtn = [UIButton new];
     [rightBtn setImage:UIImageWithFileName(@"group_chooses_image") forState:UIControlStateNormal];
-    [rightBtn addTarget:self action:@selector(right_clicked) forControlEvents:UIControlEventTouchUpInside];
+    [rightBtn addTarget:self action:@selector(right_clicked:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     [self.navigationItem setRightBarButtonItem:rightItem];
     
 }
--(void)right_clicked
+-(void)right_clicked:(UIButton*)btn
 {
 //    [self.tableView setEditing:YES animated:NO];
+    btn.selected = !btn.selected;
     
     [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 
         DeleteGroupsTableViewCell *cell = (DeleteGroupsTableViewCell*)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:0]];
-        cell.selectBtn.selected = YES;
-        [self.selectedIndexSet addIndex:idx];
+        cell.selectBtn.selected = btn.selected;
+        if (btn.selected) {
+            [self.selectedIndexSet addIndex:idx];
+        }else{
+            [self.selectedIndexSet removeIndex:idx];
+        }
 
     }];
     
@@ -154,21 +159,6 @@
 // 选中
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSDictionary *model = [self.dataArray objectAtIndex:indexPath.row];
-//    BOOL selected = [[model objectForKey:@"select"] boolValue];
-//    if (selected) {
-//        NSDictionary *dic = @{@"select":@(NO)};
-//        [self.dataArray replaceObjectAtIndex:indexPath.row withObject:dic];
-//        [self.selectedIndexSet removeIndex:indexPath.item];
-//    }else{
-//        NSDictionary *dic = @{@"select":@(YES)};
-//        [self.dataArray replaceObjectAtIndex:indexPath.row withObject:dic];
-//        [self.selectedIndexSet addIndex:indexPath.item];
-//    }
-//
-//    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    
-    
     DeleteGroupsTableViewCell *cell = (DeleteGroupsTableViewCell*)[tableView cellForRowAtIndexPath:indexPath];
     cell.selectBtn.selected = !cell.selectBtn.selected;
     if (cell.selectBtn.selected) {
@@ -176,8 +166,6 @@
     }else{
         [self.selectedIndexSet removeIndex:indexPath.item];
     }
-    
-    
 }
 
 - (void)loadNewData

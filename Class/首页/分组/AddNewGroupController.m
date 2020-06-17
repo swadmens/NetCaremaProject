@@ -21,6 +21,7 @@
 @property (nonatomic, strong) NSMutableArray *noSelectArray;
 
 @property (nonatomic,strong) UILabel *groupNameLabel;
+@property (nonatomic,strong) NSString *groupName;
 
 
 @end
@@ -80,6 +81,7 @@
     [self.noSelectArray addObjectsFromArray:noChooseArr];
     
     
+    self.groupName = @"公司";
     [self setupTableView];
     
     
@@ -108,6 +110,7 @@
         AddGroupTopViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[AddGroupTopViewCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
+        [cell makeCellData:self.groupName];
         
         return cell;
     }else if (indexPath.row == 1){
@@ -144,20 +147,23 @@
         .LeeAddTextField(^(UITextField *textField) {
             
             // 这里可以进行自定义的设置
-            
-            textField.placeholder = @" ";
-            
-            if (@available(iOS 13.0, *)) {
-                textField.textColor = [UIColor secondaryLabelColor];
-                
-            } else {
-                textField.textColor = [UIColor darkGrayColor];
-            }
+            textField.placeholder = @"输入名称";
+            textField.font = [UIFont customFontWithSize:kFontSizeFifty];
+            textField.textColor = kColorMainTextColor;
+            textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+
+//            if (@available(iOS 13.0, *)) {
+//                textField.textColor = [UIColor secondaryLabelColor];
+//            } else {
+//                textField.textColor = [UIColor darkGrayColor];
+//            }
             
             tf = textField; //赋值
         })
-        .LeeAction(@"好的", ^{
-          
+        .LeeAction(@"确定", ^{
+            DLog(@"名称是  %@",tf.text);
+            self.groupName = tf.text;
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
         })
         .leeShouldActionClickClose(^(NSInteger index){
             // 是否可以关闭回调, 当即将关闭时会被调用 根据返回值决定是否执行关闭处理

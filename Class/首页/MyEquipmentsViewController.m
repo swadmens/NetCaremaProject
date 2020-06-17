@@ -17,6 +17,9 @@
 
 @property (nonatomic,strong) WWTableView *tableView;
 
+/// 没有内容
+@property (nonatomic, strong) UIView *noDataView;
+
 @end
 
 @implementation MyEquipmentsViewController
@@ -32,6 +35,10 @@
     self.tableView.dataSource = self;
     [self.tableView registerClass:[MyEquipmentsCell class] forCellReuseIdentifier:[MyEquipmentsCell getCellIDStr]];
 }
+- (void)setupNoDataView
+{
+    self.noDataView = [self setupnoDataContentViewWithTitle:@"暂无可用设备" andImageNamed:@"device_empty_backimage" andTop:@"60"];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -39,6 +46,8 @@
 
     self.title = @"我的设备";
     [self setupTableView];
+    [self setupNoDataView];
+    [self changeNoDataViewHiddenStatus];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -79,6 +88,18 @@
     [self.delegate selectCarmeraModel:model];
     [self.navigationController popViewControllerAnimated:YES];
 
+}
+- (void)changeNoDataViewHiddenStatus
+{
+    NSInteger count = self.dataArray.count;
+    if (count == 0) {
+        self.tableView.hidden = YES;
+        self.noDataView.hidden = NO;
+    } else {
+        self.tableView.hidden = NO;
+        self.noDataView.hidden = YES;
+    }
+    
 }
 
 /*
