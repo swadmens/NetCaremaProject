@@ -9,6 +9,7 @@
 #import "ChannelMoreSystemController.h"
 #import "WWTableView.h"
 #import "WWTableViewCell.h"
+#import <UIImageView+YYWebImage.h>
 
 
 @interface ChannelMoreSystemImageCell : WWTableViewCell
@@ -61,6 +62,7 @@
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
 
     
+    
     [self setupTableView];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -74,11 +76,16 @@
         ChannelMoreSystemImageCell *cell = [tableView dequeueReusableCellWithIdentifier:[ChannelMoreSystemImageCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 
+        NSDictionary *dic = [WWPublicMethod objectTransFromJson:self.pushId];
+        NSString *icon = [dic objectForKey:@"SnapURL"];
+        [cell.titleImageView yy_setImageWithURL:[NSURL URLWithString:icon] placeholder:UIImageWithFileName(@"player_hoder_image")];
+
         return cell;
     }else{
         ChannelMoreSystemNameCell *cell = [tableView dequeueReusableCellWithIdentifier:[ChannelMoreSystemNameCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
+        NSDictionary *dic = [WWPublicMethod objectTransFromJson:self.pushId];
+        cell.titleLabel.text = [dic objectForKey:@"ChannelName"];
         
         return cell;
     }

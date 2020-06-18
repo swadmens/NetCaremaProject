@@ -40,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)clickSnapshotButton;
 - (void)changeVolume:(float)volume;
 
+- (void)startOrStopVideo:(BOOL)start;
+
 
 @end
 

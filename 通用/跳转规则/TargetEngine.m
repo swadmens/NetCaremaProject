@@ -628,6 +628,7 @@
         case PushTargetChannelMoreSystem: //更多设置
         {
             ChannelMoreSystemController *controller = [[ChannelMoreSystemController alloc] init];
+            controller.pushId = pushId;
             toController = controller;
         }
             break;

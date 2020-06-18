@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ChannelMoreSystemController : WWViewController
 
+@property (nonatomic,strong) NSString *pushId;
+
 @end
 
 NS_ASSUME_NONNULL_END

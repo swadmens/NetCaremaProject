@@ -77,10 +77,8 @@
     [self.tableView registerClass:[IndexTableViewCell class] forCellReuseIdentifier:[IndexTableViewCell getCellIDStr]];
     [self.tableView registerClass:[SingleCarmeraCell class] forCellReuseIdentifier:[SingleCarmeraCell getCellIDStr]];
     [self.tableView registerClass:[MoreCarmerasCell class] forCellReuseIdentifier:[MoreCarmerasCell getCellIDStr]];
-
-    
     self.tableView.refreshEnable = YES;
-    self.tableView.loadingMoreEnable = NO;
+//    self.tableView.loadingMoreEnable = NO;
     __unsafe_unretained typeof(self) weak_self = self;
     self.tableView.actionHandle = ^(WWScrollingState state){
         switch (state) {
@@ -442,7 +440,7 @@
 #pragma IndexTopDelegate
 -(void)collectionSelect:(NSInteger)index
 {
-    
+    DLog(@"点了第%ld个",(long)index);
     
 }
 -(void)searchValue:(NSString *)value

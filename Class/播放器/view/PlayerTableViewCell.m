@@ -55,6 +55,9 @@
 @property (nonatomic,assign) NSInteger selectIndex;
 @property (nonatomic,assign) BOOL changeUI;
 
+@property (nonatomic,strong) UIImageView *tipImageView;//录像提示点
+@property (nonatomic,assign) BOOL videoing;//是否正在录像
+
 
 @end
 
@@ -113,6 +116,18 @@
     
     self.showDeleteView = YES;
     self.selectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    self.videoing = NO;
+    
+    
+    //录像提示图示
+    _tipImageView = [UIImageView new];
+    _tipImageView.image = UIImageWithFileName(@"videoing_show_tip_image");
+    _tipImageView.hidden = YES;
+    [self.collectionView addSubview:_tipImageView];
+    [_tipImageView lgx_makeConstraints:^(LGXLayoutMaker *make) {
+        make.xCenter.lgx_equalTo(self.collectionView.lgx_xCenter);
+        make.topEdge.lgx_equalTo(self.collectionView.lgx_topEdge).lgx_floatOffset(15);
+    }];
     
 }
 -(void)makeCellScale:(BOOL)scale
@@ -124,6 +139,7 @@
     if (self.changeUI) {
         id obj = [self.dataArray objectAtIndex:self.selectIndexPath.row];
         self.changeDataArray = [NSArray arrayWithObjects:obj, nil];
+        _tipImageView.hidden = YES;
     }
     
     [self.collectionView reloadData];
@@ -170,7 +186,7 @@
             cell.delegate = self;
             [cell makeCellData:obj];
             
-            [collectionView selectItemAtIndexPath:self.selectIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+//            [collectionView selectItemAtIndexPath:self.selectIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
             
             return cell;
         }
@@ -537,10 +553,38 @@
     }
  
 }
+-(void)startOrStopVideo:(BOOL)start
+{
+    self.videoing = start;
+    if (self.changeUI) {
+        _tipImageView.hidden = YES;
+        return;
+    }
+    CGFloat width = (kScreenWidth-1)/2 + 15;
+    
+    if (self.selectIndexPath.row == 0 || self.selectIndexPath.row == 1) {
+        [_tipImageView lgx_remakeConstraints:^(LGXLayoutMaker *make) {
+            make.xCenter.lgx_equalTo(self.collectionView.lgx_xCenter);
+            make.topEdge.lgx_equalTo(self.collectionView.lgx_topEdge).lgx_floatOffset(15);
+        }];
+    }else{
+        [_tipImageView lgx_remakeConstraints:^(LGXLayoutMaker *make) {
+            make.xCenter.lgx_equalTo(self.collectionView.lgx_xCenter);
+            make.topEdge.lgx_equalTo(self.collectionView.lgx_topEdge).lgx_floatOffset(width*0.68+10);
+        }];
+    }
+
+    _tipImageView.hidden = !start;
+    self.collectionView.userInteractionEnabled = !start;
+}
 
 //视频是否可以正常播放
 -(BOOL)chengkVideoNormalPlay
 {
+    if (self.videoing) {
+        [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
+        return NO;
+    }
     id obj = [self.dataArray objectAtIndex:self.selectIndexPath.row];
     if ([obj isKindOfClass:[LivingModel class]]) {
         LivingModel *model = obj;

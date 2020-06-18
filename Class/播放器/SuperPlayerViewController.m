@@ -46,8 +46,8 @@
 @property (nonatomic,strong) NSString *carmer_id;//摄像头ID
 @property (nonatomic,strong) NSString *streamid;
 
-
-
+@property (nonatomic,strong) LivingModel *selectModel;
+@property (nonatomic,assign) BOOL videoing;//是否正在录像
 
 @end
 
@@ -99,6 +99,9 @@
     [self.view addSubview:self.clView];
     self.clView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight - KTopviewheight - 177);
     
+    self.videoing = NO;
+    
+    
     
     //右上角按钮组
     UIButton *sharaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -121,9 +124,9 @@
     
 //    [self setupSaveView];
     if (_isLiving) {
-        LivingModel *mdl = self.allDataArray.firstObject;
-        self.carmer_id = mdl.ChannelID;
-        self.streamid = mdl.StreamID;
+        self.selectModel = self.allDataArray.firstObject;
+        self.carmer_id = self.selectModel.ChannelID;
+        self.streamid = self.selectModel.StreamID;
     }
     
 
@@ -172,6 +175,10 @@
             cell.allBtn = ^{
                  
 //                LivingModel *lmd = [self.allDataArray objectAtIndex:0];
+                if (self.videoing) {
+                    [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
+                    return;
+                }
                 LocalVideoViewController *vc = [LocalVideoViewController new];
                 vc.delegate = self;
                 vc.isFromIndex = NO;
@@ -203,6 +210,10 @@
     if (![WWPublicMethod isStringEmptyText:self.streamid]) {
         return;
     }
+//    if (self.videoing) {
+//        [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
+//        return;
+//    }
     
     self.controlBtn = (LGXVerticalButton*)sender;
     switch (state) {
@@ -252,7 +263,9 @@
 
             self.controlBtn.selected = !self.controlBtn.selected;
             [self startOrStopVideo:self.controlBtn.selected?@"start":@"stop"];
-            
+            [self.topCell startOrStopVideo:self.controlBtn.selected];
+            self.videoing = self.controlBtn.selected;
+
             break;
         case videoSateYuntai://云台控制
             
@@ -395,7 +408,7 @@
 #pragma mark - PlayerTableViewCellDelegate
 - (void)getPlayerCellSnapshot:(PlayerTableViewCell *_Nullable)cell with:(UIImage*_Nullable)image
 {
-    [self setupSaveView:image];
+    [self setupSaveView:image witnTitle:@"图片已保存"];
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         __weak __typeof(&*self)weakSelf = self;
@@ -403,8 +416,11 @@
     });
 }
 //图片，视频保存view
--(void)setupSaveView:(UIImage*)image
+-(void)setupSaveView:(UIImage*)image witnTitle:(NSString*)title
 {
+    if (image == nil) {
+        return;
+    }
     CGFloat ySpace = kScreenWidth * 0.68 - 43.5;
     
     _saveBackView = [UIView new];
@@ -423,7 +439,7 @@
     
     
     UILabel *subTitleLabel = [UILabel new];
-    subTitleLabel.text = @"图片已保存";
+    subTitleLabel.text = title;
     subTitleLabel.textColor = [UIColor whiteColor];
     subTitleLabel.font = [UIFont customFontWithSize:kFontSizeEleven];
     [_saveBackView addSubview:subTitleLabel];
@@ -478,7 +494,6 @@
         [_kHUDManager hideAfter:0.1 onHide:nil];
         // 请求失败
         DLog(@"error  ==  %@",error.userInfo);
-        [weak_self failedOperation];
     };
     [sence sendRequest];
 }
@@ -518,12 +533,12 @@
     [sence startDownload];
 }
 //下载完成保存视频到本地相册
-- (void)savedVideo:(UIImage*)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+- (void)savedVideo:(NSString*)videoURL didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
     if (error) {
         NSLog(@"保存图片失败%@", error.localizedDescription);
     }else {
         
-        [self setupSaveView:image];
+        [self setupSaveView:[self getImage:videoURL] witnTitle:@"视频已保存"];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             __weak __typeof(&*self)weakSelf = self;
@@ -532,10 +547,26 @@
 
     }
 }
+//根据本地视频地址获取视频缩略图
+-(UIImage *)getImage:(NSString *)videoURL
+{
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:videoURL] options:nil];
+    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    gen.appliesPreferredTrackTransform = YES;
+    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+    NSError *error = nil;
+    CMTime actualTime;
+    CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
+    CGImageRelease(image);
+    return thumb;
+}
 
 
 - (void)selectCellCarmera:(PlayerTableViewCell *)cell withData:(LivingModel *)model
 {
+    self.selectModel = model;
+    
     self.carmer_id = model.ChannelID;
     self.streamid = model.StreamID;
     [self startLoadDataRequest:model.DeviceID];
@@ -543,6 +574,11 @@
 //右上角按钮
 -(void)sharaBtnCLick
 {
+    if (self.videoing) {
+        [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
+        return;
+    }
+    
     //分享里面的内容
     self.shareParams = [[LGXShareParams alloc] init];
 //        [self.shareParams makeShreParamsByData:self.model.share];
@@ -568,8 +604,19 @@
 }
 -(void)systemBtnCLick
 {
+    if (self.videoing) {
+        [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
+        return;
+    }
+    
     //更多设置
-    [TargetEngine controller:self pushToController:PushTargetChannelMoreSystem WithTargetId:nil];
+    if (self.selectModel == nil) {
+        return;
+    }
+    NSDictionary *dic = @{@"SnapURL":self.selectModel.SnapURL,@"ChannelName":self.selectModel.ChannelName};
+    NSString *pushid = [WWPublicMethod jsonTransFromObject:dic];
+    
+    [TargetEngine controller:self pushToController:PushTargetChannelMoreSystem WithTargetId:pushid];
 }
 //生成二维码并保存到相册
 -(void)generatingTwoDimensionalCode:(NSString *)value {
@@ -619,6 +666,11 @@
 #pragma LocalVideoDelegate
 -(void)selectRowData:(NSInteger)value
 {
+    if (self.videoing) {
+        [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
+        return;
+    }
+    
     self.isLiving = NO;
     if (self.localVideosArray.count == 0) {
         return;

@@ -101,7 +101,7 @@
     
     _videoBtn = [LGXVerticalButton new];
     [_videoBtn setImage:UIImageWithFileName(@"player_videos_image") forState:UIControlStateNormal];
-    [_videoBtn setImage:UIImageWithFileName(@"player_videos_select_image") forState:UIControlStateHighlighted];
+    [_videoBtn setImage:UIImageWithFileName(@"player_videos_select_image") forState:UIControlStateSelected];
     [_videoBtn setImage:UIImageWithFileName(@"player_videos_disabled_image") forState:UIControlStateDisabled];
     [_videoBtn setTitle:@"录像" forState:UIControlStateNormal];
     [_videoBtn setTitleColor:kColorSecondTextColor forState:UIControlStateNormal];
