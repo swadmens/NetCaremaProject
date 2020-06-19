@@ -748,6 +748,8 @@
 		4AD270282465550E00D462B4 /* index_search_player_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AD270262465550E00D462B4 /* index_search_player_image@2x.png */; };
 		4AE0213C249B537D009CD476 /* videoing_show_tip_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE0213A249B537C009CD476 /* videoing_show_tip_image@2x.png */; };
 		4AE0213D249B537D009CD476 /* videoing_show_tip_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE0213B249B537D009CD476 /* videoing_show_tip_image@3x.png */; };
+		4AE02140249C4FCA009CD476 /* channel_detail_carmera_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE0213E249C4FCA009CD476 /* channel_detail_carmera_image@2x.png */; };
+		4AE02141249C4FCA009CD476 /* channel_detail_carmera_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE0213F249C4FCA009CD476 /* channel_detail_carmera_image@3x.png */; };
 		4AE2FBF62480B762007E3BAA /* PlayerTopAddViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AE2FBF52480B762007E3BAA /* PlayerTopAddViewCell.m */; };
 		4AE928FA2417753400CFBBD8 /* shara_url_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE928F22417753300CFBBD8 /* shara_url_image@3x.png */; };
 		4AE928FB2417753400CFBBD8 /* shara_wechat_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE928F32417753300CFBBD8 /* shara_wechat_image@3x.png */; };
@@ -1989,6 +1991,8 @@
 		4AD270262465550E00D462B4 /* index_search_player_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "index_search_player_image@2x.png"; sourceTree = "<group>"; };
 		4AE0213A249B537C009CD476 /* videoing_show_tip_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "videoing_show_tip_image@2x.png"; sourceTree = "<group>"; };
 		4AE0213B249B537D009CD476 /* videoing_show_tip_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "videoing_show_tip_image@3x.png"; sourceTree = "<group>"; };
+		4AE0213E249C4FCA009CD476 /* channel_detail_carmera_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "channel_detail_carmera_image@2x.png"; sourceTree = "<group>"; };
+		4AE0213F249C4FCA009CD476 /* channel_detail_carmera_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "channel_detail_carmera_image@3x.png"; sourceTree = "<group>"; };
 		4AE2FBF42480B762007E3BAA /* PlayerTopAddViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayerTopAddViewCell.h; sourceTree = "<group>"; };
 		4AE2FBF52480B762007E3BAA /* PlayerTopAddViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayerTopAddViewCell.m; sourceTree = "<group>"; };
 		4AE928F22417753300CFBBD8 /* shara_url_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shara_url_image@3x.png"; sourceTree = "<group>"; };
@@ -2110,6 +2114,8 @@
 		4A4606BE2407C513007C209A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4AE0213E249C4FCA009CD476 /* channel_detail_carmera_image@2x.png */,
+				4AE0213F249C4FCA009CD476 /* channel_detail_carmera_image@3x.png */,
 				4AE0213A249B537C009CD476 /* videoing_show_tip_image@2x.png */,
 				4AE0213B249B537D009CD476 /* videoing_show_tip_image@3x.png */,
 				4A0CA8D42488F56D00DC97BC /* local_video_left_arrow@2x.png */,
@@ -5027,6 +5033,7 @@
 				4AD270002463E57600D462B4 /* player_voice_image@3x.png in Resources */,
 				4AE0213D249B537D009CD476 /* videoing_show_tip_image@3x.png in Resources */,
 				4A0CA8C92488896E00DC97BC /* player_play_select_image@3x.png in Resources */,
+				4AE02140249C4FCA009CD476 /* channel_detail_carmera_image@2x.png in Resources */,
 				4AE928FC2417753400CFBBD8 /* shara_qq_image@3x.png in Resources */,
 				4AB299E8240E36F4004CA6B5 /* playback_full_image@3x.png in Resources */,
 				4AB2999F240CDBF3004CA6B5 /* send_url_image@2x.png in Resources */,
@@ -5157,6 +5164,7 @@
 				4ABDA75624174023003B3170 /* DHNetSDK_dev.mobileprovision in Resources */,
 				4A4608632408E54C007C209A /* rm_key_noselect@3x.png in Resources */,
 				4AB50B3B2473BD230064BF82 /* super_player_system_image@3x.png in Resources */,
+				4AE02141249C4FCA009CD476 /* channel_detail_carmera_image@3x.png in Resources */,
 				4A4607282407C889007C209A /* Tabbar-1-normal@2x.png in Resources */,
 				4A68695A245915FB0036355E /* index_add_image@2x.png in Resources */,
 				4AD26FFE2463E57600D462B4 /* player_gongge_image@3x.png in Resources */,

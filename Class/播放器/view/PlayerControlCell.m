@@ -50,6 +50,7 @@
     _gongGeBtn = [UIButton new];
     [_gongGeBtn setImage:UIImageWithFileName(@"player_gongge_image") forState:UIControlStateNormal];
     [_gongGeBtn setImage:UIImageWithFileName(@"player_gongge_select_image") forState:UIControlStateSelected];
+    [_gongGeBtn setImage:UIImageWithFileName(@"player_gongge_select_image") forState:UIControlStateDisabled];
     [topView addSubview:_gongGeBtn];
     [_gongGeBtn xCenterToView:topView];
     [_gongGeBtn yCenterToView:topView];

@@ -23,6 +23,13 @@
 
 @end
 
+@interface ChannelDetailFirstCell : WWTableViewCell
+
+@property (nonatomic,strong) UILabel *titleLabel;
+
+
+@end
+
 @interface ChannelDetailController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong) WWTableView *tableView;
@@ -30,6 +37,9 @@
 
 @property (nonatomic,strong) NSString *serial;
 @property (nonatomic,strong) NSString *code;
+
+@property (nonatomic,strong) NSString *SnapURL;
+@property (nonatomic,strong) NSString *ChannelName;
 
 
 @end
@@ -47,11 +57,11 @@
     self.tableView = [[WWTableView alloc] init];
     self.tableView.backgroundColor = kColorBackgroundColor;
     [self.view addSubview:self.tableView];
-    self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 60;
+    self.tableView.rowHeight = 45;
     [self.tableView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self.tableView registerClass:[ChannelDetailFirstCell class] forCellReuseIdentifier:[ChannelDetailFirstCell getCellIDStr]];
     [self.tableView registerClass:[ChannelDetailCell class] forCellReuseIdentifier:[ChannelDetailCell getCellIDStr]];
 }
 
@@ -67,6 +77,9 @@
     
     self.serial = [data objectForKey:@"serial"];
     self.code = [data objectForKey:@"code"];
+    self.SnapURL = [data objectForKey:@"SnapURL"];
+    self.ChannelName = [data objectForKey:@"ChannelName"];
+
 
     NSArray *arr = @[[data objectForKey:@"name"],@"通知",@"设备音频采集",@"设备分享",@"更多设置"];
        
@@ -81,48 +94,54 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    ChannelDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:[ChannelDetailCell getCellIDStr] forIndexPath:indexPath];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.lineHidden = NO;
-
-    NSString *value = [self.dataArray objectAtIndex:indexPath.row];
-    cell.titleLabel.text = value;
-    
     if (indexPath.row == 0) {
-        cell.detailLabel.hidden = YES;
-        cell.switchView.hidden = YES;
-        cell.rightImageView.hidden = NO;
-    }else if (indexPath.row == 1){
-        cell.detailLabel.hidden = YES;
-        cell.switchView.hidden = YES;
-        cell.rightImageView.hidden = NO;
-    }else if (indexPath.row == 2){
-        cell.detailLabel.hidden = YES;
-        cell.switchView.hidden = NO;
-        cell.rightImageView.hidden = YES;
-        
-        cell.serial = self.serial;
-        cell.code = self.code;
-        
-    }else if (indexPath.row == 3){
-        cell.detailLabel.hidden = NO;
-        cell.switchView.hidden = YES;
-        cell.rightImageView.hidden = NO;
+        ChannelDetailFirstCell *cell = [tableView dequeueReusableCellWithIdentifier:[ChannelDetailFirstCell getCellIDStr] forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.lineHidden = NO;
+
+        NSString *value = [self.dataArray objectAtIndex:indexPath.row];
+        cell.titleLabel.text = value;
+        return cell;
     }else{
-        cell.detailLabel.hidden = YES;
-        cell.switchView.hidden = YES;
-        cell.rightImageView.hidden = NO;
+        ChannelDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:[ChannelDetailCell getCellIDStr] forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.lineHidden = NO;
+
+        NSString *value = [self.dataArray objectAtIndex:indexPath.row];
+        cell.titleLabel.text = value;
+        
+        if (indexPath.row == 1 || indexPath.row == 4){
+            cell.detailLabel.hidden = YES;
+            cell.switchView.hidden = YES;
+            cell.rightImageView.hidden = NO;
+        }else if (indexPath.row == 2){
+            cell.detailLabel.hidden = YES;
+            cell.switchView.hidden = NO;
+            cell.rightImageView.hidden = YES;
+            
+            cell.serial = self.serial;
+            cell.code = self.code;
+            
+        }else{
+            cell.detailLabel.hidden = NO;
+            cell.switchView.hidden = YES;
+            cell.rightImageView.hidden = NO;
+        }
+        
+        
+        return cell;
     }
     
     
-    return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 4) {
         //更多设置
-        [TargetEngine controller:self pushToController:PushTargetChannelMoreSystem WithTargetId:nil];
+        NSDictionary *dic = @{@"SnapURL":self.SnapURL,@"ChannelName":self.ChannelName};
+        NSString *pushid = [WWPublicMethod jsonTransFromObject:dic];
+
+        [TargetEngine controller:self pushToController:PushTargetChannelMoreSystem WithTargetId:pushid];
     }else if (indexPath.row == 0){
         [TargetEngine controller:self pushToController:PushTargetEquimentBasicInfo WithTargetId:self.device_id];
     }else if (indexPath.row == 1){
@@ -157,9 +176,8 @@
     _titleLabel.textColor = kColorMainTextColor;
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
     [self.contentView addSubview:_titleLabel];
-    [_titleLabel topToView:self.contentView withSpace:15];
+    [_titleLabel yCenterToView:self.contentView];
     [_titleLabel leftToView:self.contentView withSpace:15];
-    [_titleLabel bottomToView:self.contentView withSpace:15];
     
     
     _rightImageView = [UIImageView new];
@@ -212,3 +230,37 @@
 
 @end
 
+
+@implementation ChannelDetailFirstCell
+
+-(void)dosetup
+{
+    [super dosetup];
+    self.contentView.backgroundColor = [UIColor whiteColor];
+    
+    UIImageView *iconImageView = [UIImageView new];
+    iconImageView.image = UIImageWithFileName(@"channel_detail_carmera_image");
+    [self.contentView addSubview:iconImageView];
+    [iconImageView yCenterToView:self.contentView];
+    [iconImageView leftToView:self.contentView withSpace:15];
+    
+    
+    _titleLabel = [UILabel new];
+    _titleLabel.text = @"测试的";
+    _titleLabel.textColor = kColorMainTextColor;
+    _titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
+    [self.contentView addSubview:_titleLabel];
+    [_titleLabel leftToView:iconImageView withSpace:5];
+    [_titleLabel yCenterToView:self.contentView];
+    
+    
+    UIImageView *rightImageView = [UIImageView new];
+    rightImageView.image = UIImageWithFileName(@"mine_right_arrows");
+    [self.contentView addSubview:rightImageView];
+    [rightImageView yCenterToView:self.contentView];
+    [rightImageView rightToView:self.contentView withSpace:15];
+    
+ 
+}
+
+@end

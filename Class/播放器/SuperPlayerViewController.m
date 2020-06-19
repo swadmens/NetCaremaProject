@@ -48,6 +48,8 @@
 
 @property (nonatomic,strong) LivingModel *selectModel;
 @property (nonatomic,assign) BOOL videoing;//是否正在录像
+@property (nonatomic,strong) UIView *videoTipView;//录像提示view
+@property (nonatomic,strong) UILabel *videoTipLabel;//录像提示view
 
 @end
 
@@ -100,6 +102,21 @@
     self.clView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight - KTopviewheight - 177);
     
     self.videoing = NO;
+    _videoTipView = [UIView new];
+    _videoTipView.layer.cornerRadius = 15;
+    _videoTipView.backgroundColor = UIColorFromRGB(0x000000, 0.73);
+    [self.view addSubview:_videoTipView];
+    [_videoTipView xCenterToView:self.view];
+    [_videoTipView bottomToView:self.view withSpace:35];
+    [_videoTipView addWidth:108];
+    [_videoTipView addHeight:30];
+    
+    _videoTipLabel = [UILabel new];
+    _videoTipLabel.textColor = [UIColor whiteColor];
+    _videoTipLabel.font = [UIFont customFontWithSize:kFontSizeEleven];
+    [_videoTipView addSubview:_videoTipLabel];
+    [_videoTipLabel xCenterToView:_videoTipView];
+    [_videoTipLabel yCenterToView:_videoTipView];
     
     
     
@@ -127,11 +144,14 @@
         self.selectModel = self.allDataArray.firstObject;
         self.carmer_id = self.selectModel.ChannelID;
         self.streamid = self.selectModel.StreamID;
+        [self tipViewHidden:YES withTitle:@"开始录像"];
     }
-    
-
-    
-    
+   
+}
+-(void)tipViewHidden:(BOOL)hidden withTitle:(NSString*)title
+{
+    _videoTipView.hidden = hidden;
+    _videoTipLabel.text = title;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -139,8 +159,6 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-
     __weak typeof(self) weakSelf = self;
     
     if (indexPath.row == 0) {
@@ -265,6 +283,7 @@
             [self startOrStopVideo:self.controlBtn.selected?@"start":@"stop"];
             [self.topCell startOrStopVideo:self.controlBtn.selected];
             self.videoing = self.controlBtn.selected;
+            [self tipViewHidden:NO withTitle:@"正在录像"];
 
             break;
         case videoSateYuntai://云台控制
@@ -510,7 +529,8 @@
     NSString *EndTime = [dic objectForKey:@"EndTime"];
     NSString *StartTime = [dic objectForKey:@"StartTime"];
 
-    
+    [self tipViewHidden:NO withTitle:@"正在处理录像"];
+
     DownLoadSence *sence = [[DownLoadSence alloc]init];
     sence.url = DownloadURL;
 //    sence.filePath = @"";
@@ -538,6 +558,7 @@
         NSLog(@"保存图片失败%@", error.localizedDescription);
     }else {
         
+        [self tipViewHidden:YES withTitle:@" "];
         [self setupSaveView:[self getImage:videoURL] witnTitle:@"视频已保存"];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -565,6 +586,10 @@
 
 - (void)selectCellCarmera:(PlayerTableViewCell *)cell withData:(LivingModel *)model
 {
+    if ([self.streamid isEqualToString:model.StreamID]) {
+        return;
+    }
+    
     self.selectModel = model;
     
     self.carmer_id = model.ChannelID;

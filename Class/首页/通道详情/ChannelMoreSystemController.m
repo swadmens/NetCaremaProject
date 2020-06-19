@@ -61,8 +61,6 @@
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
 
-    
-    
     [self setupTableView];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
