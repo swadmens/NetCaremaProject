@@ -51,7 +51,7 @@
 {
 //    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] options:YYWebImageOptionProgressive];
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:UIImageWithFileName(@"player_hoder_image")];
-    _titleLabel.text = model.video_name;
+    _titleLabel.text = model.vods_vodName;
 }
 
 @end

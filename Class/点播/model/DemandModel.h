@@ -49,6 +49,25 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *time;
 
 
+
+
+
+
+@property (nonatomic,strong) NSString *vods_creationDate;
+@property (nonatomic,strong) NSString *vods_duration;
+@property (nonatomic,strong) NSString *vods_filePath;
+@property (nonatomic,strong) NSString *vods_fileSize;
+@property (nonatomic,strong) NSString *vods_streamId;
+@property (nonatomic,strong) NSString *vods_streamName;
+@property (nonatomic,strong) NSString *vods_type;
+@property (nonatomic,strong) NSString *vods_vodId;
+@property (nonatomic,strong) NSString *vods_vodName;
+
+
+
+
+
+
 @end
 
 

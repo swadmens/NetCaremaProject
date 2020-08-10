@@ -315,7 +315,95 @@
 -(void)getUploadVideoAddress:(NSData*)value withFileName:(NSString*)fileName
 {
     [_kHUDManager showActivityInView:nil withTitle:@"正在上传..."];
+    
+//    http://39.108.208.122:5080/LiveApp/rest/v2/vods/count  http://47.107.95.170:5080/ lishaoyu li136130
+    
+    NSString *url = @"http://39.108.208.122:5080/LiveApp/rest/v2/vods/create";
+    
+    
+    NSDictionary *params = @{
+                            @"name":fileName,
+//                            @"body":value,
+                            };
 
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
+        
+    // 设置请求头
+//    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//    [request setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
+    
+//    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:params error:nil];
+//        // 设置body
+//
+//    [request setHTTPBody:value];
+//    //    __unsafe_unretained typeof(self) weak_self = self;
+//
+//    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
+//
+//    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+//        [_kHUDManager hideAfter:0.1 onHide:nil];
+//
+//        if (error) {
+//            // 请求失败
+//            [_kHUDManager showMsgInView:nil withTitle:@"上传失败" isSuccess:YES];
+//            DLog(@"error  ==  %@",error.userInfo);
+//            DLog(@"responseObject  ==  %@",responseObject);
+//
+//            return ;
+//        }
+//        [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
+//        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+//        DLog(@"Received: %@", responseObject);
+//        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+//
+//    }];
+        
+    
+//    NSURLSessionDataTask *task = [manager POST:url parameters:params progress:^(NSProgress * _Nonnull uploadProgress) {
+//
+//        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//
+//            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+//            [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
+//            DLog(@"Received: %@", responseObject);
+//            DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+//
+//        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//            // 请求失败
+//            [_kHUDManager hideAfter:0.1 onHide:nil];
+//            [_kHUDManager showMsgInView:nil withTitle:@"上传失败" isSuccess:YES];
+//
+//            DLog(@"error ==  %@",error.userInfo)
+//        }];
+
+    
+    NSURLSessionDataTask *task = [manager POST:url parameters:@{@"name":fileName} constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+
+        [formData appendPartWithFileData:value name:@"name" fileName:fileName mimeType:@"video/mp4"];
+
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
+
+        DLog(@"responseObject ==  %@",responseObject)
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        [_kHUDManager showMsgInView:nil withTitle:@"上传失败" isSuccess:YES];
+
+        DLog(@"error ==  %@",error.userInfo)
+
+    }];
+
+    [task resume];
+    
+
+    return;
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"";

@@ -53,9 +53,11 @@
     
     _nameTextField = [UITextField new];
     _nameTextField.placeholder = @"请输入账号";
+    _nameTextField.text = @"homebay";
     _nameTextField.textColor = kColorMainTextColor;
     _nameTextField.font = [UIFont customFontWithSize:kFontSizeFifty];
     _nameTextField.delegate = self;
+    _nameTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.view addSubview:_nameTextField];
     [_nameTextField yCenterToView:nameImageView];
     [_nameTextField leftToView:self.view withSpace:62];
@@ -81,10 +83,12 @@
     
     _passwordTextField = [UITextField new];
     _passwordTextField.placeholder = @"请输入密码";
+    _passwordTextField.text = @"HomeBay@5144";
     _passwordTextField.textColor = kColorMainTextColor;
     _passwordTextField.font = [UIFont customFontWithSize:kFontSizeFifty];
     _passwordTextField.delegate = self;
     _passwordTextField.secureTextEntry = YES;
+    _passwordTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.view addSubview:_passwordTextField];
     [_passwordTextField yCenterToView:keyImageView];
     [_passwordTextField xCenterToView:_nameTextField];

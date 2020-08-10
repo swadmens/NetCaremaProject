@@ -399,6 +399,41 @@
 }
 -(void)loadData
 {
+    [_kHUDManager showActivityInView:nil withTitle:nil];
+
+    NSString *url = [NSString stringWithFormat:@"http://39.108.208.122:5080/LiveApp/rest/v2/vods/list/%ld/10",self.page];
+    
+
+//    http://39.108.208.122:5080/LiveApp/rest/v2/vods/461937096479396286965442
+    
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+       manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    
+    __unsafe_unretained typeof(self) weak_self = self;
+
+    NSURLSessionDataTask *task = [manager GET:url parameters:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+            
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+             
+            [_kHUDManager hideAfter:0.1 onHide:nil];
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+           
+            DLog(@"\n~~~~~完成请求地址:%@\n",httpResponse.URL.absoluteString);
+            DLog(@"Received: %@", responseObject);
+            DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+            
+            [weak_self handleObject:responseObject];
+
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            // 请求失败
+            [_kHUDManager hideAfter:0.1 onHide:nil];
+            [_kHUDManager showMsgInView:nil withTitle:@"请求失败" isSuccess:NO];
+        }];
+    [task resume];
+    
+    
+    return;
     [self startLoadDataRequest];
 }
 - (void)startLoadDataRequest
@@ -516,15 +551,15 @@
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
 //        NSArray *data = [obj objectForKey:@"references"];
-        NSDictionary *data = [obj objectForKey:@"data"];
-        NSArray *rows= [data objectForKey:@"rows"];
+//        NSDictionary *data = [obj objectForKey:@"data"];
+//        NSArray *rows= [data objectForKey:@"rows"];
         NSMutableArray *tempArray = [NSMutableArray array];
 
         if (weak_self.page == 1) {
             [weak_self.dataArray removeAllObjects];
         }
 
-        [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [obj enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             DemandModel *model = [DemandModel makeModelData:dic];
             [tempArray addObject:model];
@@ -566,6 +601,37 @@
 -(void)getSubcatalogList
 {
     
+    NSArray *rows= @[@{@"createAt":@"2020-03-16 23:34:12",
+                       @"desc":@"",
+                       @"folder":@"",
+                       @"id":@"",
+                       @"name":@"全部",
+                       @"realPath":@"",
+                       @"sort":@"1",
+                       @"updateAt":@"2020-03-16 23:34:12",
+                     },
+                    @{@"createAt":@"2020-03-16 23:34:12",
+                      @"desc":@"",
+                      @"folder":@"other",
+                      @"id":@"",
+                      @"name":@"其它",
+                      @"realPath":@"",
+                      @"sort":@"1",
+                      @"updateAt":@"2020-03-16 23:34:12",
+                      }];
+    NSMutableArray *tempArray = [NSMutableArray array];
+    [rows enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *dic = obj;
+        DemandSubcatalogModel *model = [DemandSubcatalogModel makeModelData:dic];
+        [tempArray addObject:model];
+    }];
+    [self.titleDataArray addObjectsFromArray:tempArray];
+    
+    [[GCDQueue mainQueue] queueBlock:^{
+        [self.collectionUpView reloadData];
+    }];
+    
+    return;
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";

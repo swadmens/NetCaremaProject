@@ -45,6 +45,22 @@
 
     
     
+    
+    
+    
+  
+    model.vods_creationDate = [NSString stringWithFormat:@"%@",[dic objectForKey:@"creationDate"]];
+    model.vods_duration = [NSString stringWithFormat:@"%@",[dic objectForKey:@"duration"]];
+    model.vods_filePath = [NSString stringWithFormat:@"%@",[dic objectForKey:@"filePath"]];
+    model.vods_fileSize = [NSString stringWithFormat:@"%@",[dic objectForKey:@"fileSize"]];
+    model.vods_streamId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"streamId"]];
+    model.vods_streamName = [NSString stringWithFormat:@"%@",[dic objectForKey:@"streamName"]];
+    model.vods_type = [NSString stringWithFormat:@"%@",[dic objectForKey:@"type"]];
+    model.vods_vodId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"vodId"]];
+    model.vods_vodName = [NSString stringWithFormat:@"%@",[dic objectForKey:@"vodName"]];
+
+    
+    
  
     return model;
 }
