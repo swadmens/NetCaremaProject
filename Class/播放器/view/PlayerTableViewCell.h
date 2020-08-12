@@ -35,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)stop;
 -(void)play;
+- (void)pause;
+- (void)resume;
 -(void)makePlayerViewFullScreen;
 -(void)makeCellScale:(BOOL)scale;
 -(void)clickSnapshotButton;

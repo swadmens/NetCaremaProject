@@ -90,8 +90,8 @@
     [_fullBtn addHeight:btnWidth];
     
     _playerBtn = [UIButton new];
-    [_playerBtn setImage:UIImageWithFileName(@"player_play_image") forState:UIControlStateNormal];
-    [_playerBtn setImage:UIImageWithFileName(@"player_play_select_image") forState:UIControlStateSelected];
+    [_playerBtn setImage:UIImageWithFileName(@"player_play_select_image") forState:UIControlStateNormal];
+    [_playerBtn setImage:UIImageWithFileName(@"player_play_image") forState:UIControlStateSelected];
     [topView addSubview:_playerBtn];
     [_playerBtn yCenterToView:topView];
     [_playerBtn addCenterX:-space toView:_voiceBtn];

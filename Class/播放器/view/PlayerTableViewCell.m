@@ -367,14 +367,14 @@
 -(void)makeCellDataNoLiving:(DemandModel*)model witnLive:(BOOL)isLiving
 {
    
-    CGFloat height = kScreenWidth * 0.68 + 0.5;
+//    CGFloat height = kScreenWidth * 0.68 + 0.5;
 
     _localVideoView = [PlayLocalVideoView new];
     self.localVideoView.model = model;
     self.localVideoView.delegate = self;
     [self.contentView addSubview:self.localVideoView];
     [self.localVideoView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.contentView];
-    [self.localVideoView addHeight:height];
+//    [self.localVideoView addHeight:height];
     
     self.isPlayerVideo = !isLiving;
     self.localVideoView.hidden = isLiving;
@@ -489,6 +489,23 @@
     }
  
 }
+- (void)pause
+{
+    if (![self chengkVideoNormalPlay]) {
+        return;
+    }
+    
+    [self.localVideoView pause];
+}
+- (void)resume
+{
+    if (![self chengkVideoNormalPlay]) {
+        return;
+    }
+     
+    [self.localVideoView resume];
+   
+}
 
 -(void)makePlayerViewFullScreen
 {
@@ -594,7 +611,7 @@
             return YES;
         }
     }else{
-       return NO;
+       return YES;
     }
 }
 

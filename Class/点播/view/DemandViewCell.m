@@ -16,7 +16,7 @@
 
 @property (nonatomic,strong) UIImageView *showImageView;
 @property (nonatomic,strong) UILabel *titleLabel;
-
+@property (nonatomic,strong) DemandModel *model;
 @end
 
 @implementation DemandViewCell
@@ -33,7 +33,6 @@
     [_showImageView topToView:self.contentView];
     [_showImageView bottomToView:self.contentView withSpace:32.5];
     [_showImageView addWidth:width];
-    [_showImageView addHeight:width*0.6];
     
     
     
@@ -49,9 +48,30 @@
 
 -(void)makeCellData:(DemandModel *)model
 {
-//    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] options:YYWebImageOptionProgressive];
+//    if (self.model != nil) {
+//        return;
+//    }
+    self.model = model;
+    
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:UIImageWithFileName(@"player_hoder_image")];
-    _titleLabel.text = model.vods_vodName;
+    
+    //此处获取视频封面，会有卡顿
+//    _showImageView.image = [self getImage:self.model.videoUrl];
+    _titleLabel.text = self.model.vods_vodName;
+}
+//根据视频地址获取视频封面
+-(UIImage *)getImage:(NSString *)videoURL
+{
+    AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:[NSURL fileURLWithPath:videoURL] options:nil];
+    AVAssetImageGenerator *gen = [[AVAssetImageGenerator alloc] initWithAsset:asset];
+    gen.appliesPreferredTrackTransform = YES;
+    CMTime time = CMTimeMakeWithSeconds(0.0, 600);
+    NSError *error = nil;
+    CMTime actualTime;
+    CGImageRef image = [gen copyCGImageAtTime:time actualTime:&actualTime error:&error];
+    UIImage *thumb = [[UIImage alloc] initWithCGImage:image];
+    CGImageRelease(image);
+    return thumb;
 }
 
 @end

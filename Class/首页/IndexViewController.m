@@ -308,8 +308,8 @@
             NSDictionary *dic = obj;
             IndexDataModel *model = [IndexDataModel makeModelData:dic];
             [tempArray addObject:model];
-            [weak_self getDeviceInfo:model.equipment_id withIndex:idx];
-            [weak_self getDeviceLivingData:model.childDevices_id withIndex:idx];
+//            [weak_self getDeviceInfo:model.equipment_id withIndex:idx];
+//            [weak_self getDeviceLivingData:model.childDevices_id withIndex:idx];
         }];
         [weak_self.dataArray addObjectsFromArray:tempArray];
         

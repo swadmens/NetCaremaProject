@@ -80,6 +80,7 @@
         make.edges.equalTo(self.playView);
     }];
     [self configureVideo:NO];
+    [self.playerView play];
 }
 - (void)play {
     [self.playerView play];

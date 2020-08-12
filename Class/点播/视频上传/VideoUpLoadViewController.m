@@ -376,13 +376,14 @@
 //            [_kHUDManager hideAfter:0.1 onHide:nil];
 //            [_kHUDManager showMsgInView:nil withTitle:@"上传失败" isSuccess:YES];
 //
-//            DLog(@"error ==  %@",error.userInfo)
+//            DLog(@"error ==  %@",error.userInfo)  //"Request failed: unsupported media type (415)"
 //        }];
 
     
+//    @{@"name":fileName}
     NSURLSessionDataTask *task = [manager POST:url parameters:@{@"name":fileName} constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
 
-        [formData appendPartWithFileData:value name:@"name" fileName:fileName mimeType:@"video/mp4"];
+        [formData appendPartWithFileData:value name:@"file" fileName:fileName mimeType:@"video/mp4"];
 
     } progress:^(NSProgress * _Nonnull uploadProgress) {
 

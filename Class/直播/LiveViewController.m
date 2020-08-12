@@ -331,7 +331,7 @@
                 weak_self.collectionView.loadingMoreEnable = NO;
             }
             [weak_self.collectionView stopLoading];
-//            [weak_self changeNoDataViewHiddenStatus];
+            [weak_self changeNoDataViewHiddenStatus];
         }];
     }];
 }

@@ -231,6 +231,7 @@
         _collectionView.dataSource = self;
         
         _collectionView.refreshEnable = YES;
+        
         __unsafe_unretained typeof(self) weak_self = self;
         _collectionView.actionHandle = ^(WWCollectionViewState state){
 
@@ -268,7 +269,7 @@
     [self.collectionUpView addHeight:35];
     
     [self.view addSubview:self.collectionView];
-    [self.collectionView alignTop:@"35" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
+    [self.collectionView alignTop:@"45" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     
     self.folder = @" ";
     self.isClick = NO;
@@ -348,7 +349,7 @@
         vc.indexInteger = indexPath.row;
         vc.isRecordFile = NO;
         vc.isLiving = NO;
-        vc.title_value = model.video_name;
+        vc.title_value = model.vods_vodName;
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
@@ -433,8 +434,7 @@
     [task resume];
     
     
-    return;
-    [self startLoadDataRequest];
+//    [self startLoadDataRequest];
 }
 - (void)startLoadDataRequest
 {

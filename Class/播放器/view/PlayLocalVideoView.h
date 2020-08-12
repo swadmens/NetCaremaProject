@@ -32,6 +32,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) DemandModel *model;
 - (void)stop;
 - (void)play;
+- (void)pause;
+- (void)resume;
+
 -(void)clickSnapshotButton;
 -(void)makePlayerViewFullScreen;
 - (void)changeVolume:(float)volume;

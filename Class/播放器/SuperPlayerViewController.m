@@ -105,6 +105,7 @@
     _videoTipView = [UIView new];
     _videoTipView.layer.cornerRadius = 15;
     _videoTipView.backgroundColor = UIColorFromRGB(0x000000, 0.73);
+    _videoTipView.hidden = !_isLiving;
     [self.view addSubview:_videoTipView];
     [_videoTipView xCenterToView:self.view];
     [_videoTipView bottomToView:self.view withSpace:35];
@@ -225,7 +226,7 @@
 #pragma mark - PlayerControlDelegate
 -(void)playerControlwithState:(videoSate)state withButton:(UIButton *)sender
 {
-    if (![WWPublicMethod isStringEmptyText:self.streamid]) {
+    if (![WWPublicMethod isStringEmptyText:self.streamid] && _isLiving == YES) {
         return;
     }
 //    if (self.videoing) {
@@ -240,9 +241,9 @@
             if (!_isLiving) {
                 self.controlBtn.selected = !self.controlBtn.selected;
                 if (self.controlBtn.selected) {
-                    [self.topCell play];
+                    [self.topCell pause];
                 }else{
-                    [self.topCell stop];
+                    [self.topCell resume];
                 }
             }
             

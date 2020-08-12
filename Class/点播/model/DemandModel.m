@@ -14,7 +14,7 @@
     DemandModel *model = [DemandModel new];
     
     model.video_id = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
-    model.video_name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+//    model.video_name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
     model.size = [NSString stringWithFormat:@"%@",[dic objectForKey:@"size"]];
     model.type = [NSString stringWithFormat:@"%@",[dic objectForKey:@"type"]];
     model.status = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
@@ -33,7 +33,7 @@
     model.snapUrl = [NSString stringWithFormat:@"%@",[dic objectForKey:@"snapUrl"]];
     model.transvideo = [NSString stringWithFormat:@"%@",[dic objectForKey:@"transvideo"]];
     model.updateAt = [NSString stringWithFormat:@"%@",[dic objectForKey:@"updateAt"]];
-    model.videoUrl = [NSString stringWithFormat:@"%@",[dic objectForKey:@"videoUrl"]];
+//    model.videoUrl = [NSString stringWithFormat:@"%@",[dic objectForKey:@"videoUrl"]];
     model.videoCodec = [NSString stringWithFormat:@"%@",[dic objectForKey:@"videoCodec"]];
 
     
@@ -47,11 +47,14 @@
     
     
     
+    model.videoUrl = [NSString stringWithFormat:@"http://39.108.208.122:5080/LiveApp/%@",[dic objectForKey:@"filePath"]];
+    model.video_name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"vodName"]];
+
     
   
     model.vods_creationDate = [NSString stringWithFormat:@"%@",[dic objectForKey:@"creationDate"]];
     model.vods_duration = [NSString stringWithFormat:@"%@",[dic objectForKey:@"duration"]];
-    model.vods_filePath = [NSString stringWithFormat:@"%@",[dic objectForKey:@"filePath"]];
+    model.vods_filePath = [NSString stringWithFormat:@"http://39.108.208.122:5080/LiveApp/%@",[dic objectForKey:@"filePath"]];
     model.vods_fileSize = [NSString stringWithFormat:@"%@",[dic objectForKey:@"fileSize"]];
     model.vods_streamId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"streamId"]];
     model.vods_streamName = [NSString stringWithFormat:@"%@",[dic objectForKey:@"streamName"]];
