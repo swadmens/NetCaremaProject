@@ -48,6 +48,7 @@ PODS:
     - MOBFoundation
   - SocketRocket (0.5.1)
   - TYAlertController (1.2.0)
+  - TZImagePickerController (3.3.1)
   - "XLPhotoBrowser+CoderXL (1.2.0)":
     - SDWebImage (~> 4.0.0)
   - YHPhotoBrowser (0.0.9):
@@ -82,6 +83,7 @@ DEPENDENCIES:
   - ShareSDK3/ShareSDKUI
   - SocketRocket
   - TYAlertController
+  - TZImagePickerController
   - "XLPhotoBrowser+CoderXL"
   - YHPhotoBrowser (~> 0.0.5)
   - YYText
@@ -105,6 +107,7 @@ SPEC REPOS:
     - ShareSDK3
     - SocketRocket
     - TYAlertController
+    - TZImagePickerController
     - "XLPhotoBrowser+CoderXL"
     - YHPhotoBrowser
     - YYCache
@@ -129,6 +132,7 @@ SPEC CHECKSUMS:
   ShareSDK3: 47f50f8217b9542255c573c8ac4392af1c50b0ed
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   TYAlertController: c121090edb0bea7426f987da94cdddd81eef4231
+  TZImagePickerController: 99f03b64145a8c92c55b9b1b931410967d9be4cb
   "XLPhotoBrowser+CoderXL": 2bf4036e2af4611b24bde1681e24c64ed01fbe98
   YHPhotoBrowser: a5a953ddc8b6b4a289b2c96c8e1bfa3f31e6e9fe
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
@@ -136,6 +140,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   YYWebImage: 5f7f36aee2ae293f016d418c7d6ba05c4863e928
 
-PODFILE CHECKSUM: 3e0c25c49c8396793933b7d388bfabbadbaf684d
+PODFILE CHECKSUM: 58cc4391428c5896a0a364446481e7959369f8da
 
 COCOAPODS: 1.9.0

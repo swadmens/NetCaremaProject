@@ -826,13 +826,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     if ([compatiblePresets containsObject:AVAssetExportPresetHighestQuality]) {
         
         AVAssetExportSession *exportSession = [[AVAssetExportSession alloc] initWithAsset:avAsset presetName:AVAssetExportPresetHighestQuality];
-        
-//        NSDateFormatter *formater = [[NSDateFormatter alloc] init];//用时间给文件全名，以免重复
-//        [formater setDateFormat:@"yyyyMMdd_HHmmss"];
-//
-//        NSString *nsTmpDIr = NSTemporaryDirectory();
-//        NSString *resultPath = [NSString stringWithFormat:@"%@record_video_yb_mp4_%3.f.%@", nsTmpDIr, [NSDate timeIntervalSinceReferenceDate], @"mp4"];
-        
+
         NSString *nsTmpDIr = NSTemporaryDirectory();
         NSString *resultPath = [NSString stringWithFormat:@"%@record_video_mp4_%3.f.%@", nsTmpDIr, [NSDate timeIntervalSinceReferenceDate], @"mp4"];
         
@@ -890,6 +884,10 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 
                      break;
                      
+                 case AVAssetExportSessionStatusCancelled:
+                     NSLog(@"AVAssetExportSessionStatusCancelled");
+
+                     break;
              }
              
          }];

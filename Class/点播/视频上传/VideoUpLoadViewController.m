@@ -14,9 +14,11 @@
 #import "AFHTTPSessionManager.h"
 #import "RequestSence.h"
 
+#import "MovEncodeToMpegTool.h"
+#import <TZImagePickerController.h>
 
 
-@interface VideoUpLoadViewController ()<UITextFieldDelegate,UITextViewDelegate,StartRecordVideoDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate>
+@interface VideoUpLoadViewController ()<UITextFieldDelegate,UITextViewDelegate,StartRecordVideoDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,TZImagePickerControllerDelegate>
 
 @property (nonatomic,strong) UITextField *titleTextField;
 
@@ -24,6 +26,9 @@
 @property (nonatomic,strong) NSString *msg_content;//文件描述
 @property (nonatomic,strong) UIButton *addVideoBtn;
 @property (nonatomic,strong) NSData *fileData;
+
+@property (nonatomic,strong) NSURL *fileUrl;
+
 
 @property (nonatomic,strong) NSString *fileName;//文件名称
 @property (nonatomic,assign) BOOL isAddVideo;//是否添加了视频
@@ -146,6 +151,7 @@
     
     NSString *string = [NSString stringWithFormat:@"%@.mp4",self.fileName];
     [self getUploadVideoAddress:self.fileData withFileName:string];
+//    [self sendImageWithImage:string];
 }
 #pragma mark - UITextFieldDelegate
 -(void)textFieldDidEndEditing:(UITextField *)textField
@@ -195,17 +201,13 @@
 
 - (void)recordVideoNormalPath:(NSString *)path
 {
-    NSError *err = nil;
-    NSData* data = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:path] options:NSDataReadingMappedIfSafe error:&err];
-//    //文件最大不超过28MB
-//    if(data.length < 28 * 1024 * 1024)
-//    {
-        self.fileData = data;
-        self.isAddVideo = YES;
+//    NSError *err = nil;
+//    NSData* data = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:path] options:NSDataReadingMappedIfSafe error:&err];
+//
+//    self.fileData = data;
+//    self.isAddVideo = YES;
+//    self.fileUrl = [NSURL fileURLWithPath:path];
 
-//    }else{
-//        [_kHUDManager showMsgInView:nil withTitle:@"发送的文件过大" isSuccess:YES];
-//    }
 }
 -(void)recordVideoTakeHomePath:(NSString *)path withImage:(UIImage *)image
 {
@@ -217,17 +219,13 @@
 
     NSError *err = nil;
     NSData* data = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:path] options:NSDataReadingMappedIfSafe error:&err];
-//    //文件最大不超过28MB
-//    if(data.length < 28 * 1024 * 1024)
-//    {
-        self.fileData = data;
-        self.isAddVideo = YES;
 
-//    }else
-//    {
-//        [_kHUDManager showMsgInView:nil withTitle:@"发送的文件过大" isSuccess:YES];
-//    }
+    self.fileData = data;
+    self.isAddVideo = YES;
+    self.fileUrl = [NSURL fileURLWithPath:path];
+
 }
+
 
 //选择本地视频
 -(void)chooseLocalVideo
@@ -263,7 +261,89 @@
     nav.modalPresentationStyle = 0;
     [self presentViewController:nav animated:YES completion:nil];
 }
-- (void)chosedVideo
+
+-(void)chosedVideo
+{
+    //MaxImagesCount  可以选着的最大条目数
+    TZImagePickerController *imagePicker = [[TZImagePickerController alloc] initWithMaxImagesCount:2 delegate:self];
+    
+    // 是否显示可选原图按钮
+    imagePicker.allowPickingOriginalPhoto = NO;
+    // 是否允许显示视频
+    imagePicker.allowPickingVideo = YES;
+    // 是否允许显示图片
+    imagePicker.allowPickingImage = NO;
+    // 持续时间 限制
+    imagePicker.videoMaximumDuration = 5;
+    // 设置 模态弹出模式。 iOS 13默认非全屏
+    imagePicker.modalPresentationStyle = UIModalPresentationFullScreen;
+    // 这是一个navigation 只能present
+    [self presentViewController:imagePicker animated:YES completion:nil];
+    
+}
+
+// 选择视频的回调
+-(void)imagePickerController:(TZImagePickerController *)picker
+       didFinishPickingVideo:(UIImage *)coverImage
+                sourceAssets:(PHAsset *)asset{
+    
+    [_kHUDManager showActivityInView:nil withTitle:@"处理视频中..."];
+    
+//    [[TZImageManager manager] getVideoOutputPathWithAsset:asset presetName:AVAssetExportPresetLowQuality success:^(NSString *outputPath) {
+//        NSLog(@"视频导出到本地完成,沙盒路径为:%@",outputPath);
+//        [_kHUDManager hideAfter:0.1 onHide:nil];
+//
+//        // Export completed, send video here, send by outputPath or NSData
+//        // 导出完成，在这里写上传代码，通过路径或者通过NSData上传
+//
+//        self.isAddVideo = YES;
+//        NSData *data = [NSData dataWithContentsOfFile:outputPath];
+//        self.fileData = data;
+//
+//    } failure:^(NSString *errorMessage, NSError *error) {
+//        [_kHUDManager hideAfter:0.1 onHide:nil];
+//        NSLog(@"视频导出失败:%@,error:%@",errorMessage, error);
+//    }];
+//
+//    return;
+
+    DLog(@"--------- 视频编码 ----------- 开始 ----------");
+    [MovEncodeToMpegTool convertMovToMp4FromPHAsset:asset
+                      andAVAssetExportPresetQuality:ExportPresetMediumQuality
+                  andMovEncodeToMpegToolResultBlock:^(NSURL *mp4FileUrl, NSData *mp4Data, NSError *error) {
+        DLog(@"--------- 视频编码 ----------- 结束 ----------\n{\n  %@,\n   %ld,\n  %@\n}",mp4FileUrl,mp4Data.length,error.localizedDescription);
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+
+        self.fileData = mp4Data;
+        self.fileUrl = mp4FileUrl;
+        
+        [[GCDQueue mainQueue] queueBlock:^{
+            self.isAddVideo = YES;
+            [self.addVideoBtn setImage:coverImage forState:UIControlStateNormal];
+        }];
+        
+//        BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([mp4FileUrl path]);
+//        if (compatible){
+//           //保存相册核心代码
+//           UISaveVideoAtPathToSavedPhotosAlbum([mp4FileUrl path], self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
+//       }
+        
+    }];
+    
+}
+//保存视频完成之后的回调
+- (void) savedPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError *)error contextInfo: (void *)contextInfo {
+    if (error) {
+        NSLog(@"保存视频失败%@", error.localizedDescription);
+        [_kHUDManager showMsgInView:nil withTitle:@"视频保存失败，没有足够的空间！" isSuccess:YES];
+    }
+    else {
+        NSLog(@"保存视频成功");
+    }
+}
+
+
+- (void)chosedVideoOldMethod
 {
     BOOL canuse = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
     if (canuse == NO) {
@@ -294,7 +374,9 @@
                 
         NSString *videoPath = [[x objectForKey:UIImagePickerControllerMediaURL] path];
         NSData *data = [NSData dataWithContentsOfFile:videoPath];
+        self.fileUrl = [x objectForKey:UIImagePickerControllerMediaURL];
         
+
         [picker dismissViewControllerAnimated:YES completion:^{
             self.fileData = data;
             self.isAddVideo = YES;
@@ -311,6 +393,80 @@
     
 }
 
+#pragma makr -- 上传到服务器
+-(void)sendImageWithImage:(NSString *)fileName{
+    
+    NSURL *url = [NSURL URLWithString:@"http://39.108.208.122:5080/LiveApp/rest/v2/vods/create"];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    request.HTTPMethod = @"POST";
+    //设置请求实体
+    NSMutableData *body = [NSMutableData data];
+      
+    ///文件参数
+    [body appendData:[self getDataWithString:@"--BOUNDARY\r\n" ]];
+    NSString *disposition = [NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n",@"file",fileName];
+    [body appendData:[self getDataWithString:disposition]];
+    [body appendData:[self getDataWithString:@"Content-Type: video/mp4 \r\n"]];
+    [body appendData:[self getDataWithString:@"\r\n"]];
+    [body appendData:self.fileData];
+    [body appendData:[self getDataWithString:@"\r\n"]];
+    //普通参数
+//     [body appendData:[self getDataWithString:@"--BOUNDARY\r\n" ]];
+//    //上传参数需要key： （相应参数，在这里是_myModel.personID）
+//     NSString *dispositions = [NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n",@"file"];
+//     [body appendData:[self getDataWithString:dispositions]];
+//     [body appendData:[self getDataWithString:@"\r\n"]];
+//     [body appendData:[self getDataWithString:fileName]];
+//     [body appendData:[self getDataWithString:@"\r\n"]];
+
+    //参数结束
+    [body appendData:[self getDataWithString:@"--BOUNDARY--\r\n"]];
+    request.HTTPBody = body;
+    //设置请求体长度
+    NSInteger length = [body length];
+    [request setValue:[NSString stringWithFormat:@"%ld",length] forHTTPHeaderField:@"Content-Length"];
+    //设置 POST请求文件上传
+    [request setValue:@"multipart/form-data; boundary=BOUNDARY" forHTTPHeaderField:@"Content-Type"];
+//    [request setValue:@"file" forKey:@"name"];
+//    [request setValue:fileName forKey:@"filename"];
+//    [request setValue:@"video/mp4" forKey:@"Content-Type"];
+
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+         
+        NSJSONSerialization *object = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
+        NSDictionary *dict = (NSDictionary *)object;
+        NSLog(@"dictdict=====%@",dict);
+    }];
+    //开始任务
+    [dataTask resume];
+      
+      
+    //运用AFN实现照片上传
+//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//    NSDictionary *dict = @{@"key":_myModel.personID};
+//    [manager POST:@"http://192.168.0.254:1010/AddImage.ashx" parameters:dict constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+//        [formData appendPartWithFileData:imageData name:_myModel.personID fileName:[NSString stringWithFormat:@"%@.jpg",_myModel.personID] mimeType:@"image/jpeg"];
+//    } progress:^(NSProgress * _Nonnull uploadProgress) {
+//
+//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        NSLog(@"--------%@",responseObject);
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//
+//    }];
+}
+  
+  
+-(NSData *)getDataWithString:(NSString *)string{
+      
+    NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+      
+    return data;
+      
+}
+
+
+
 //获取上传视频地址
 -(void)getUploadVideoAddress:(NSData*)value withFileName:(NSString*)fileName
 {
@@ -319,71 +475,24 @@
 //    http://39.108.208.122:5080/LiveApp/rest/v2/vods/count  http://47.107.95.170:5080/ lishaoyu li136130
     
     NSString *url = @"http://39.108.208.122:5080/LiveApp/rest/v2/vods/create";
-    
-    
-    NSDictionary *params = @{
-                            @"name":fileName,
-//                            @"body":value,
-                            };
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"application/vnd.com.nsn.cumulocity.managedobject+json",@"multipart/form-data", nil];
-        
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"multipart/form-data",nil];
+
     // 设置请求头
-//    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-//    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-//    [request setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
-    
-//    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:params error:nil];
-//        // 设置body
-//
-//    [request setHTTPBody:value];
-//    //    __unsafe_unretained typeof(self) weak_self = self;
-//
-//    NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
-//
-//    } completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-//        [_kHUDManager hideAfter:0.1 onHide:nil];
-//
-//        if (error) {
-//            // 请求失败
-//            [_kHUDManager showMsgInView:nil withTitle:@"上传失败" isSuccess:YES];
-//            DLog(@"error  ==  %@",error.userInfo);
-//            DLog(@"responseObject  ==  %@",responseObject);
-//
-//            return ;
-//        }
-//        [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
-//        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-//        DLog(@"Received: %@", responseObject);
-//        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-//
-//    }];
-        
-    
-//    NSURLSessionDataTask *task = [manager POST:url parameters:params progress:^(NSProgress * _Nonnull uploadProgress) {
-//
-//        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//
-//            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-//            [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
-//            DLog(@"Received: %@", responseObject);
-//            DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-//
-//        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//            // 请求失败
-//            [_kHUDManager hideAfter:0.1 onHide:nil];
-//            [_kHUDManager showMsgInView:nil withTitle:@"上传失败" isSuccess:YES];
-//
-//            DLog(@"error ==  %@",error.userInfo)  //"Request failed: unsupported media type (415)"
-//        }];
+//    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [manager.requestSerializer setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
+//    [manager.requestSerializer setValue:[NSString stringWithFormat:@"%ld",value.length] forHTTPHeaderField:@"Content-Length"];
 
     
+
 //    @{@"name":fileName}
-    NSURLSessionDataTask *task = [manager POST:url parameters:@{@"name":fileName} constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    NSURLSessionDataTask *task = [manager POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
 
         [formData appendPartWithFileData:value name:@"file" fileName:fileName mimeType:@"video/mp4"];
+//        [formData appendPartWithFileURL:self.fileUrl name:@"file" fileName:fileName mimeType:@"video/mp4" error:nil];
 
     } progress:^(NSProgress * _Nonnull uploadProgress) {
 
@@ -472,6 +581,7 @@
     CGImageRelease(image);
     return thumb;
 }
+
 /*
 #pragma mark - Navigation
 

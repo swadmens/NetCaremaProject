@@ -103,6 +103,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_resource "${PODS_ROOT}/ShareSDK3/ShareSDK/Support/PlatformSDK/QQSDK/TencentOpenApi_IOS_Bundle.bundle"
   install_resource "${PODS_ROOT}/ShareSDK3/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WeiboSDK.bundle"
   install_resource "${PODS_ROOT}/ShareSDK3/ShareSDK/Support/Optional/ShareSDKUI.bundle"
+  install_resource "${PODS_ROOT}/TZImagePickerController/TZImagePickerController/TZImagePickerController/TZImagePickerController.bundle"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/JSPatch/JSPatch/JSPatch.js"
@@ -111,6 +112,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_resource "${PODS_ROOT}/ShareSDK3/ShareSDK/Support/PlatformSDK/QQSDK/TencentOpenApi_IOS_Bundle.bundle"
   install_resource "${PODS_ROOT}/ShareSDK3/ShareSDK/Support/PlatformSDK/SinaWeiboSDK/WeiboSDK.bundle"
   install_resource "${PODS_ROOT}/ShareSDK3/ShareSDK/Support/Optional/ShareSDKUI.bundle"
+  install_resource "${PODS_ROOT}/TZImagePickerController/TZImagePickerController/TZImagePickerController/TZImagePickerController.bundle"
 fi
 
 mkdir -p "${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}"

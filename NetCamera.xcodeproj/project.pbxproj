@@ -760,6 +760,7 @@
 		4AE929002417753400CFBBD8 /* shara_arcode_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE928F82417753400CFBBD8 /* shara_arcode_image@3x.png */; };
 		4AE929012417753400CFBBD8 /* shara_qq_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE928F92417753400CFBBD8 /* shara_qq_image@2x.png */; };
 		4AE92904241872D500CFBBD8 /* DHVideoPlaybackController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4AE92903241872D500CFBBD8 /* DHVideoPlaybackController.mm */; };
+		4AF4CA6724E661F200C95400 /* MovEncodeToMpegTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AF4CA6524E661F100C95400 /* MovEncodeToMpegTool.m */; };
 		BC690A0D7092344C888D3680 /* libPods-NetCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90767F8A11353B268BDE0918 /* libPods-NetCamera.a */; };
 /* End PBXBuildFile section */
 
@@ -2005,6 +2006,8 @@
 		4AE928F92417753400CFBBD8 /* shara_qq_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shara_qq_image@2x.png"; sourceTree = "<group>"; };
 		4AE92902241872D500CFBBD8 /* DHVideoPlaybackController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DHVideoPlaybackController.h; sourceTree = "<group>"; };
 		4AE92903241872D500CFBBD8 /* DHVideoPlaybackController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = DHVideoPlaybackController.mm; sourceTree = "<group>"; };
+		4AF4CA6524E661F100C95400 /* MovEncodeToMpegTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovEncodeToMpegTool.m; sourceTree = "<group>"; };
+		4AF4CA6624E661F100C95400 /* MovEncodeToMpegTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovEncodeToMpegTool.h; sourceTree = "<group>"; };
 		5DB9CFF7FE0AF07CD2DB397C /* Pods-NetCamera.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetCamera.release.xcconfig"; path = "Pods/Target Support Files/Pods-NetCamera/Pods-NetCamera.release.xcconfig"; sourceTree = "<group>"; };
 		90767F8A11353B268BDE0918 /* libPods-NetCamera.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NetCamera.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A13654334E02429EFAB7F139 /* Pods-NetCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetCamera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NetCamera/Pods-NetCamera.debug.xcconfig"; sourceTree = "<group>"; };
@@ -4122,6 +4125,8 @@
 		4AB299CD240E2F3B004CA6B5 /* 视频上传 */ = {
 			isa = PBXGroup;
 			children = (
+				4AF4CA6624E661F100C95400 /* MovEncodeToMpegTool.h */,
+				4AF4CA6524E661F100C95400 /* MovEncodeToMpegTool.m */,
 				4AB299F7240F4837004CA6B5 /* VideoUpLoadViewController.h */,
 				4AB299F8240F4837004CA6B5 /* VideoUpLoadViewController.m */,
 			);
@@ -5317,6 +5322,7 @@
 				4A58106424075F2E00E82675 /* UIImage+ImageEffects.m in Sources */,
 				4ABDA70724174023003B3170 /* MBProgressHUD.m in Sources */,
 				4A51193C242B082D005A3065 /* AFURLConnectionOperation.m in Sources */,
+				4AF4CA6724E661F200C95400 /* MovEncodeToMpegTool.m in Sources */,
 				4AA2EE652407A10000C4F5DA /* LiveViewController.m in Sources */,
 				4A580FD824075F2D00E82675 /* UIView+animations.m in Sources */,
 				4A580FC724075F2D00E82675 /* ResetPwdSence.m in Sources */,

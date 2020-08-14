@@ -45,6 +45,10 @@ pod 'JGProgressHUD'
 
  #七牛云播放器
  pod 'PLPlayerKit'
+
+ #相册选择图片视频
+ pod 'TZImagePickerController'
+
  
  #腾讯云
 # pod 'TXLiteAVSDK_Professional'
