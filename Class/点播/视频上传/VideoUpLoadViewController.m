@@ -289,16 +289,19 @@
     
     [_kHUDManager showActivityInView:nil withTitle:@"处理视频中..."];
     
+//    //不转码，直接使用
 //    [[TZImageManager manager] getVideoOutputPathWithAsset:asset presetName:AVAssetExportPresetLowQuality success:^(NSString *outputPath) {
 //        NSLog(@"视频导出到本地完成,沙盒路径为:%@",outputPath);
 //        [_kHUDManager hideAfter:0.1 onHide:nil];
 //
 //        // Export completed, send video here, send by outputPath or NSData
 //        // 导出完成，在这里写上传代码，通过路径或者通过NSData上传
-//
-//        self.isAddVideo = YES;
 //        NSData *data = [NSData dataWithContentsOfFile:outputPath];
 //        self.fileData = data;
+//        [[GCDQueue mainQueue] queueBlock:^{
+//            self.isAddVideo = YES;
+//            [self.addVideoBtn setImage:[self getImage:outputPath] forState:UIControlStateNormal];
+//        }];
 //
 //    } failure:^(NSString *errorMessage, NSError *error) {
 //        [_kHUDManager hideAfter:0.1 onHide:nil];
@@ -321,28 +324,8 @@
             self.isAddVideo = YES;
             [self.addVideoBtn setImage:coverImage forState:UIControlStateNormal];
         }];
-        
-//        BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([mp4FileUrl path]);
-//        if (compatible){
-//           //保存相册核心代码
-//           UISaveVideoAtPathToSavedPhotosAlbum([mp4FileUrl path], self, @selector(savedPhotoImage:didFinishSavingWithError:contextInfo:), nil);
-//       }
-        
     }];
-    
 }
-//保存视频完成之后的回调
-- (void) savedPhotoImage:(UIImage*)image didFinishSavingWithError: (NSError *)error contextInfo: (void *)contextInfo {
-    if (error) {
-        NSLog(@"保存视频失败%@", error.localizedDescription);
-        [_kHUDManager showMsgInView:nil withTitle:@"视频保存失败，没有足够的空间！" isSuccess:YES];
-    }
-    else {
-        NSLog(@"保存视频成功");
-    }
-}
-
-
 - (void)chosedVideoOldMethod
 {
     BOOL canuse = [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
@@ -355,7 +338,6 @@
             item = [RIButtonItem itemWithLabel:@"去设置" action:^{
                 [[UIApplication sharedApplication] openURL:url options:[NSDictionary new] completionHandler:nil];
             }];
-            
         }
         [[TCNewAlertView shareInstance] showAlert:@"" message:@"您的设备不支持拍摄或您设置了拍摄权限" cancelTitle:@"知道了" viewController:self confirm:^(NSInteger buttonTag) {
             
@@ -392,89 +374,14 @@
     [self presentViewController:picker animated:YES completion:nil];
     
 }
-
-#pragma makr -- 上传到服务器
--(void)sendImageWithImage:(NSString *)fileName{
-    
-    NSURL *url = [NSURL URLWithString:@"http://39.108.208.122:5080/LiveApp/rest/v2/vods/create"];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    request.HTTPMethod = @"POST";
-    //设置请求实体
-    NSMutableData *body = [NSMutableData data];
-      
-    ///文件参数
-    [body appendData:[self getDataWithString:@"--BOUNDARY\r\n" ]];
-    NSString *disposition = [NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"%@\"\r\n",@"file",fileName];
-    [body appendData:[self getDataWithString:disposition]];
-    [body appendData:[self getDataWithString:@"Content-Type: video/mp4 \r\n"]];
-    [body appendData:[self getDataWithString:@"\r\n"]];
-    [body appendData:self.fileData];
-    [body appendData:[self getDataWithString:@"\r\n"]];
-    //普通参数
-//     [body appendData:[self getDataWithString:@"--BOUNDARY\r\n" ]];
-//    //上传参数需要key： （相应参数，在这里是_myModel.personID）
-//     NSString *dispositions = [NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n",@"file"];
-//     [body appendData:[self getDataWithString:dispositions]];
-//     [body appendData:[self getDataWithString:@"\r\n"]];
-//     [body appendData:[self getDataWithString:fileName]];
-//     [body appendData:[self getDataWithString:@"\r\n"]];
-
-    //参数结束
-    [body appendData:[self getDataWithString:@"--BOUNDARY--\r\n"]];
-    request.HTTPBody = body;
-    //设置请求体长度
-    NSInteger length = [body length];
-    [request setValue:[NSString stringWithFormat:@"%ld",length] forHTTPHeaderField:@"Content-Length"];
-    //设置 POST请求文件上传
-    [request setValue:@"multipart/form-data; boundary=BOUNDARY" forHTTPHeaderField:@"Content-Type"];
-//    [request setValue:@"file" forKey:@"name"];
-//    [request setValue:fileName forKey:@"filename"];
-//    [request setValue:@"video/mp4" forKey:@"Content-Type"];
-
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-         
-        NSJSONSerialization *object = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
-        NSDictionary *dict = (NSDictionary *)object;
-        NSLog(@"dictdict=====%@",dict);
-    }];
-    //开始任务
-    [dataTask resume];
-      
-      
-    //运用AFN实现照片上传
-//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-//    NSDictionary *dict = @{@"key":_myModel.personID};
-//    [manager POST:@"http://192.168.0.254:1010/AddImage.ashx" parameters:dict constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-//        [formData appendPartWithFileData:imageData name:_myModel.personID fileName:[NSString stringWithFormat:@"%@.jpg",_myModel.personID] mimeType:@"image/jpeg"];
-//    } progress:^(NSProgress * _Nonnull uploadProgress) {
-//
-//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        NSLog(@"--------%@",responseObject);
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//
-//    }];
-}
-  
-  
--(NSData *)getDataWithString:(NSString *)string{
-      
-    NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
-      
-    return data;
-      
-}
-
-
-
-//获取上传视频地址
+//上传视频
 -(void)getUploadVideoAddress:(NSData*)value withFileName:(NSString*)fileName
 {
     [_kHUDManager showActivityInView:nil withTitle:@"正在上传..."];
-    
-//    http://39.108.208.122:5080/LiveApp/rest/v2/vods/count  http://47.107.95.170:5080/ lishaoyu li136130
-    
-    NSString *url = @"http://39.108.208.122:5080/LiveApp/rest/v2/vods/create";
+    __unsafe_unretained typeof(self) weak_self = self;
+
+    NSString *url = [NSString stringWithFormat:@"http://39.108.208.122:5080/LiveApp/rest/v2/vods/create?name=%@",fileName];
+    NSString  *newUrlString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];//链接含有中文转码
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
@@ -484,87 +391,35 @@
     // 设置请求头
 //    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
 //    [manager.requestSerializer setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
-//    [manager.requestSerializer setValue:[NSString stringWithFormat:@"%ld",value.length] forHTTPHeaderField:@"Content-Length"];
-
-    
-
-//    @{@"name":fileName}
-    NSURLSessionDataTask *task = [manager POST:url parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+//@{@"accept":@"video/*"}
+    NSURLSessionDataTask *task = [manager POST:newUrlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
 
         [formData appendPartWithFileData:value name:@"file" fileName:fileName mimeType:@"video/mp4"];
-//        [formData appendPartWithFileURL:self.fileUrl name:@"file" fileName:fileName mimeType:@"video/mp4" error:nil];
 
     } progress:^(NSProgress * _Nonnull uploadProgress) {
 
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-        [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
 
         DLog(@"responseObject ==  %@",responseObject)
-
+        
+        BOOL success = [[NSString stringWithFormat:@"%@",[responseObject objectForKey:@"success"]] boolValue];
+        if (success) {
+            [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
+            [weak_self.navigationController popViewControllerAnimated:YES];
+        }else{
+            [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
+        }
+        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-        [_kHUDManager showMsgInView:nil withTitle:@"上传失败" isSuccess:YES];
+        [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
 
         DLog(@"error ==  %@",error.userInfo)
 
     }];
 
     [task resume];
-    
-
-    return;
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathHeader = @"";
-    sence.pathURL = @"service/video/liveqing/vod/upload_addr";
-    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-        DLog(@"responseObject  ==  %@",obj);
-        NSDictionary *dic = obj;
-        NSString *url = [dic objectForKey:@"url"];
-        NSString *token = [dic objectForKey:@"token"];
-        [weak_self uploadVideo:value withFileName:fileName withToken:token withUrl:url];
-
-    };
-    
-    sence.errorBlock = ^(NSError *error) {
-        
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"error  ==  %@",error);
-        [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
-    };
-    [sence sendRequest];
-}
-
-
-//上传视频
--(void)uploadVideo:(NSData*)value withFileName:(NSString*)fileName withToken:(NSString*)token withUrl:(NSString*)url
-{
-    NSArray *fileArray = @[@{@"name":@"file",@"fileName":fileName,@"mimeType":@"video/mp4",@"data":value}];
-    
-    
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"UPLOAD";
-    sence.pathHeader = @"application/json";
-    sence.pathURL = url;
-    sence.fileArray = fileArray;
-    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
-
-        DLog(@"responseObject  ==  %@",obj);
-        [weak_self.navigationController popViewControllerAnimated:YES];
-    };
-    sence.errorBlock = ^(NSError *error) {
-        
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"error  ==  %@",error);
-        [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
-    };
-    [sence sendRequest];
 }
 
 //根据本地视频地址获取视频缩略图

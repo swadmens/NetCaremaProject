@@ -404,10 +404,6 @@
 
     NSString *url = [NSString stringWithFormat:@"http://39.108.208.122:5080/LiveApp/rest/v2/vods/list/%ld/10",self.page];
     
-
-//    http://39.108.208.122:5080/LiveApp/rest/v2/vods/461937096479396286965442
-    
-    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
        manager.responseSerializer = [AFJSONResponseSerializer serializer];
     
