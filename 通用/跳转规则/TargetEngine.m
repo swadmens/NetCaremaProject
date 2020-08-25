@@ -47,7 +47,6 @@
 
 
 @interface TargetEngine ()
-//<LGXPhotoBrowserDelegate,UIWebViewDelegate>
 
 //@property (nonatomic, strong) LGXPhotoBrowserController *photoBrowserView;
 @property (nonatomic, strong) NSArray *photosArr;

@@ -171,9 +171,6 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    NSString *url = [NSString stringWithFormat:@"https://leo.quarkioe.com/apps/androidapp/#/device/%@/dashboard/%@",model.childId,model.wechat[0]];
-//    IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//
     [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:nil];
 }
 

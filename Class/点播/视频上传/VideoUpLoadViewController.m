@@ -381,7 +381,7 @@
     __unsafe_unretained typeof(self) weak_self = self;
 
     NSString *url = [NSString stringWithFormat:@"http://39.108.208.122:5080/LiveApp/rest/v2/vods/create?name=%@",fileName];
-    NSString  *newUrlString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];//链接含有中文转码
+    NSString *newUrlString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];//链接含有中文转码
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
@@ -392,7 +392,8 @@
 //    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
 //    [manager.requestSerializer setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
 //@{@"accept":@"video/*"}
-    NSURLSessionDataTask *task = [manager POST:newUrlString parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+
+    NSURLSessionDataTask *task = [manager POST:newUrlString parameters:nil headers:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
 
         [formData appendPartWithFileData:value name:@"file" fileName:fileName mimeType:@"video/mp4"];
 
@@ -402,7 +403,7 @@
         [_kHUDManager hideAfter:0.1 onHide:nil];
 
         DLog(@"responseObject ==  %@",responseObject)
-        
+
         BOOL success = [[NSString stringWithFormat:@"%@",[responseObject objectForKey:@"success"]] boolValue];
         if (success) {
             [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
@@ -410,7 +411,7 @@
         }else{
             [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
         }
-        
+
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];

@@ -191,7 +191,7 @@
         return nil;
     }
     
-    NSURLSessionDataTask *task = [self GET:url parameters:params progress:^(NSProgress * _Nonnull downloadProgress) {
+    NSURLSessionDataTask *task = [self GET:url parameters:params headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
          
@@ -223,7 +223,7 @@
         }
         return nil;
     }
-    NSURLSessionDataTask *task = [self POST:url parameters:params progress:^(NSProgress * _Nonnull uploadProgress) {
+    NSURLSessionDataTask *task = [self POST:url parameters:params headers:nil progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
@@ -250,7 +250,7 @@
         return nil;
     }
     
-    NSURLSessionDataTask *task = [self POST:url parameters:finalParams constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    NSURLSessionDataTask *task = [self POST:url parameters:finalParams headers:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
 
         for (int i =0; i<files.count; i++) {
             NSDictionary *dic = [files objectAtIndex:i];
@@ -295,7 +295,7 @@
     DLog(@"\n请求参数 = %@ \n",finalParams);
 
 
-    NSURLSessionDataTask *task = [self PUT:urlStr parameters:finalParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    NSURLSessionDataTask *task = [self PUT:urlStr parameters:finalParams headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
         DLog(@"\n~~~~~完成请求地址:%@\n",httpResponse.URL.absoluteString);

@@ -485,7 +485,7 @@
 
     view.closeBackCoverButton = ^{
         [LEEAlert closeWithCompletionBlock:nil];
-        _isAlertShown = YES;
+        self->_isAlertShown = YES;
     };
     view.reviceBounsButton  = ^{
         [LEEAlert closeWithCompletionBlock:nil];
@@ -493,7 +493,7 @@
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:download_url] options:[NSDictionary new] completionHandler:^(BOOL success) {
 
         }];
-        _isAlertShown = YES;
+        self->_isAlertShown = YES;
 
     };
 

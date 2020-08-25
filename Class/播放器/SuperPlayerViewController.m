@@ -492,9 +492,6 @@
 //开始或停止录像
 -(void)startOrStopVideo:(NSString*)states
 {
-//    "raw": "https://homebay.quarkioe.com/service/video/livegbs/api/v1/record/start?streamid=stream:34020000001320000001:34020000001320000001",
-//    "raw": "https://homebay.quarkioe.com/service/video/livegbs/api/v1/record/stop?streamid=stream:34020000001320000001:34020000001320000001",
-
     NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/record/%@?streamid=%@",states,self.streamid];
     
     RequestSence *sence = [[RequestSence alloc] init];

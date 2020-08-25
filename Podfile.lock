@@ -1,5 +1,5 @@
 PODS:
-  - IQKeyboardManager (6.5.5)
+  - IQKeyboardManager (6.5.6)
   - JGProgressHUD (2.1)
   - JSPatch (1.1.3):
     - JSPatch/Core (= 1.1.3)
@@ -11,7 +11,7 @@ PODS:
   - LGXLayout (1.0.0):
     - Masonry
   - Masonry (1.1.0)
-  - MJExtension (3.2.1)
+  - MJExtension (3.2.2)
   - MMMaterialDesignSpinner (0.2.5)
   - MOBFoundation (2.2.19)
   - PLPlayerKit (3.4.3):
@@ -48,7 +48,7 @@ PODS:
     - MOBFoundation
   - SocketRocket (0.5.1)
   - TYAlertController (1.2.0)
-  - TZImagePickerController (3.3.1)
+  - TZImagePickerController (3.4.2)
   - "XLPhotoBrowser+CoderXL (1.2.0)":
     - SDWebImage (~> 4.0.0)
   - YHPhotoBrowser (0.0.9):
@@ -116,13 +116,13 @@ SPEC REPOS:
     - YYWebImage
 
 SPEC CHECKSUMS:
-  IQKeyboardManager: 3a8b9e603f8b0eeaf5f096a1f2b2cfcf121992ef
+  IQKeyboardManager: 2a6e97afdafc7becf0cb17a9a8d795e3a980717f
   JGProgressHUD: aa403e9a5b45cae98903c4600cccdd98c0c3ec90
   JSPatch: 02cfed591cb907bbfe80a346666e5a35fc2d349d
   JSPatchPlatform: 8cc9aaebe21109d5fdfb4500384ddf38ed0990e9
   LGXLayout: c4756241405146dbd0be48cc1b5dabd4298f68ca
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MJExtension: 635f2c663dcb1bf76fa4b715b2570a5710aec545
+  MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
   MMMaterialDesignSpinner: a548042720c2e5f04212048483085d7942ac3e81
   MOBFoundation: e962b2aee79e2b8f626e2d30c2f23e9f13e5331e
   PLPlayerKit: a44734dc78c1f8f9fb22c537fa1916612fa46b06
@@ -132,7 +132,7 @@ SPEC CHECKSUMS:
   ShareSDK3: 47f50f8217b9542255c573c8ac4392af1c50b0ed
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   TYAlertController: c121090edb0bea7426f987da94cdddd81eef4231
-  TZImagePickerController: 99f03b64145a8c92c55b9b1b931410967d9be4cb
+  TZImagePickerController: cc0b74d5f01ab4cddcc24dcdfc3c7d68e6261056
   "XLPhotoBrowser+CoderXL": 2bf4036e2af4611b24bde1681e24c64ed01fbe98
   YHPhotoBrowser: a5a953ddc8b6b4a289b2c96c8e1bfa3f31e6e9fe
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
@@ -140,6 +140,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   YYWebImage: 5f7f36aee2ae293f016d418c7d6ba05c4863e928
 
-PODFILE CHECKSUM: 58cc4391428c5896a0a364446481e7959369f8da
+PODFILE CHECKSUM: dc416a7aad3dc4368316758a2d10f288594179ac
 
 COCOAPODS: 1.9.0

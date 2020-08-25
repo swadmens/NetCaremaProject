@@ -48,6 +48,9 @@ pod 'JGProgressHUD'
 
  #相册选择图片视频
  pod 'TZImagePickerController'
+ 
+ #MQTT及时通讯
+# pod 'MQTTClient'
 
  
  #腾讯云

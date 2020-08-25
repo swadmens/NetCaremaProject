@@ -8,8 +8,6 @@
 
 #import "LoginViewController.h"
 #import "LGXHorizontalButton.h"
-#import "AFHTTPRequestOperation.h"
-#import "AFHTTPSessionManager.h"
 #import "RequestSence.h"
 
 

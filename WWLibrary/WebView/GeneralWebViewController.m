@@ -465,7 +465,7 @@ typedef enum : NSUInteger {
 /**清除缓存和cookie*/
 - (void)cleanCacheAndCookie{
     
-    //清除UIWebView的缓存
+    //清除WKWebView的缓存
     [[NSURLCache sharedURLCache] removeAllCachedResponses];
     NSURLCache * cache = [NSURLCache sharedURLCache];
     [cache removeAllCachedResponses];

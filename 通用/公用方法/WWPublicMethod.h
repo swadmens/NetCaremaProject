@@ -17,7 +17,6 @@ typedef void(^RefreshTokenSuccessBlock)(id obj);
 
 
 @interface WWPublicMethod : NSObject
-<UIWebViewDelegate>
 #pragma mark - json 操作
 /// obj 转jsonString
 + (NSString *)jsonTransFromObject:(id)obj;
