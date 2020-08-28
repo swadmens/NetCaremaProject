@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A04620D24F5F9ED00DDD408 /* WWMQTTManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A04620C24F5F9ED00DDD408 /* WWMQTTManager.m */; };
 		4A0CA8C72488896E00DC97BC /* player_voice_select_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0CA8BF2488896C00DC97BC /* player_voice_select_image@3x.png */; };
 		4A0CA8C82488896E00DC97BC /* group_remove_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0CA8C02488896C00DC97BC /* group_remove_image@2x.png */; };
 		4A0CA8C92488896E00DC97BC /* player_play_select_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0CA8C12488896C00DC97BC /* player_play_select_image@3x.png */; };
@@ -802,6 +803,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4A04620B24F5F9ED00DDD408 /* WWMQTTManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WWMQTTManager.h; sourceTree = "<group>"; };
+		4A04620C24F5F9ED00DDD408 /* WWMQTTManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WWMQTTManager.m; sourceTree = "<group>"; };
 		4A0CA8BF2488896C00DC97BC /* player_voice_select_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_voice_select_image@3x.png"; sourceTree = "<group>"; };
 		4A0CA8C02488896C00DC97BC /* group_remove_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "group_remove_image@2x.png"; sourceTree = "<group>"; };
 		4A0CA8C12488896C00DC97BC /* player_play_select_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_play_select_image@3x.png"; sourceTree = "<group>"; };
@@ -2092,6 +2095,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4A04620724F5F9A100DDD408 /* MQTT */ = {
+			isa = PBXGroup;
+			children = (
+				4A04620B24F5F9ED00DDD408 /* WWMQTTManager.h */,
+				4A04620C24F5F9ED00DDD408 /* WWMQTTManager.m */,
+			);
+			path = MQTT;
+			sourceTree = "<group>";
+		};
 		4A10B922244D2BDA00105B93 /* 摄像头控制 */ = {
 			isa = PBXGroup;
 			children = (
@@ -3030,6 +3042,7 @@
 		4A580D3124075F2B00E82675 /* WWLibrary */ = {
 			isa = PBXGroup;
 			children = (
+				4A04620724F5F9A100DDD408 /* MQTT */,
 				4AB50ADA246928290064BF82 /* 二维码扫描 */,
 				4A64ECD8242D862C00D30FB1 /* 视频录制 */,
 				4A580D3224075F2B00E82675 /* WebView */,
@@ -4838,6 +4851,7 @@
 				TargetAttributes = {
 					4A580BE924075D0700E82675 = {
 						CreatedOnToolsVersion = 11.3.1;
+						LastSwiftMigration = 1160;
 					};
 					4A580C0424075D0D00E82675 = {
 						CreatedOnToolsVersion = 11.3.1;
@@ -5634,6 +5648,7 @@
 				4A580FEB24075F2D00E82675 /* GTMBase64.m in Sources */,
 				4A58103F24075F2E00E82675 /* NSMutableDictionary+Json.m in Sources */,
 				4A64ED02242DEE0000D30FB1 /* CarmeaVideosModel.m in Sources */,
+				4A04620D24F5F9ED00DDD408 /* WWMQTTManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5803,6 +5818,7 @@
 			baseConfigurationReference = A13654334E02429EFAB7F139 /* Pods-NetCamera.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TJ2Y6LJ9G5;
 				ENABLE_BITCODE = NO;
@@ -5832,6 +5848,9 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = NetCamera.Indentifier.NetCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "WWLibrary/MQTT/NetCamera-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$PODS_ROOT/**";
 			};
@@ -5842,6 +5861,7 @@
 			baseConfigurationReference = 5DB9CFF7FE0AF07CD2DB397C /* Pods-NetCamera.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = TJ2Y6LJ9G5;
 				ENABLE_BITCODE = NO;
@@ -5871,6 +5891,8 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = NetCamera.Indentifier.NetCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "WWLibrary/MQTT/NetCamera-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$PODS_ROOT/**";
 			};

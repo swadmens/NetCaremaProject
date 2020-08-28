@@ -14,6 +14,14 @@ PODS:
   - MJExtension (3.2.2)
   - MMMaterialDesignSpinner (0.2.5)
   - MOBFoundation (2.2.19)
+  - MQTTClient (0.15.3):
+    - MQTTClient/Core (= 0.15.3)
+  - MQTTClient/Core (0.15.3):
+    - MQTTClient/Manager
+    - MQTTClient/Min
+  - MQTTClient/Manager (0.15.3):
+    - MQTTClient/Min
+  - MQTTClient/Min (0.15.3)
   - PLPlayerKit (3.4.3):
     - PLPlayerKit/iphoneos (= 3.4.3)
   - PLPlayerKit/iphoneos (3.4.3)
@@ -71,6 +79,7 @@ DEPENDENCIES:
   - MJExtension
   - MMMaterialDesignSpinner
   - MOBFoundation (~> 2.2.3)
+  - MQTTClient
   - PLPlayerKit
   - PonyDebugger (= 0.4.3)
   - ReactiveCocoa (= 2.5)
@@ -100,6 +109,7 @@ SPEC REPOS:
     - MJExtension
     - MMMaterialDesignSpinner
     - MOBFoundation
+    - MQTTClient
     - PLPlayerKit
     - PonyDebugger
     - ReactiveCocoa
@@ -125,6 +135,7 @@ SPEC CHECKSUMS:
   MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
   MMMaterialDesignSpinner: a548042720c2e5f04212048483085d7942ac3e81
   MOBFoundation: e962b2aee79e2b8f626e2d30c2f23e9f13e5331e
+  MQTTClient: 0dfa04e789479c2e461786464969895c1fcb0875
   PLPlayerKit: a44734dc78c1f8f9fb22c537fa1916612fa46b06
   PonyDebugger: 52f96f501df018dc2b7153fa18464b82553e700c
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
@@ -140,6 +151,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   YYWebImage: 5f7f36aee2ae293f016d418c7d6ba05c4863e928
 
-PODFILE CHECKSUM: dc416a7aad3dc4368316758a2d10f288594179ac
+PODFILE CHECKSUM: c69c891d889549c78499c0ea5f64d599809e90c6
 
 COCOAPODS: 1.9.0
