@@ -16,6 +16,9 @@
     NSDictionary *managedObject = [dic objectForKey:@"managedObject"];
     
     
+    model.deviceSerial = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"deviceSerial"]];
+
+    
     model.equipment_id = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"id"]];
     model.equipment_name = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"name"]];
 //    model.equipment_Channel = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"Channel"]];
@@ -35,15 +38,16 @@
     model.online = [status isEqualToString:@"UNAVAILABLE"]?@(NO):@(YES);
 
     
-    NSDictionary *quark_GBSCameraDevice = [managedObject objectForKey:@"quark_GBSCameraDevice"];
-    model.address = [NSString stringWithFormat:@"%@",[quark_GBSCameraDevice objectForKey:@"address"]];
-    model.createdAt = [NSString stringWithFormat:@"%@",[quark_GBSCameraDevice objectForKey:@"createdAt"]];
-    model.deviceID = [NSString stringWithFormat:@"%@",[quark_GBSCameraDevice objectForKey:@"deviceID"]];
-    model.childDevice_id = [NSString stringWithFormat:@"%@",[quark_GBSCameraDevice objectForKey:@"id"]];
-    model.updatedAt = [NSString stringWithFormat:@"%@",[quark_GBSCameraDevice objectForKey:@"updatedAt"]];
-    model.manufacturer = [NSString stringWithFormat:@"%@",[quark_GBSCameraDevice objectForKey:@"manufacturer"]];
-    model.civilCode = [NSString stringWithFormat:@"%@",[quark_GBSCameraDevice objectForKey:@"civilCode"]];
-    model.channel = [NSString stringWithFormat:@"%@",[quark_GBSCameraDevice objectForKey:@"channel"]];
+    NSDictionary *sourceInfo = [managedObject objectForKey:@"sourceInfo"];
+    model.address = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"address"]];
+    model.createdAt = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"createdAt"]];
+    model.deviceID = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"deviceID"]];
+    model.childDevice_id = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"id"]];
+    model.updatedAt = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"updatedAt"]];
+    model.manufacturer = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"manufacturer"]];
+    model.civilCode = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"civilCode"]];
+    model.channel = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"channel"]];
+    model.snapURL = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"snapURL"]];
 
     
     NSDictionary *c8y_RequiredAvailability = [managedObject objectForKey:@"c8y_RequiredAvailability"];

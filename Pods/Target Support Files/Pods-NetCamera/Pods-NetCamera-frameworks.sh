@@ -197,9 +197,11 @@ if [ -r "${ARTIFACT_LIST_FILE}" ]; then
 fi
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "${PODS_ROOT}/EZOpenSDK/dist/EZOpenSDK/dynamicSDK/EZOpenSDKFramework.framework"
   install_framework "${PODS_ROOT}/PLPlayerKit/Pod/Library/PLPlayerKit.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "${PODS_ROOT}/EZOpenSDK/dist/EZOpenSDK/dynamicSDK/EZOpenSDKFramework.framework"
   install_framework "${PODS_ROOT}/PLPlayerKit/Pod/Library/PLPlayerKit.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then

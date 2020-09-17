@@ -10,7 +10,6 @@
 #import "WWCollectionView.h"
 #import "CarmeaVideosViewCell.h"
 #import "CarmeaVideosModel.h"
-#import "HKVideoPlaybackController.h"
 #import "DemandModel.h"
 #import "LGXVerticalButton.h"
 #import "DownloadListController.h"
@@ -240,19 +239,10 @@
         NSDictionary *dic = @{@"name":model.video_name,
                               @"snapUrl":model.snap,
                               @"videoUrl":model.hls,
-                              @"createAt":model.time,
+                              @"createAt":model.start_time,
                              };
        
         DemandModel *models = [DemandModel makeModelData:dic];
-        HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
-        vc.model = models;
-        vc.allDataArray = [NSMutableArray arrayWithArray:self.dataArray];
-        vc.indexInteger = indexPath.row;
-        vc.isRecordFile = YES;
-        vc.isLiving = NO;
-        vc.carmeaModel = model;
-        vc.device_id = self.device_id;
-        [self.navigationController pushViewController:vc animated:YES];
     }
     
 }

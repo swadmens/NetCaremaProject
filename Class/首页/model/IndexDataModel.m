@@ -17,20 +17,41 @@
     
     
     model.equipment_id = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
+    model.equipment_name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    model.equipment_address = [NSString stringWithFormat:@"%@",[dic objectForKey:@"address"]];
+    model.equipment_type = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    model.lastUpdated = [NSString stringWithFormat:@"%@",[dic objectForKey:@"address"]];
+    model.creationTime = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
+    model.owner = [NSString stringWithFormat:@"%@",[dic objectForKey:@"owner"]];
+    model.system_Source = [NSString stringWithFormat:@"%@",[dic objectForKey:@"system_Source"]];
+    model.deviceSerial = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceSerial"]];
+    
+    model.status = [[NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]] boolValue];
+
     
     NSDictionary *statesDic = [dic objectForKey:@"c8y_Availability"];
     NSString *status = [NSString stringWithFormat:@"%@",[statesDic objectForKey:@"status"]];
     model.equipment_states = [status isEqualToString:@"AVAILABLE"]?@"在线":@"离线";
-
-    NSDictionary *quark_GBSManageDevice = [dic objectForKey:@"quark_GBSManageDevice"];
     
-    model.equipment_name = [NSString stringWithFormat:@"%@",[quark_GBSManageDevice objectForKey:@"name"]];
-    model.equipment_address = [NSString stringWithFormat:@"%@",[quark_GBSManageDevice objectForKey:@"address"]];
-    model.childDevices_id = [NSString stringWithFormat:@"%@",[quark_GBSManageDevice objectForKey:@"id"]];
-    model.serial = [NSString stringWithFormat:@"%@",[quark_GBSManageDevice objectForKey:@"serial"]];
 
-    
-//    model.childDevices_info = [NSArray arrayWithArray:[dic objectForKey:@"device_num"]];
+    NSDictionary *sourceInfo = [dic objectForKey:@"sourceInfo"];
+    model.source_id = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"id"]];
+    model.source_name = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"name"]];
+    model.source_type = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"type"]];
+    model.source_password = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"password"]];
+    model.source_charset = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"charset"]];
+    model.source_manufacturer = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"manufacturer"]];
+    model.source_remoteIP = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"remoteIP"]];
+    model.source_remotePort = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"remotePort"]];
+    model.source_contactIP = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"contactIP"]];
+    model.source_channelCount = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"channelCount"]];
+    model.source_recvStreamIP = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"recvStreamIP"]];
+    model.source_smsid = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"smsid"]];
+    model.source_online = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"online"]];
+    model.source_commandTransport = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"commandTransport"]];
+    model.source_mediaTransport = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"mediaTransport"]];
+    model.source_mediaTransportMode = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"mediaTransportMode"]];
+    model.source_catalogInterval = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"catalogInterval"]];
     
     
     NSDictionary *childDevices = (NSDictionary*)[dic objectForKey:@"childDevices"];
@@ -40,9 +61,14 @@
         NSDictionary *childDic = obj;
         IndexChildDataModel *childModel = [IndexChildDataModel makeModelData:childDic];
         [tempArray addObject:childModel];
+        if (idx == 0) {
+            model.childDevices_id = [NSString stringWithFormat:@"%@",childModel.childDevices_id];
+        }
     }];
     
     model.equipment_nums = [NSArray arrayWithArray:tempArray];
+    
+    model.liveModelArray = [NSMutableArray array];
     
     
     return model;

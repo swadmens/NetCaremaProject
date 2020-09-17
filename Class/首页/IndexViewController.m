@@ -215,8 +215,8 @@
         
         cell.moreClick = ^{
             self.selectModel = model.childDevices_info.firstObject;
-            self.selectLvModel = model.liveModelArray.firstObject;
-            [self moreDealwith:[model.equipment_states isEqualToString:@"离线"]];
+//            self.selectLvModel = model.liveModelArray.firstObject;
+            [self moreDealwith:model.status];
         };
         cell.getSingleModelBackdata = ^(LivingModel * _Nonnull model) {
             NSArray *arr = [NSArray arrayWithObjects:model, nil];
@@ -236,9 +236,7 @@
     SuperPlayerViewController *vc = [SuperPlayerViewController new];
     vc.hidesBottomBarWhenPushed = YES;
     vc.allDataArray = [NSArray arrayWithArray:model.liveModelArray];
-//    vc.allDataArray = [NSArray arrayWithArray:model.childDevices_info];
     vc.isLiving = YES;
-    vc.device_id = model.childDevices_id;
     vc.title_value = model.equipment_name;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
@@ -262,8 +260,8 @@
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
-//    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_IsCameraManageDevice&currentPage=%ld",(long)self.page];
-    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_GBSManageDevice&currentPage=%ld",(long)self.page];
+    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?type=camera_Root&fragmentType=camera_Device&pageSize=100&currentPage=%ld",(long)self.page];
+//    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_GBSManageDevice&currentPage=%ld",(long)self.page];
     
     
     RequestSence *sence = [[RequestSence alloc] init];
@@ -308,8 +306,7 @@
             NSDictionary *dic = obj;
             IndexDataModel *model = [IndexDataModel makeModelData:dic];
             [tempArray addObject:model];
-//            [weak_self getDeviceInfo:model.equipment_id withIndex:idx];
-//            [weak_self getDeviceLivingData:model.childDevices_id withIndex:idx];
+            [weak_self getDeviceInfo:model.equipment_id withIndex:idx];
         }];
         [weak_self.dataArray addObjectsFromArray:tempArray];
         
@@ -376,6 +373,7 @@
         [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             MyEquipmentsModel *model = [MyEquipmentsModel makeModelData:dic];
+            [weak_self getDeviceLivingData:model withIndex:index];
             [tempArray addObject:model];
         }];
 
@@ -391,9 +389,11 @@
     }];
 }
 //获取直播数据
--(void)getDeviceLivingData:(NSString*)living_id withIndex:(NSInteger)index
+-(void)getDeviceLivingData:(MyEquipmentsModel*)meModel withIndex:(NSInteger)index
 {
-    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/stream/list?serial=%@",living_id];
+
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/live/infos?systemSource=GBS&deviceSerial=%@&channel=1",meModel.deviceSerial];
+//    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/stream/list?serial=%@",living_id];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
@@ -402,7 +402,7 @@
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"Received: %@", obj);
-        [weak_self handleDeviceLivingObject:obj withIndex:index];
+        [weak_self handleDeviceLivingObject:obj withModel:meModel withIndex:index];
     };
     sence.errorBlock = ^(NSError *error) {
 
@@ -413,20 +413,24 @@
     [sence sendRequest];
 }
 
-- (void)handleDeviceLivingObject:(id)obj  withIndex:(NSInteger)index
+- (void)handleDeviceLivingObject:(id)obj withModel:(MyEquipmentsModel*)meModel withIndex:(NSInteger)index
 {
     [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
-        NSArray *data= [obj objectForKey:@"Streams"];
-        NSMutableArray *tempArray = [NSMutableArray array];
-        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSDictionary *dic = obj;
-            LivingModel *model = [LivingModel makeModelData:dic];
-            [tempArray addObject:model];
-        }];
+//        NSArray *data= [obj objectForKey:@"Streams"];
+//        NSMutableArray *tempArray = [NSMutableArray array];
+//        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:obj];
+        [dic setObject:meModel.createdAt forKey:@"createdAt"];
+        [dic setObject:meModel.equipment_name forKey:@"name"];
+        [dic setObject:meModel.equipment_id forKey:@"deviceId"];
+
+            LivingModel *lvModel = [LivingModel makeModelData:dic];
+//            [tempArray addObject:model];
+//        }];
         IndexDataModel *model = [self.dataArray objectAtIndex:index];
-        model.liveModelArray = [NSArray arrayWithArray:tempArray];
+        [model.liveModelArray addObject:lvModel];
         [self.dataArray replaceObjectAtIndex:index withObject:model];
 
         [[GCDQueue mainQueue] queueBlock:^{
@@ -441,7 +445,7 @@
 -(void)collectionSelect:(NSInteger)index
 {
     DLog(@"点了第%ld个",(long)index);
-    
+    [self loadNewData];
 }
 -(void)searchValue:(NSString *)value
 {
@@ -490,31 +494,29 @@
     vc.delegate = self;
     vc.hidesBottomBarWhenPushed = YES;
     vc.isFromIndex = YES;
-    vc.device_id = self.selectModel.deviceID;
-    vc.code = self.selectLvModel.DeviceID;
+    vc.device_id = self.selectModel.equipment_id;
+    vc.code = self.selectLvModel.deviceSerial;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }
 -(void)clickChannelDetails
 {
-    if (self.selectLvModel == nil) {
+    if (self.selectModel == nil) {
         return;
     }
     NSDictionary *dic = @{
                           @"id":self.selectModel.equipment_id,
                           @"name":self.selectModel.equipment_name,
-//                          @"c8y_Notes":self.selectModel.c8y_Notes,
-                          @"ChannelName":self.selectLvModel.ChannelName,
-                          @"SnapURL":self.selectLvModel.SnapURL,
-                          @"media_transport":self.selectLvModel.Transport,
+                          @"ChannelName":self.selectModel.equipment_name,
+                          @"SnapURL":self.selectModel.snapURL,
                           @"serial":self.selectModel.childDevice_id,
-                          @"code":self.selectLvModel.DeviceID,
+                          @"code":self.selectModel.deviceSerial,
                           @"owner":self.selectModel.owner,
                           @"lastUpdated":self.selectModel.lastUpdated,
                           @"responseInterval":self.selectModel.responseInterval,
                          };
     NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
-    
+
     [TargetEngine controller:nil pushToController:PushTargetChannelDetail WithTargetId:pushId];
 
 }
@@ -528,13 +530,13 @@
 {
     IndexDataModel *model = [self.dataArray objectAtIndex:index];
     model.childDevices_info = infoArray;
-    model.liveModelArray = mdArray;
+    model.liveModelArray = [NSMutableArray arrayWithArray:mdArray];
     [self.dataArray replaceObjectAtIndex:index withObject:model];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     
 }
 //更多操作
--(void)moreDealwith:(BOOL)offline
+-(void)moreDealwith:(BOOL)online
 {
     NSArray *arr = @[@{@"title":@"消息设置",@"image":@"index_message_image"},
                      @{@"title":@"全部录像",@"image":@"index_all_video_image"},
@@ -542,20 +544,14 @@
                      @{@"title":@"设备详情",@"image":@"index_channel_detail_image"}];
      NSArray *arr2 = @[@{@"title":@"全部录像",@"image":@"index_all_video_image"},
                      @{@"title":@"通道详情",@"image":@"index_channel_detail_image"}];
-     
-//     NSString *ClientId = [WWPublicMethod isStringEmptyText:self.selectModel.ClientId]?self.selectModel.ClientId:@"";
-//     NSString *DeviceId = [WWPublicMethod isStringEmptyText:self.selectModel.DeviceId]?self.selectModel.DeviceId:@"";
-//     NSString *CameraId = [WWPublicMethod isStringEmptyText:self.selectModel.CameraId]?self.selectModel.CameraId:@"";
-//
-//     NSString *device_id = [NSString stringWithFormat:@"%@%@%@",ClientId,DeviceId,CameraId];
-     
+    
      CGFloat height;
-     if (offline) {
-         [self.bottomView makeViewData:arr2 with:self.selectModel.deviceID];
-         height = arr2.count * 35 + 50;
-     }else{
+     if (online) {
          [self.bottomView makeViewData:arr with:self.selectModel.deviceID];
          height = arr.count * 35 + 50;
+     }else{
+         [self.bottomView makeViewData:arr2 with:self.selectModel.deviceID];
+         height = arr2.count * 35 + 50;
      }
      
     [UIView animateWithDuration:0.3 animations:^{

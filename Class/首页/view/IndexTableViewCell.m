@@ -109,14 +109,11 @@
 -(void)makeCellData:(IndexDataModel *)model
 {
     _equipmentName.text = model.equipment_id;
-    _equipmentStates.text = model.equipment_states;
     _equipmentAddress.text = model.equipment_address;
-    
-    if ([model.equipment_states isEqualToString:@"离线"]) {
-        _equipmentStates.backgroundColor = UIColorFromRGB(0xAEAEAE, 1);
-    }else{
-        _equipmentStates.backgroundColor = UIColorFromRGB(0xF39700, 1);
-    }
+    _equipmentStates.text = model.status?@"在线":@"离线";
+
+    _equipmentStates.backgroundColor = model.status?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
+  
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

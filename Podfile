@@ -52,6 +52,9 @@ pod 'JGProgressHUD'
  #MQTT及时通讯
  pod 'MQTTClient'
 
+ #萤石
+ pod 'EZOpenSDK'
+ 
  
  #腾讯云
 # pod 'TXLiteAVSDK_Professional'

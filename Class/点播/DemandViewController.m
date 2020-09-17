@@ -12,7 +12,6 @@
 #import "DemandViewCell.h"
 #import "AFHTTPSessionManager.h"
 #import "DemandModel.h"
-#import "HKVideoPlaybackController.h"
 #import "SuperPlayerViewController.h"
 #import "RequestSence.h"
 

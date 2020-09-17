@@ -313,7 +313,7 @@ static NSString *const _kdownloadListKey = @"download_video_list";
                 
                 CarmeaVideosModel *model = obj;
                 [tempDic setValue:model.snap forKey:@"snap"];//封面图片URL
-                [tempDic setValue:model.time forKey:@"time"];//视频时间
+//                [tempDic setValue:model.time forKey:@"time"];//视频时间
                 [tempDic setValue:model.start_time forKey:@"start_time"];//视频时间
                 [tempDic setValue:model.video_name forKey:@"name"];//视频名称
                 [tempDic setValue:model.duration forKey:@"duration"];//视频时长

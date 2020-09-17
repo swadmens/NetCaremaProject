@@ -122,8 +122,6 @@
 //    [stopBtn addHeight:40];
     
     
-    
-    
     _leftUpBtn = [UIButton new];
     _leftUpBtn.hidden = YES;
     [_leftUpBtn setTitle:@"左上" forState:UIControlStateNormal];

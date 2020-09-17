@@ -605,7 +605,7 @@
     id obj = [self.dataArray objectAtIndex:self.selectIndexPath.row];
     if ([obj isKindOfClass:[LivingModel class]]) {
         LivingModel *model = obj;
-        if (![WWPublicMethod isStringEmptyText:model.HLS]) {
+        if (![WWPublicMethod isStringEmptyText:model.hls]) {
             return NO;
         }else{
             return YES;

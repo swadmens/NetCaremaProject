@@ -12,6 +12,7 @@
 
 #import "LGXThirdEngine.h" // 第三方管理
 //#import <TXLiteAVSDK_Professional/TXLiteAVSDK.h>
+#import <EZOpenSDKFramework/EZOpenSDKFramework.h>
 
 //#import "netsdk.h"
 //#import "Global.h"
@@ -96,6 +97,15 @@
     /// cookie设置
     NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     [cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
+    
+    
+    [EZOpenSDK initLibWithAppKey:@"a2fafc9c1ebd422cb440ecd0b59e582a"];
+    [EZOpenSDK setAccessToken:@"at.0zxdy7r321xv05174qoew9gi60enzc9q-86s058tza2-0z30fvu-90ppdbz4q"];
+    [EZOpenSDK openLoginPage:^(EZAccessToken *accessToken) {
+        
+    }];
+    
+    
 
     /// 引导页，判断是否是第一次
 //    [self setupGuideView];

@@ -12,7 +12,7 @@
 
 
 //设置租户
-#define KAPPTenant @"homebay"
+#define KAPPTenant @"lpc"
 
 
 @interface LoginViewController ()<UITextFieldDelegate>
@@ -51,7 +51,7 @@
     
     _nameTextField = [UITextField new];
     _nameTextField.placeholder = @"请输入账号";
-    _nameTextField.text = @"homebay";
+    _nameTextField.text = @"admin";
     _nameTextField.textColor = kColorMainTextColor;
     _nameTextField.font = [UIFont customFontWithSize:kFontSizeFifty];
     _nameTextField.delegate = self;
@@ -81,7 +81,7 @@
     
     _passwordTextField = [UITextField new];
     _passwordTextField.placeholder = @"请输入密码";
-    _passwordTextField.text = @"HomeBay@5144";
+    _passwordTextField.text = @"admin123";
     _passwordTextField.textColor = kColorMainTextColor;
     _passwordTextField.font = [UIFont customFontWithSize:kFontSizeFifty];
     _passwordTextField.delegate = self;

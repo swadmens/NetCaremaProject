@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *important;
 @property (nonatomic,strong) NSString *snap;
 @property (nonatomic,strong) NSString *start_time;
-@property (nonatomic,strong) NSString *time;
+//@property (nonatomic,strong) NSString *time;
 
 @end
 

@@ -19,10 +19,6 @@
 #import "PersonInfoViewController.h"//个人信息
 #import "EquipmentInformationController.h"//设备信息
 #import "VideoUpLoadViewController.h"//视频上传
-#import "HKLivingViewController.h"//海康视频直播
-#import "DHLivingViewController.h"//大华视频直播
-#import "HKVideoPlaybackController.h"//海康录像播放
-#import "DHVideoPlaybackController.h"//大华录像播放
 #import "RetrievePasswordController.h"//找回密码
 #import "DownloadListController.h"//下载列表
 #import "LiveLivingViewController.h"//live直播
@@ -512,38 +508,9 @@
             toController = controller;
         }
                break;
-        case PushTargetHKVideoPlayback: //  海康视频播放
-        {
-            HKVideoPlaybackController *controller = [[HKVideoPlaybackController alloc] init];
-            controller.video_id = pushId;
-            toController = controller;
-       
-        }
-              break;
-        case PushTargetDHVideoPlayback: //  大华视频播放
-         {
-             DHVideoPlaybackController *controller = [[DHVideoPlaybackController alloc] init];
-             controller.video_id = pushId;
-             toController = controller;
-        
-         }
-               break;
         case PushTargetVideoUpLoad: //视频上传
         {
             VideoUpLoadViewController *controller = [[VideoUpLoadViewController alloc] init];
-            toController = controller;
-        }
-            break;
-        case PushTargetHKLiving: //海康视频直播
-        {
-            HKLivingViewController *controller = [[HKLivingViewController alloc] init];
-            controller.live_id = pushId;
-            toController = controller;
-        }
-            break;
-        case PushTargetDHLiving: //大华视频直播
-        {
-            DHLivingViewController *controller = [[DHLivingViewController alloc] init];
             toController = controller;
         }
             break;

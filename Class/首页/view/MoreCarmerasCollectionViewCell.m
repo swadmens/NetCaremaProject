@@ -126,14 +126,14 @@
 -(void)makeCellData:(LivingModel *)model withOnline:(BOOL)online
 {
     self.model = model;
-    _titleLabel.text = model.ChannelName;
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.SnapURL] placeholder:UIImageWithFileName(@"player_hoder_image")];
+    _titleLabel.text = model.name;
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
     
     if (online) {
         self.isLiving = YES;
         self.coverView.hidden = YES;
     }else{
-        self.timeLabel.text = model.StartAt;
+        self.timeLabel.text = model.createdAt;
         self.isLiving = NO;
         self.coverView.hidden = NO;
     }
@@ -146,9 +146,9 @@
 }
 -(void)moreButtonClick
 {
-    BOOL offline = ![WWPublicMethod isStringEmptyText:self.model.HLS];
+//    BOOL offline = ![WWPublicMethod isStringEmptyText:self.model.hls];
     if (self.moreBtnClick) {
-        self.moreBtnClick(offline);
+        self.moreBtnClick(self.model.status);
     }
 }
 @end

@@ -43,7 +43,6 @@
 #import "LGXDatePicker.h"
 #import "TCNewAlertView.h"
 #import "IQKeyboardManager.h"
-#import "GlobalDefine.h"
 
 #import <PLPlayerKit/PLPlayerKit.h>
 #import <Masonry.h>

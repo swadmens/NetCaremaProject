@@ -121,17 +121,13 @@
 -(void)makeCellData:(IndexDataModel *)model
 {
     _equipmentName.text = model.equipment_name;
-    _equipmentStates.text = model.equipment_states;
-    _equipmentAddress.text = model.equipment_address;
-    
-    if ([model.equipment_states isEqualToString:@"离线"]) {
-        _equipmentStates.backgroundColor = UIColorFromRGB(0xAEAEAE, 1);
-    }else{
-        _equipmentStates.backgroundColor = UIColorFromRGB(0xF39700, 1);
-    }
-    
+    _equipmentAddress.text = model.equipment_address;    
+    _equipmentStates.text = model.status?@"在线":@"离线";
+
+    _equipmentStates.backgroundColor = model.status?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
+
     LivingModel *lvModel = model.liveModelArray.firstObject;
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:lvModel.SnapURL] placeholder:UIImageWithFileName(@"player_hoder_image")];
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:lvModel.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
 }
 -(void)moreButtonClick
 {

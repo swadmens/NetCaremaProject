@@ -28,6 +28,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) BOOL online;//是否在线
 
 
+@property (nonatomic,strong) NSString *deviceSerial;
+
+
+
+
 @property (nonatomic,strong) NSString *address;
 @property (nonatomic,strong) NSString *createdAt;
 @property (nonatomic,strong) NSString *deviceID;

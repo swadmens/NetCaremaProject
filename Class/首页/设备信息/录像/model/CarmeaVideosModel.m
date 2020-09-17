@@ -18,8 +18,8 @@
     model.hls = [NSString stringWithFormat:@"%@",[dic objectForKey:@"hls"]];
     model.important = [NSString stringWithFormat:@"%@",[dic objectForKey:@"important"]];
     model.snap = [NSString stringWithFormat:@"%@",[dic objectForKey:@"snap"]];
-    model.start_time = [NSString stringWithFormat:@"%@",[dic objectForKey:@"start_time"]];
-    model.time = [NSString stringWithFormat:@"%@",[dic objectForKey:@"time"]];
+    model.start_time = [NSString stringWithFormat:@"%@",[dic objectForKey:@"startAt"]];
+//    model.time = [NSString stringWithFormat:@"%@",[dic objectForKey:@"time"]];
      
     
     return model;

@@ -251,7 +251,7 @@
             NSDictionary *dic = @{@"name":model.video_name,
                                    @"snapUrl":model.snap,
                                    @"videoUrl":model.hls,
-                                   @"createAt":model.time,
+                                   @"createAt":model.start_time,
                                   };
             DemandModel *models = [DemandModel makeModelData:dic];
             SuperPlayerViewController *vc = [SuperPlayerViewController new];
@@ -278,21 +278,12 @@
     }
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
-    NSDictionary *finalParams = @{
-                                  @"id":self.device_id,
-                                  @"day":self.date_value,
-                                  };
-            
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
-                                                       options:0
-                                                         error:nil];
-    
-    NSString *url = [NSString stringWithFormat:@"api/v1/cloudrecord/querydaily?serial=%@&code=%@&period=%@",self.device_id,self.code,self.date_value];
-    
+//    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=GBS&id=%@&date=%@",self.device_id,self.date_value];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=GBS&id=%@&date=%@",@"524508",@"20200916"];
+
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
-//    sence.body = jsonData;
     sence.pathURL = url;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
@@ -323,25 +314,13 @@
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
         
-        NSString *monthsKey = [self.date_value substringWithRange:NSMakeRange(0, 6)];
-        NSString *dayKey = self.date_value;
-        
-        NSDictionary *data = [obj objectForKey:@"data"];
-        NSDictionary *monthsDic = (NSDictionary*)[data objectForKey:monthsKey];
-        NSArray *dayDataArr = [monthsDic objectForKey:dayKey];
+        NSArray *list = [obj objectForKey:@"list"];
         NSMutableArray *tempArray = [NSMutableArray array];
         
         [self.dataArray removeAllObjects];
         
-        [dayDataArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
-            
-//            NSString *originalSnap = [dic objectForKey:@"snap"];
-//            NSString *start_time = [dic objectForKey:@"start_time"];
-//
-//            if (![WWPublicMethod isStringEmptyText:originalSnap]) {
-//                [self getRecordCoverPhoto:start_time withData:idx];
-//            }
             CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:dic];
             [tempArray addObject:model];
         }];

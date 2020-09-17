@@ -11,7 +11,6 @@
 #import "LiveViewCollectionViewCell.h"
 #import "ChooseAreaView.h"
 #import "LivingModel.h"
-#import "HKVideoPlaybackController.h"
 #import "SuperPlayerViewController.h"
 #import "DemandModel.h"
 #import "RequestSence.h"
@@ -206,14 +205,14 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    if ([WWPublicMethod isStringEmptyText:model.RTMP]) {
+    if ([WWPublicMethod isStringEmptyText:model.hls]) {
         //live直播
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
         vc.hidesBottomBarWhenPushed = YES;
 //        vc.allDataArray = [NSArray arrayWithArray:self.dataArray];
         vc.allDataArray = [NSArray arrayWithObjects:model, nil];
         vc.isLiving = YES;
-        vc.title_value = model.ChannelName;
+        vc.title_value = model.rtmp;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
         

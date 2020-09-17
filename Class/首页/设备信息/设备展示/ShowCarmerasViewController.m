@@ -122,7 +122,7 @@
     MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
     LivingModel *lvModel = [self.liveDataArray objectAtIndex:indexPath.row];
     
-    [cell makeCellData:model witnSnap:lvModel.SnapURL];
+    [cell makeCellData:model witnSnap:lvModel.snap];
     
     return cell;
     

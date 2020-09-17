@@ -74,10 +74,10 @@
 }
 -(void)makeCellData:(LivingModel*)model
 {
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.SnapURL] placeholder:[UIImage imageWithColor:kColorBackSecondColor]];
-    _titleLabel.text = model.ChannelName;
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:[UIImage imageWithColor:kColorBackSecondColor]];
+    _titleLabel.text = model.rtmp;
     
-    if ([WWPublicMethod isStringEmptyText:model.HLS]) {
+    if ([WWPublicMethod isStringEmptyText:model.hls]) {
         _tagLabel.text = @"直播中";
     }else{
         _tagLabel.text = @"离线";

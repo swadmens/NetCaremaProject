@@ -9,7 +9,6 @@
 #import "NetLivingViewController.h"
 #import "LivingModel.h"
 #import <UIImageView+YYWebImage.h>
-#import "HKVideoPlaybackController.h"
 #import "DemandModel.h"
 #import "RequestSence.h"
 
@@ -147,19 +146,14 @@
         return;
     }
     //live直播
-    NSDictionary *dic = @{ @"name":_model.ChannelName,
-                            @"snapUrl":_model.SnapURL,
-                            @"videoUrl":_model.HLS,
-                            @"sharedLink":_model.StreamID,
-                            @"createAt":_model.StartAt,
+    NSDictionary *dic = @{ @"name":_model.name,
+                            @"snapUrl":_model.snap,
+                            @"videoUrl":_model.hls,
+                            @"sharedLink":_model.deviceSerial,
+                            @"createAt":_model.createdAt,
                           };
     DemandModel *models = [DemandModel makeModelData:dic];
-    HKVideoPlaybackController *vc = [HKVideoPlaybackController new];
-    vc.model = models;
-    vc.isLiving = YES;
-    vc.isRecordFile = YES;
-    vc.device_id = self.device_id;
-    [self.navigationController pushViewController:vc animated:YES];
+  
 }
 - (void)startLoadDataRequest
 {
@@ -215,14 +209,14 @@
             if (idx == 0) {
                 weak_self.model = [LivingModel makeModelData:dic];
                 if ([dic.allKeys containsObject:@"session"]) {
-                    [weak_self getLivingCoverPhoto:weak_self.model.DeviceID];
+//                    [weak_self getLivingCoverPhoto:weak_self.model.DeviceID];
                     [[GCDQueue mainQueue] queueBlock:^{
                         weak_self.isLiving = YES;
                     }];
                 }else{
                     [[GCDQueue mainQueue] queueBlock:^{
                         weak_self.showImageView.image = [UIImage imageWithColor:kColorThirdTextColor];
-                        weak_self.nameLabel.text = weak_self.model.ChannelName;
+//                        weak_self.nameLabel.text = weak_self.model.ChannelName;
                         weak_self.tagLabel.text = @"离线";
                         weak_self.isLiving = NO;
                     }];

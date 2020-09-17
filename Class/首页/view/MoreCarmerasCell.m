@@ -23,7 +23,6 @@
 
 @property (nonatomic, strong) WWCollectionView *collectionView;
 @property (nonatomic,strong) NSArray *dataArray;
-@property (nonatomic,strong) NSArray *infoArray;
 
 @property (nonatomic,strong) NSMutableArray *modelArray;
 
@@ -151,16 +150,11 @@
 -(void)makeCellData:(IndexDataModel *)model
 {
     _equipmentName.text = model.equipment_name;
-    _equipmentStates.text = model.equipment_states;
     _equipmentAddress.text = model.equipment_address;
+    _equipmentStates.text = model.status?@"在线":@"离线";
 
-    if ([model.equipment_states isEqualToString:@"离线"]) {
-        _equipmentStates.backgroundColor = UIColorFromRGB(0xAEAEAE, 1);
-    }else{
-        _equipmentStates.backgroundColor = UIColorFromRGB(0xF39700, 1);
-    }
+    _equipmentStates.backgroundColor = model.status?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
     self.dataArray = [NSArray arrayWithArray:model.liveModelArray];
-    self.infoArray = [NSArray arrayWithArray:model.childDevices_info];
     
     [self.collectionView reloadData];
 }
@@ -175,8 +169,7 @@
     MoreCarmerasCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MoreCarmerasCollectionViewCell getCellIDStr] forIndexPath:indexPath];
     
     LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    MyEquipmentsModel *myMdl = [self.infoArray objectAtIndex:indexPath.row];
-    [cell makeCellData:model withOnline:myMdl.online];
+    [cell makeCellData:model withOnline:model.status];
 
     cell.moreBtnClick = ^(BOOL offline) {
         if (self.moreDealClick) {
@@ -185,7 +178,7 @@
     };
     
     cell.getModelBackdata = ^(LivingModel * _Nonnull model) {
-        if (![WWPublicMethod isStringEmptyText:model.RTMP]) {
+        if (![WWPublicMethod isStringEmptyText:model.hls]) {
             [self.modelArray addObject:model];
         }else{
             [self.modelArray insertObject:model atIndex:0];

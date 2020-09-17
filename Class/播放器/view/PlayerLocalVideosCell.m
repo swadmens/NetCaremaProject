@@ -194,7 +194,7 @@
         NSDictionary *dic = @{ @"name":model.video_name,
                                @"snapUrl":model.snap,
                                @"videoUrl":model.hls,
-                               @"createAt":model.time,
+                               @"createAt":model.start_time,
                               };
         DemandModel *models = [DemandModel makeModelData:dic];
 //        self.playerView.media = models;

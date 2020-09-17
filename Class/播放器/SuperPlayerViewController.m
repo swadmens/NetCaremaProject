@@ -143,8 +143,9 @@
 //    [self setupSaveView];
     if (_isLiving) {
         self.selectModel = self.allDataArray.firstObject;
-        self.carmer_id = self.selectModel.ChannelID;
-        self.streamid = self.selectModel.StreamID;
+        self.carmer_id = self.selectModel.deviceId;
+        self.streamid = self.selectModel.deviceSerial;
+        [self startLoadDataRequest:self.selectModel.deviceId];
         [self tipViewHidden:YES withTitle:@"开始录像"];
     }
    
@@ -185,7 +186,7 @@
         return cell;
     }else{
         
-        if (_isLiving) {
+//        if (_isLiving) {
             PlayerLocalVideosCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerLocalVideosCell getCellIDStr] forIndexPath:indexPath];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
@@ -212,12 +213,12 @@
             };
             
             return cell;
-        }else{
-            PlayBottomDateCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayBottomDateCell getCellIDStr] forIndexPath:indexPath];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-            return cell;
-        }
+//        }else{
+//            PlayBottomDateCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayBottomDateCell getCellIDStr] forIndexPath:indexPath];
+//            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//
+//            return cell;
+//        }
         
         
     }
@@ -318,57 +319,57 @@
     switch (state) {
         case ControlStateUp:
             //上
-            [self cameraControl:@"up"];
+            [self cameraControl:@"UP"];
             break;
             
         case ControlStateDown:
             //下
-            [self cameraControl:@"down"];
+            [self cameraControl:@"DOWN"];
             break;
         
         case ControlStateLeft:
             //左
-            [self cameraControl:@"left"];
+            [self cameraControl:@"LEFT"];
             break;
         
         case ControlStaterRight:
             //右
-            [self cameraControl:@"right"];
+            [self cameraControl:@"RIGHT"];
             break;
             
         case ControlStaterStop:
             //停
-            [self cameraControl:@"stop"];
+            [self cameraControl:@"STOP"];
             break;
             
         case ControlStaterLeftUp:
             //左上
-            [self cameraControl:@"upleft"];
+            [self cameraControl:@"UP_LEFT"];
             break;
             
         case ControlStaterLeftDown:
             //左下
-            [self cameraControl:@"downleft"];
+            [self cameraControl:@"DOWN_LEFT"];
             break;
             
         case ControlStaterRightUp:
             //右上
-            [self cameraControl:@"upright"];
+            [self cameraControl:@"UP_RIGHT"];
             break;
             
         case ControlStaterRightDown:
             //右下
-            [self cameraControl:@"downright"];
+            [self cameraControl:@"DOWN_RIGHT"];
             break;
             
         case ControlStaterZoomin:
             //缩放
-            [self cameraControl:@"zoomin"];
+            [self cameraControl:@"ZOOM_IN"];
             break;
             
         case ControlStaterZoomout:
             //缩放
-            [self cameraControl:@"zoomout"];
+            [self cameraControl:@"ZOOM_OUT"];
             break;
             
         case ControlStaterFocusin:
@@ -410,7 +411,7 @@
 //        url = [NSString stringWithFormat:@"service/video/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
 //    }
     
-    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.device_id,self.carmer_id,controls];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/operation/ptz?systemSource=GBS&id=%@&command=%@",self.carmer_id,controls];
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -584,15 +585,15 @@
 
 - (void)selectCellCarmera:(PlayerTableViewCell *)cell withData:(LivingModel *)model
 {
-    if ([self.streamid isEqualToString:model.StreamID]) {
+    if ([self.streamid isEqualToString:model.deviceSerial]) {
         return;
     }
     
     self.selectModel = model;
     
-    self.carmer_id = model.ChannelID;
-    self.streamid = model.StreamID;
-    [self startLoadDataRequest:model.DeviceID];
+    self.carmer_id = model.deviceId;
+    self.streamid = model.deviceSerial;
+    [self startLoadDataRequest:model.deviceId];
 }
 //右上角按钮
 -(void)sharaBtnCLick
@@ -636,7 +637,7 @@
     if (self.selectModel == nil) {
         return;
     }
-    NSDictionary *dic = @{@"SnapURL":self.selectModel.SnapURL,@"ChannelName":self.selectModel.ChannelName};
+    NSDictionary *dic = @{@"SnapURL":self.selectModel.snap,@"ChannelName":self.selectModel.rtmp};
     NSString *pushid = [WWPublicMethod jsonTransFromObject:dic];
     
     [TargetEngine controller:self pushToController:PushTargetChannelMoreSystem WithTargetId:pushid];
@@ -702,7 +703,7 @@
     NSDictionary *dic = @{ @"name":model.video_name,
                            @"snapUrl":model.snap,
                            @"videoUrl":model.hls,
-                           @"createAt":model.time,
+                           @"createAt":model.start_time,
                           };
     DemandModel *models = [DemandModel makeModelData:dic];
     self.model = models;
@@ -742,21 +743,12 @@
     if (![WWPublicMethod isStringEmptyText:carmeraId]) {
         return;
     }
-    NSDictionary *finalParams = @{
-                                  @"id":carmeraId,
-                                  @"day":[_kDatePicker getCurrentTimes:@"YYYYMMdd"],
-                                  };
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
-                                                       options:0
-                                                         error:nil];
-    
-    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/record/query?streamid=stream:%@:%@",carmeraId,carmeraId];
-    
+//    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=LiveGBS&id=%@&date=%@",carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"]];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=GBS&id=%@&date=%@",@"524508",@"20200916"];
+
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
-    sence.body = jsonData;
     sence.pathURL = url;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
@@ -783,27 +775,14 @@
     [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
-        
-         
-        NSString *monthsKey = [[_kDatePicker getCurrentTimes:@"YYYYMMdd"] substringWithRange:NSMakeRange(0, 6)];
-        NSString *dayKey = [_kDatePicker getCurrentTimes:@"YYYYMMdd"];
-        
-        NSDictionary *data = [obj objectForKey:@"data"];
-        NSDictionary *monthsDic = (NSDictionary*)[data objectForKey:monthsKey];
-        NSArray *dayDataArr = [monthsDic objectForKey:dayKey];
+
+        NSArray *list = [obj objectForKey:@"list"];
         NSMutableArray *tempArray = [NSMutableArray array];
         
         [self.localVideosArray removeAllObjects];
         
-        [dayDataArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
-            
-//            NSString *originalSnap = [dic objectForKey:@"snap"];
-//            NSString *start_time = [dic objectForKey:@"start_time"];
-//
-//            if (![WWPublicMethod isStringEmptyText:originalSnap]) {
-//                [self getRecordCoverPhoto:start_time withData:idx];
-//            }
             CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:dic];
             [tempArray addObject:model];
         }];
@@ -819,11 +798,11 @@
 -(void)getRecordCoverPhoto:(NSString*)period withData:(NSInteger)indexInteger
 {
     LivingModel *mdl = self.allDataArray.firstObject;
-    if (![WWPublicMethod isStringEmptyText:mdl.DeviceID]) {
+    if (![WWPublicMethod isStringEmptyText:mdl.deviceSerial]) {
         return;
     }
     
-    NSString *url = [NSString stringWithFormat:@"service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",mdl.DeviceID,period];
+    NSString *url = [NSString stringWithFormat:@"service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",mdl.deviceSerial,period];
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -870,94 +849,6 @@
     [super viewWillAppear:animated];
     [self.topCell play];
 }
-
-
-//获取直播数据
-- (void)getLivingAllData:(NSString*)device_id
-{
-    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/stream/list?serial=%@",device_id];
-
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathHeader = @"application/json";
-//    sence.body = jsonData;
-    sence.pathURL = url;
-    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"Received: %@", obj);
-        [weak_self handleObject:obj withDeviceId:device_id];
-    };
-    sence.errorBlock = ^(NSError *error) {
-
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        // 请求失败
-        DLog(@"error  ==  %@",error.userInfo);
-        [_kHUDManager showMsgInView:nil withTitle:@"无法获取直播数据，请重试！" isSuccess:YES];
-    };
-    [sence sendRequest];
-}
-
-- (void)handleObject:(id)obj withDeviceId:(NSString*)device_id
-{
-    [_kHUDManager hideAfter:0.1 onHide:nil];
-    __unsafe_unretained typeof(self) weak_self = self;
-    [[GCDQueue globalQueue] queueBlock:^{
-        NSArray *data= [obj objectForKey:@"Streams"];
-        NSMutableArray *tempArray = [NSMutableArray array];
-        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSDictionary *dic = obj;
-            LivingModel *model = [LivingModel makeModelData:dic];
-            [tempArray addObject:model];
-        }];
-        [weak_self.dataArray addObjectsFromArray:tempArray];
-        
-        [[GCDQueue mainQueue] queueBlock:^{
-            [weak_self.tableView reloadData];
-        }];
-        
-    }];
-}
-//获取直播快照
--(void)getLivingCoverPhoto:(NSString*)live_id
-{
-    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/channelsnap?serial=%@&code=%@&realtime=true",live_id,live_id];
-
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathHeader = @"application/json";
-    sence.pathURL = url;
-    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"Received: %@", obj);
-
-         [weak_self dealWithCoverPhoto:obj];
-    };
-
-    sence.errorBlock = ^(NSError *error) {
-
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"error: %@", error);
-    };
-    [sence sendRequest];
-}
-
--(void)dealWithCoverPhoto:(id)obj
-{
-    if (obj == nil) {
-        return;
-    }
-    
-//    NSDictionary *data = [obj objectForKey:@"data"];
-//    NSString *snapUrl = [NSString stringWithFormat:@"%@",[data objectForKey:self.model.live_id]];
-//
-//    [_showImageView yy_setImageWithURL:[NSURL URLWithString:snapUrl] placeholder:[UIImage imageWithColor:kColorLineColor]];
-//    _titleLabel.text = self.model.name;
-
-}
-
-
 
 /*
 #pragma mark - Navigation

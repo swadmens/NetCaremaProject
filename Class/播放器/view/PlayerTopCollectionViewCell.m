@@ -184,20 +184,20 @@
         return;
     }
     self.lvModel = obj;
-    if (![WWPublicMethod isStringEmptyText:self.lvModel.HLS]) {
+    if (![WWPublicMethod isStringEmptyText:self.lvModel.hls]) {
         _coverView.hidden = NO;
         _titleImageView.hidden = NO;
-        _timeLabel.text = self.lvModel.StartAt;
+//        _timeLabel.text = self.lvModel.StartAt;
     }else{
         
         _coverView.hidden = YES;
         _titleImageView.hidden = YES;
         
-        NSDictionary *dic = @{ @"name":self.lvModel.ChannelName,
-                                @"snapUrl":self.lvModel.SnapURL,
-                                @"videoUrl":self.lvModel.HLS,
-                                @"sharedLink":self.lvModel.StreamID,
-                               @"createAt":self.lvModel.StartAt,
+        NSDictionary *dic = @{ @"name":self.lvModel.name,
+                                @"snapUrl":self.lvModel.snap,
+                                @"videoUrl":self.lvModel.hls,
+                                @"sharedLink":self.lvModel.flv,
+                               @"createAt":self.lvModel.createdAt,
                               };
         DemandModel *models = [DemandModel makeModelData:dic];
         self.playerView.media = models;
