@@ -392,8 +392,8 @@
 -(void)getDeviceLivingData:(MyEquipmentsModel*)meModel withIndex:(NSInteger)index
 {
 
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/live/infos?systemSource=GBS&deviceSerial=%@&channel=1",meModel.deviceSerial];
-//    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/stream/list?serial=%@",living_id];
+//    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/live/infos?systemSource=GBS&deviceSerial=%@&channel=1",meModel.deviceSerial];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/live/infos?systemSource=%@&id=%@",meModel.system_Source,meModel.equipment_id];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
@@ -425,7 +425,8 @@
         [dic setObject:meModel.createdAt forKey:@"createdAt"];
         [dic setObject:meModel.equipment_name forKey:@"name"];
         [dic setObject:meModel.equipment_id forKey:@"deviceId"];
-
+        [dic setObject:meModel.system_Source forKey:@"system_Source"];
+        
             LivingModel *lvModel = [LivingModel makeModelData:dic];
 //            [tempArray addObject:model];
 //        }];
@@ -496,6 +497,7 @@
     vc.isFromIndex = YES;
     vc.device_id = self.selectModel.equipment_id;
     vc.code = self.selectLvModel.deviceSerial;
+    vc.system_Source = self.selectModel.system_Source;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }

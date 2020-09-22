@@ -18,7 +18,7 @@ pod 'YYText'
 pod 'TYAlertController'
 pod 'LGXLayout'
 pod 'XLPhotoBrowser+CoderXL'
-pod 'YHPhotoBrowser','~> 0.0.5'
+#pod 'YHPhotoBrowser','~> 0.0.5'
 pod 'YYWebImage'
 pod 'SocketRocket'
 pod 'Masonry', '>= 1.0.1'
@@ -54,6 +54,8 @@ pod 'JGProgressHUD'
 
  #萤石
  pod 'EZOpenSDK'
+ pod 'EZUIKit'
+
  
  
  #腾讯云

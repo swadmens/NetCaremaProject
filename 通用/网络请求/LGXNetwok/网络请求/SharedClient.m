@@ -200,12 +200,12 @@
         DLog(@"\n~~~~~完成请求地址:%@\n",httpResponse.URL.absoluteString);
             completion(responseObject, nil);
         
-        if ([[responseObject objectForKey:@"data"] isKindOfClass:[NSDictionary class]]) {
-            [self.returnDic setValue:responseObject forKey:@"moid"];
-        }
+//        if ([[responseObject objectForKey:@"data"] isKindOfClass:[NSDictionary class]]) {
+//            [self.returnDic setValue:responseObject forKey:@"moid"];
+//        }
 
-//        DLog(@"Received: %@", responseObject);
-//        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+        DLog(@"Received: %@", responseObject);
+        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败
         completion(nil, error);

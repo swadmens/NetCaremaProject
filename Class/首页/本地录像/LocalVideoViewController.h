@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) BOOL isFromIndex;
 @property (nonatomic,strong) NSString *device_id;//具体设备id,设备国标编号
 @property (nonatomic,strong) NSString *code;//通道国标编号
+@property (nonatomic,strong) NSString *system_Source;
 
 
 @end

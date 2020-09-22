@@ -53,6 +53,8 @@
     self.playerView.delegate = self;
     [_playView addSubview:self.playerView];
     self.playerView.isLocalVideo = NO;
+    self.playerView.playType = PlayerStatusGBS;
+//    self.playerView.playType = PlayerStatusHk;
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.playView);
     }];

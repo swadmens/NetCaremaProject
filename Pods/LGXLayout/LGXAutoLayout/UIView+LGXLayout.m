@@ -7,7 +7,7 @@
 //
 
 #import "UIView+LGXLayout.h"
-#import "Masonry.h"
+#import <Masonry/Masonry.h>
 
 #pragma mark -属性添加、更新、重制 操作
 /** 属性添加、更新、重制 操作 */

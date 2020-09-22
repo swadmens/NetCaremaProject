@@ -7,8 +7,7 @@
 //
 
 #import "LGXConstraint.h"
-#import "Masonry.h"
-
+#import <Masonry/Masonry.h>
 
 typedef NS_ENUM(NSUInteger, LayoutOffsetType) {
     LayoutOffsetDefault = 0,

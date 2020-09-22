@@ -91,9 +91,8 @@
     self.title = self.title_value;
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
-    
-    [self setupTableView];
 
+    [self setupTableView];
     
     self.clView = [CameraControlView new];
     self.clView.delegate = self;
@@ -203,6 +202,7 @@
                 vc.delegate = self;
                 vc.isFromIndex = NO;
                 vc.device_id = self.carmer_id;
+                vc.system_Source = self.selectModel.system_Source;
                 [weakSelf.navigationController pushViewController:vc animated:YES];
                
             };
@@ -403,15 +403,7 @@
 -(void)cameraControl:(NSString*)controls
 {
     //提交数据
-//    NSString *url;
-//
-//    if ([self.live_type isEqualToString:@"LiveGBS"]) {
-//        url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/control/ptz?serial=%@&code=%@&command=%@",self.gbs_serial,self.gbs_code,controls];
-//    }else{
-//        url = [NSString stringWithFormat:@"service/video/livenvr/api/v1/ptzcontrol?channel=%@&command=%@",self.nvr_channel,controls];
-//    }
-    
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/operation/ptz?systemSource=GBS&id=%@&command=%@",self.carmer_id,controls];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/operation/ptz?systemSource=%@&id=%@&command=%@",self.selectModel.system_Source,self.carmer_id,controls];
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -744,7 +736,7 @@
         return;
     }
 //    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=LiveGBS&id=%@&date=%@",carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"]];
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=GBS&id=%@&date=%@",@"524508",@"20200916"];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.selectModel.system_Source,@"524508",@"20200918"];
 
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";

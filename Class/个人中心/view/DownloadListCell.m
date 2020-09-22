@@ -204,6 +204,7 @@
     [self.showImageView addSubview:self.playerView];
     self.playerView.media = models;
     self.playerView.isLocalVideo = YES;
+    self.playerView.playType = PlayerStatusGBS;
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.showImageView);
     }];

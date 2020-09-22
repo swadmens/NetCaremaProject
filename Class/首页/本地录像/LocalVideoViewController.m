@@ -18,6 +18,8 @@
 #import "CGXPickerView.h"
 #import "RequestSence.h"
 
+#import "AFHTTPSessionManager.h"
+
 
 @interface LocalVideoViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -278,8 +280,37 @@
     }
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
+
 //    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=GBS&id=%@&date=%@",self.device_id,self.date_value];
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=GBS&id=%@&date=%@",@"524508",@"20200916"];
+//    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=GBS&id=%@&date=%@",@"524508",@"20200916"];
+    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.system_Source,@"524508",@"20200918"];
+    
+//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+////    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+//    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"multipart/form-data",nil];
+//
+//    // 设置请求头
+//    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+//    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+////@{@"accept":@"video/*"}
+//
+//    //添加授权
+//    [manager.requestSerializer setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
+//
+//    NSURLSessionDataTask *task = [manager GET:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+//
+//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        [_kHUDManager hideAfter:0.1 onHide:nil];
+//        DLog(@"responseObject == %@",responseObject);
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//        [_kHUDManager hideAfter:0.1 onHide:nil];
+//        DLog(@"error == %@",error);
+//
+//    }];
+//    [task resume];
+//    return;
 
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";

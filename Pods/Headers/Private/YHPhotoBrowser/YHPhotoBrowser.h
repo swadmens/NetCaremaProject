@@ -1,1 +1,0 @@
-../../../YHPhotoBrowser/YHPhotoBrowser/YHPhotoBrowser/YHPhotoBrowser.h

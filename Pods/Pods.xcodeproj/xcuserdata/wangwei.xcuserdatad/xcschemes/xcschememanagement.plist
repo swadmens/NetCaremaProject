@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>EZUIKit.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>IQKeyboardManager.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -105,11 +110,6 @@
 			<false/>
 		</dict>
 		<key>XLPhotoBrowser+CoderXL.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>YHPhotoBrowser.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

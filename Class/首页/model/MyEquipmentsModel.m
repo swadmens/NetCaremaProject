@@ -28,6 +28,7 @@
     model.owner = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"owner"]];
     model.lastUpdated = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"lastUpdated"]];
     model.creationTime = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"creationTime"]];
+    model.system_Source = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"system_Source"]];
 
     
     

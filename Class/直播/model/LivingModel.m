@@ -22,12 +22,12 @@
     model.rtmp = [NSString stringWithFormat:@"%@",[dic objectForKey:@"rtmp"]];
     model.rtmpHd = [NSString stringWithFormat:@"%@",[dic objectForKey:@"rtmpHd"]];
     model.snap = [NSString stringWithFormat:@"%@",[dic objectForKey:@"snap"]];
-//    model.status = [[NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]] boolValue];
+    model.streamId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"streamId"]];
     model.createdAt = [NSString stringWithFormat:@"%@",[dic objectForKey:@"createdAt"]];
     model.name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
     model.deviceId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceId"]];
-    
-    
+    model.system_Source = [NSString stringWithFormat:@"%@",[dic objectForKey:@"system_Source"]];
+
     NSString *online = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
     model.status = [online isEqualToString:@"on"]?YES:NO;
     

@@ -23,9 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *rtmpHd;
 @property (nonatomic,strong) NSString *snap;
 @property (nonatomic,assign) BOOL status;
+@property (nonatomic,strong) NSString *streamId;
 @property (nonatomic,strong) NSString *createdAt;
 @property (nonatomic,strong) NSString *name;
 @property (nonatomic,strong) NSString *deviceId;
+@property (nonatomic,strong) NSString *system_Source;
 
 
 @end
