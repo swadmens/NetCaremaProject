@@ -23,6 +23,8 @@
 #import "RequestSence.h"
 #import "MyEquipmentsModel.h"
 #import "DownLoadSence.h"
+#import "AFHTTPSessionManager.h"
+
 
 #define KTopviewheight kScreenWidth*0.68
 
@@ -85,6 +87,16 @@
     [self.tableView registerClass:[PlayBottomDateCell class] forCellReuseIdentifier:[PlayBottomDateCell getCellIDStr]];
 
 }
+//控制台
+-(void)setupControllView
+{
+    //摄像头控制
+    self.clView = [CameraControlView new];
+    self.clView.delegate = self;
+    [self.view addSubview:self.clView];
+    self.clView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight - KTopviewheight - 177);
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -92,14 +104,11 @@
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
 
+    //    [self setupSaveView];
+    
     [self setupTableView];
-    
-    self.clView = [CameraControlView new];
-    self.clView.delegate = self;
-    self.clView.isLiveGBS = [self.live_type isEqualToString:@"LiveGBS"];
-    [self.view addSubview:self.clView];
-    self.clView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight - KTopviewheight - 177);
-    
+    [self setupControllView];
+
     self.videoing = NO;
     _videoTipView = [UIView new];
     _videoTipView.layer.cornerRadius = 15;
@@ -117,6 +126,21 @@
     [_videoTipView addSubview:_videoTipLabel];
     [_videoTipLabel xCenterToView:_videoTipView];
     [_videoTipLabel yCenterToView:_videoTipView];
+    
+    
+    if (_isLiving) {
+        self.selectModel = self.allDataArray.firstObject;
+        self.carmer_id = self.selectModel.deviceId;
+        self.streamid = self.selectModel.deviceSerial;
+        [self startLoadDataRequest:self.selectModel.deviceId];
+        [self tipViewHidden:YES withTitle:@"开始录像"];
+    
+        if (self.selectModel != nil) {
+            [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withEquimentId:self.equiment_id withIndex:0];
+        }
+  
+    }
+   
     
     
     
@@ -138,16 +162,6 @@
     
     self.navigationItem.rightBarButtonItems  = @[settingBtnItem,fixedSpaceBarButtonItem,sharaBtnItem];
     
-    
-//    [self setupSaveView];
-    if (_isLiving) {
-        self.selectModel = self.allDataArray.firstObject;
-        self.carmer_id = self.selectModel.deviceId;
-        self.streamid = self.selectModel.deviceSerial;
-        [self startLoadDataRequest:self.selectModel.deviceId];
-        [self tipViewHidden:YES withTitle:@"开始录像"];
-    }
-   
 }
 -(void)tipViewHidden:(BOOL)hidden withTitle:(NSString*)title
 {
@@ -485,7 +499,7 @@
 //开始或停止录像
 -(void)startOrStopVideo:(NSString*)states
 {
-    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/record/%@?streamid=%@",states,self.streamid];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/%@?systemSource=%@&id=%@",states,self.selectModel.system_Source,self.selectModel.deviceId];
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -496,7 +510,9 @@
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"Received: %@", obj);
         if ([states isEqualToString:@"stop"]) {
-            [weak_self videoFinishDownload:obj];
+//            [weak_self videoFinishDownload:obj];
+            [self tipViewHidden:YES withTitle:@"录像完成"];
+
         }
     };
     sence.errorBlock = ^(NSError *error) {
@@ -575,7 +591,7 @@
 }
 
 
-- (void)selectCellCarmera:(PlayerTableViewCell *)cell withData:(LivingModel *)model
+- (void)selectCellCarmera:(PlayerTableViewCell *)cell withData:(LivingModel *)model withIndex:(NSInteger)index
 {
     if ([self.streamid isEqualToString:model.deviceSerial]) {
         return;
@@ -586,6 +602,7 @@
     self.carmer_id = model.deviceId;
     self.streamid = model.deviceSerial;
     [self startLoadDataRequest:model.deviceId];
+    [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withEquimentId:self.equiment_id withIndex:index];
 }
 //右上角按钮
 -(void)sharaBtnCLick
@@ -692,10 +709,11 @@
         return;
     }
     CarmeaVideosModel *model = [self.localVideosArray objectAtIndex:value];
-    NSDictionary *dic = @{ @"name":model.video_name,
-                           @"snapUrl":model.snap,
-                           @"videoUrl":model.hls,
-                           @"createAt":model.start_time,
+    NSDictionary *dic = @{
+//        @"name":model.video_name,
+                           @"snapUrl":model.picUrl,
+                           @"videoUrl":model.url,
+//                           @"createAt":model.start_time,
                           };
     DemandModel *models = [DemandModel makeModelData:dic];
     self.model = models;
@@ -736,13 +754,46 @@
         return;
     }
 //    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=LiveGBS&id=%@&date=%@",carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"]];
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.selectModel.system_Source,@"524508",@"20200918"];
+    
+    
+    NSString *urls = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.selectModel.system_Source,@"524508",@"20200918"];
 
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"multipart/form-data",nil];
+
+    // 设置请求头
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+//@{@"accept":@"video/*"}
+
+    //添加授权
+    [manager.requestSerializer setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
+
+    __unsafe_unretained typeof(self) weak_self = self;
+
+    NSURLSessionDataTask *task = [manager GET:urls parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"responseObject == %@",responseObject);
+        [weak_self handleObject:responseObject];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+        [weak_self failedOperation];
+
+    }];
+    [task resume];
+    return;
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.selectModel.system_Source,@"524508",@"20200918"];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
     sence.pathURL = url;
-    __unsafe_unretained typeof(self) weak_self = self;
+//    __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"Received: %@", obj);
@@ -768,7 +819,7 @@
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
 
-        NSArray *list = [obj objectForKey:@"list"];
+        NSArray *list = (NSArray*)obj;
         NSMutableArray *tempArray = [NSMutableArray array];
         
         [self.localVideosArray removeAllObjects];
@@ -822,7 +873,7 @@
     }
     __unsafe_unretained typeof(self) weak_self = self;
     CarmeaVideosModel *model = [self.localVideosArray objectAtIndex:indexInteger];
-    model.snap = [NSString stringWithFormat:@"%@",[obj objectForKey:@"url"]];
+    model.picUrl = [NSString stringWithFormat:@"%@",[obj objectForKey:@"url"]];
     [weak_self.localVideosArray replaceObjectAtIndex:indexInteger withObject:model];
 //    weak_self.allDataArray = [NSMutableArray arrayWithArray:weak_self.dataArray];
     [[GCDQueue mainQueue] queueBlock:^{

@@ -102,9 +102,11 @@ NSString *_kStaticURL;
     }
     
     [SharedClient sharedInstance].responseSerializer = [AFJSONResponseSerializer serializer];
-//    [SharedClient sharedInstance].responseSerializer = [AFHTTPResponseSerializer serializer];
     [SharedClient sharedInstance].requestSerializer = [AFHTTPRequestSerializer serializer];
-
+    
+    [SharedClient sharedInstance].responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json", @"application/vnd.com.nsn.cumulocity.currentuser+json",@"application/json", @"text/json", @"text/javascript",@"text/html", @"text/plain",@"multipart/form-data",nil];
+    
+    //请求头
     if ([WWPublicMethod isStringEmptyText:_pathHeader]) {
         [[SharedClient sharedInstance].requestSerializer setValue:_pathHeader forHTTPHeaderField:@"Accept"];
         [[SharedClient sharedInstance].requestSerializer setValue:_pathHeader forHTTPHeaderField:@"Content-Type"];
@@ -112,8 +114,7 @@ NSString *_kStaticURL;
     
     //添加授权
     [[SharedClient sharedInstance].requestSerializer setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
-    
-    [SharedClient sharedInstance].responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/vnd.com.nsn.cumulocity.managedobjectcollection+json", @"application/vnd.com.nsn.cumulocity.currentuser+json",@"application/json", @"text/json", @"text/javascript",@"text/html", @"text/plain",@"multipart/form-data",nil];
+        
     
     if ([self.requestMethod isEqual:@"GET"]) {
         
@@ -151,7 +152,13 @@ NSString *_kStaticURL;
             DLog(@"errorMsg == %@",[dic objectForKey:@"errorMsg"]);
             [self handleResult:results andError:error];
         }];
+    }else if ([self.requestMethod isEqual:@"DELETE"]){
         
+        self.task = [[SharedClient sharedInstance] requestDELETEWithURLStr:self.pathURL paramDic:self.params completion:^(id results, NSError *error) {
+            NSDictionary *dic = results;
+            NSLog(@"errorMsg == %@",[dic objectForKey:@"errorMsg"]);
+            [self handleResult:results andError:error];
+        }];
     }
 }
 -(void)bodyMutRequest

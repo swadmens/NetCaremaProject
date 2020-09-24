@@ -312,15 +312,15 @@ static NSString *const _kdownloadListKey = @"download_video_list";
             if ([obj isKindOfClass:[CarmeaVideosModel class]]) {
                 
                 CarmeaVideosModel *model = obj;
-                [tempDic setValue:model.snap forKey:@"snap"];//封面图片URL
+                [tempDic setValue:model.picUrl forKey:@"snap"];//封面图片URL
 //                [tempDic setValue:model.time forKey:@"time"];//视频时间
-                [tempDic setValue:model.start_time forKey:@"start_time"];//视频时间
-                [tempDic setValue:model.video_name forKey:@"name"];//视频名称
+//                [tempDic setValue:model.start_time forKey:@"start_time"];//视频时间
+//                [tempDic setValue:model.video_name forKey:@"name"];//视频名称
                 [tempDic setValue:model.duration forKey:@"duration"];//视频时长
-                [tempDic setValue:model.hls forKey:@"hls"];//视频播放地址
+                [tempDic setValue:model.url forKey:@"hls"];//视频播放地址
 
                 //录像文件下载
-                [self startLoadDataRequest:model.start_time withInteger:idx];
+//                [self startLoadDataRequest:model.start_time withInteger:idx];
             }else{
                 
                 DemandModel *model = obj;

@@ -75,6 +75,7 @@
         _client = [[SharedClient alloc] initWithBaseURL:baseURL
                                          sessionConfiguration:config];
         _client.responseSerializer = [AFJSONResponseSerializer serializer];
+        _client.requestSerializer = [AFHTTPRequestSerializer serializer];
 
         _client.networkStatus = AFNetworkReachabilityStatusReachableViaWiFi; // 用_client.reachabilityManager.networkReachabilityStatus;读出来不正确。
         
@@ -204,8 +205,8 @@
 //            [self.returnDic setValue:responseObject forKey:@"moid"];
 //        }
 
-        DLog(@"Received: %@", responseObject);
-        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+//        DLog(@"Received: %@", responseObject);
+//        DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         // 请求失败
         completion(nil, error);
@@ -307,6 +308,33 @@
         completion(nil, error);
         
     }];
+    
+    return task;
+}
+
+///DELETE请求
+- (NSURLSessionDataTask*)requestDELETEWithURLStr:(NSString *)urlStr paramDic:(NSDictionary *)paramDic completion:( void (^)(id results, NSError *error) )completion
+{
+    if (self.networkStatus == AFNetworkReachabilityStatusNotReachable || self.networkStatus == AFNetworkReachabilityStatusUnknown) {
+        if (completion) {
+            
+            NSError *err = [NSError errorWithDomain:self.baseURL.absoluteString code:-1001 userInfo:nil];
+            completion(nil, err);
+        }
+        return nil;
+    }
+
+    NSURLSessionDataTask *task = [self DELETE:urlStr parameters:paramDic headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+                NSLog(@"\n~~~~~完成请求地址:%@\n",httpResponse.URL.absoluteString);
+                completion(responseObject, nil);
+        //        NSLog(@"Received: %@", responseObject);
+        //        NSLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        // 请求失败
+        completion(nil, error);
+    }];
+    
     
     return task;
 }

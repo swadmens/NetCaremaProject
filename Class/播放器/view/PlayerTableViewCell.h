@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)getPlayerCellSnapshot:(PlayerTableViewCell *_Nullable)cell with:(UIImage*_Nullable)image;
 
-- (void)selectCellCarmera:(PlayerTableViewCell *_Nullable)cell withData:(LivingModel*)model;
+- (void)selectCellCarmera:(PlayerTableViewCell *_Nullable)cell withData:(LivingModel*)model withIndex:(NSInteger)index;
 
 @end
 

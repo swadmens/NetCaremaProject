@@ -236,10 +236,11 @@
     if (self.isEdit) {
         [self.selectedIndexSet addIndex:indexPath.item];
     }else{       
-        NSDictionary *dic = @{@"name":model.video_name,
-                              @"snapUrl":model.snap,
-                              @"videoUrl":model.hls,
-                              @"createAt":model.start_time,
+        NSDictionary *dic = @{
+//            @"name":model.video_name,
+                              @"snapUrl":model.picUrl,
+                              @"videoUrl":model.url,
+//                              @"createAt":model.start_time,
                              };
        
         DemandModel *models = [DemandModel makeModelData:dic];
@@ -453,7 +454,7 @@
         if (buttonTag == 0 ) {
             [self.selectedIndexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
                 CarmeaVideosModel *model = [self.dataArray objectAtIndex:idx];
-                [self deleteNumbersVideo:model.start_time withInteger:idx];
+//                [self deleteNumbersVideo:model.start_time withInteger:idx];
             }];
         }
     } buttonTitles:@"确定", nil];
@@ -544,7 +545,7 @@
         return;
     }
     CarmeaVideosModel *model = [self.dataArray objectAtIndex:indexInteger];
-    model.snap = [NSString stringWithFormat:@"%@",[obj objectForKey:@"url"]];
+    model.picUrl = [NSString stringWithFormat:@"%@",[obj objectForKey:@"url"]];
     [self.dataArray replaceObjectAtIndex:indexInteger withObject:model];
     [self.collectionView reloadData];
 }

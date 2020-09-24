@@ -344,7 +344,6 @@
         
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
         vc.model = model;
-//        vc.allDataArray = [NSArray arrayWithArray:self.dataArray];
         vc.indexInteger = indexPath.row;
         vc.isRecordFile = NO;
         vc.isLiving = NO;

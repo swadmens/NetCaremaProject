@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *name;
 @property (nonatomic,strong) NSString *deviceId;
 @property (nonatomic,strong) NSString *system_Source;
+@property (nonatomic,strong) NSArray *presets;
 
 
 @end

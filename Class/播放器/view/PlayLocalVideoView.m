@@ -72,10 +72,11 @@
 -(void)setModel:(DemandModel *)model
 {
     self.playerView = [[PLPlayerView alloc] init];
+    self.playerView.backgroundColor = [UIColor redColor];
     self.playerView.delegate = self;
     [_playView addSubview:self.playerView];
     self.playerView.media = model;
-    self.playerView.isLocalVideo = NO;
+    self.playerView.isLocalVideo = YES;
     self.playerView.playType = PlayerStatusHk;
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.playView);

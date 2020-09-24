@@ -31,7 +31,16 @@
     model.system_Source = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"system_Source"]];
 
     
-    
+    NSArray *preArr = [NSArray arrayWithArray:[managedObject objectForKey:@"presets"]];
+    NSMutableArray *tempPreArr = [NSMutableArray arrayWithCapacity:preArr.count];
+    [preArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        NSDictionary *preDic = obj;
+        PresetsModel *pModel = [PresetsModel makeModelData:preDic];
+        [tempPreArr addObject:pModel];
+    }];
+    model.presets = [NSArray arrayWithArray:tempPreArr];//预置点数组
+
+
     
     NSDictionary *statesDic = [managedObject objectForKey:@"c8y_Availability"];
     NSString *status = [NSString stringWithFormat:@"%@",[statesDic objectForKey:@"status"]];
@@ -59,4 +68,16 @@
     return model;
 }
 
+@end
+
+@implementation PresetsModel
++(PresetsModel*)makeModelData:(NSDictionary *)dic
+{
+    PresetsModel *model = [PresetsModel new];
+    model.name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    model.index = [NSString stringWithFormat:@"%@",[dic objectForKey:@"index"]];
+    
+    return model;
+
+}
 @end

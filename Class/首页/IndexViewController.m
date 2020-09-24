@@ -238,6 +238,7 @@
     vc.allDataArray = [NSArray arrayWithArray:model.liveModelArray];
     vc.isLiving = YES;
     vc.title_value = model.equipment_name;
+    vc.equiment_id = model.equipment_id;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
     
@@ -426,7 +427,7 @@
         [dic setObject:meModel.equipment_name forKey:@"name"];
         [dic setObject:meModel.equipment_id forKey:@"deviceId"];
         [dic setObject:meModel.system_Source forKey:@"system_Source"];
-        
+        [dic setObject:meModel.presets forKey:@"presets"];
             LivingModel *lvModel = [LivingModel makeModelData:dic];
 //            [tempArray addObject:model];
 //        }];

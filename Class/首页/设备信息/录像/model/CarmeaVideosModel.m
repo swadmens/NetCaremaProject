@@ -13,14 +13,20 @@
 {
     CarmeaVideosModel *model = [CarmeaVideosModel new];
     
-    model.video_name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
-    model.duration = [NSString stringWithFormat:@"%@",[dic objectForKey:@"duration"]];
-    model.hls = [NSString stringWithFormat:@"%@",[dic objectForKey:@"hls"]];
-    model.important = [NSString stringWithFormat:@"%@",[dic objectForKey:@"important"]];
-    model.snap = [NSString stringWithFormat:@"%@",[dic objectForKey:@"snap"]];
-    model.start_time = [NSString stringWithFormat:@"%@",[dic objectForKey:@"startAt"]];
+//    model.video_name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+//    model.hls = [NSString stringWithFormat:@"%@",[dic objectForKey:@"hls"]];
+//    model.important = [NSString stringWithFormat:@"%@",[dic objectForKey:@"important"]];
+//    model.snap = [NSString stringWithFormat:@"%@",[dic objectForKey:@"snap"]];
+//    model.start_time = [NSString stringWithFormat:@"%@",[dic objectForKey:@"startAt"]];
 //    model.time = [NSString stringWithFormat:@"%@",[dic objectForKey:@"time"]];
      
+    model.duration = [NSString stringWithFormat:@"%@",[dic objectForKey:@"duration"]];
+    model.duration = [NSString stringWithFormat:@"%@",[dic objectForKey:@"duration"]];
+    model.picUrl = [NSString stringWithFormat:@"%@",[dic objectForKey:@"picUrl"]];
+    model.size = [NSString stringWithFormat:@"%@",[dic objectForKey:@"size"]];
+    model.token = [NSString stringWithFormat:@"%@",[dic objectForKey:@"token"]];
+    model.url = [NSString stringWithFormat:@"%@",[dic objectForKey:@"url"]];
+
     
     return model;
 }

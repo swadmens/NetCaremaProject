@@ -79,4 +79,14 @@ typedef void(^NetworkChangedHandle)(AFNetworkReachabilityStatus status);
 //- (NSURLSessionDataTask *)requestPUT:(NSString *)url parameters:(NSDictionary *)params body:(NSData *)body completion:( void (^)(id results, NSError *error) )completion;
 - (NSURLSessionDataTask*)requestPUTWithURLStr:(NSString *)urlStr paramDic:(NSDictionary *)paramDic Api_key:(NSString *)api_key completion:( void (^)(id results, NSError *error) )completion;
 
+/**
+ DELETE请求
+ 
+ @param urlStr @"xxx.html?do=xx" 或 @"xxx.html"
+ @param paramDic 请求参数
+ 
+ @return NSURLSessionDataTask
+ */
+- (NSURLSessionDataTask*)requestDELETEWithURLStr:(NSString *)urlStr paramDic:(NSDictionary *)paramDic completion:( void (^)(id results, NSError *error) )completion;
+
 @end

@@ -7,8 +7,20 @@
 //
 
 #import "CameraControlView.h"
+#import "PresetView.h"
+#import "LEEAlert.h"
+#import "RequestSence.h"
+#import "MyEquipmentsModel.h"
 
-@interface CameraControlView ()
+#define KTopviewheight kScreenWidth*0.68
+
+
+@interface CameraControlView ()<UIScrollViewDelegate>
+
+
+@property (nonatomic,strong) UIButton *ControlBtn;
+@property (nonatomic,strong) UIButton *CollectionBtn;
+
 
 @property (nonatomic,strong) UIButton *leftUpBtn;
 @property (nonatomic,strong) UIButton *leftDownBtn;
@@ -21,6 +33,21 @@
 
 @property (nonatomic,strong) UIButton *aperturein;
 @property (nonatomic,strong) UIButton *apertureout;
+
+@property (nonatomic,strong) PresetView *setView;
+
+
+@property (nonatomic,strong) UIScrollView *sView;//滚动视图
+
+@property (nonatomic,strong) NSString *systemSource;//设备类型
+@property (nonatomic,strong) NSString *device_id;//设备id
+@property (nonatomic,strong) NSArray *presets;//预置点数组
+@property (nonatomic,strong) NSString *equiment_id;//父设备id
+@property (nonatomic,strong) NSString *presetIndex;//预置点
+@property (nonatomic,assign) NSInteger indexItem;//选择的视图位置
+@property (nonatomic,strong) NSMutableArray *mutPresets;//预置点数组
+
+
 @end
 
 @implementation CameraControlView
@@ -37,6 +64,7 @@
 }
 -(void)creadUI
 {
+    
     UIButton *cancelBtn = [UIButton new];
     [cancelBtn setImage:UIImageWithFileName(@"video_control_close_image") forState:UIControlStateNormal];
     [cancelBtn addTarget:self action:@selector(cancelViewClick) forControlEvents:UIControlEventTouchUpInside];
@@ -47,6 +75,42 @@
     [cancelBtn addHeight:40];
     
     
+    CGFloat leftSpace = kScreenWidth/2 - 80;
+    
+    _ControlBtn = [UIButton new];
+    [_ControlBtn setTitle:@"云台控制" forState:UIControlStateNormal];
+    [_ControlBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
+    _ControlBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEighTeen];
+    [_ControlBtn addTarget:self action:@selector(controlBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_ControlBtn];
+    [_ControlBtn topToView:self withSpace:10];
+    [_ControlBtn leftToView:self withSpace:leftSpace];
+    
+    
+    _CollectionBtn = [UIButton new];
+    [_CollectionBtn setTitle:@"收藏位置" forState:UIControlStateNormal];
+    [_CollectionBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
+    _CollectionBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
+    [_CollectionBtn addTarget:self action:@selector(collectionBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_CollectionBtn];
+    [_CollectionBtn yCenterToView:_ControlBtn];
+    [_CollectionBtn leftToView:_ControlBtn withSpace:20];
+    
+    
+    
+    
+    
+    
+    _sView = [UIScrollView new];
+    _sView.backgroundColor = [UIColor whiteColor];
+    [self addSubview:_sView];
+    [_sView alignTop:@"45" leading:@"0" bottom:@"0" trailing:@"0" toView:self];
+    _sView.contentSize = CGSizeMake(kScreenWidth, 250);
+    _sView.showsVerticalScrollIndicator = NO;
+    _sView.showsHorizontalScrollIndicator = NO;
+    _sView.delegate = self;
+    _sView.bounces = NO;
+
     
     UIView *centerView = [UIView new];
     centerView.backgroundColor = UIColorFromRGB(0xDCDFE4, 1);
@@ -60,9 +124,9 @@
 //    centerView.layer.shadowRadius = 5;
     centerView.clipsToBounds = YES;
     centerView.layer.cornerRadius = 75;
-    [self addSubview:centerView];
-    [centerView xCenterToView:self];
-    [centerView yCenterToView:self];
+    [_sView addSubview:centerView];
+    [centerView xCenterToView:_sView];
+    [centerView topToView:_sView withSpace:15];
     [centerView addWidth:150];
     [centerView addHeight:150];
          
@@ -174,29 +238,55 @@
     
     
     UIButton *zoomin = [UIButton new];
-    zoomin.hidden = YES;
-    zoomin.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [zoomin setTitle:@"放大" forState:UIControlStateNormal];
+//    zoomin.hidden = YES;
+//    zoomin.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+//    [zoomin setTitle:@"放大" forState:UIControlStateNormal];
+//    [zoomin setBGColor:[UIColor blackColor] forState:UIControlStateNormal];
+    
+    [zoomin setImage:UIImageWithFileName(@"group_add_image") forState:UIControlStateNormal];
     [zoomin addTarget:self action:@selector(controlZoominClick) forControlEvents:UIControlEventTouchUpInside];
-    [zoomin setBGColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self addSubview:zoomin];
-    [zoomin topToView:self withSpace:25];
-    [zoomin rightToView:self withSpace:5];
+    [_sView addSubview:zoomin];
+    [zoomin topToView:centerView withSpace:25];
+    [zoomin leftToView:_sView withSpace:25];
     [zoomin addWidth:40];
     [zoomin addHeight:30];
     
     
     UIButton *zoomout = [UIButton new];
-    zoomout.hidden = YES;
-    zoomout.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [zoomout setTitle:@"缩小" forState:UIControlStateNormal];
+//    zoomout.hidden = YES;
+//    zoomout.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+//    [zoomout setTitle:@"缩小" forState:UIControlStateNormal];
+//    [zoomout setBGColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [zoomout setImage:UIImageWithFileName(@"group_remove_image") forState:UIControlStateNormal];
     [zoomout addTarget:self action:@selector(controlZoomoutClick) forControlEvents:UIControlEventTouchUpInside];
-    [zoomout setBGColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self addSubview:zoomout];
+    [_sView addSubview:zoomout];
     [zoomout yCenterToView:zoomin];
-    [zoomout rightToView:zoomin withSpace:5];
+    [zoomout leftToView:zoomin withSpace:15];
     [zoomout addWidth:40];
     [zoomout addHeight:30];
+    
+    
+    
+    
+    UIButton *scSetBtn = [UIButton new];
+    scSetBtn.clipsToBounds = YES;
+    scSetBtn.layer.borderColor = kColorMainColor.CGColor;
+    scSetBtn.layer.borderWidth = 1.0f;
+    scSetBtn.layer.cornerRadius = 3;
+    [scSetBtn setTitle:@"收藏位置" forState:UIControlStateNormal];
+    [scSetBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
+    scSetBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+    [_sView addSubview:scSetBtn];
+    [scSetBtn yCenterToView:zoomin];
+    [scSetBtn addCenterX:50 toView:_sView];
+    [scSetBtn addWidth:90];
+    [scSetBtn addHeight:30];
+    [scSetBtn addTarget:self action:@selector(collectionSetBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    
+    
+    
+    
+    
     
     
     _focusin = [UIButton new];
@@ -250,8 +340,27 @@
     [_apertureout addHeight:30];
     
     
+    //预置点视图
+    self.setView = [PresetView new];
+    [self addSubview:self.setView];
+    self.setView.frame = CGRectMake(kScreenWidth, 45, kScreenWidth, kScreenHeight - KTopviewheight - 222);
     
 }
+-(void)makeAllData:(NSArray*)presets withSystemSource:(NSString*)systemSource withDevice_id:(NSString*)device_id withEquimentId:(NSString*)equiment_id withIndex:(NSInteger)index
+{
+    self.presets = [NSArray arrayWithArray:presets];
+    
+    self.mutPresets = [NSMutableArray arrayWithArray:presets];
+    
+    self.systemSource = [NSString stringWithString:systemSource];
+    self.device_id = [NSString stringWithString:device_id];
+    self.equiment_id = [NSString stringWithString:equiment_id];
+    self.indexItem = index;
+
+    [self.setView makeAllData:presets withSystemSource:systemSource withDevice_id:device_id];
+}
+
+
 -(void)cancelViewClick
 {
     //还原
@@ -260,6 +369,32 @@
         [self.delegate cameraColseControl:self];
     }
 }
+
+-(void)controlBtnClick
+{
+    _ControlBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEighTeen];
+    _CollectionBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
+
+    [UIView animateWithDuration:0.3 animations:^{
+        //还原
+        self.sView.transform = CGAffineTransformIdentity;
+        self.setView.transform = CGAffineTransformIdentity;
+    }];
+}
+-(void)collectionBtnClick
+{
+    _ControlBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
+    _CollectionBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEighTeen];
+ 
+    [UIView animateWithDuration:0.3 animations:^{
+        //X轴向左平移
+        self.setView.transform = CGAffineTransformMakeTranslation(-kScreenWidth, 0);
+        self.sView.transform = CGAffineTransformMakeTranslation(-kScreenWidth, 0);
+
+    }];
+      
+}
+
 -(void)setIsLiveGBS:(BOOL)isLiveGBS
 {
 //    _leftUpBtn.hidden = !isLiveGBS;
@@ -365,6 +500,169 @@
         [self.delegate cameraControl:self withState:ControlStaterApertureout];
     }
 }
+
+
+//点击收藏位置
+-(void)collectionSetBtnClick
+{
+    //获取最新的预置点数据
+    [self getDeviceNewPresetInfo];
+    
+    // 使用一个变量接收自定义的输入框对象 以便于在其他位置调用
+    __block UITextField *tf = nil;
+    [LEEAlert alert].config
+    .LeeTitle(@"设置位置名称")
+    .LeeContent(@"")
+    .LeeAddTextField(^(UITextField *textField) {
+        
+        // 这里可以进行自定义的设置
+        textField.text = [NSString stringWithFormat:@"预置点%@",self.presetIndex];
+        textField.font = [UIFont customFontWithSize:kFontSizeFifty];
+        textField.textColor = kColorMainTextColor;
+        textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+
+//            if (@available(iOS 13.0, *)) {
+//                textField.textColor = [UIColor secondaryLabelColor];
+//            } else {
+//                textField.textColor = [UIColor darkGrayColor];
+//            }
+        
+        tf = textField; //赋值
+    })
+    .LeeAction(@"确定", ^{
+        DLog(@"名称是  %@",tf.text);
+        
+        [self addNewPerSetWithName:tf.text withIndex:self.presetIndex];
+    })
+    .leeShouldActionClickClose(^(NSInteger index){
+        // 是否可以关闭回调, 当即将关闭时会被调用 根据返回值决定是否执行关闭处理
+        // 这里演示了与输入框非空校验结合的例子
+        BOOL result = ![tf.text isEqualToString:@""];
+        result = index == 0 ? result : YES;
+        return result;
+    })
+    .LeeCancelAction(@"取消", nil) // 点击事件的Block如果不需要可以传nil
+    .LeeShow();
+}
+//新增预置点
+-(void)addNewPerSetWithName:(NSString*_Nonnull)name withIndex:(NSString*)indexs
+{
+    
+    if ([self nameRepeated:name]) {
+        [_kHUDManager showMsgInView:nil withTitle:@"命名重复，请重新设置！" isSuccess:YES];
+        return;
+    }
+
+    
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/operation/addpreset/%@/%@",self.systemSource,self.device_id];
+    
+    NSDictionary *finalParams = @{
+                                  @"name":name,
+                                  @"index":indexs,
+                                  };
+    PresetsModel *model = [PresetsModel makeModelData:finalParams];
+    [self.mutPresets addObject:model];
+    
+    
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
+                                                       options:0
+                                                         error:nil];
+    
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"BODY";
+    sence.pathHeader = @"application/json";
+    sence.body = jsonData;
+    sence.pathURL = url;
+//    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+        [self.setView makeAllData:self.mutPresets withSystemSource:self.systemSource withDevice_id:self.device_id];
+    };
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+        [_kHUDManager showMsgInView:nil withTitle:@"新增失败，请重试！" isSuccess:YES];
+        
+    };
+    [sence sendRequest];
+}
+
+///处理预置点index
+-(NSString*)dealWithPresetIndex:(NSArray*)array
+{
+   static NSString *string;
+    
+    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:self.mutPresets.count];
+    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        PresetsModel *model = obj;
+        [tempArr addObject:model.index];
+    }];
+    
+    for (int i = 1; i<=255 ; i++) {
+        
+        NSString *str = [NSString stringWithFormat:@"%d",i];
+
+        if (![tempArr containsObject:str]) {
+            string = str;
+            break;
+        }
+    }
+    
+    return string;
+}
+
+//检查名称是否重复
+-(BOOL)nameRepeated:(NSString*)name
+{
+    BOOL result = NO;
+    for (int i=0; i<self.presets.count; i++) {
+        PresetsModel *model = [self.presets objectAtIndex:i];
+        if ([model.name isEqualToString:name]) {
+            result = YES;
+        }
+    }
+    return result;
+}
+
+//获取设备最新的预置点数据
+-(void)getDeviceNewPresetInfo
+{
+    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",self.equiment_id];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        NSArray *data = [obj objectForKey:@"references"];
+        NSDictionary *dic = [data objectAtIndex:self.indexItem];
+        NSDictionary *managedObject = [dic objectForKey:@"managedObject"];
+        NSArray *dataArr = [managedObject objectForKey:@"presets"];
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:dataArr.count];
+        [dataArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *Mdic = obj;
+            PresetsModel *model = [PresetsModel makeModelData:Mdic];
+            [tempArr addObject:model];
+        }];
+        [weak_self.mutPresets removeAllObjects];
+        [weak_self.mutPresets addObjectsFromArray:tempArr];
+        
+        weak_self.presetIndex = [weak_self dealWithPresetIndex:weak_self.mutPresets];
+        
+        DLog(@"mutPresets: %@", weak_self.mutPresets);
+
+    };
+    sence.errorBlock = ^(NSError *error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error: %@", error);
+    };
+    [sence sendRequest];
+}
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

@@ -42,7 +42,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *civilCode;
 @property (nonatomic,strong) NSString *channel;
 
+@property (nonatomic,strong) NSArray *presets;
 
+
+
+@end
+
+@interface PresetsModel : NSObject
+
++(PresetsModel*)makeModelData:(NSDictionary*)dic;
+
+@property (nonatomic,strong) NSString *name;
+@property (nonatomic,strong) NSString *index;
 
 
 @end

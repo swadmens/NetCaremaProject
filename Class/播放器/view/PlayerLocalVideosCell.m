@@ -191,10 +191,11 @@
 //        CarmeaVideosModel *model = obj;
 //        self.carmeaModel = model;
 //
-        NSDictionary *dic = @{ @"name":model.video_name,
-                               @"snapUrl":model.snap,
-                               @"videoUrl":model.hls,
-                               @"createAt":model.start_time,
+        NSDictionary *dic = @{
+//            @"name":model.video_name,
+                               @"snapUrl":model.picUrl,
+                               @"videoUrl":model.url,
+//                               @"createAt":model.start_time,
                               };
         DemandModel *models = [DemandModel makeModelData:dic];
 //        self.playerView.media = models;

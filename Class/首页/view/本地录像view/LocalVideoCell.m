@@ -89,9 +89,9 @@
 }
 -(void)makeCellData:(CarmeaVideosModel *)model
 {
-    _titleLabel.text = model.video_name;
-    _timeLabel.text = model.start_time;
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
+    _titleLabel.text = model.duration;
+    _timeLabel.text = model.duration;
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.picUrl] placeholder:UIImageWithFileName(@"player_hoder_image")];
 }
 -(void)setIsEdit:(BOOL)isEdit
 {

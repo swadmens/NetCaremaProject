@@ -250,10 +250,11 @@
 
     }else{
         if (_isFromIndex) {
-            NSDictionary *dic = @{@"name":model.video_name,
-                                   @"snapUrl":model.snap,
-                                   @"videoUrl":model.hls,
-                                   @"createAt":model.start_time,
+            NSDictionary *dic = @{
+                                   @"name":model.duration,
+                                   @"snapUrl":model.picUrl,
+                                   @"videoUrl":model.url,
+                                   @"createAt":model.duration,
                                   };
             DemandModel *models = [DemandModel makeModelData:dic];
             SuperPlayerViewController *vc = [SuperPlayerViewController new];
@@ -261,7 +262,7 @@
             vc.indexInteger = indexPath.row;
             vc.isRecordFile = NO;
             vc.isLiving = NO;
-            vc.title_value = model.video_name;
+            vc.title_value = model.duration;
             [self.navigationController pushViewController:vc animated:YES];
 
         }else{
@@ -279,44 +280,50 @@
         return;
     }
     [_kHUDManager showActivityInView:nil withTitle:nil];
+    __unsafe_unretained typeof(self) weak_self = self;
+
     
 
 //    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=GBS&id=%@&date=%@",self.device_id,self.date_value];
-//    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=GBS&id=%@&date=%@",@"524508",@"20200916"];
-    NSString *url = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.system_Source,@"524508",@"20200918"];
-    
-//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-//    manager.responseSerializer = [AFJSONResponseSerializer serializer];
-////    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
-//    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
-//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"multipart/form-data",nil];
-//
-//    // 设置请求头
-//    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-//    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-////@{@"accept":@"video/*"}
-//
-//    //添加授权
-//    [manager.requestSerializer setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
-//
-//    NSURLSessionDataTask *task = [manager GET:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
-//
-//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//        [_kHUDManager hideAfter:0.1 onHide:nil];
-//        DLog(@"responseObject == %@",responseObject);
-//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//        [_kHUDManager hideAfter:0.1 onHide:nil];
-//        DLog(@"error == %@",error);
-//
-//    }];
-//    [task resume];
-//    return;
 
+    
+    NSString *urls = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.system_Source,@"524508",@"20200918"];
+
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    manager.requestSerializer = [AFHTTPRequestSerializer serializer];
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"multipart/form-data",nil];
+
+    // 设置请求头
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+
+    //添加授权
+    [manager.requestSerializer setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
+
+    NSURLSessionDataTask *task = [manager GET:urls parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"responseObject == %@",responseObject);
+        [weak_self handleObject:responseObject];
+
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+        [weak_self failedOperation];
+
+    }];
+    [task resume];
+    return;
+
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.system_Source,@"524508",@"20200918"];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
     sence.pathURL = url;
-    __unsafe_unretained typeof(self) weak_self = self;
+//    __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"Received: %@", obj);
@@ -345,7 +352,7 @@
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
         
-        NSArray *list = [obj objectForKey:@"list"];
+        NSArray *list = (NSArray*)obj;
         NSMutableArray *tempArray = [NSMutableArray array];
         
         [self.dataArray removeAllObjects];
@@ -413,7 +420,7 @@
         return;
     }
     CarmeaVideosModel *model = [self.dataArray objectAtIndex:indexInteger];
-    model.snap = [NSString stringWithFormat:@"%@",[obj objectForKey:@"url"]];
+    model.picUrl = [NSString stringWithFormat:@"%@",[obj objectForKey:@"url"]];
     [self.dataArray replaceObjectAtIndex:indexInteger withObject:model];
     [self.tableView reloadData];
 }
@@ -428,7 +435,7 @@
             
             [tempIndexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
                 CarmeaVideosModel *model = [self.dataArray objectAtIndex:idx];
-                [self deleteNumbersVideo:model.start_time withInteger:idx];
+//                [self deleteNumbersVideo:model.start_time withInteger:idx];
             }];
         }
     } buttonTitles:@"确定", nil];

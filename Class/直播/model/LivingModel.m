@@ -31,6 +31,8 @@
     NSString *online = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
     model.status = [online isEqualToString:@"on"]?YES:NO;
     
+    model.presets = [NSArray arrayWithArray:[dic objectForKey:@"presets"]];//预置点数组
+
     
 
     return model;

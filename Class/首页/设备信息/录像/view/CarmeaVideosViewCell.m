@@ -63,8 +63,8 @@
 
 -(void)makeCellData:(CarmeaVideosModel *)model
 {
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
-    _titleLabel.text = model.video_name;
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.picUrl] placeholder:[UIImage imageWithColor:[UIColor greenColor]]];
+//    _titleLabel.text = model.video_name;
 }
 -(void)setIsEdit:(BOOL)isEdit
 {

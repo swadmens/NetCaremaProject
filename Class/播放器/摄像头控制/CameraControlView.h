@@ -32,6 +32,7 @@ typedef enum {
 
 -(void)cameraControl:(CameraControlView *_Nullable)CameraControlView withState:(ControlState)state;
 -(void)cameraColseControl:(CameraControlView *_Nullable)CameraControlView;
+-(void)addNewPerSet:(CameraControlView *_Nullable)CameraControlView withName:(NSString*_Nonnull)name;
 
 @end
 
@@ -42,7 +43,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id<CameraControlDelete> delegate;
 
-@property (nonatomic,assign) BOOL isLiveGBS;//是否是GBS摄像
+-(void)makeAllData:(NSArray*)presets withSystemSource:(NSString*)systemSource withDevice_id:(NSString*)device_id withEquimentId:(NSString*)equiment_id withIndex:(NSInteger)index;
+
 
 @end
 

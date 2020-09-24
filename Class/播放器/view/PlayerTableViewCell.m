@@ -205,8 +205,8 @@
         if (!self.changeUI) {
             self.selectIndexPath = indexPath;
             self.playingCell = (PlayerTopCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
-            if ([self.delegate respondsToSelector:@selector(selectCellCarmera:withData:)]) {
-                [self.delegate selectCellCarmera:self withData:obj];
+            if ([self.delegate respondsToSelector:@selector(selectCellCarmera:withData:withIndex:)]) {
+                [self.delegate selectCellCarmera:self withData:obj withIndex:indexPath.row];
             }
         }
         
@@ -416,8 +416,8 @@
    }];
 //    [self.collectionView reloadData];
     
-    if ([self.delegate respondsToSelector:@selector(selectCellCarmera:withData:)]) {
-        [self.delegate selectCellCarmera:self withData:model];
+    if ([self.delegate respondsToSelector:@selector(selectCellCarmera:withData:withIndex:)]) {
+        [self.delegate selectCellCarmera:self withData:model withIndex:self.selectIndex];
     }
 }
 #pragma mark - PlayLocalVideoViewDelegate

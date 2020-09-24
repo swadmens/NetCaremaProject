@@ -56,8 +56,8 @@
         _titleLabel.text = models.video_name;
     }else{
         CarmeaVideosModel *models = model;
-        [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
-        _titleLabel.text = models.video_name;
+        [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.picUrl] placeholder:UIImageWithFileName(@"player_hoder_image")];
+        _titleLabel.text = models.duration;
     }
 }
 @end
