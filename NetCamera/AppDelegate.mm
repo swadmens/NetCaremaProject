@@ -19,6 +19,10 @@
 //#import "Global.h"
 
 
+#define HikAppKey @"a2fafc9c1ebd422cb440ecd0b59e582a"
+#define HikSecret @"0a042989a3dc9fc8c1bd2f26ac88e99d"
+#define HikAccessToken @"at.az10g79b7r52pugrc51l3o4ibfqq4rtq-5tpe3tvzre-0gryxf8-zyaf6otfu"
+
 @interface AppDelegate ()
 {
     GuideViewController *_guideController;
@@ -100,13 +104,12 @@
     [cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
     
     
-    [EZUIKit initWithAppKey:@"a2fafc9c1ebd422cb440ecd0b59e582a"];
-    [EZUIKit setAccessToken:@"at.dtmmb1z3atmt0x2z4isag1k2289j7jz2-7ef4qsbn2a-0hxlt2u-f9pg2xhkk"];
-    
-    
-    [EZOpenSDK initLibWithAppKey:@"a2fafc9c1ebd422cb440ecd0b59e582a"];
-    [EZOpenSDK setAccessToken:@"at.dtmmb1z3atmt0x2z4isag1k2289j7jz2-7ef4qsbn2a-0hxlt2u-f9pg2xhkk"];
-    
+    [EZUIKit initWithAppKey:HikAppKey];
+    [EZUIKit setAccessToken:HikAccessToken];
+
+
+    [EZOpenSDK initLibWithAppKey:HikAppKey];
+    [EZOpenSDK setAccessToken:HikAccessToken];
 
     /// 引导页，判断是否是第一次
 //    [self setupGuideView];

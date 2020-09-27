@@ -9,6 +9,7 @@
 #import "PlayLocalVideoView.h"
 #import "PLPlayerView.h"
 #import "DemandModel.h"
+#import "HikPlayerView.h"
 
 
 @interface PlayLocalVideoView ()<PLPlayerViewDelegate>
@@ -17,6 +18,8 @@
 
 @property (nonatomic,strong) UIView *playView;
 @property (nonatomic, strong) PLPlayerView *playerView;
+@property (nonatomic, strong) HikPlayerView *hkPlayerView;
+
 @property (nonatomic, assign) BOOL isFullScreen;   /// 是否全屏标记
 @property (nonatomic, assign) BOOL isPlaying;
 
@@ -59,6 +62,15 @@
     [_titleImageView addSubview:_coverView];
     [_coverView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:_titleImageView];
     
+    
+    self.playerView = [[PLPlayerView alloc] init];
+    self.playerView.delegate = self;
+    [_playView addSubview:self.playerView];
+    self.playerView.isLocalVideo = YES;   
+    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.playView);
+    }];
+    
 
     UILabel *outlineLabel = [UILabel new];
     outlineLabel.text = @"离线";
@@ -71,19 +83,14 @@
 }
 -(void)setModel:(DemandModel *)model
 {
-    self.playerView = [[PLPlayerView alloc] init];
-    self.playerView.backgroundColor = [UIColor redColor];
-    self.playerView.delegate = self;
-    [_playView addSubview:self.playerView];
     self.playerView.media = model;
-    self.playerView.isLocalVideo = YES;
-    self.playerView.playType = PlayerStatusHk;
-    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.playView);
-    }];
+    if ([model.videoUrl hasPrefix:@"ezopen://"]) {
+        self.playerView.playType = PlayerStatusHk;
+    }else{
+        self.playerView.playType = PlayerStatusGBS;
+    }
     [self configureVideo:NO];
     [self.playerView play];
-    
 }
 - (void)play {
     [self.playerView play];
@@ -113,7 +120,6 @@
 
 - (void)playerViewEnterFullScreen:(PLPlayerView *)playerView {
     
-//    UIView *superView = [UIApplication sharedApplication].delegate.window.rootViewController.view;
     UIView *superView = [[UIApplication sharedApplication] keyWindow];
     [self.playerView removeFromSuperview];
     [superView addSubview:self.playerView];
@@ -122,7 +128,7 @@
         make.height.equalTo(superView.mas_width);
         make.center.equalTo(superView);
     }];
-    
+
     [superView setNeedsUpdateConstraints];
     [superView updateConstraintsIfNeeded];
 
@@ -139,18 +145,18 @@
     
     [self.playerView removeFromSuperview];
     [self.playView addSubview:self.playerView];
-    
+
     [self.playerView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.playView);
     }];
-    
+
     [self setNeedsUpdateConstraints];
     [self updateConstraintsIfNeeded];
 
     [UIView animateWithDuration:.3 animations:^{
         [self layoutIfNeeded];
     }];
-    
+
     self.isFullScreen = NO;
     [self.delegate tableViewCellExitFullScreen:self];
 
@@ -171,7 +177,6 @@
 }
 
 - (void)playerViewWillPlay:(PLPlayerView *)playerView {
-//    [self.playerView.delegate playerViewWillPlay:self.playerView];
     [self.delegate tableViewWillPlay:self];
 }
 

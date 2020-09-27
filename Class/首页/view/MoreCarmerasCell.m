@@ -66,7 +66,8 @@
     
     
     CGFloat backHeight = kScreenWidth*0.6;
-    
+    CGFloat preMaxWidth = kScreenWidth - 105;
+
     
     UIView *backView = [UIView new];
     backView.backgroundColor = [UIColor whiteColor];
@@ -87,10 +88,13 @@
     _equipmentName.text = @"设备名称123456";
     _equipmentName.textColor = kColorMainTextColor;
     _equipmentName.font = [UIFont customFontWithSize:kFontSizeSixteen];
+    _equipmentName.preferredMaxLayoutWidth = preMaxWidth;
+    _equipmentName.numberOfLines = 0;
     [backView addSubview:_equipmentName];
     [_equipmentName leftToView:backView withSpace:12];
     [_equipmentName topToView:backView withSpace:12];
-    
+    [_equipmentName addHeight:20];
+
     
     _equipmentStates = [UILabel new];
 //    _equipmentStates.text = @"在线";
@@ -154,7 +158,7 @@
     _equipmentStates.text = model.status?@"在线":@"离线";
 
     _equipmentStates.backgroundColor = model.status?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
-    self.dataArray = [NSArray arrayWithArray:model.liveModelArray];
+    self.dataArray = [NSArray arrayWithArray:model.childDevices_info];
     
     [self.collectionView reloadData];
 }
@@ -168,8 +172,8 @@
 {
     MoreCarmerasCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MoreCarmerasCollectionViewCell getCellIDStr] forIndexPath:indexPath];
     
-    LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    [cell makeCellData:model withOnline:model.status];
+    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    [cell makeCellData:model.model withOnline:model.online];
 
     cell.moreBtnClick = ^(BOOL offline) {
         if (self.moreDealClick) {

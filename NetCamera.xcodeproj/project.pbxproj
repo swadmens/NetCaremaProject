@@ -462,6 +462,8 @@
 		4A7007E2241766660024DFB8 /* LGXThirdEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A7007DA241766650024DFB8 /* LGXThirdEngine.m */; };
 		4A8D97DB251AE47300295CAC /* CameraControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D97D9251AE47300295CAC /* CameraControlView.m */; };
 		4A8D97E2251AE4C900295CAC /* PresetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D97E1251AE4C900295CAC /* PresetView.m */; };
+		4A8D9811252078EE00295CAC /* HikPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D9810252078ED00295CAC /* HikPlayerView.m */; };
+		4A8D987725207E5F00295CAC /* EZPlaybackProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D987525207E5F00295CAC /* EZPlaybackProgressBar.m */; };
 		4AA2EE622407A0EE00C4F5DA /* DemandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE612407A0EE00C4F5DA /* DemandViewController.m */; };
 		4AA2EE652407A10000C4F5DA /* LiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE642407A10000C4F5DA /* LiveViewController.m */; };
 		4AA77B032518502E00C2D427 /* PLPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA77B012518502E00C2D427 /* PLPlayerView.m */; };
@@ -1529,6 +1531,10 @@
 		4A8D97DA251AE47300295CAC /* CameraControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraControlView.h; sourceTree = "<group>"; };
 		4A8D97E0251AE4C900295CAC /* PresetView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetView.h; sourceTree = "<group>"; };
 		4A8D97E1251AE4C900295CAC /* PresetView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PresetView.m; sourceTree = "<group>"; };
+		4A8D980F252078ED00295CAC /* HikPlayerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HikPlayerView.h; sourceTree = "<group>"; };
+		4A8D9810252078ED00295CAC /* HikPlayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HikPlayerView.m; sourceTree = "<group>"; };
+		4A8D987225207E5E00295CAC /* EZPlaybackProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPlaybackProgressBar.h; sourceTree = "<group>"; };
+		4A8D987525207E5F00295CAC /* EZPlaybackProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPlaybackProgressBar.m; sourceTree = "<group>"; };
 		4AA2EE602407A0EE00C4F5DA /* DemandViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemandViewController.h; sourceTree = "<group>"; };
 		4AA2EE612407A0EE00C4F5DA /* DemandViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemandViewController.m; sourceTree = "<group>"; };
 		4AA2EE632407A10000C4F5DA /* LiveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveViewController.h; sourceTree = "<group>"; };
@@ -3860,6 +3866,17 @@
 			path = "摄像头控制";
 			sourceTree = "<group>";
 		};
+		4A8D980E252078DB00295CAC /* hikPlayerView */ = {
+			isa = PBXGroup;
+			children = (
+				4A8D987225207E5E00295CAC /* EZPlaybackProgressBar.h */,
+				4A8D987525207E5F00295CAC /* EZPlaybackProgressBar.m */,
+				4A8D980F252078ED00295CAC /* HikPlayerView.h */,
+				4A8D9810252078ED00295CAC /* HikPlayerView.m */,
+			);
+			path = hikPlayerView;
+			sourceTree = "<group>";
+		};
 		4AA77B0025184FF400C2D427 /* playerView */ = {
 			isa = PBXGroup;
 			children = (
@@ -4339,6 +4356,7 @@
 		4AD26FE62463AE6B00D462B4 /* 播放器 */ = {
 			isa = PBXGroup;
 			children = (
+				4A8D980E252078DB00295CAC /* hikPlayerView */,
 				4A8D97D8251AE47300295CAC /* 摄像头控制 */,
 				4A8D97D7251AE47300295CAC /* 预置点 */,
 				4AA77B0025184FF400C2D427 /* playerView */,
@@ -5000,6 +5018,7 @@
 				4A58106324075F2E00E82675 /* SCLButton.m in Sources */,
 				4A64ECE7242D875B00D30FB1 /* TCNavigationController.m in Sources */,
 				4A6869B5245AB9B90036355E /* ChannelDetailController.m in Sources */,
+				4A8D987725207E5F00295CAC /* EZPlaybackProgressBar.m in Sources */,
 				4AD26FEE2463DD2300D462B4 /* PlayerTableViewCell.m in Sources */,
 				4A58101124075F2D00E82675 /* FTUtils+NSObject.m in Sources */,
 				4A58100B24075F2D00E82675 /* UIColor+MLPFlatColors.m in Sources */,
@@ -5207,6 +5226,7 @@
 				4A580FFB24075F2D00E82675 /* UIView+MJExtension.m in Sources */,
 				4A7007DC241766660024DFB8 /* SendMessageToWXReq+requestWithTextOrMediaMessage.m in Sources */,
 				4AB50AA22468EDF40064BF82 /* CalanderModel.m in Sources */,
+				4A8D9811252078EE00295CAC /* HikPlayerView.m in Sources */,
 				4A58103424075F2E00E82675 /* IFTTTTransform3DAnimation.m in Sources */,
 				4A580FCB24075F2D00E82675 /* RetrievePasswordCell.m in Sources */,
 				4A580F6C24075F2D00E82675 /* LGXBadgeManager.m in Sources */,

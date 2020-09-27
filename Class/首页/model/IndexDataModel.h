@@ -48,7 +48,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @property (nonatomic,strong) NSMutableArray *liveModelArray;//直播集合
-@property (nonatomic,strong) NSArray *childDevices_info;//子设备组信息
+@property (nonatomic,strong) NSMutableArray *childDevices_info;//子设备组信息
 @property (nonatomic,strong) NSString *childDevices_id;//子设备id
 @property (nonatomic,strong) NSArray *equipment_nums;//设备数量
 

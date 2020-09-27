@@ -41,7 +41,6 @@
 
 @property (nonatomic,strong) NSString *systemSource;//设备类型
 @property (nonatomic,strong) NSString *device_id;//设备id
-@property (nonatomic,strong) NSArray *presets;//预置点数组
 @property (nonatomic,strong) NSString *equiment_id;//父设备id
 @property (nonatomic,strong) NSString *presetIndex;//预置点
 @property (nonatomic,assign) NSInteger indexItem;//选择的视图位置
@@ -348,8 +347,6 @@
 }
 -(void)makeAllData:(NSArray*)presets withSystemSource:(NSString*)systemSource withDevice_id:(NSString*)device_id withEquimentId:(NSString*)equiment_id withIndex:(NSInteger)index
 {
-    self.presets = [NSArray arrayWithArray:presets];
-    
     self.mutPresets = [NSMutableArray arrayWithArray:presets];
     
     self.systemSource = [NSString stringWithString:systemSource];
@@ -505,9 +502,126 @@
 //点击收藏位置
 -(void)collectionSetBtnClick
 {
-    //获取最新的预置点数据
-    [self getDeviceNewPresetInfo];
     
+    if (self.mutPresets.count > 24) {
+        [_kHUDManager showMsgInView:nil withTitle:@"收藏不超过25个！" isSuccess:YES];
+        return;
+    }
+    
+    [_kHUDManager showActivityInView:nil withTitle:nil];
+    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",self.device_id];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"obj ==  %@",obj)
+        NSArray *data = [obj objectForKey:@"presets"];
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:data.count];
+        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *Mdic = obj;
+            PresetsModel *model = [PresetsModel makeModelData:Mdic];
+            [tempArr addObject:model];
+        }];
+        [weak_self.mutPresets removeAllObjects];
+        [weak_self.mutPresets addObjectsFromArray:tempArr];
+        
+        weak_self.presetIndex = [weak_self dealWithPresetIndex:weak_self.mutPresets];
+        //获取最新的预置点数据
+        [weak_self getDeviceNewPresetInfo];
+        DLog(@"mutPresets: %@", weak_self.mutPresets);
+
+    };
+    sence.errorBlock = ^(NSError *error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error: %@", error);
+    };
+    [sence sendRequest];
+}
+//新增预置点
+-(void)addNewPerSetWithName:(NSString*_Nonnull)name withIndex:(NSString*)indexs
+{
+    
+    if ([self nameRepeated:name]) {
+        [_kHUDManager showMsgInView:nil withTitle:@"命名重复，请重新设置！" isSuccess:YES];
+        return;
+    }
+    
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/operation/addpreset/%@/%@",self.systemSource,self.device_id];
+    NSDictionary *finalParams = @{
+                                  @"name":name,
+                                  @"index":indexs,
+                                  };
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
+                                                       options:0
+                                                         error:nil];
+    
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"BODY";
+    sence.pathHeader = @"application/json";
+    sence.body = jsonData;
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+        [_kHUDManager showMsgInView:nil withTitle:@"已收藏" isSuccess:YES];
+        PresetsModel *model = [PresetsModel makeModelData:finalParams];
+        [weak_self.mutPresets addObject:model];
+        [weak_self.setView makeAllData:weak_self.mutPresets withSystemSource:weak_self.systemSource withDevice_id:weak_self.device_id];
+    };
+    sence.errorBlock = ^(NSError *error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+        [_kHUDManager showMsgInView:nil withTitle:@"新增失败，请重试！" isSuccess:YES];
+    };
+    [sence sendRequest];
+}
+
+///处理预置点index
+-(NSString*)dealWithPresetIndex:(NSArray*)array
+{
+   static NSString *string;
+    
+    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:self.mutPresets.count];
+    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        PresetsModel *model = obj;
+        [tempArr addObject:model.index];
+    }];
+    
+    for (int i = 1; i<=25 ; i++) {
+        
+        NSString *str = [NSString stringWithFormat:@"%d",i];
+
+        if (![tempArr containsObject:str]) {
+            string = str;
+            break;
+        }
+    }
+    
+    return string;
+}
+
+//检查名称是否重复
+-(BOOL)nameRepeated:(NSString*)name
+{
+    BOOL result = NO;
+    for (int i=0; i<self.mutPresets.count; i++) {
+        PresetsModel *model = [self.mutPresets objectAtIndex:i];
+        if ([model.name isEqualToString:name]) {
+            result = YES;
+        }
+    }
+    return result;
+}
+
+//获取设备最新的预置点数据
+-(void)getDeviceNewPresetInfo
+{
     // 使用一个变量接收自定义的输入框对象 以便于在其他位置调用
     __block UITextField *tf = nil;
     [LEEAlert alert].config
@@ -543,124 +657,6 @@
     })
     .LeeCancelAction(@"取消", nil) // 点击事件的Block如果不需要可以传nil
     .LeeShow();
-}
-//新增预置点
--(void)addNewPerSetWithName:(NSString*_Nonnull)name withIndex:(NSString*)indexs
-{
-    
-    if ([self nameRepeated:name]) {
-        [_kHUDManager showMsgInView:nil withTitle:@"命名重复，请重新设置！" isSuccess:YES];
-        return;
-    }
-
-    
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/operation/addpreset/%@/%@",self.systemSource,self.device_id];
-    
-    NSDictionary *finalParams = @{
-                                  @"name":name,
-                                  @"index":indexs,
-                                  };
-    PresetsModel *model = [PresetsModel makeModelData:finalParams];
-    [self.mutPresets addObject:model];
-    
-    
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
-                                                       options:0
-                                                         error:nil];
-    
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"BODY";
-    sence.pathHeader = @"application/json";
-    sence.body = jsonData;
-    sence.pathURL = url;
-//    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"Received: %@", obj);
-        [self.setView makeAllData:self.mutPresets withSystemSource:self.systemSource withDevice_id:self.device_id];
-    };
-    sence.errorBlock = ^(NSError *error) {
-
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        // 请求失败
-        DLog(@"error  ==  %@",error.userInfo);
-        [_kHUDManager showMsgInView:nil withTitle:@"新增失败，请重试！" isSuccess:YES];
-        
-    };
-    [sence sendRequest];
-}
-
-///处理预置点index
--(NSString*)dealWithPresetIndex:(NSArray*)array
-{
-   static NSString *string;
-    
-    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:self.mutPresets.count];
-    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        PresetsModel *model = obj;
-        [tempArr addObject:model.index];
-    }];
-    
-    for (int i = 1; i<=255 ; i++) {
-        
-        NSString *str = [NSString stringWithFormat:@"%d",i];
-
-        if (![tempArr containsObject:str]) {
-            string = str;
-            break;
-        }
-    }
-    
-    return string;
-}
-
-//检查名称是否重复
--(BOOL)nameRepeated:(NSString*)name
-{
-    BOOL result = NO;
-    for (int i=0; i<self.presets.count; i++) {
-        PresetsModel *model = [self.presets objectAtIndex:i];
-        if ([model.name isEqualToString:name]) {
-            result = YES;
-        }
-    }
-    return result;
-}
-
-//获取设备最新的预置点数据
--(void)getDeviceNewPresetInfo
-{
-    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",self.equiment_id];
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathHeader = @"application/json";
-    sence.pathURL = url;
-    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-        NSArray *data = [obj objectForKey:@"references"];
-        NSDictionary *dic = [data objectAtIndex:self.indexItem];
-        NSDictionary *managedObject = [dic objectForKey:@"managedObject"];
-        NSArray *dataArr = [managedObject objectForKey:@"presets"];
-        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:dataArr.count];
-        [dataArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSDictionary *Mdic = obj;
-            PresetsModel *model = [PresetsModel makeModelData:Mdic];
-            [tempArr addObject:model];
-        }];
-        [weak_self.mutPresets removeAllObjects];
-        [weak_self.mutPresets addObjectsFromArray:tempArr];
-        
-        weak_self.presetIndex = [weak_self dealWithPresetIndex:weak_self.mutPresets];
-        
-        DLog(@"mutPresets: %@", weak_self.mutPresets);
-
-    };
-    sence.errorBlock = ^(NSError *error) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"error: %@", error);
-    };
-    [sence sendRequest];
 }
 
 

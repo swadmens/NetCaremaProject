@@ -10,6 +10,7 @@
 #import "PLPlayerView.h"
 #import "DemandModel.h"
 #import "LivingModel.h"
+#import "MyEquipmentsModel.h"
 
 @interface PlayerTopCollectionViewCell ()<PLPlayerViewDelegate>
 
@@ -54,12 +55,11 @@
     [_playView addSubview:self.playerView];
     self.playerView.isLocalVideo = NO;
     self.playerView.playType = PlayerStatusGBS;
-//    self.playerView.playType = PlayerStatusHk;
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.playView);
     }];
     [self configureVideo:NO];
-    self.playerView.userInteractionEnabled = NO;
+//    self.playerView.userInteractionEnabled = NO;
 
     
     _titleImageView = [UIImageView new];
@@ -185,7 +185,8 @@
     if (self.lvModel != nil) {
         return;
     }
-    self.lvModel = obj;
+    MyEquipmentsModel *myModel = obj;
+    self.lvModel = myModel.model;
     if (![WWPublicMethod isStringEmptyText:self.lvModel.hls]) {
         _coverView.hidden = NO;
         _titleImageView.hidden = NO;

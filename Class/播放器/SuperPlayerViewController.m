@@ -53,6 +53,7 @@
 @property (nonatomic,strong) UIView *videoTipView;//录像提示view
 @property (nonatomic,strong) UILabel *videoTipLabel;//录像提示view
 
+
 @end
 
 @implementation SuperPlayerViewController
@@ -96,15 +97,12 @@
     [self.view addSubview:self.clView];
     self.clView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight - KTopviewheight - 177);
 }
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = self.title_value;
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
-
-    //    [self setupSaveView];
     
     [self setupTableView];
     [self setupControllView];
@@ -129,7 +127,8 @@
     
     
     if (_isLiving) {
-        self.selectModel = self.allDataArray.firstObject;
+        MyEquipmentsModel *MyModel = self.allDataArray.firstObject;
+        self.selectModel = MyModel.model;
         self.carmer_id = self.selectModel.deviceId;
         self.streamid = self.selectModel.deviceSerial;
         [self startLoadDataRequest:self.selectModel.deviceId];
@@ -753,11 +752,10 @@
     if (![WWPublicMethod isStringEmptyText:carmeraId]) {
         return;
     }
-//    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=LiveGBS&id=%@&date=%@",carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"]];
-    
-    
-    NSString *urls = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.selectModel.system_Source,@"524508",@"20200918"];
+    __unsafe_unretained typeof(self) weak_self = self;
 
+    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.selectModel.system_Source,carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],@"local"];
+    
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -771,9 +769,7 @@
     //添加授权
     [manager.requestSerializer setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
 
-    __unsafe_unretained typeof(self) weak_self = self;
-
-    NSURLSessionDataTask *task = [manager GET:urls parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+    NSURLSessionDataTask *task = [manager GET:recordUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
 
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [_kHUDManager hideAfter:0.1 onHide:nil];

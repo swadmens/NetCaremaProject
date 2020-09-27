@@ -59,15 +59,15 @@
     MyEquipmentsCell *cell = [tableView dequeueReusableCellWithIdentifier:[MyEquipmentsCell getCellIDStr] forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    [cell makeCellData:model];
+    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    [cell makeCellData:model.model];
     
     return cell;
     
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    LivingModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
     
 //    NSDictionary *dic = @{
 //                          @"id":model.equipment_id,
@@ -85,7 +85,7 @@
 //
 //    [TargetEngine controller:self pushToController:PushTargetEquipmentInformation WithTargetId:pushId];
     
-    [self.delegate selectCarmeraModel:model];
+    [self.delegate selectCarmeraModel:model.model];
     [self.navigationController popViewControllerAnimated:YES];
 
 }

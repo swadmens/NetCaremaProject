@@ -67,9 +67,7 @@
     }];
     
     model.equipment_nums = [NSArray arrayWithArray:tempArray];
-    
-    model.liveModelArray = [NSMutableArray array];
-    
+        
     
     return model;
 }

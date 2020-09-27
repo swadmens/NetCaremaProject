@@ -38,17 +38,33 @@
 {
     self.tableView = [WWTableView new];
     self.tableView.backgroundColor = kColorBackgroundColor;
-    self.tableView.rowHeight = 40;
+    self.tableView.rowHeight = 45;
     [self addSubview:self.tableView];
     [self.tableView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    
+    
+    self.dataArray = [NSMutableArray array];
+    for (int i=0; i<25; i++) {
+        [self.dataArray addObject:@" "];
+    }
+    
+    
 }
 
 -(void)makeAllData:(NSArray*)presets withSystemSource:(NSString*)systemSource withDevice_id:(NSString*)device_id
 {
-    [self.dataArray removeAllObjects];
-    self.dataArray = [NSMutableArray arrayWithArray:presets];
+//    [self.dataArray removeAllObjects];
+//    self.dataArray = [NSMutableArray arrayWithArray:presets];
+    
+    [presets enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        PresetsModel *model = obj;
+        NSInteger indexs = [model.index integerValue];
+        if (indexs < 26) {
+            [self.dataArray replaceObjectAtIndex:indexs-1 withObject:model];
+        }
+    }];
     [self.tableView reloadData];
     
     self.systemSource = [NSString stringWithString:systemSource];
@@ -67,9 +83,15 @@
         cell = [tableView dequeueReusableCellWithIdentifier:@"persetCell" forIndexPath:indexPath];
     }
     cell.lineHidden = NO;
-    PresetsModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    cell.textLabel.text = model.name;
-    cell.textLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+    
+    id objs = [self.dataArray objectAtIndex:indexPath.row];
+    if ([objs isKindOfClass:[PresetsModel class]]) {
+        PresetsModel *model = objs;
+        cell.textLabel.text = model.name;
+    }else{
+        cell.textLabel.text = @" ";
+    }
+    cell.textLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
 
     return cell;
 }
@@ -121,9 +143,13 @@
 //        [_kHUDManager showMsgInView:nil withTitle:@"" isSuccess:YES];
         DLog(@"Received: %@", obj);
         //删除数据
-        [self.dataArray removeObjectAtIndex:path.row];
+//        [self.dataArray removeObjectAtIndex:path.row];
+        [self.dataArray replaceObjectAtIndex:path.row withObject:@" "];
         // 刷新
-        [self.tableView deleteRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationLeft];
+//        [self.tableView deleteRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationLeft];
+        [[GCDQueue mainQueue] queueBlock:^{
+            [self.tableView reloadData];
+        }];
 
     };
     sence.errorBlock = ^(NSError *error) {
@@ -137,7 +163,13 @@
 //点击预置点控制
 -(void)carmeraClickPresetWithIndex:(NSInteger)index
 {
-    PresetsModel *dModel = [self.dataArray objectAtIndex:index];
+    
+    id objs = [self.dataArray objectAtIndex:index];
+    if (![objs isKindOfClass:[PresetsModel class]]) {
+        return;
+    }
+    
+    PresetsModel *dModel = objs;
     
     NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/operation/movepreset?index=%@&systemSource=%@&id=%@",dModel.index,self.systemSource,self.device_id];
     

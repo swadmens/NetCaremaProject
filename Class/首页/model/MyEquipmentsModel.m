@@ -7,6 +7,7 @@
 //
 
 #import "MyEquipmentsModel.h"
+#import "LivingModel.h"
 
 @implementation MyEquipmentsModel
 +(MyEquipmentsModel*)makeModelData:(NSDictionary *)dic

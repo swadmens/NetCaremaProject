@@ -282,13 +282,8 @@
     [_kHUDManager showActivityInView:nil withTitle:nil];
     __unsafe_unretained typeof(self) weak_self = self;
 
-    
-
-//    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=GBS&id=%@&date=%@",self.device_id,self.date_value];
-
-    
-    NSString *urls = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.system_Source,@"524508",@"20200918"];
-
+    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.system_Source,self.device_id,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],@"local"];
+ 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -301,7 +296,7 @@
     //添加授权
     [manager.requestSerializer setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
 
-    NSURLSessionDataTask *task = [manager GET:urls parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+    NSURLSessionDataTask *task = [manager GET:recordUrl parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
 
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [_kHUDManager hideAfter:0.1 onHide:nil];

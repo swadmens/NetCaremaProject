@@ -35,7 +35,8 @@
     
     
     CGFloat backHeight = kScreenWidth*0.6;
-    
+    CGFloat preMaxWidth = kScreenWidth - 105;
+
     
     UIView *backView = [UIView new];
     backView.backgroundColor = [UIColor whiteColor];
@@ -56,9 +57,12 @@
     _equipmentName.text = @"设备名称123456";
     _equipmentName.textColor = kColorMainTextColor;
     _equipmentName.font = [UIFont customFontWithSize:kFontSizeSixteen];
+    _equipmentName.preferredMaxLayoutWidth = preMaxWidth;
+    _equipmentName.numberOfLines = 0;
     [backView addSubview:_equipmentName];
     [_equipmentName leftToView:backView withSpace:12];
     [_equipmentName topToView:backView withSpace:12];
+    [_equipmentName addHeight:20];
     
     
     _equipmentStates = [UILabel new];

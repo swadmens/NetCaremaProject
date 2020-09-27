@@ -46,10 +46,13 @@
     _equipmentName = [UILabel new];
     _equipmentName.text = @"设备名称123456";
     _equipmentName.textColor = kColorMainTextColor;
+    _equipmentName.preferredMaxLayoutWidth = kScreenWidth - 105;
+    _equipmentName.numberOfLines = 0;
     _equipmentName.font = [UIFont customFontWithSize:kFontSizeSixteen];
     [backView addSubview:_equipmentName];
     [_equipmentName leftToView:backView withSpace:12];
     [_equipmentName addCenterY:-10 toView:backView];
+    [_equipmentName addHeight:20];
     
     
     _equipmentStates = [UILabel new];

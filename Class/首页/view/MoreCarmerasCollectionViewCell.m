@@ -75,7 +75,7 @@
     [moreBtn addTarget:self action:@selector(moreButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [backView addSubview:moreBtn];
     [moreBtn rightToView:backView];
-    [moreBtn yCenterToView:_titleLabel];
+    [moreBtn bottomToView:backView withSpace:2];
     [moreBtn addWidth:35];
     [moreBtn addHeight:25];
     

@@ -174,7 +174,7 @@
     
     IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
    
-    if (model.liveModelArray.count > 1) {
+    if (model.childDevices_info.count > 1) {
         MoreCarmerasCell *cell = [tableView dequeueReusableCellWithIdentifier:[MoreCarmerasCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
@@ -235,7 +235,7 @@
     
     SuperPlayerViewController *vc = [SuperPlayerViewController new];
     vc.hidesBottomBarWhenPushed = YES;
-    vc.allDataArray = [NSArray arrayWithArray:model.liveModelArray];
+    vc.allDataArray = [NSArray arrayWithArray:model.childDevices_info];
     vc.isLiving = YES;
     vc.title_value = model.equipment_name;
     vc.equiment_id = model.equipment_id;
@@ -374,12 +374,12 @@
         [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             MyEquipmentsModel *model = [MyEquipmentsModel makeModelData:dic];
-            [weak_self getDeviceLivingData:model withIndex:index];
+            [weak_self getDeviceLivingData:model withIndex:index withEquimentIndex:idx];
             [tempArray addObject:model];
         }];
 
         IndexDataModel *model = [self.dataArray objectAtIndex:index];
-        model.childDevices_info = [NSArray arrayWithArray:tempArray];
+        model.childDevices_info = [NSMutableArray arrayWithArray:tempArray];
         [self.dataArray replaceObjectAtIndex:index withObject:model];
 
 
@@ -390,7 +390,7 @@
     }];
 }
 //获取直播数据
--(void)getDeviceLivingData:(MyEquipmentsModel*)meModel withIndex:(NSInteger)index
+-(void)getDeviceLivingData:(MyEquipmentsModel*)meModel withIndex:(NSInteger)index withEquimentIndex:(NSInteger)equiIndex
 {
 
 //    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/live/infos?systemSource=GBS&deviceSerial=%@&channel=1",meModel.deviceSerial];
@@ -403,7 +403,7 @@
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"Received: %@", obj);
-        [weak_self handleDeviceLivingObject:obj withModel:meModel withIndex:index];
+        [weak_self handleDeviceLivingObject:obj withModel:meModel withIndex:index withEquimentIndex:equiIndex];
     };
     sence.errorBlock = ^(NSError *error) {
 
@@ -414,27 +414,26 @@
     [sence sendRequest];
 }
 
-- (void)handleDeviceLivingObject:(id)obj withModel:(MyEquipmentsModel*)meModel withIndex:(NSInteger)index
+- (void)handleDeviceLivingObject:(id)obj withModel:(MyEquipmentsModel*)meModel withIndex:(NSInteger)index withEquimentIndex:(NSInteger)equiIndex
 {
     [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
-//        NSArray *data= [obj objectForKey:@"Streams"];
-//        NSMutableArray *tempArray = [NSMutableArray array];
-//        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:obj];
+
+        NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:obj];
         [dic setObject:meModel.createdAt forKey:@"createdAt"];
         [dic setObject:meModel.equipment_name forKey:@"name"];
         [dic setObject:meModel.equipment_id forKey:@"deviceId"];
         [dic setObject:meModel.system_Source forKey:@"system_Source"];
         [dic setObject:meModel.presets forKey:@"presets"];
-            LivingModel *lvModel = [LivingModel makeModelData:dic];
-//            [tempArray addObject:model];
-//        }];
-        IndexDataModel *model = [self.dataArray objectAtIndex:index];
-        [model.liveModelArray addObject:lvModel];
-        [self.dataArray replaceObjectAtIndex:index withObject:model];
+        LivingModel *lvModel = [LivingModel makeModelData:dic];
 
+        IndexDataModel *model = [self.dataArray objectAtIndex:index];
+        MyEquipmentsModel *eModel = [model.childDevices_info objectAtIndex:equiIndex];
+        eModel.model = lvModel;
+        [model.childDevices_info replaceObjectAtIndex:equiIndex withObject:eModel];
+        [self.dataArray replaceObjectAtIndex:index withObject:model];
+        
         [[GCDQueue mainQueue] queueBlock:^{
             [weak_self.tableView reloadData];
         }];
