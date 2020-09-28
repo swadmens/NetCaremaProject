@@ -96,7 +96,6 @@
 - (void) EZUIPlayer:(EZUIPlayer *)player didPlayFailed:(EZUIError *) error
 {
     [self stop];
-//    self.playBtn.selected = NO;
     
     if ([error.errorString isEqualToString:UE_ERROR_INNER_VERIFYCODE_ERROR])
     {

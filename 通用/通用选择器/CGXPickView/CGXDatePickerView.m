@@ -114,11 +114,24 @@
             _datePicker.maximumDate = maxDate;
         }
         // 把当前时间赋值给 _datePicker
-//        [_datePicker setDate:[NSDate date] animated:YES];
+        [_datePicker setDate:[NSDate date] animated:YES];
+        [_datePicker setDate:[self toDateWithDateString:_selectValue] animated:YES];
+        [_datePicker setValue:[UIColor blackColor] forKey:@"textColor"];
+
+        //runtime改变选中颜色
+        SEL selector = NSSelectorFromString(@"setHighlightsToday:");
+        NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDatePicker instanceMethodSignatureForSelector:selector]];
+        BOOL no = NO;
+        [invocation setSelector:selector];
+        [invocation setArgument:&no atIndex:2];
+        [invocation invokeWithTarget:self.datePicker];
+
+        
 //        [_datePicker setLocale:[NSLocale systemLocale]];
         // 设置时区
 //        [_datePicker setTimeZone:[NSTimeZone localTimeZone]];
 //        // 设置UIDatePicker的显示模式
+        _datePicker.datePickerMode = UIDatePickerModeDate;
         // 滚动改变值的响应事件
         [_datePicker addTarget:self action:@selector(didSelectValueChanged:) forControlEvents:UIControlEventValueChanged];
     }

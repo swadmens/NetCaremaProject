@@ -696,7 +696,7 @@
 }
 
 #pragma LocalVideoDelegate
--(void)selectRowData:(NSInteger)value
+-(void)selectRowData:(CarmeaVideosModel *)model
 {
     if (self.videoing) {
         [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
@@ -707,12 +707,11 @@
     if (self.localVideosArray.count == 0) {
         return;
     }
-    CarmeaVideosModel *model = [self.localVideosArray objectAtIndex:value];
     NSDictionary *dic = @{
-//        @"name":model.video_name,
+                           @"name":model.duration,
                            @"snapUrl":model.picUrl,
                            @"videoUrl":model.url,
-//                           @"createAt":model.start_time,
+                           @"createAt":model.startTime,
                           };
     DemandModel *models = [DemandModel makeModelData:dic];
     self.model = models;
@@ -753,8 +752,9 @@
         return;
     }
     __unsafe_unretained typeof(self) weak_self = self;
+    NSString *recordType = [self.selectModel.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
 
-    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.selectModel.system_Source,carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],@"local"];
+    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.selectModel.system_Source,carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],recordType];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];

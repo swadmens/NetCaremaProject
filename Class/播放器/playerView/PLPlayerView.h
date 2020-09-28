@@ -18,17 +18,6 @@ typedef enum {
     PlayerStatusDH = 2,
 }PlayStatus;
 
-//海康播放器播放状态
-typedef enum {
-    HKPlayerStatusReady = 0,
-    HKPlayerStatusPlaying = 1,
-    HKPlayerStatusPaused = 2,
-    HKPlayerStatusStopped = 3,
-    HKPlayerStatusError = 4,
-    HKPlayerStatusCompleted = 5,
-
-}HKPlayStatus;
-
 
 @protocol PLPlayerViewDelegate <NSObject>
 

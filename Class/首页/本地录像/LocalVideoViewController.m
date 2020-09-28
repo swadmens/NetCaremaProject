@@ -17,11 +17,12 @@
 #import "LocalVideoCell.h"
 #import "CGXPickerView.h"
 #import "RequestSence.h"
+#import "WXZPickDateView.h"
 
 #import "AFHTTPSessionManager.h"
 
 
-@interface LocalVideoViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface LocalVideoViewController ()<UITableViewDelegate,UITableViewDataSource,PickerDateViewDelegate>
 {
     BOOL _isHadFirst; // 是否第一次加载了
 }
@@ -111,8 +112,6 @@
     
     self.selectedIndexSet = [NSMutableIndexSet new];
     self.date_value = [_kDatePicker getCurrentTimes:@"YYYYMMdd"];
-    self.default_date = [_kDatePicker getCurrentTimes:@"YYYY-MM-dd"];
-    
     
     [self startLoadDataRequest];
     
@@ -260,13 +259,13 @@
             SuperPlayerViewController *vc = [SuperPlayerViewController new];
             vc.model = models;
             vc.indexInteger = indexPath.row;
-            vc.isRecordFile = NO;
+            vc.isRecordFile = YES;
             vc.isLiving = NO;
             vc.title_value = model.duration;
             [self.navigationController pushViewController:vc animated:YES];
 
         }else{
-            [self.delegate selectRowData:indexPath.row];
+            [self.delegate selectRowData:model];
             [self.navigationController popViewControllerAnimated:YES];
         }
     }
@@ -282,7 +281,10 @@
     [_kHUDManager showActivityInView:nil withTitle:nil];
     __unsafe_unretained typeof(self) weak_self = self;
 
-    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.system_Source,self.device_id,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],@"local"];
+    NSString *recordType = [self.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
+    
+    
+    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.system_Source,self.device_id,self.date_value,recordType];
  
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
@@ -313,7 +315,7 @@
     [task resume];
     return;
 
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.system_Source,@"524508",@"20200918"];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.system_Source,@"524508",_date_value];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
@@ -497,18 +499,91 @@
     if (self.isEdit) {
         [self exitTheEditStates];
     }
-    [CGXPickerView showDatePickerWithTitle:@"选择日期" DateType:UIDatePickerModeDate DefaultSelValue:self.default_date MinDateStr:nil MaxDateStr:[_kDatePicker getCurrentTimes:@"YYYY-MM-dd"] IsAutoSelect:NO Manager:nil ResultBlock:^(NSString *selectValue) {
-        DLog(@"选择的日期 ==  %@",selectValue);
-        self.default_date = selectValue;
-        self.date_value = [selectValue stringByReplacingOccurrencesOfString:@"-" withString:@""];
-        
-        NSArray *arr = [selectValue componentsSeparatedByString:@"-"];
-        NSString *btn_title = [NSString stringWithFormat:@"%@年%@月%@日",arr[0],arr[1],arr[2]];
-        
-        [self.dateButton setTitle:btn_title forState:UIControlStateNormal];
-        
-        [self startLoadDataRequest];
-    }];
+//    [CGXPickerView showDatePickerWithTitle:@"选择日期" DateType:UIDatePickerModeDate DefaultSelValue:self.default_date MinDateStr:nil MaxDateStr:[_kDatePicker getCurrentTimes:@"YYYY-MM-dd"] IsAutoSelect:NO Manager:nil ResultBlock:^(NSString *selectValue) {
+//        DLog(@"选择的日期 ==  %@",selectValue);
+//        self.default_date = selectValue;
+//        self.date_value = [selectValue stringByReplacingOccurrencesOfString:@"-" withString:@""];
+//
+//        NSArray *arr = [selectValue componentsSeparatedByString:@"-"];
+//        NSString *btn_title = [NSString stringWithFormat:@"%@年%@月%@日",arr[0],arr[1],arr[2]];
+//
+//        [self.dateButton setTitle:btn_title forState:UIControlStateNormal];
+//
+//        [self startLoadDataRequest];
+//    }];
+//
+    
+    NSString *currentTime = [_kDatePicker getCurrentTimes:@"YYYY-MM-dd"];
+    
+    if ([WWPublicMethod isStringEmptyText:self.default_date]) {
+        currentTime = self.default_date;
+    }
+    
+    NSArray *arr = [currentTime componentsSeparatedByString:@"-"];
+    WXZPickDateView *pickerDate = [[WXZPickDateView alloc]init];
+    
+    [pickerDate setIsAddYetSelect:NO];//是否显示至今选项
+    [pickerDate setIsShowDay:YES];//是否显示日信息
+    [pickerDate setDefaultTSelectYear:[arr[0] integerValue] defaultSelectMonth:[arr[1] integerValue] defaultSelectDay:[arr[2] integerValue]];//设定默认显示的日期
+    [pickerDate setDelegate:self];
+    [pickerDate show];
+    
+}
+-(void)pickerDateView:(WXZBasePickView *)pickerDateView selectYear:(NSInteger)year selectMonth:(NSInteger)month selectDay:(NSInteger)day{
+    NSLog(@"选择的日期是：%ld %ld %ld",year,month,day);
+//    NSCalendar *gregorian = [[NSCalendar alloc]
+//                             initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+//    // 获取当前日期
+//    NSDate* dt = [NSDate date];
+//    // 指定获取指定年、月、日、时、分、秒的信息
+//    unsigned unitFlags = NSCalendarUnitYear |
+//    NSCalendarUnitMonth |  NSCalendarUnitDay |
+//    NSCalendarUnitHour |  NSCalendarUnitMinute |
+//    NSCalendarUnitSecond | NSCalendarUnitWeekday;
+//    // 获取不同时间字段的信息
+//    NSDateComponents* comp = [gregorian components: unitFlags
+//                                          fromDate:dt];
+//
+//    if (year > comp.year && month > comp.month && day > comp.day) {
+//        return;
+//    }
+    NSString *monthValue;
+    if (month < 10) {
+        monthValue = [NSString stringWithFormat:@"0%ld",month];
+    }else{
+        monthValue = [NSString stringWithFormat:@"%ld",month];
+    }
+    
+    NSString *dayValue;
+    if (day < 10) {
+        dayValue = [NSString stringWithFormat:@"0%ld",day];
+    }else{
+        dayValue = [NSString stringWithFormat:@"%ld",day];
+    }
+    
+    
+    
+    NSString *currentTime = [_kDatePicker getCurrentTimes:@"YYYY-MM-dd"];
+    NSString *chooseTime = [NSString stringWithFormat:@"%ld-%@-%@",year,monthValue,dayValue];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSDate *currentDate = [dateFormatter dateFromString:currentTime];
+    NSDate *chooseDate = [dateFormatter dateFromString:chooseTime];
+    
+    if ([chooseDate compare:currentDate] == NSOrderedDescending) {
+        [_kHUDManager showMsgInView:nil withTitle:@"时间选择错误！" isSuccess:YES];
+        return;
+    }
+      
+    self.date_value = [NSString stringWithFormat:@"%ld%@%@",year,monthValue,dayValue];
+    self.default_date = [NSString stringWithFormat:@"%ld-%@-%@",year,monthValue,dayValue];
+    NSString *btn_title = [NSString stringWithFormat:@"%ld年%@月%@日",year,monthValue,dayValue];
+    [self.dateButton setTitle:btn_title forState:UIControlStateNormal];
+    [self startLoadDataRequest];
+    
+    [self.dateButton setTitle:btn_title forState:UIControlStateNormal];
+
     
 }
 /*

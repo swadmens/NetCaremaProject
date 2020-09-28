@@ -10,9 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class CarmeaVideosModel;
 @protocol LocalVideoDelegate <NSObject>
 
--(void)selectRowData:(NSInteger)value;
+-(void)selectRowData:(CarmeaVideosModel*)model;
 
 @end
 

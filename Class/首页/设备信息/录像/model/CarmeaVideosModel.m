@@ -13,14 +13,10 @@
 {
     CarmeaVideosModel *model = [CarmeaVideosModel new];
     
-//    model.video_name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
-//    model.hls = [NSString stringWithFormat:@"%@",[dic objectForKey:@"hls"]];
-//    model.important = [NSString stringWithFormat:@"%@",[dic objectForKey:@"important"]];
-//    model.snap = [NSString stringWithFormat:@"%@",[dic objectForKey:@"snap"]];
-//    model.start_time = [NSString stringWithFormat:@"%@",[dic objectForKey:@"startAt"]];
-//    model.time = [NSString stringWithFormat:@"%@",[dic objectForKey:@"time"]];
-     
-    model.duration = [NSString stringWithFormat:@"%@",[dic objectForKey:@"duration"]];
+    model.video_name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    model.appKey = [NSString stringWithFormat:@"%@",[dic objectForKey:@"appKey"]];
+    model.endTime = [NSString stringWithFormat:@"%@",[dic objectForKey:@"endTime"]];
+    model.startTime = [NSString stringWithFormat:@"%@",[dic objectForKey:@"startTime"]];
     model.duration = [NSString stringWithFormat:@"%@",[dic objectForKey:@"duration"]];
     model.picUrl = [NSString stringWithFormat:@"%@",[dic objectForKey:@"picUrl"]];
     model.size = [NSString stringWithFormat:@"%@",[dic objectForKey:@"size"]];

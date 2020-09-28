@@ -13,6 +13,7 @@
 #import <UIImageView+YYWebImage.h>
 #import <UIImageView+WebCache.h>
 #import <EZUIKit/EZUIPlayer.h>
+#import <EZUIKit/EZUIError.h>
 
 
 @class PLControlView;
@@ -75,9 +76,7 @@ EZUIPlayerDelegate
 // 适配iPhone X
 @property (nonatomic, assign) CGFloat edgeSpace;
 
-
 @property (nonatomic,strong) EZUIPlayer *ePlayer;
-@property (nonatomic,assign) HKPlayStatus hkPlaySatus;
 
 @end
 
@@ -374,6 +373,23 @@ EZUIPlayerDelegate
         self.playTimeLabel.text = [NSString stringWithFormat:@"%d:%02d:%02d", hour, min, sec];
         self.bottomPlayProgreeeView.progress = self.slider.value / CMTimeGetSeconds(self.player.totalDuration);
     }
+    
+    
+//    self.slider.value = CMTimeGetSeconds(self.ePlayer.);
+//    if (CMTimeGetSeconds(self.player.totalDuration)) {
+//        int duration = self.slider.value + .5;
+//        int hour = duration / 3600;
+//        int min  = (duration % 3600) / 60;
+//        int sec  = duration % 60;
+//        self.playTimeLabel.text = [NSString stringWithFormat:@"%d:%02d:%02d", hour, min, sec];
+//        self.bottomPlayProgreeeView.progress = self.slider.value / CMTimeGetSeconds(self.player.totalDuration);
+//    }
+    
+    
+    
+    
+    
+    
 }
 
 - (void)panGesture:(UIPanGestureRecognizer *)panGesture {
@@ -440,21 +456,15 @@ EZUIPlayerDelegate
         case PlayerStatusHk:
             
             // 如果还木有初始化，直接初始化播放
-            if (self.isNeedSetupPlayer || self.hkPlaySatus == HKPlayerStatusStopped) {
+            if (self.isNeedSetupPlayer) {
                 [self play];
                 return;
             }
-
-            if (self.hkPlaySatus == HKPlayerStatusPaused) {
-                [self resume];
-                return;
-            }
-            if (self.hkPlaySatus == HKPlayerStatusPlaying) {
-                if (self.bottomBarView.frame.origin.y >= self.bounds.size.height) {
-                    [self showBar];
-                } else {
-                    [self hideBar];
-                }
+            
+            if (self.bottomBarView.frame.origin.y >= self.bounds.size.height) {
+                [self showBar];
+            } else {
+                [self hideBar];
             }
    
             break;
@@ -469,11 +479,9 @@ EZUIPlayerDelegate
 }
 
 - (void)hideBar {
-    
-    if (PLPlayerStatusPlaying != self.player.status) return;
 
-    if (self.hkPlaySatus != HKPlayerStatusPlaying) {
-        return;
+    if (self.playType == PlayerStatusGBS) {
+        if (PLPlayerStatusPlaying != self.player.status) return;
     }
     
     
@@ -534,17 +542,17 @@ EZUIPlayerDelegate
 //        [self.player stop];
 //    }
     
-//    [self hideBottomBar];
-//    [self hideBottomProgressView];
-//    self.centerPauseButton.hidden = !self.isLiving;
-//    
-//    self.isFullScreen = NO;
+    [self hideBottomBar];
+    [self hideBottomProgressView];
+    self.centerPauseButton.hidden = !self.isLiving;
+    
+    self.isFullScreen = NO;
     [self transformWithOrientation:UIDeviceOrientationPortrait];
 }
 
 - (void)clickEnterFullScreenButton {
 
-//    self.isFullScreen = YES;
+    self.isFullScreen = YES;
     if (UIDeviceOrientationLandscapeRight == [[UIDevice currentDevice]orientation]) {
         [self transformWithOrientation:UIDeviceOrientationLandscapeRight];
     } else {
@@ -607,15 +615,15 @@ EZUIPlayerDelegate
     
     self.snapshotButton.hidden = YES;
 
-    if (PLPlayerStatusPlaying == self.player.status ||
-        PLPlayerStatusPaused == self.player.status ||
-        PLPlayerStatusCaching == self.player.status) {
-        [self showBottomProgressView];
-    }
+//    if (PLPlayerStatusPlaying == self.player.status ||
+//        PLPlayerStatusPaused == self.player.status ||
+//        PLPlayerStatusCaching == self.player.status) {
+//        [self showBottomProgressView];
+//    }
     
-    if (self.hkPlaySatus == HKPlayerStatusPlaying || self.hkPlaySatus == HKPlayerStatusPaused) {
-        [self showBottomProgressView];
-    }
+//    if (self.playType != PlayerStatusGBS) {
+//        [self showBottomProgressView];
+//    }
     
 }
 
@@ -674,6 +682,14 @@ EZUIPlayerDelegate
                make.size.equalTo(CGSizeMake(64, 64));
            }];
            
+           CGFloat height = kScreenWidth * 0.68 + 0.5;
+           [self.ePlayer setPreviewFrame:CGRectMake(0, 0, kScreenWidth, height)];
+           [self.ePlayer.previewView mas_remakeConstraints:^(MASConstraintMaker *make) {
+               make.center.equalTo(self);
+               make.size.equalTo(CGSizeMake(kScreenWidth, height));
+           }];
+          
+           
            if (!isFirst) {
                [self hideTopBar];
                [self hideControlView];
@@ -690,7 +706,6 @@ EZUIPlayerDelegate
                
            }
            
-//           self.ePlayer.previewView.frame = self.bounds;
            
            [UIView animateWithDuration:.3 animations:^{
                self.transform = CGAffineTransformMakeRotation(0);
@@ -723,15 +738,18 @@ EZUIPlayerDelegate
                    make.size.equalTo(CGSizeMake(0, 0));
                }];
                
+               [self.ePlayer setPreviewFrame:CGRectMake(0, 0, kScreenHeight, kScreenWidth)];
+               [self.ePlayer.previewView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                   make.center.equalTo(self);
+                   make.size.equalTo(CGSizeMake(kScreenHeight, kScreenWidth));
+               }];
+               
                [self doConstraintAnimation];
            }
            
            [UIView animateWithDuration:duration animations:^{
                self.transform = UIDeviceOrientationLandscapeLeft == or ? CGAffineTransformMakeRotation(M_PI/2) : CGAffineTransformMakeRotation(3*M_PI/2);
            }];
-           
-//           self.ePlayer.previewView.frame = self.bounds;
-
            
            if (UIDeviceOrientationUnknown != self.deviceOrientation) {
                [self.delegate playerViewEnterFullScreen:self];
@@ -764,14 +782,17 @@ EZUIPlayerDelegate
 }
 
 - (void)clickPlayButton {
-    
-//    || self.hkPlaySatus == HKPlayerStatusPaused
-    
-    if (PLPlayerStatusPaused == self.player.status || self.hkPlaySatus == HKPlayerStatusPaused) {
+        
+    if (PLPlayerStatusPaused == self.player.status) {
         [self resume];
     } else {
         [self play];
     }
+    
+//    if (<#condition#>) {
+//        <#statements#>
+//    }
+    
 }
 
 - (void)setupPlayer {
@@ -786,8 +807,7 @@ EZUIPlayerDelegate
         }
         return;
     }
-    
-    
+ 
     self.thumbImageView.hidden = NO;
     [self.thumbImageView yy_setImageWithURL:[NSURL URLWithString:_media.snapUrl] options:YYWebImageOptionProgressive];
     
@@ -829,7 +849,7 @@ EZUIPlayerDelegate
             make.edges.equalTo(self);
         }];
         
-//        _slider.hidden = self.isLiving;
+        _slider.hidden = self.isLiving;
 //        _bufferingView.hidden = _isLiving;
     //    _playTimeLabel.hidden = self.isLiving && !_isFullScreen;
     //    _durationLabel.hidden = self.isLiving && !_isFullScreen;
@@ -840,18 +860,29 @@ EZUIPlayerDelegate
         
         self.isLiving = NO;
         
-//        NSString *str = @"ezopen://open.ys7.com/E16543953/1.rec?begin=20200926000000&end=20200927235959";
+        NSString *str = @"ezopen://open.ys7.com/E16543953/1.rec?begin=20200927000000&end=20200928235959";
                 
-        self.ePlayer = [EZUIPlayer createPlayerWithUrl:_media.videoUrl];
+        CGFloat height = kScreenWidth * 0.68 + 0.5;
+
+
+//        UIView *showView = [UIView new];
+//        showView.backgroundColor = [UIColor redColor];
+//        [self insertSubview:showView atIndex:0];
+//        showView.frame = self.bounds;
+//        [showView mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.edges.equalTo(self);
+//        }];
+//
+        self.ePlayer = [EZUIPlayer createPlayerWithUrl:str];
         self.ePlayer.mDelegate = self;
        //添加预览视图到当前界面
         self.ePlayer.previewView.contentMode = UIViewContentModeScaleAspectFit;
-//        [self addSubview:self.ePlayer.previewView];
         [self insertSubview:self.ePlayer.previewView atIndex:0];
-//        self.ePlayer.previewView.frame = CGRectMake(0, 0,CGRectGetWidth(self.ePlayer.previewView.frame),CGRectGetHeight(self.ePlayer.previewView.frame));
-        self.ePlayer.previewView.frame = self.layer.bounds;
+        self.ePlayer.previewView.frame = self.bounds;
         [self.ePlayer.previewView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self);
+//            make.edges.equalTo(self);
+            make.center.equalTo(self);
+            make.size.equalTo(CGSizeMake(kScreenWidth, height));
         }];
 
     }else{
@@ -886,72 +917,69 @@ EZUIPlayerDelegate
 
 - (void)play {
     
-    if (self.isNeedSetupPlayer) {
-        [self setupPlayer];
-        self.isNeedSetupPlayer = NO;
-    }
-    self.isStop = NO;
-    
-    [self.delegate playerViewWillPlay:self];
-    [self addFullStreenNotify];
-    [self addTimer];
-    [self resetButton:YES];
-    
-    if (!(PLPlayerStatusReady == self.player.status ||
-        PLPlayerStatusOpen == self.player.status ||
-        PLPlayerStatusCaching == self.player.status ||
-        PLPlayerStatusPlaying == self.player.status ||
-        PLPlayerStatusPreparing == self.player.status)
-        ) {
-        NSDate *date = [NSDate date];
-        [self.player play];
-        NSLog(@"play 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
-    }
-    
 //    if (self.isNeedSetupPlayer) {
 //        [self setupPlayer];
 //        self.isNeedSetupPlayer = NO;
 //    }
 //    self.isStop = NO;
-//    self.isStartPlay = YES;
 //
 //    [self.delegate playerViewWillPlay:self];
 //    [self addFullStreenNotify];
 //    [self addTimer];
 //    [self resetButton:YES];
 //
-//    switch (_playType) {
-//        case PlayerStatusGBS:
-//            if (!(PLPlayerStatusReady == self.player.status ||
-//                PLPlayerStatusOpen == self.player.status ||
-//                PLPlayerStatusCaching == self.player.status ||
-//                PLPlayerStatusPlaying == self.player.status ||
-//                PLPlayerStatusPreparing == self.player.status)
-//                ) {
-//                NSDate *date = [NSDate date];
-//                [self.player play];
-//                NSLog(@"play 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
-//            }
-//            break;
-//        case PlayerStatusHk:
-//
-//            if (self.hkPlaySatus == HKPlayerStatusPaused) {
-//                [self.ePlayer resumePlay];
-//            }
-//
-//            break;
-//        case PlayerStatusDH:
-//            break;
-//
-//        default:
-//            break;
+//    if (!(PLPlayerStatusReady == self.player.status ||
+//        PLPlayerStatusOpen == self.player.status ||
+//        PLPlayerStatusCaching == self.player.status ||
+//        PLPlayerStatusPlaying == self.player.status ||
+//        PLPlayerStatusPreparing == self.player.status)
+//        ) {
+//        NSDate *date = [NSDate date];
+//        [self.player play];
+//        NSLog(@"play 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
 //    }
+    
+    if (self.isNeedSetupPlayer) {
+        [self setupPlayer];
+        self.isNeedSetupPlayer = NO;
+    }
+    self.isStop = NO;
+    self.isStartPlay = YES;
+
+    [self.delegate playerViewWillPlay:self];
+    [self addFullStreenNotify];
+    [self addTimer];
+    [self resetButton:YES];
+
+    switch (_playType) {
+        case PlayerStatusGBS:
+            if (!(PLPlayerStatusReady == self.player.status ||
+                PLPlayerStatusOpen == self.player.status ||
+                PLPlayerStatusCaching == self.player.status ||
+                PLPlayerStatusPlaying == self.player.status ||
+                PLPlayerStatusPreparing == self.player.status)
+                ) {
+                NSDate *date = [NSDate date];
+                [self.player play];
+                NSLog(@"play 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
+            }
+            break;
+        case PlayerStatusHk:
+
+            [self.ePlayer startPlay];
+
+            break;
+        case PlayerStatusDH:
+            break;
+
+        default:
+            break;
+    }
    
 }
 
 - (void)pause {
     
-    self.hkPlaySatus = HKPlayerStatusPaused;
     [self.player pause];
     [self.ePlayer pausePlay];
     [self resetButton:NO];
@@ -960,7 +988,6 @@ EZUIPlayerDelegate
 - (void)resume {
     
     [self.delegate playerViewWillPlay:self];
-    self.hkPlaySatus = HKPlayerStatusPlaying;
     [self.player resume];
     [self.ePlayer resumePlay];
     [self resetButton:YES];
@@ -974,7 +1001,6 @@ EZUIPlayerDelegate
     }
     [self.player stop];
     
-    self.hkPlaySatus = HKPlayerStatusStopped;
     [self.ePlayer stopPlay];
     
     if (date) {
@@ -1262,18 +1288,39 @@ EZUIPlayerDelegate
  @param error 错误码对象
  */
 - (void) EZUIPlayer:(EZUIPlayer *) player didPlayFailed:(EZUIError *) error
-{
-    DLog(@"error == %@",error);
-    
+{    
     [self stop];
     if (self.isFullScreen) {
         [self clickExitFullScreenButton];
     }
     
-//    if (self.isLocalVideo) {
-//        [self.delegate theLocalFileDoesNotExist:self];
-//        return;
+//    if ([error.errorString isEqualToString:UE_ERROR_INNER_VERIFYCODE_ERROR])
+//    {
+//        [_kHUDManager showMsgInView:nil withTitle:@"验证码错误" isSuccess:YES];
 //    }
+//    else if ([error.errorString isEqualToString:UE_ERROR_TRANSF_DEVICE_OFFLINE])
+//    {
+//        [_kHUDManager showMsgInView:nil withTitle:@"设备不在线" isSuccess:YES];
+//    }
+//    else if ([error.errorString isEqualToString:UE_ERROR_CAMERA_NOT_EXIST] ||
+//             [error.errorString isEqualToString:UE_ERROR_DEVICE_NOT_EXIST])
+//    {
+//        [_kHUDManager showMsgInView:nil withTitle:@"通道不存在" isSuccess:YES];
+//    }
+//    else if ([error.errorString isEqualToString:UE_ERROR_INNER_STREAM_TIMEOUT])
+//    {
+//        [_kHUDManager showMsgInView:nil withTitle:@"连接超时" isSuccess:YES];
+//    }
+//    else if ([error.errorString isEqualToString:UE_ERROR_CAS_MSG_PU_NO_RESOURCE])
+//    {
+//        [_kHUDManager showMsgInView:nil withTitle:@"设备连接数过大" isSuccess:YES];
+//    }
+//    else
+//    {
+//        [_kHUDManager showMsgInView:nil withTitle:@"播放失败" isSuccess:YES];
+//    }
+//
+//    NSLog(@"play error:%@(%ld)",error.errorString,error.internalErrorCode);
 }
 
 /**
@@ -1284,7 +1331,6 @@ EZUIPlayerDelegate
 - (void) EZUIPlayerPlaySucceed:(EZUIPlayer *) player
 {
     [self hideFullLoading];
-    self.hkPlaySatus = HKPlayerStatusPlaying;
     if (self.bottomBarView.frame.origin.y >= self.bounds.size.height) {
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideBar) object:nil];
         [self performSelector:@selector(hideBar) withObject:nil afterDelay:3];
@@ -1301,10 +1347,10 @@ EZUIPlayerDelegate
 - (void) EZUIPlayer:(EZUIPlayer *)player previewWidth:(CGFloat)pWidth previewHeight:(CGFloat)pHeight
 {
     CGFloat ratio = pWidth/pHeight;
-    
+
     CGFloat destWidth = CGRectGetWidth(self.bounds);
     CGFloat destHeight = destWidth/ratio;
-    
+
     [player setPreviewFrame:CGRectMake(0, CGRectGetMinY(player.previewView.frame), destWidth, destHeight)];
 }
 
@@ -1318,7 +1364,6 @@ EZUIPlayerDelegate
     {
         [self showFullLoading];
         self.centerPauseButton.hidden = YES;
-        self.hkPlaySatus = HKPlayerStatusReady;
         [self.ePlayer startPlay];
     }
 }

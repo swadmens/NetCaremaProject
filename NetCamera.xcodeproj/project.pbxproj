@@ -184,15 +184,6 @@
 		4A580F5D24075F2D00E82675 /* WWCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CD724075F2B00E82675 /* WWCollectionViewCell.m */; };
 		4A580F5E24075F2D00E82675 /* TCNewAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CDA24075F2B00E82675 /* TCNewAlertView.m */; };
 		4A580F5F24075F2D00E82675 /* TCAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CDB24075F2B00E82675 /* TCAlertView.m */; };
-		4A580F6124075F2D00E82675 /* CGXPickerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CE424075F2B00E82675 /* CGXPickerViewManager.m */; };
-		4A580F6224075F2D00E82675 /* NSDate+CGXPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CE924075F2B00E82675 /* NSDate+CGXPicker.m */; };
-		4A580F6324075F2D00E82675 /* CGXAddressPcikerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CEA24075F2B00E82675 /* CGXAddressPcikerView.m */; };
-		4A580F6424075F2D00E82675 /* CGXPickerView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4A580CEB24075F2B00E82675 /* CGXPickerView.bundle */; };
-		4A580F6524075F2D00E82675 /* CGXDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CED24075F2B00E82675 /* CGXDatePickerView.m */; };
-		4A580F6624075F2D00E82675 /* CGXPickerUIBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CEE24075F2B00E82675 /* CGXPickerUIBaseView.m */; };
-		4A580F6724075F2D00E82675 /* CGXAddressModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CEF24075F2B00E82675 /* CGXAddressModel.m */; };
-		4A580F6824075F2D00E82675 /* CGXStringPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CF124075F2B00E82675 /* CGXStringPickerView.m */; };
-		4A580F6924075F2D00E82675 /* CGXPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CF224075F2B00E82675 /* CGXPickerView.m */; };
 		4A580F6A24075F2D00E82675 /* JSBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CF524075F2B00E82675 /* JSBadgeView.m */; };
 		4A580F6B24075F2D00E82675 /* P_Badge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CF824075F2B00E82675 /* P_Badge.m */; };
 		4A580F6C24075F2D00E82675 /* LGXBadgeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580CF924075F2B00E82675 /* LGXBadgeManager.m */; };
@@ -464,6 +455,21 @@
 		4A8D97E2251AE4C900295CAC /* PresetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D97E1251AE4C900295CAC /* PresetView.m */; };
 		4A8D9811252078EE00295CAC /* HikPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D9810252078ED00295CAC /* HikPlayerView.m */; };
 		4A8D987725207E5F00295CAC /* EZPlaybackProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D987525207E5F00295CAC /* EZPlaybackProgressBar.m */; };
+		4A8D98D02521746200295CAC /* area.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4A8D98C62521746100295CAC /* area.plist */; };
+		4A8D98D12521746200295CAC /* WXZBasePickView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98CA2521746100295CAC /* WXZBasePickView.m */; };
+		4A8D98D22521746200295CAC /* WXZPickTimeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98CB2521746100295CAC /* WXZPickTimeView.m */; };
+		4A8D98D32521746200295CAC /* WXZCustomPickView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98CC2521746100295CAC /* WXZCustomPickView.m */; };
+		4A8D98D42521746200295CAC /* WXZPickDateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98CD2521746100295CAC /* WXZPickDateView.m */; };
+		4A8D98D52521746200295CAC /* WXZPickCityView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98CF2521746100295CAC /* WXZPickCityView.m */; };
+		4A8D98EA25217C2800295CAC /* CGXPickerViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98DB25217C2700295CAC /* CGXPickerViewManager.m */; };
+		4A8D98EB25217C2800295CAC /* NSDate+CGXPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E025217C2700295CAC /* NSDate+CGXPicker.m */; };
+		4A8D98EC25217C2800295CAC /* CGXAddressPcikerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E125217C2700295CAC /* CGXAddressPcikerView.m */; };
+		4A8D98ED25217C2800295CAC /* CGXPickerView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4A8D98E225217C2700295CAC /* CGXPickerView.bundle */; };
+		4A8D98EE25217C2800295CAC /* CGXDatePickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E425217C2700295CAC /* CGXDatePickerView.m */; };
+		4A8D98EF25217C2800295CAC /* CGXPickerUIBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E525217C2700295CAC /* CGXPickerUIBaseView.m */; };
+		4A8D98F025217C2800295CAC /* CGXAddressModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E625217C2700295CAC /* CGXAddressModel.m */; };
+		4A8D98F125217C2800295CAC /* CGXStringPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E825217C2700295CAC /* CGXStringPickerView.m */; };
+		4A8D98F225217C2800295CAC /* CGXPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E925217C2700295CAC /* CGXPickerView.m */; };
 		4AA2EE622407A0EE00C4F5DA /* DemandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE612407A0EE00C4F5DA /* DemandViewController.m */; };
 		4AA2EE652407A10000C4F5DA /* LiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE642407A10000C4F5DA /* LiveViewController.m */; };
 		4AA77B032518502E00C2D427 /* PLPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA77B012518502E00C2D427 /* PLPlayerView.m */; };
@@ -1003,23 +1009,6 @@
 		4A580CDA24075F2B00E82675 /* TCNewAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCNewAlertView.m; sourceTree = "<group>"; };
 		4A580CDB24075F2B00E82675 /* TCAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TCAlertView.m; sourceTree = "<group>"; };
 		4A580CE024075F2B00E82675 /* TCNewAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCNewAlertView.h; sourceTree = "<group>"; };
-		4A580CE224075F2B00E82675 /* CGXAddressPcikerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXAddressPcikerView.h; sourceTree = "<group>"; };
-		4A580CE324075F2B00E82675 /* CGXDatePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXDatePickerView.h; sourceTree = "<group>"; };
-		4A580CE424075F2B00E82675 /* CGXPickerViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXPickerViewManager.m; sourceTree = "<group>"; };
-		4A580CE524075F2B00E82675 /* CGXAddressModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXAddressModel.h; sourceTree = "<group>"; };
-		4A580CE624075F2B00E82675 /* CGXPickerUIBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXPickerUIBaseView.h; sourceTree = "<group>"; };
-		4A580CE724075F2B00E82675 /* CGXPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXPickerView.h; sourceTree = "<group>"; };
-		4A580CE824075F2B00E82675 /* CGXStringPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXStringPickerView.h; sourceTree = "<group>"; };
-		4A580CE924075F2B00E82675 /* NSDate+CGXPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+CGXPicker.m"; sourceTree = "<group>"; };
-		4A580CEA24075F2B00E82675 /* CGXAddressPcikerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXAddressPcikerView.m; sourceTree = "<group>"; };
-		4A580CEB24075F2B00E82675 /* CGXPickerView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CGXPickerView.bundle; sourceTree = "<group>"; };
-		4A580CEC24075F2B00E82675 /* CGXPickerViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXPickerViewManager.h; sourceTree = "<group>"; };
-		4A580CED24075F2B00E82675 /* CGXDatePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXDatePickerView.m; sourceTree = "<group>"; };
-		4A580CEE24075F2B00E82675 /* CGXPickerUIBaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXPickerUIBaseView.m; sourceTree = "<group>"; };
-		4A580CEF24075F2B00E82675 /* CGXAddressModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXAddressModel.m; sourceTree = "<group>"; };
-		4A580CF024075F2B00E82675 /* NSDate+CGXPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CGXPicker.h"; sourceTree = "<group>"; };
-		4A580CF124075F2B00E82675 /* CGXStringPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXStringPickerView.m; sourceTree = "<group>"; };
-		4A580CF224075F2B00E82675 /* CGXPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXPickerView.m; sourceTree = "<group>"; };
 		4A580CF524075F2B00E82675 /* JSBadgeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSBadgeView.m; sourceTree = "<group>"; };
 		4A580CF624075F2B00E82675 /* JSBadgeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSBadgeView.h; sourceTree = "<group>"; };
 		4A580CF724075F2B00E82675 /* LGXBadgeRequestSence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGXBadgeRequestSence.h; sourceTree = "<group>"; };
@@ -1535,6 +1524,34 @@
 		4A8D9810252078ED00295CAC /* HikPlayerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HikPlayerView.m; sourceTree = "<group>"; };
 		4A8D987225207E5E00295CAC /* EZPlaybackProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EZPlaybackProgressBar.h; sourceTree = "<group>"; };
 		4A8D987525207E5F00295CAC /* EZPlaybackProgressBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EZPlaybackProgressBar.m; sourceTree = "<group>"; };
+		4A8D98C52521746100295CAC /* WXZCustomPickView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXZCustomPickView.h; sourceTree = "<group>"; };
+		4A8D98C62521746100295CAC /* area.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = area.plist; sourceTree = "<group>"; };
+		4A8D98C72521746100295CAC /* WXZPickTimeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXZPickTimeView.h; sourceTree = "<group>"; };
+		4A8D98C82521746100295CAC /* WXZPickDateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXZPickDateView.h; sourceTree = "<group>"; };
+		4A8D98C92521746100295CAC /* WXZPickCityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXZPickCityView.h; sourceTree = "<group>"; };
+		4A8D98CA2521746100295CAC /* WXZBasePickView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXZBasePickView.m; sourceTree = "<group>"; };
+		4A8D98CB2521746100295CAC /* WXZPickTimeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXZPickTimeView.m; sourceTree = "<group>"; };
+		4A8D98CC2521746100295CAC /* WXZCustomPickView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXZCustomPickView.m; sourceTree = "<group>"; };
+		4A8D98CD2521746100295CAC /* WXZPickDateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXZPickDateView.m; sourceTree = "<group>"; };
+		4A8D98CE2521746100295CAC /* WXZBasePickView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXZBasePickView.h; sourceTree = "<group>"; };
+		4A8D98CF2521746100295CAC /* WXZPickCityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXZPickCityView.m; sourceTree = "<group>"; };
+		4A8D98D925217C2700295CAC /* CGXAddressPcikerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXAddressPcikerView.h; sourceTree = "<group>"; };
+		4A8D98DA25217C2700295CAC /* CGXDatePickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXDatePickerView.h; sourceTree = "<group>"; };
+		4A8D98DB25217C2700295CAC /* CGXPickerViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXPickerViewManager.m; sourceTree = "<group>"; };
+		4A8D98DC25217C2700295CAC /* CGXAddressModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXAddressModel.h; sourceTree = "<group>"; };
+		4A8D98DD25217C2700295CAC /* CGXPickerUIBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXPickerUIBaseView.h; sourceTree = "<group>"; };
+		4A8D98DE25217C2700295CAC /* CGXPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXPickerView.h; sourceTree = "<group>"; };
+		4A8D98DF25217C2700295CAC /* CGXStringPickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXStringPickerView.h; sourceTree = "<group>"; };
+		4A8D98E025217C2700295CAC /* NSDate+CGXPicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+CGXPicker.m"; sourceTree = "<group>"; };
+		4A8D98E125217C2700295CAC /* CGXAddressPcikerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXAddressPcikerView.m; sourceTree = "<group>"; };
+		4A8D98E225217C2700295CAC /* CGXPickerView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = CGXPickerView.bundle; sourceTree = "<group>"; };
+		4A8D98E325217C2700295CAC /* CGXPickerViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGXPickerViewManager.h; sourceTree = "<group>"; };
+		4A8D98E425217C2700295CAC /* CGXDatePickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXDatePickerView.m; sourceTree = "<group>"; };
+		4A8D98E525217C2700295CAC /* CGXPickerUIBaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXPickerUIBaseView.m; sourceTree = "<group>"; };
+		4A8D98E625217C2700295CAC /* CGXAddressModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXAddressModel.m; sourceTree = "<group>"; };
+		4A8D98E725217C2700295CAC /* NSDate+CGXPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CGXPicker.h"; sourceTree = "<group>"; };
+		4A8D98E825217C2700295CAC /* CGXStringPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXStringPickerView.m; sourceTree = "<group>"; };
+		4A8D98E925217C2700295CAC /* CGXPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXPickerView.m; sourceTree = "<group>"; };
 		4AA2EE602407A0EE00C4F5DA /* DemandViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemandViewController.h; sourceTree = "<group>"; };
 		4AA2EE612407A0EE00C4F5DA /* DemandViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemandViewController.m; sourceTree = "<group>"; };
 		4AA2EE632407A10000C4F5DA /* LiveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveViewController.h; sourceTree = "<group>"; };
@@ -2732,23 +2749,8 @@
 		4A580CE124075F2B00E82675 /* 通用选择器 */ = {
 			isa = PBXGroup;
 			children = (
-				4A580CE524075F2B00E82675 /* CGXAddressModel.h */,
-				4A580CEF24075F2B00E82675 /* CGXAddressModel.m */,
-				4A580CE224075F2B00E82675 /* CGXAddressPcikerView.h */,
-				4A580CEA24075F2B00E82675 /* CGXAddressPcikerView.m */,
-				4A580CE324075F2B00E82675 /* CGXDatePickerView.h */,
-				4A580CED24075F2B00E82675 /* CGXDatePickerView.m */,
-				4A580CE624075F2B00E82675 /* CGXPickerUIBaseView.h */,
-				4A580CEE24075F2B00E82675 /* CGXPickerUIBaseView.m */,
-				4A580CEB24075F2B00E82675 /* CGXPickerView.bundle */,
-				4A580CE724075F2B00E82675 /* CGXPickerView.h */,
-				4A580CF224075F2B00E82675 /* CGXPickerView.m */,
-				4A580CEC24075F2B00E82675 /* CGXPickerViewManager.h */,
-				4A580CE424075F2B00E82675 /* CGXPickerViewManager.m */,
-				4A580CE824075F2B00E82675 /* CGXStringPickerView.h */,
-				4A580CF124075F2B00E82675 /* CGXStringPickerView.m */,
-				4A580CF024075F2B00E82675 /* NSDate+CGXPicker.h */,
-				4A580CE924075F2B00E82675 /* NSDate+CGXPicker.m */,
+				4A8D98D825217C2700295CAC /* CGXPickView */,
+				4A8D98C42521746100295CAC /* WXZCustomPickView */,
 			);
 			path = "通用选择器";
 			sourceTree = "<group>";
@@ -3877,6 +3879,48 @@
 			path = hikPlayerView;
 			sourceTree = "<group>";
 		};
+		4A8D98C42521746100295CAC /* WXZCustomPickView */ = {
+			isa = PBXGroup;
+			children = (
+				4A8D98C52521746100295CAC /* WXZCustomPickView.h */,
+				4A8D98C62521746100295CAC /* area.plist */,
+				4A8D98C72521746100295CAC /* WXZPickTimeView.h */,
+				4A8D98C82521746100295CAC /* WXZPickDateView.h */,
+				4A8D98C92521746100295CAC /* WXZPickCityView.h */,
+				4A8D98CA2521746100295CAC /* WXZBasePickView.m */,
+				4A8D98CB2521746100295CAC /* WXZPickTimeView.m */,
+				4A8D98CC2521746100295CAC /* WXZCustomPickView.m */,
+				4A8D98CD2521746100295CAC /* WXZPickDateView.m */,
+				4A8D98CE2521746100295CAC /* WXZBasePickView.h */,
+				4A8D98CF2521746100295CAC /* WXZPickCityView.m */,
+			);
+			path = WXZCustomPickView;
+			sourceTree = "<group>";
+		};
+		4A8D98D825217C2700295CAC /* CGXPickView */ = {
+			isa = PBXGroup;
+			children = (
+				4A8D98D925217C2700295CAC /* CGXAddressPcikerView.h */,
+				4A8D98DA25217C2700295CAC /* CGXDatePickerView.h */,
+				4A8D98DB25217C2700295CAC /* CGXPickerViewManager.m */,
+				4A8D98DC25217C2700295CAC /* CGXAddressModel.h */,
+				4A8D98DD25217C2700295CAC /* CGXPickerUIBaseView.h */,
+				4A8D98DE25217C2700295CAC /* CGXPickerView.h */,
+				4A8D98DF25217C2700295CAC /* CGXStringPickerView.h */,
+				4A8D98E025217C2700295CAC /* NSDate+CGXPicker.m */,
+				4A8D98E125217C2700295CAC /* CGXAddressPcikerView.m */,
+				4A8D98E225217C2700295CAC /* CGXPickerView.bundle */,
+				4A8D98E325217C2700295CAC /* CGXPickerViewManager.h */,
+				4A8D98E425217C2700295CAC /* CGXDatePickerView.m */,
+				4A8D98E525217C2700295CAC /* CGXPickerUIBaseView.m */,
+				4A8D98E625217C2700295CAC /* CGXAddressModel.m */,
+				4A8D98E725217C2700295CAC /* NSDate+CGXPicker.h */,
+				4A8D98E825217C2700295CAC /* CGXStringPickerView.m */,
+				4A8D98E925217C2700295CAC /* CGXPickerView.m */,
+			);
+			path = CGXPickView;
+			sourceTree = "<group>";
+		};
 		4AA77B0025184FF400C2D427 /* playerView */ = {
 			isa = PBXGroup;
 			children = (
@@ -4702,7 +4746,6 @@
 				4A64ECF8242D89BD00D30FB1 /* HVideo_back@3x.png in Resources */,
 				4AB50B2F246D20710064BF82 /* index_empty_backimage@3x.png in Resources */,
 				4A68695324590B050036355E /* index_all_video_image@3x.png in Resources */,
-				4A580F6424075F2D00E82675 /* CGXPickerView.bundle in Resources */,
 				4AE929002417753400CFBBD8 /* shara_arcode_image@3x.png in Resources */,
 				4A68697224591E7B0036355E /* group_up_image@2x.png in Resources */,
 				4A68695224590B050036355E /* index_channel_detail_image@2x.png in Resources */,
@@ -4752,6 +4795,7 @@
 				4A46072D2407C889007C209A /* Tabbar-2-select@3x.png in Resources */,
 				4AB50B2E246D20710064BF82 /* device_empty_backimage@2x.png in Resources */,
 				4AB29A02240F80D1004CA6B5 /* choose_area_up_image@2x.png in Resources */,
+				4A8D98D02521746200295CAC /* area.plist in Resources */,
 				4AE928FA2417753400CFBBD8 /* shara_url_image@3x.png in Resources */,
 				4A64ECFC242D89BD00D30FB1 /* SX_confirm@2x.png in Resources */,
 				4AB50B2C246D20710064BF82 /* search_empty_backimage@3x.png in Resources */,
@@ -4804,6 +4848,7 @@
 				4AE02141249C4FCA009CD476 /* channel_detail_carmera_image@3x.png in Resources */,
 				4A4607282407C889007C209A /* Tabbar-1-normal@2x.png in Resources */,
 				4A68695A245915FB0036355E /* index_add_image@2x.png in Resources */,
+				4A8D98ED25217C2800295CAC /* CGXPickerView.bundle in Resources */,
 				4AD26FFE2463E57600D462B4 /* player_gongge_image@3x.png in Resources */,
 				4AB50A1B2466424E0064BF82 /* video_control_up_image@3x.png in Resources */,
 				4A4608702408EB4F007C209A /* rm_key_select@2x.png in Resources */,
@@ -4907,11 +4952,10 @@
 				4A58100324075F2D00E82675 /* MJRefreshNormalHeader.m in Sources */,
 				4A58105D24075F2E00E82675 /* UIAlertView+Blocks.m in Sources */,
 				4AB50AA42468EDF40064BF82 /* WMZDialog+MenusSelect.m in Sources */,
+				4A8D98EF25217C2800295CAC /* CGXPickerUIBaseView.m in Sources */,
 				4AB50AA72468EDF40064BF82 /* WMZDialog+PickView.m in Sources */,
 				4A58101524075F2D00E82675 /* ADScaleTransition.m in Sources */,
-				4A580F6924075F2D00E82675 /* CGXPickerView.m in Sources */,
 				4A58102724075F2E00E82675 /* IFTTTTextColorAnimation.m in Sources */,
-				4A580F6524075F2D00E82675 /* CGXDatePickerView.m in Sources */,
 				4A580FDA24075F2D00E82675 /* PageScrollView.m in Sources */,
 				4A6869862459550A0036355E /* ShowCarmerasTableViewCell.m in Sources */,
 				4A686920245587480036355E /* IndexTopCollectionViewCell.m in Sources */,
@@ -4938,11 +4982,13 @@
 				4AB50B1E246BC9100064BF82 /* PlayBottomDateCell.m in Sources */,
 				4A6869412457C89E0036355E /* NoChooseCarmerasCell.m in Sources */,
 				4AB299A5240CEF23004CA6B5 /* CarmeaVideosViewCell.m in Sources */,
+				4A8D98D12521746200295CAC /* WXZBasePickView.m in Sources */,
 				4AB50AB82468EDF50064BF82 /* tagOneCell.m in Sources */,
 				4A580FFE24075F2D00E82675 /* MJRefreshBackNormalFooter.m in Sources */,
 				4AE2FBF62480B762007E3BAA /* PlayerTopAddViewCell.m in Sources */,
 				4A58100F24075F2D00E82675 /* FTAnimation+UIView.m in Sources */,
 				4AB29A11240F9627004CA6B5 /* AreaNormalCell.m in Sources */,
+				4A8D98F225217C2800295CAC /* CGXPickerView.m in Sources */,
 				4AB50AB72468EDF50064BF82 /* WMZTagBtn.m in Sources */,
 				4A4608A8240C94CE007C209A /* EquipmentInformationController.m in Sources */,
 				4A58103224075F2E00E82675 /* IFTTTConstraintMultiplierAnimation.m in Sources */,
@@ -4978,7 +5024,6 @@
 				4A14BC4624F49FBA003ADC07 /* UIImageView+AFNetworking.m in Sources */,
 				4A686926245678550036355E /* MoreCarmerasCell.m in Sources */,
 				4A7007E2241766660024DFB8 /* LGXThirdEngine.m in Sources */,
-				4A580F6124075F2D00E82675 /* CGXPickerViewManager.m in Sources */,
 				4A51192E242B082D005A3065 /* SharedClient.m in Sources */,
 				4A6D13CF243C63B80069EA93 /* CLVoiceApplyAddressModel.m in Sources */,
 				4A7007DD241766660024DFB8 /* WXMediaMessage+messageConstruct.m in Sources */,
@@ -4987,13 +5032,14 @@
 				4A68699F245A5C0C0036355E /* CarmeraDetailInfoController.m in Sources */,
 				4A580F5D24075F2D00E82675 /* WWCollectionViewCell.m in Sources */,
 				4A58103524075F2E00E82675 /* IFTTTFrameAnimation.m in Sources */,
-				4A580F6624075F2D00E82675 /* CGXPickerUIBaseView.m in Sources */,
 				4A580FCC24075F2D00E82675 /* CountryAreaCodeCell.m in Sources */,
 				4AD2700F2463F02300D462B4 /* PlayerLocalVideosCell.m in Sources */,
 				4AD26FDA2462AB7800D462B4 /* DeleteGroupsTableViewCell.m in Sources */,
 				4A58103024075F2E00E82675 /* IFTTTPathPositionAnimation.m in Sources */,
 				4AB50AB52468EDF50064BF82 /* WMZTagsTool.m in Sources */,
+				4A8D98D52521746200295CAC /* WXZPickCityView.m in Sources */,
 				4A14BC4A24F49FBA003ADC07 /* AFImageDownloader.m in Sources */,
+				4A8D98D22521746200295CAC /* WXZPickTimeView.m in Sources */,
 				4A580F1924075F2D00E82675 /* RefreshControlView.m in Sources */,
 				4A580FE024075F2D00E82675 /* UIView+autolayout.m in Sources */,
 				4A64ED05242DF2E000D30FB1 /* DemandViewCell.m in Sources */,
@@ -5021,6 +5067,7 @@
 				4A8D987725207E5F00295CAC /* EZPlaybackProgressBar.m in Sources */,
 				4AD26FEE2463DD2300D462B4 /* PlayerTableViewCell.m in Sources */,
 				4A58101124075F2D00E82675 /* FTUtils+NSObject.m in Sources */,
+				4A8D98F125217C2800295CAC /* CGXStringPickerView.m in Sources */,
 				4A58100B24075F2D00E82675 /* UIColor+MLPFlatColors.m in Sources */,
 				4A580FC824075F2D00E82675 /* LoginSence.m in Sources */,
 				4A580F8F24075F2D00E82675 /* EPBannerView.m in Sources */,
@@ -5045,7 +5092,6 @@
 				4A580F8924075F2D00E82675 /* EPPageStatesControl.m in Sources */,
 				4A58104024075F2E00E82675 /* JSONKit.m in Sources */,
 				4A14BC3F24F49FBA003ADC07 /* AFURLRequestSerialization.m in Sources */,
-				4A580F6324075F2D00E82675 /* CGXAddressPcikerView.m in Sources */,
 				4A6869302456C32E0036355E /* AllGroupsViewController.m in Sources */,
 				4AB50AB12468EDF40064BF82 /* WMZDialog+Sheet.m in Sources */,
 				4A580FC024075F2D00E82675 /* RetrievePasswordController.m in Sources */,
@@ -5055,6 +5101,7 @@
 				4A580F7624075F2D00E82675 /* DTTimePeriodCollection.m in Sources */,
 				4A580FF724075F2D00E82675 /* MJRefreshConst.m in Sources */,
 				4AB50AB92468EDF50064BF82 /* WMZTags.m in Sources */,
+				4A8D98EB25217C2800295CAC /* NSDate+CGXPicker.m in Sources */,
 				4AD26FE92463AE9E00D462B4 /* SuperPlayerViewController.m in Sources */,
 				4A580FE424075F2D00E82675 /* UIImage+loadImage.m in Sources */,
 				4AB50A982468EDF40064BF82 /* WMZDialog+Write.m in Sources */,
@@ -5107,13 +5154,13 @@
 				4A58101E24075F2D00E82675 /* IFTTTAnimator.m in Sources */,
 				4A580FD024075F2D00E82675 /* LoginChooseCountriesCell.m in Sources */,
 				4A58106224075F2E00E82675 /* SCLSwitchView.m in Sources */,
-				4A580F6824075F2D00E82675 /* CGXStringPickerView.m in Sources */,
 				4A511944242B082D005A3065 /* AESHelper.m in Sources */,
 				4A4608762408F426007C209A /* MyEquipmentsCell.m in Sources */,
 				4A14BC3C24F49FBA003ADC07 /* AFURLResponseSerialization.m in Sources */,
 				4A580FDC24075F2D00E82675 /* UIView+badge.m in Sources */,
 				4A580FC424075F2D00E82675 /* RegistNewModel.m in Sources */,
 				4A6869A9245AA33A0036355E /* AddCarmeraAddressController.m in Sources */,
+				4A8D98D42521746200295CAC /* WXZPickDateView.m in Sources */,
 				4AB50AA82468EDF40064BF82 /* WMZDialogShareView.m in Sources */,
 				4A6869B8245AC0310036355E /* ChannelMoreSystemController.m in Sources */,
 				4A64ECD5242C547B00D30FB1 /* NSObject+Auth.m in Sources */,
@@ -5168,7 +5215,6 @@
 				4A580F2C24075F2D00E82675 /* MainViewController.m in Sources */,
 				4A580FCA24075F2D00E82675 /* UCenterListItem.m in Sources */,
 				4A58106524075F2E00E82675 /* SCLAlertView.m in Sources */,
-				4A580F6224075F2D00E82675 /* NSDate+CGXPicker.m in Sources */,
 				4A580F8524075F2D00E82675 /* GeneralWebViewController.m in Sources */,
 				4A580FF224075F2D00E82675 /* UIImageView+MKNetworkKitAdditions.m in Sources */,
 				4AB50AAA2468EDF40064BF82 /* WMZDialogTableView.m in Sources */,
@@ -5216,11 +5262,13 @@
 				4AB50A9C2468EDF40064BF82 /* WMZDialog+Down.m in Sources */,
 				4A58102024075F2D00E82675 /* IFTTTRotationAnimation.m in Sources */,
 				4A58101A24075F2D00E82675 /* UICollectionViewController+ADFlipTransition.m in Sources */,
+				4A8D98EA25217C2800295CAC /* CGXPickerViewManager.m in Sources */,
 				4A7007DB241766660024DFB8 /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m in Sources */,
 				4A58104124075F2E00E82675 /* NSObject+Json.m in Sources */,
 				4A7007E0241766660024DFB8 /* WXApiManager.m in Sources */,
 				4A51192D242B082D005A3065 /* RequestSence.m in Sources */,
 				4A580FF524075F2D00E82675 /* NSDate+RFC1123.m in Sources */,
+				4A8D98EE25217C2800295CAC /* CGXDatePickerView.m in Sources */,
 				4A580FD324075F2D00E82675 /* MineViewController.m in Sources */,
 				4AB50A9D2468EDF40064BF82 /* WMZDialog+Location.m in Sources */,
 				4A580FFB24075F2D00E82675 /* UIView+MJExtension.m in Sources */,
@@ -5243,14 +5291,15 @@
 				4A580FFD24075F2D00E82675 /* MJRefreshBackStateFooter.m in Sources */,
 				4A580BF224075D0700E82675 /* SceneDelegate.m in Sources */,
 				4A58100224075F2D00E82675 /* MJChiBaoZiHeader.m in Sources */,
+				4A8D98EC25217C2800295CAC /* CGXAddressPcikerView.m in Sources */,
 				4A686998245975660036355E /* LocalVideoCell.m in Sources */,
 				4A14BC4124F49FBA003ADC07 /* AFSecurityPolicy.m in Sources */,
 				4AB50A992468EDF40064BF82 /* WMZDialog+Loading.m in Sources */,
+				4A8D98D32521746200295CAC /* WXZCustomPickView.m in Sources */,
 				4A46087E24090598007C209A /* MineTableViewCell.m in Sources */,
 				4A58104724075F2E00E82675 /* GCDSemaphore.m in Sources */,
 				4A4608B9240C9F94007C209A /* ConnectionMonitoringCell.m in Sources */,
 				4A6869462457D2BD0036355E /* LEEAlert.m in Sources */,
-				4A580F6724075F2D00E82675 /* CGXAddressModel.m in Sources */,
 				4A511946242B082D005A3065 /* FilePathManager.m in Sources */,
 				4AB50AB02468EDF40064BF82 /* WMZDialog+Select.m in Sources */,
 				4A58104624075F2E00E82675 /* GCDGroup.m in Sources */,
@@ -5266,6 +5315,7 @@
 				4AB50AB22468EDF40064BF82 /* WMZDialog.m in Sources */,
 				4AB50AAD2468EDF40064BF82 /* WMZDialog+BuyCar.m in Sources */,
 				4A46089A240912DB007C209A /* PersonInfoViewController.m in Sources */,
+				4A8D98F025217C2800295CAC /* CGXAddressModel.m in Sources */,
 				4A580F6F24075F2D00E82675 /* TargetEngine.m in Sources */,
 				4A4608AB240C9AB5007C209A /* EquimentBasicInfoController.m in Sources */,
 				4A580F2724075F2D00E82675 /* UITabBar+badgeView.m in Sources */,
