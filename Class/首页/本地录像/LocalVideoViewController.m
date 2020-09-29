@@ -9,7 +9,7 @@
 #import "LocalVideoViewController.h"
 #import "RequestSence.h"
 #import "SuperPlayerViewController.h"
-#import "DemandModel.h"
+#import "PLPlayModel.h"
 #import "CarmeaVideosModel.h"
 #import "LGXVerticalButton.h"
 #import "DownloadListController.h"
@@ -249,15 +249,9 @@
 
     }else{
         if (_isFromIndex) {
-            NSDictionary *dic = @{
-                                   @"name":model.duration,
-                                   @"snapUrl":model.picUrl,
-                                   @"videoUrl":model.url,
-                                   @"createAt":model.duration,
-                                  };
-            DemandModel *models = [DemandModel makeModelData:dic];
+            
             SuperPlayerViewController *vc = [SuperPlayerViewController new];
-            vc.model = models;
+            vc.model = model;
             vc.indexInteger = indexPath.row;
             vc.isRecordFile = YES;
             vc.isLiving = NO;

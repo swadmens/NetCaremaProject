@@ -52,8 +52,8 @@
 {
     if ([model isKindOfClass:[DemandModel class]]) {
         DemandModel *models = model;
-        [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.snapUrl] placeholder:UIImageWithFileName(@"player_hoder_image")];
-        _titleLabel.text = models.video_name;
+        [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.filePath] placeholder:UIImageWithFileName(@"player_hoder_image")];
+        _titleLabel.text = models.vodName;
     }else{
         CarmeaVideosModel *models = model;
         [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.picUrl] placeholder:UIImageWithFileName(@"player_hoder_image")];

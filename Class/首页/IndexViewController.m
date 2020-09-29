@@ -21,6 +21,7 @@
 #import "QRScanCodeViewController.h"//二维码
 #import "SuperPlayerViewController.h"
 #import "LivingModel.h"
+#import "PLPlayModel.h"
 
 #import "LocalVideoViewController.h"
 
@@ -231,7 +232,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//    [TargetEngine controller:self pushToController:PushTargetMyEquipments WithTargetId:model.equipment_id];
     
     SuperPlayerViewController *vc = [SuperPlayerViewController new];
     vc.hidesBottomBarWhenPushed = YES;
@@ -485,12 +485,6 @@
 }
 -(void)clickAllVideos
 {
-    
-//    NSString *ClientId = [WWPublicMethod isStringEmptyText:self.selectModel.ClientId]?self.selectModel.ClientId:@"";
-//    NSString *DeviceId = [WWPublicMethod isStringEmptyText:self.selectModel.DeviceId]?self.selectModel.DeviceId:@"";
-//    NSString *CameraId = [WWPublicMethod isStringEmptyText:self.selectModel.CameraId]?self.selectModel.CameraId:@"";
-
-    
     LocalVideoViewController *vc = [LocalVideoViewController new];
     vc.delegate = self;
     vc.hidesBottomBarWhenPushed = YES;

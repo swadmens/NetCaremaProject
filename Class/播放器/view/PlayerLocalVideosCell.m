@@ -10,7 +10,7 @@
 #import "WWCollectionView.h"
 #import "VideoPlaybackViewCell.h"
 #import "CarmeaVideosModel.h"
-#import "DemandModel.h"
+#import "CarmeaVideosModel.h"
 
 @interface PlayerLocalVideosCell ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
@@ -167,44 +167,10 @@
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-     
-//    if (self.isPlaying) {
-//        [self stop];
-//    }
-//    self.isLiving = NO;
-//    _deleteBtn.hidden = NO;
-//    _downLoadBtn.hidden = NO;
-//    _moreButton.hidden = YES;
-//
     CarmeaVideosModel *model = [self.dataArray objectAtIndex:indexPath.row];
-//
-//    if ([obj isKindOfClass:[DemandModel class]]) {
-//        DemandModel *model = obj;
-//        self.playerView.media = obj;
-//        self.playerView.media = model;
-//        self.model = model;
-//        self.indexInteger = indexPath.row;
-//        _videoNameLabel.text = self.model.video_name;
-//        _videoTimeLabel.text = self.model.createAt;
-//
-//    }else{
-//        CarmeaVideosModel *model = obj;
-//        self.carmeaModel = model;
-//
-        NSDictionary *dic = @{
-//            @"name":model.video_name,
-                               @"snapUrl":model.picUrl,
-                               @"videoUrl":model.url,
-//                               @"createAt":model.start_time,
-                              };
-        DemandModel *models = [DemandModel makeModelData:dic];
-//        self.playerView.media = models;
-//        self.indexInteger = indexPath.row;
-//        _videoNameLabel.text = self.model.video_name;
-//        _videoTimeLabel.text = self.model.createAt;
-//   }
+    
     if (self.selectedRowData) {
-        self.selectedRowData(models);
+        self.selectedRowData(model);
     }
 
 }

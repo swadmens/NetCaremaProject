@@ -17,7 +17,7 @@
 #import "MyEquipmentsViewController.h"
 #import "SuperPlayerViewController.h"
 #import "LivingModel.h"
-#import "DemandModel.h"
+#import "CarmeaVideosModel.h"
 
 
 #define KDeleteHeight 60
@@ -364,17 +364,17 @@
     UIButton *button = (UIButton *)[_deleteView viewWithTag:202004];
     button.selected = NO;
 }
--(void)makeCellDataNoLiving:(DemandModel*)model witnLive:(BOOL)isLiving
+-(void)makeCellDataNoLiving:(CarmeaVideosModel*)model witnLive:(BOOL)isLiving
 {
-   
-//    CGFloat height = kScreenWidth * 0.68 + 0.5;
-
+    if (model == nil || isLiving) {
+        return;
+    }
+    
     _localVideoView = [PlayLocalVideoView new];
     self.localVideoView.model = model;
     self.localVideoView.delegate = self;
     [self.contentView addSubview:self.localVideoView];
     [self.localVideoView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.contentView];
-//    [self.localVideoView addHeight:height];
     
     self.isPlayerVideo = !isLiving;
     self.localVideoView.hidden = isLiving;

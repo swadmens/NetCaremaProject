@@ -473,6 +473,7 @@
 		4AA2EE622407A0EE00C4F5DA /* DemandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE612407A0EE00C4F5DA /* DemandViewController.m */; };
 		4AA2EE652407A10000C4F5DA /* LiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE642407A10000C4F5DA /* LiveViewController.m */; };
 		4AA77B032518502E00C2D427 /* PLPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA77B012518502E00C2D427 /* PLPlayerView.m */; };
+		4AAB80C8252317B50006849F /* PLPlayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB80C7252317B50006849F /* PLPlayModel.m */; };
 		4AB2999D240CDBF3004CA6B5 /* send_url_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB29999240CDBF2004CA6B5 /* send_url_image@3x.png */; };
 		4AB2999E240CDBF3004CA6B5 /* push_url_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB2999A240CDBF2004CA6B5 /* push_url_image@3x.png */; };
 		4AB2999F240CDBF3004CA6B5 /* send_url_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB2999B240CDBF2004CA6B5 /* send_url_image@2x.png */; };
@@ -1558,6 +1559,8 @@
 		4AA2EE642407A10000C4F5DA /* LiveViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveViewController.m; sourceTree = "<group>"; };
 		4AA77B012518502E00C2D427 /* PLPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLPlayerView.m; sourceTree = "<group>"; };
 		4AA77B022518502E00C2D427 /* PLPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLPlayerView.h; sourceTree = "<group>"; };
+		4AAB80C6252317B50006849F /* PLPlayModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLPlayModel.h; sourceTree = "<group>"; };
+		4AAB80C7252317B50006849F /* PLPlayModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLPlayModel.m; sourceTree = "<group>"; };
 		4AB29999240CDBF2004CA6B5 /* send_url_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send_url_image@3x.png"; sourceTree = "<group>"; };
 		4AB2999A240CDBF2004CA6B5 /* push_url_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "push_url_image@3x.png"; sourceTree = "<group>"; };
 		4AB2999B240CDBF2004CA6B5 /* send_url_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send_url_image@2x.png"; sourceTree = "<group>"; };
@@ -4440,6 +4443,8 @@
 		4AD26FEB2463DD0100D462B4 /* model */ = {
 			isa = PBXGroup;
 			children = (
+				4AAB80C6252317B50006849F /* PLPlayModel.h */,
+				4AAB80C7252317B50006849F /* PLPlayModel.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -5201,6 +5206,7 @@
 				4AB29A0D240F8D92004CA6B5 /* ChooseAreaView.m in Sources */,
 				4A580F5C24075F2D00E82675 /* WWCollectionView.m in Sources */,
 				4A58102124075F2D00E82675 /* IFTTTAnimatedPagingScrollViewController.m in Sources */,
+				4AAB80C8252317B50006849F /* PLPlayModel.m in Sources */,
 				4A64ECD6242C547B00D30FB1 /* NSDate+Covert.m in Sources */,
 				4A7007DE241766660024DFB8 /* WXApiResponseHandler.m in Sources */,
 				4A511948242B082D005A3065 /* UploadSence.m in Sources */,

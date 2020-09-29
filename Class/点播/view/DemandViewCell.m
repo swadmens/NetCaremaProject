@@ -53,11 +53,11 @@
 //    }
     self.model = model;
     
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:UIImageWithFileName(@"player_hoder_image")];
+//    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:UIImageWithFileName(@"player_hoder_image")];
     
     //此处获取视频封面，会有卡顿
 //    _showImageView.image = [self getImage:self.model.videoUrl];
-    _titleLabel.text = self.model.vods_vodName;
+    _titleLabel.text = self.model.vodName;
 }
 //根据视频地址获取视频封面
 -(UIImage *)getImage:(NSString *)videoURL

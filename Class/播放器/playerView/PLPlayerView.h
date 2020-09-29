@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class PLPlayerView;
-@class DemandModel;
-@class LivingModel;
+@class PLPlayModel;
 
 typedef enum {
     PlayerStatusGBS = 0,
@@ -36,7 +35,7 @@ typedef enum {
 
 @property (nonatomic, weak) id<PLPlayerViewDelegate> delegate;
 
-@property (nonatomic, strong) DemandModel *media;
+@property (nonatomic, strong) PLPlayModel *plModel;
 
 @property (nonatomic,assign) BOOL isLocalVideo;//是否是本地视频
 

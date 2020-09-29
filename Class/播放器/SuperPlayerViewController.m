@@ -133,16 +133,12 @@
         self.streamid = self.selectModel.deviceSerial;
         [self startLoadDataRequest:self.selectModel.deviceId];
         [self tipViewHidden:YES withTitle:@"开始录像"];
-    
-        if (self.selectModel != nil) {
+        if (MyModel.model != nil) {
             [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withEquimentId:self.equiment_id withIndex:0];
         }
   
     }
    
-    
-    
-    
     //右上角按钮组
     UIButton *sharaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [sharaBtn addTarget:self action:@selector(sharaBtnCLick) forControlEvents:UIControlEventTouchUpInside];
@@ -198,42 +194,34 @@
         return cell;
     }else{
         
-//        if (_isLiving) {
-            PlayerLocalVideosCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerLocalVideosCell getCellIDStr] forIndexPath:indexPath];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-            [cell makeCellData:self.localVideosArray];
-            
-            cell.allBtn = ^{
-                 
-//                LivingModel *lmd = [self.allDataArray objectAtIndex:0];
-                if (self.videoing) {
-                    [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
-                    return;
-                }
-                LocalVideoViewController *vc = [LocalVideoViewController new];
-                vc.delegate = self;
-                vc.isFromIndex = NO;
-                vc.device_id = self.carmer_id;
-                vc.system_Source = self.selectModel.system_Source;
-                [weakSelf.navigationController pushViewController:vc animated:YES];
-               
-            };
-            cell.selectedRowData = ^(DemandModel * _Nonnull model) {
-                weakSelf.model = model;
-                weakSelf.isLiving = NO;
-                [weakSelf.tableView reloadData];
-            };
-            
-            return cell;
-//        }else{
-//            PlayBottomDateCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayBottomDateCell getCellIDStr] forIndexPath:indexPath];
-//            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//
-//            return cell;
-//        }
+        PlayerLocalVideosCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerLocalVideosCell getCellIDStr] forIndexPath:indexPath];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+        [cell makeCellData:self.localVideosArray];
         
-        
+        cell.allBtn = ^{
+             
+            if (self.videoing) {
+                [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
+                return;
+            }
+            LocalVideoViewController *vc = [LocalVideoViewController new];
+            vc.delegate = self;
+            vc.isFromIndex = NO;
+            vc.device_id = self.carmer_id;
+            vc.system_Source = self.selectModel.system_Source;
+            [weakSelf.navigationController pushViewController:vc animated:YES];
+           
+        };
+        cell.selectedRowData = ^(CarmeaVideosModel * _Nonnull model) {
+            weakSelf.model = model;
+            weakSelf.isLiving = NO;
+            [weakSelf.tableView reloadData];
+        };
+   
+        return cell;
+
     }
 }
 
@@ -510,7 +498,7 @@
         DLog(@"Received: %@", obj);
         if ([states isEqualToString:@"stop"]) {
 //            [weak_self videoFinishDownload:obj];
-            [self tipViewHidden:YES withTitle:@"录像完成"];
+            [weak_self tipViewHidden:YES withTitle:@"录像完成"];
 
         }
     };
@@ -704,17 +692,7 @@
     }
     
     self.isLiving = NO;
-    if (self.localVideosArray.count == 0) {
-        return;
-    }
-    NSDictionary *dic = @{
-                           @"name":model.duration,
-                           @"snapUrl":model.picUrl,
-                           @"videoUrl":model.url,
-                           @"createAt":model.startTime,
-                          };
-    DemandModel *models = [DemandModel makeModelData:dic];
-    self.model = models;
+    self.model = model;
     
     [self.tableView reloadData];
 }

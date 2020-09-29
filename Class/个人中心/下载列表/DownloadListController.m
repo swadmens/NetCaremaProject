@@ -324,16 +324,16 @@ static NSString *const _kdownloadListKey = @"download_video_list";
             }else{
                 
                 DemandModel *model = obj;
-                
-                [tempDic setValue:model.snapUrl forKey:@"snap"];//封面图片URL
-                [tempDic setValue:model.createAt forKey:@"time"];//视频时间
-                [tempDic setValue:model.start_time forKey:@"start_time"];//视频时间
-                [tempDic setValue:model.video_name forKey:@"name"];//视频名称
+//
+//                [tempDic setValue:model. forKey:@"snap"];//封面图片URL
+                [tempDic setValue:model.creationDate forKey:@"time"];//视频时间
+//                [tempDic setValue:model.creationDate forKey:@"start_time"];//视频时间
+                [tempDic setValue:model.vodName forKey:@"name"];//视频名称
                 [tempDic setValue:model.duration forKey:@"duration"];//视频时长
-                [tempDic setValue:model.videoUrl forKey:@"hls"];//视频播放地址
-                
-                //点播文件下载
-                [self startLoadDataRequest:model.video_id withInteger:idx];
+                [tempDic setValue:model.filePath forKey:@"hls"];//视频播放地址
+//
+//                //点播文件下载
+//                [self startLoadDataRequest:model.video_id withInteger:idx];
             }
             
             CLVoiceApplyAddressModel *model = [CLVoiceApplyAddressModel AddressModelWithDict:tempDic];

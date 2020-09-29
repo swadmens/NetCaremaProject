@@ -8,8 +8,9 @@
 
 #import "PlayLocalVideoView.h"
 #import "PLPlayerView.h"
-#import "DemandModel.h"
+#import "CarmeaVideosModel.h"
 #import "HikPlayerView.h"
+#import "PLPlayModel.h"
 
 
 @interface PlayLocalVideoView ()<PLPlayerViewDelegate>
@@ -81,10 +82,18 @@
     [outlineLabel yCenterToView:_coverView];
 
 }
--(void)setModel:(DemandModel *)model
+-(void)setModel:(CarmeaVideosModel *)model
 {
-    self.playerView.media = model;
-    if ([model.videoUrl hasPrefix:@"ezopen://"]) {
+    NSDictionary *dic = @{@"name":model.video_name,
+                          @"duration":model.duration,
+                          @"url":model.url,
+                          @"startTime":model.startTime,
+                          @"endTime":model.endTime,
+    };
+    PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
+    self.playerView.plModel = pModel;
+    
+    if ([model.url hasPrefix:@"ezopen://"]) {
         self.playerView.playType = PlayerStatusHk;
     }else{
         self.playerView.playType = PlayerStatusGBS;

@@ -14,6 +14,7 @@
 #import "DemandModel.h"
 #import "SuperPlayerViewController.h"
 #import "RequestSence.h"
+#import "CarmeaVideosModel.h"
 
 @interface DemandViewController ()<UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource>
 {
@@ -342,12 +343,19 @@
     if ([collectionView isEqual:self.collectionView]) {
         DemandModel *model = [self.dataArray objectAtIndex:indexPath.row];
         
+        NSDictionary *dic = @{
+                               @"name":model.vodName,
+                               @"duration":model.duration,
+                               @"url":model.filePath,
+                              };
+        CarmeaVideosModel *models = [CarmeaVideosModel makeModelData:dic];
+        
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
-        vc.model = model;
+        vc.model = models;
         vc.indexInteger = indexPath.row;
         vc.isRecordFile = NO;
         vc.isLiving = NO;
-        vc.title_value = model.vods_vodName;
+        vc.title_value = model.vodName;
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;

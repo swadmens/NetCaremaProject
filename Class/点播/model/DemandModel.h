@@ -14,58 +14,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(DemandModel*)makeModelData:(NSDictionary*)dic;
 
-@property (nonatomic,strong) NSString *video_id;//视频id
-@property (nonatomic,strong) NSString *video_name;//视频名称
-@property (nonatomic,strong) NSString *size;//文件大小
-@property (nonatomic,strong) NSString *type;//文件类型
-@property (nonatomic,strong) NSString *status;//转码状态
-@property (nonatomic,strong) NSString *duration;//时长
-@property (nonatomic,strong) NSString *aspect;
-@property (nonatomic,strong) NSString *audioCodec;
-@property (nonatomic,strong) NSString *createAt;
-@property (nonatomic,strong) NSString *error;
-@property (nonatomic,strong) NSString *flowNum;
-@property (nonatomic,strong) NSString *folder;
-@property (nonatomic,strong) NSString *isresolution;
-@property (nonatomic,strong) NSString *path;
-@property (nonatomic,strong) NSString *playNum;
-@property (nonatomic,strong) NSString *progress;
-@property (nonatomic,strong) NSString *resolution;
-@property (nonatomic,strong) NSString *resolutiondefault;
-@property (nonatomic,strong) NSString *rotate;
-@property (nonatomic,strong) NSString *shared;
-@property (nonatomic,strong) NSString *sharedLink;
-@property (nonatomic,strong) NSString *snapUrl;
-@property (nonatomic,strong) NSString *transvideo;
-@property (nonatomic,strong) NSString *updateAt;
-@property (nonatomic,strong) NSString *videoUrl;
-@property (nonatomic,strong) NSString *videoCodec;
-
-
-@property (nonatomic,strong) NSString *hls;
-@property (nonatomic,strong) NSString *important;
-@property (nonatomic,strong) NSString *snap;
-@property (nonatomic,strong) NSString *start_time;
-@property (nonatomic,strong) NSString *time;
-
-
-
-
-
-
-@property (nonatomic,strong) NSString *vods_creationDate;
-@property (nonatomic,strong) NSString *vods_duration;
-@property (nonatomic,strong) NSString *vods_filePath;
-@property (nonatomic,strong) NSString *vods_fileSize;
-@property (nonatomic,strong) NSString *vods_streamId;
-@property (nonatomic,strong) NSString *vods_streamName;
-@property (nonatomic,strong) NSString *vods_type;
-@property (nonatomic,strong) NSString *vods_vodId;
-@property (nonatomic,strong) NSString *vods_vodName;
-
-
-
-
+@property (nonatomic,strong) NSString *streamName;
+@property (nonatomic,strong) NSString *duration;
+@property (nonatomic,strong) NSString *creationDate;
+@property (nonatomic,strong) NSString *filePath;
+@property (nonatomic,strong) NSString *fileSize;
+@property (nonatomic,strong) NSString *streamId;
+@property (nonatomic,strong) NSString *type;
+@property (nonatomic,strong) NSString *vodId;
+@property (nonatomic,strong) NSString *vodName;
 
 
 @end

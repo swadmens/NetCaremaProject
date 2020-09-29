@@ -12,7 +12,7 @@
 #import "DemandModel.h"
 #import "YDDownload.h"
 #import "CLVoiceApplyAddressModel.h"
-
+#import "PLPlayModel.h"
 #import <PLPlayerKit/PLPlayerKit.h>
 #import "PLPlayerView.h"
 
@@ -194,15 +194,17 @@
 -(void)startPlayVideo:(NSString*)fil_path
 {
     NSDictionary *dic = @{@"name":self.cacheModel.name,
-                          @"snapUrl":self.cacheModel.snap,
-                          @"videoUrl":fil_path,
+                          @"picUrl":self.cacheModel.snap,
+                          @"startTime":self.cacheModel.start_time,
+                          @"duration":self.cacheModel.duration,
+                          @"url":fil_path,
                           };
-    DemandModel *models = [DemandModel makeModelData:dic];
+    PLPlayModel *models = [PLPlayModel makeModelData:dic];
 
     self.playerView = [PLPlayerView new];
     self.playerView.delegate = self;
     [self.showImageView addSubview:self.playerView];
-    self.playerView.media = models;
+    self.playerView.plModel = models;
     self.playerView.isLocalVideo = YES;
     self.playerView.playType = PlayerStatusGBS;
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {

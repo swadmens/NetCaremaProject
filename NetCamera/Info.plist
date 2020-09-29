@@ -2,41 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-	</array>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>sinaweibo</string>
-		<string>sinaweibohd</string>
-		<string>sinaweibosso</string>
-		<string>sinaweibohdsso</string>
-		<string>weibosdk</string>
-		<string>weibosdk2.5</string>
-		<string>mqqopensdkapiV4
-mqqopensdkapiV4
-</string>
-		<string>mqqwpa</string>
-		<string>mqqapi</string>
-		<string>wtloginmqq2</string>
-		<string>mqqopensdkapiV3</string>
-		<string>mqzoneopensdk</string>
-		<string>mqzoneopensdkapi</string>
-		<string>mqzoneopensdkapi19</string>
-		<string>mqzoneopensdkapiV2</string>
-		<string>mqqOpensdkSSoLogin</string>
-		<string>mqqopensdkapiV2</string>
-		<string>mqzone</string>
-		<string>mqq</string>
-		<string>weixin</string>
-		<string>wechat</string>
-	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
@@ -77,8 +42,39 @@ mqqopensdkapiV4
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>sinaweibo</string>
+		<string>sinaweibohd</string>
+		<string>sinaweibosso</string>
+		<string>sinaweibohdsso</string>
+		<string>weibosdk</string>
+		<string>weibosdk2.5</string>
+		<string>mqqopensdkapiV4
+mqqopensdkapiV4
+</string>
+		<string>mqqwpa</string>
+		<string>mqqapi</string>
+		<string>wtloginmqq2</string>
+		<string>mqqopensdkapiV3</string>
+		<string>mqzoneopensdk</string>
+		<string>mqzoneopensdkapi</string>
+		<string>mqzoneopensdkapi19</string>
+		<string>mqzoneopensdkapiV2</string>
+		<string>mqqOpensdkSSoLogin</string>
+		<string>mqqopensdkapiV2</string>
+		<string>mqzone</string>
+		<string>mqq</string>
+		<string>weixin</string>
+		<string>wechat</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>我们需要使用您的相机进行拍照或扫描？</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
@@ -118,6 +114,10 @@ mqqopensdkapiV4
 			</array>
 		</dict>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -127,8 +127,6 @@ mqqopensdkapiV4
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

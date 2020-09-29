@@ -8,8 +8,7 @@
 
 #import "PLPlayerView.h"
 #import <AVFoundation/AVFoundation.h>
-#import "DemandModel.h"
-#import "LivingModel.h"
+#import "PLPlayModel.h"
 #import <UIImageView+YYWebImage.h>
 #import <UIImageView+WebCache.h>
 #import <EZUIKit/EZUIPlayer.h>
@@ -77,6 +76,7 @@ EZUIPlayerDelegate
 @property (nonatomic, assign) CGFloat edgeSpace;
 
 @property (nonatomic,strong) EZUIPlayer *ePlayer;
+@property (nonatomic,assign) int ePlayTime;
 
 @end
 
@@ -364,6 +364,9 @@ EZUIPlayerDelegate
 }
 
 - (void)timerAction {
+    if (self.playType == PlayerStatusHk) {
+        return;
+    }
     self.slider.value = CMTimeGetSeconds(self.player.currentTime);
     if (CMTimeGetSeconds(self.player.totalDuration)) {
         int duration = self.slider.value + .5;
@@ -373,23 +376,6 @@ EZUIPlayerDelegate
         self.playTimeLabel.text = [NSString stringWithFormat:@"%d:%02d:%02d", hour, min, sec];
         self.bottomPlayProgreeeView.progress = self.slider.value / CMTimeGetSeconds(self.player.totalDuration);
     }
-    
-    
-//    self.slider.value = CMTimeGetSeconds(self.ePlayer.);
-//    if (CMTimeGetSeconds(self.player.totalDuration)) {
-//        int duration = self.slider.value + .5;
-//        int hour = duration / 3600;
-//        int min  = (duration % 3600) / 60;
-//        int sec  = duration % 60;
-//        self.playTimeLabel.text = [NSString stringWithFormat:@"%d:%02d:%02d", hour, min, sec];
-//        self.bottomPlayProgreeeView.progress = self.slider.value / CMTimeGetSeconds(self.player.totalDuration);
-//    }
-    
-    
-    
-    
-    
-    
 }
 
 - (void)panGesture:(UIPanGestureRecognizer *)panGesture {
@@ -587,7 +573,36 @@ EZUIPlayerDelegate
 
 - (void)sliderValueChange {
     [self.player seekTo:CMTimeMake(self.slider.value * 1000, 1000)];
+    
+    NSInteger currentProgess = self.slider.value * [_plModel.duration floatValue]/1000;
+    NSInteger hour = currentProgess / 3600;
+    NSInteger minutes = currentProgess / 60;
+    NSInteger second = currentProgess % 60;
+
+    [self.ePlayer seekToTime:[self dateStringAfterFor:hour minutes:minutes second:second]];
 }
+
+//HikPlayer时间处理
+-(NSDate*)dateStringAfterFor:(NSInteger)hour minutes:(NSInteger)minutes second:(NSInteger)second
+{
+    //视频开始时间
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];//解决8小时时间差问题
+    NSDate *start_time = [dateFormatter dateFromString:_plModel.startTime];
+    
+    NSCalendar *gregorian = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *offsetComponents = [[NSDateComponents alloc]init];
+    [offsetComponents setHour:hour];
+    [offsetComponents setMinute:minutes];
+    [offsetComponents setSecond:second];
+    
+    //结果时间
+    NSDate *resultDate = [gregorian dateByAddingComponents:offsetComponents toDate:start_time options:0];
+    return resultDate;
+}
+
+
 
 - (void)doConstraintAnimation {
     [self setNeedsUpdateConstraints];
@@ -798,9 +813,9 @@ EZUIPlayerDelegate
 - (void)setupPlayer {
     [self unsetupPlayer];
     
-    NSLog(@"播放地址: %@", _media.videoUrl);
+    NSLog(@"播放地址: %@", _plModel.videoUrl);
     
-    if (![WWPublicMethod isStringEmptyText:_media.videoUrl]) {
+    if (![WWPublicMethod isStringEmptyText:_plModel.videoUrl]) {
 //        [_kHUDManager showMsgInView:nil withTitle:@"视频播放有误！" isSuccess:YES];
         if (_isFullScreen){
             [self clickExitFullScreenButton];
@@ -809,14 +824,14 @@ EZUIPlayerDelegate
     }
  
     self.thumbImageView.hidden = NO;
-    [self.thumbImageView yy_setImageWithURL:[NSURL URLWithString:_media.snapUrl] options:YYWebImageOptionProgressive];
+    [self.thumbImageView yy_setImageWithURL:[NSURL URLWithString:_plModel.picUrl] options:YYWebImageOptionProgressive];
     
     
     if (self.playType == PlayerStatusGBS) {
         
         self.playerOption = [PLPlayerOption defaultOption];
         PLPlayFormat format = kPLPLAY_FORMAT_UnKnown;
-        NSString *urlString = _media.videoUrl.lowercaseString;
+        NSString *urlString = _plModel.videoUrl.lowercaseString;
         if ([urlString hasSuffix:@"mp4"]) {
             format = kPLPLAY_FORMAT_MP4;
             self.isLiving = NO;
@@ -834,7 +849,7 @@ EZUIPlayerDelegate
         [self.playerOption setOptionValue:@(kPLLogNone) forKey:PLPlayerOptionKeyLogLevel];
         
         NSDate *date = [NSDate date];
-        self.player = [PLPlayer playerWithURL:[NSURL URLWithString:_media.videoUrl] option:self.playerOption];
+        self.player = [PLPlayer playerWithURL:[NSURL URLWithString:_plModel.videoUrl] option:self.playerOption];
         
         NSLog(@"playerWithURL 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
         
@@ -859,21 +874,12 @@ EZUIPlayerDelegate
     }else if (self.playType == PlayerStatusHk){
         
         self.isLiving = NO;
+        self.ePlayTime = 0;
         
-        NSString *str = @"ezopen://open.ys7.com/E16543953/1.rec?begin=20200927000000&end=20200928235959";
-                
+//        NSString *str = @"ezopen://open.ys7.com/E16543953/1.rec?begin=20200928000000&end=20200929235959";
         CGFloat height = kScreenWidth * 0.68 + 0.5;
 
-
-//        UIView *showView = [UIView new];
-//        showView.backgroundColor = [UIColor redColor];
-//        [self insertSubview:showView atIndex:0];
-//        showView.frame = self.bounds;
-//        [showView mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.edges.equalTo(self);
-//        }];
-//
-        self.ePlayer = [EZUIPlayer createPlayerWithUrl:str];
+        self.ePlayer = [EZUIPlayer createPlayerWithUrl:_plModel.videoUrl];
         self.ePlayer.mDelegate = self;
        //添加预览视图到当前界面
         self.ePlayer.previewView.contentMode = UIViewContentModeScaleAspectFit;
@@ -903,16 +909,14 @@ EZUIPlayerDelegate
         [self.ePlayer.previewView removeFromSuperview];
     }
     
-    
     [self removeTimer];
 }
-
-- (void)setMedia:(DemandModel *)media {
-    _media = media;
-    self.titleLabel.text = media.video_name;
+-(void)setPlModel:(PLPlayModel *)plModel
+{
+    _plModel = plModel;
+    self.titleLabel.text = plModel.video_name;
     self.isNeedSetupPlayer = YES;
-    [self.thumbImageView yy_setImageWithURL:[NSURL URLWithString:_media.snapUrl] options:YYWebImageOptionProgressive];
-
+    [self.thumbImageView yy_setImageWithURL:[NSURL URLWithString:_plModel.picUrl] options:YYWebImageOptionProgressive];
 }
 
 - (void)play {
@@ -1002,6 +1006,7 @@ EZUIPlayerDelegate
     [self.player stop];
     
     [self.ePlayer stopPlay];
+    [self.ePlayer releasePlayer];
     
     if (date) {
         NSLog(@"stop 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
@@ -1294,33 +1299,34 @@ EZUIPlayerDelegate
         [self clickExitFullScreenButton];
     }
     
-//    if ([error.errorString isEqualToString:UE_ERROR_INNER_VERIFYCODE_ERROR])
-//    {
-//        [_kHUDManager showMsgInView:nil withTitle:@"验证码错误" isSuccess:YES];
-//    }
-//    else if ([error.errorString isEqualToString:UE_ERROR_TRANSF_DEVICE_OFFLINE])
-//    {
-//        [_kHUDManager showMsgInView:nil withTitle:@"设备不在线" isSuccess:YES];
-//    }
-//    else if ([error.errorString isEqualToString:UE_ERROR_CAMERA_NOT_EXIST] ||
-//             [error.errorString isEqualToString:UE_ERROR_DEVICE_NOT_EXIST])
-//    {
-//        [_kHUDManager showMsgInView:nil withTitle:@"通道不存在" isSuccess:YES];
-//    }
-//    else if ([error.errorString isEqualToString:UE_ERROR_INNER_STREAM_TIMEOUT])
-//    {
-//        [_kHUDManager showMsgInView:nil withTitle:@"连接超时" isSuccess:YES];
-//    }
-//    else if ([error.errorString isEqualToString:UE_ERROR_CAS_MSG_PU_NO_RESOURCE])
-//    {
-//        [_kHUDManager showMsgInView:nil withTitle:@"设备连接数过大" isSuccess:YES];
-//    }
-//    else
-//    {
-//        [_kHUDManager showMsgInView:nil withTitle:@"播放失败" isSuccess:YES];
-//    }
-//
-//    NSLog(@"play error:%@(%ld)",error.errorString,error.internalErrorCode);
+    if ([error.errorString isEqualToString:UE_ERROR_INNER_VERIFYCODE_ERROR])
+    {
+        [_kHUDManager showMsgInView:nil withTitle:@"验证码错误" isSuccess:YES];
+    }
+    else if ([error.errorString isEqualToString:UE_ERROR_TRANSF_DEVICE_OFFLINE])
+    {
+        [_kHUDManager showMsgInView:nil withTitle:@"设备不在线" isSuccess:YES];
+    }
+    else if ([error.errorString isEqualToString:UE_ERROR_CAMERA_NOT_EXIST] ||
+             [error.errorString isEqualToString:UE_ERROR_DEVICE_NOT_EXIST])
+    {
+        [_kHUDManager showMsgInView:nil withTitle:@"通道不存在" isSuccess:YES];
+    }
+    else if ([error.errorString isEqualToString:UE_ERROR_INNER_STREAM_TIMEOUT])
+    {
+        [_kHUDManager showMsgInView:nil withTitle:@"连接超时" isSuccess:YES];
+    }
+    else if ([error.errorString isEqualToString:UE_ERROR_CAS_MSG_PU_NO_RESOURCE])
+    {
+        [_kHUDManager showMsgInView:nil withTitle:@"设备连接数过大" isSuccess:YES];
+    }
+    else
+    {
+        [_kHUDManager showMsgInView:nil withTitle:@"播放失败" isSuccess:YES];
+//        [self play];
+    }
+
+    NSLog(@"play error:%@(%ld)",error.errorString,error.internalErrorCode);
 }
 
 /**
@@ -1331,6 +1337,7 @@ EZUIPlayerDelegate
 - (void) EZUIPlayerPlaySucceed:(EZUIPlayer *) player
 {
     [self hideFullLoading];
+    self.centerPauseButton.hidden = YES;
     if (self.bottomBarView.frame.origin.y >= self.bounds.size.height) {
         [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideBar) object:nil];
         [self performSelector:@selector(hideBar) withObject:nil afterDelay:3];
@@ -1360,12 +1367,20 @@ EZUIPlayerDelegate
  */
 - (void) EZUIPlayerPrepared:(EZUIPlayer *) player
 {
-    if ([EZUIPlayer getPlayModeWithUrl:_media.videoUrl] ==  EZUIKIT_PLAYMODE_REC)
+    if ([EZUIPlayer getPlayModeWithUrl:_plModel.videoUrl] ==  EZUIKIT_PLAYMODE_REC)
     {
+        CGFloat fduration = [_plModel.duration floatValue];
+        int duration = fduration / 1000 + .5;
+        int hour = duration / 3600;
+        int min  = (duration % 3600) / 60;
+        int sec  = duration % 60;
+        self.durationLabel.text = [NSString stringWithFormat:@"%d:%02d:%02d", hour, min, sec];
+        
         [self showFullLoading];
         self.centerPauseButton.hidden = YES;
-        [self.ePlayer startPlay];
     }
+    [self play];
+
 }
 
 /**
@@ -1375,6 +1390,37 @@ EZUIPlayerDelegate
 - (void) EZUIPlayerFinished:(EZUIPlayer *) player
 {
     [self stop];
+}
+/**
+ 回放模式有效，播放的当前时间点回调，每1秒回调一次
+
+ @param osdTime osd时间点
+ */
+- (void) EZUIPlayerPlayTime:(NSDate *) osdTime
+{
+    self.ePlayTime++;
+    
+    NSString *minutes;
+    NSString *second;
+    //秒
+    if (self.ePlayTime%60 < 10) {
+        second = [NSString stringWithFormat:@"0%d",self.ePlayTime%60];
+    }else{
+        second = [NSString stringWithFormat:@"%d",self.ePlayTime%60];
+    }
+    //分钟
+    if (self.ePlayTime/60 < 10) {
+        minutes = [NSString stringWithFormat:@"0%d",self.ePlayTime/60];
+    }else{
+        minutes = [NSString stringWithFormat:@"%d",self.ePlayTime/60];
+    }
+    //小时
+    NSString *hours = [NSString stringWithFormat:@"%d",self.ePlayTime/3600];
+    self.playTimeLabel.text = [NSString stringWithFormat:@"%@:%@:%@",hours,minutes,second];
+    
+    self.slider.value = self.ePlayTime * 1000 / [_plModel.duration floatValue];
+    self.bottomPlayProgreeeView.progress = self.slider.value / [_plModel.duration floatValue];
+
 }
 
 @end

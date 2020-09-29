@@ -24,12 +24,12 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-@class DemandModel;
+@class CarmeaVideosModel;
 @interface PlayLocalVideoView : UIView
 
 @property (nonatomic, assign) id<PlayLocalVideoViewDelegate> delegate;
 
-@property (nonatomic,strong) DemandModel *model;
+@property (nonatomic,strong) CarmeaVideosModel *model;
 - (void)stop;
 - (void)play;
 - (void)pause;

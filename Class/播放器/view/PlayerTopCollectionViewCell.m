@@ -8,7 +8,7 @@
 
 #import "PlayerTopCollectionViewCell.h"
 #import "PLPlayerView.h"
-#import "DemandModel.h"
+#import "PLPlayModel.h"
 #import "LivingModel.h"
 #import "MyEquipmentsModel.h"
 
@@ -22,7 +22,6 @@
 @property (nonatomic, assign) BOOL isPlaying;
 @property (nonatomic, assign) BOOL isLiving;//是否是直播
 
-@property (nonatomic,strong) DemandModel *model;
 @property (nonatomic,strong) LivingModel *lvModel;
 
 @property (nonatomic,strong) UIView *coverView;
@@ -187,6 +186,7 @@
     }
     MyEquipmentsModel *myModel = obj;
     self.lvModel = myModel.model;
+    
     if (![WWPublicMethod isStringEmptyText:self.lvModel.hls]) {
         _coverView.hidden = NO;
         _titleImageView.hidden = NO;
@@ -196,14 +196,14 @@
         _coverView.hidden = YES;
         _titleImageView.hidden = YES;
         
-        NSDictionary *dic = @{ @"name":self.lvModel.name,
-                                @"snapUrl":self.lvModel.snap,
-                                @"videoUrl":self.lvModel.hls,
-                                @"sharedLink":self.lvModel.flv,
-                               @"createAt":self.lvModel.createdAt,
+        NSDictionary *dic = @{
+                               @"name":myModel.equipment_name,
+                               @"picUrl":myModel.snapURL,
+                               @"url":self.lvModel.hls,
+                               @"urlHd":self.lvModel.hlsHd,
                               };
-        DemandModel *models = [DemandModel makeModelData:dic];
-        self.playerView.media = models;
+        PLPlayModel *models = [PLPlayModel makeModelData:dic];
+        self.playerView.plModel = models;
         [self.playerView play];
         
     }

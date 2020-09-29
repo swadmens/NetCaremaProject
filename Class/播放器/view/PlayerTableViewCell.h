@@ -25,12 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@class DemandModel;
+@class CarmeaVideosModel;
 @interface PlayerTableViewCell : WWTableViewCell
 
 @property (nonatomic, weak) id<PlayerTableViewCellDelegate> delegate;
 
--(void)makeCellDataNoLiving:(DemandModel*)model witnLive:(BOOL)isLiving;
+-(void)makeCellDataNoLiving:(CarmeaVideosModel*)model witnLive:(BOOL)isLiving;
 -(void)makeCellDataLiving:(NSArray*)array witnLive:(BOOL)isLiving;
 
 - (void)stop;
