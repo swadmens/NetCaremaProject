@@ -9,10 +9,10 @@
 #import "WWViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
-@class LivingModel;
+@class MyEquipmentsModel;
 @protocol MyEquipmentsDelegate <NSObject>
 
--(void)selectCarmeraModel:(LivingModel*)model;
+-(void)selectCarmeraModel:(MyEquipmentsModel*)model;
 
 @end
 

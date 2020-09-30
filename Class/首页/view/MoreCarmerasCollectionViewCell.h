@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class LivingModel;
 @interface MoreCarmerasCollectionViewCell : WWCollectionViewCell
 
--(void)makeCellData:(LivingModel*)model withOnline:(BOOL)online;
+-(void)makeCellData:(LivingModel*)model;
 
 @property (nonatomic,copy) void(^moreBtnClick)(BOOL offline);
 @property (nonatomic,copy) void(^getModelBackdata)(LivingModel *model);

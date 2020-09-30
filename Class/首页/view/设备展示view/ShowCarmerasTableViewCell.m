@@ -71,16 +71,13 @@
     [rightImageView rightToView:self.contentView withSpace:10];
     
 }
--(void)makeCellData:(MyEquipmentsModel *)model witnSnap:(nonnull NSString *)snap
+-(void)makeCellData:(MyEquipmentsModel*)model
 {
     _titleLabel.text = model.equipment_name;
     _statesLabel.text = model.equipment_states;
-    [_titleImageView yy_setImageWithURL:[NSURL URLWithString:snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
-    if ([model.equipment_states isEqualToString:@"离线"]) {
-        _statesLabel.backgroundColor = UIColorFromRGB(0xAEAEAE, 1);
-    }else{
-        _statesLabel.backgroundColor = UIColorFromRGB(0xF39700, 1);
-    }
+//    [_titleImageView yy_setImageWithURL:[NSURL URLWithString:snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
+    _statesLabel.backgroundColor = !model.online?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
+    
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

@@ -27,9 +27,9 @@
     model.name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
     model.deviceId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceId"]];
     model.system_Source = [NSString stringWithFormat:@"%@",[dic objectForKey:@"system_Source"]];
-
-    NSString *online = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
-    model.status = [online isEqualToString:@"on"]?YES:NO;
+    model.status = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
+    
+    model.online = [[model.status isEqualToString:@"on"]?@(YES):@(NO) boolValue];
     
     model.presets = [NSArray arrayWithArray:[dic objectForKey:@"presets"]];//预置点数组
 

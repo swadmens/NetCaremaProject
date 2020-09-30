@@ -11,7 +11,6 @@
 #import "ShowCarmerasTableViewCell.h"
 #import "RequestSence.h"
 #import "MyEquipmentsModel.h"
-#import "LivingModel.h"
 
 @interface ShowCarmerasViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -30,13 +29,6 @@
 
 @implementation ShowCarmerasViewController
 
-//-(NSMutableArray*)dataArray
-//{
-//    if (!_dataArray) {
-//        _dataArray = [NSMutableArray array];
-//    }
-//    return _dataArray;
-//}
 - (void)setupTableView
 {
     self.tableView = [[WWTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
@@ -118,11 +110,8 @@
     
     ShowCarmerasTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ShowCarmerasTableViewCell getCellIDStr] forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
     MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    LivingModel *lvModel = [self.liveDataArray objectAtIndex:indexPath.row];
-    
-    [cell makeCellData:model witnSnap:lvModel.snap];
+    [cell makeCellData:model];
     
     return cell;
     
@@ -154,11 +143,6 @@
        // 插入数据到新的位置
     [self.dataArray insertObject:model atIndex:destinationIndexPath.row];
     
-    
-    LivingModel *lvModel = [self.liveDataArray objectAtIndex:sourceIndexPath.row];
-    [self.liveDataArray removeObject:lvModel];
-    [self.liveDataArray insertObject:lvModel atIndex:destinationIndexPath.row];
-
 }
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
@@ -218,7 +202,6 @@
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
     NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=%ld",self.equipment_id,(long)self.page];
-    
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
@@ -302,8 +285,7 @@
 }
 -(void)action_goback
 {
-//    [self.delegate getNewArray:self.dataArray withIndex:self.indexRow];
-    [self.delegate getNewInfoArray:self.dataArray withModelArray:self.liveDataArray withIndex:self.indexRow];
+    [self.delegate getNewInfoArray:self.dataArray withIndex:self.indexRow];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

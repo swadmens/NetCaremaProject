@@ -28,6 +28,7 @@
     CGFloat width = kScreenWidth/2-21;
     
     _showImageView = [UIImageView new];
+    _showImageView.image = UIImageWithFileName(@"player_hoder_image");
     [self.contentView addSubview:_showImageView];
     [_showImageView leftToView:self.self.contentView];
     [_showImageView topToView:self.contentView];
@@ -52,7 +53,6 @@
 //        return;
 //    }
     self.model = model;
-    
 //    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snapUrl] placeholder:UIImageWithFileName(@"player_hoder_image")];
     
     //此处获取视频封面，会有卡顿

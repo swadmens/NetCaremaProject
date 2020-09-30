@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class MyEquipmentsModel;
 @interface ShowCarmerasTableViewCell : WWTableViewCell
 
--(void)makeCellData:(MyEquipmentsModel*)model witnSnap:(NSString*)snap;
+-(void)makeCellData:(MyEquipmentsModel*)model;
 
 @end
 

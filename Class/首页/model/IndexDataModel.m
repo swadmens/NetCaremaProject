@@ -19,19 +19,22 @@
     model.equipment_id = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
     model.equipment_name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
     model.equipment_address = [NSString stringWithFormat:@"%@",[dic objectForKey:@"address"]];
-    model.equipment_type = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
-    model.lastUpdated = [NSString stringWithFormat:@"%@",[dic objectForKey:@"address"]];
-    model.creationTime = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
+    model.equipment_type = [NSString stringWithFormat:@"%@",[dic objectForKey:@"type"]];
+    model.lastUpdated = [NSString stringWithFormat:@"%@",[dic objectForKey:@"lastUpdated"]];
+    model.creationTime = [NSString stringWithFormat:@"%@",[dic objectForKey:@"creationTime"]];
     model.owner = [NSString stringWithFormat:@"%@",[dic objectForKey:@"owner"]];
     model.system_Source = [NSString stringWithFormat:@"%@",[dic objectForKey:@"system_Source"]];
     model.deviceSerial = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceSerial"]];
     
-    model.status = [[NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]] boolValue];
-
     
     NSDictionary *statesDic = [dic objectForKey:@"c8y_Availability"];
     NSString *status = [NSString stringWithFormat:@"%@",[statesDic objectForKey:@"status"]];
-    model.equipment_states = [status isEqualToString:@"AVAILABLE"]?@"在线":@"离线";
+    model.equipment_states = [status hasPrefix:@"UN"]?@"离线":@"在线";
+    model.online = [[status hasPrefix:@"UN"]?@(NO):@(YES) boolValue];
+
+    
+    NSDictionary *c8y_RequiredAvailability = [dic objectForKey:@"c8y_RequiredAvailability"];
+    model.responseInterval = [NSString stringWithFormat:@"%@",[c8y_RequiredAvailability objectForKey:@"responseInterval"]];
     
 
     NSDictionary *sourceInfo = [dic objectForKey:@"sourceInfo"];

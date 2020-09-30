@@ -21,7 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSArray *allDataArray;
 @property (nonatomic,assign) NSInteger indexInteger;
 @property (nonatomic, assign) BOOL isRecordFile;
-@property (nonatomic,strong) NSString *equiment_id;//父设备id
 
 +(UIViewController *)viewController:(UIView *)view;
 

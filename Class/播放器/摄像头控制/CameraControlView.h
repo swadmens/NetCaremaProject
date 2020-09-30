@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id<CameraControlDelete> delegate;
 
--(void)makeAllData:(NSArray*)presets withSystemSource:(NSString*)systemSource withDevice_id:(NSString*)device_id withEquimentId:(NSString*)equiment_id withIndex:(NSInteger)index;
+-(void)makeAllData:(NSArray*)presets withSystemSource:(NSString*)systemSource withDevice_id:(NSString*)device_id withIndex:(NSInteger)index;
 
 
 @end

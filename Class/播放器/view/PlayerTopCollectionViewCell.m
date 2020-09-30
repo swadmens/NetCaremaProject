@@ -58,7 +58,7 @@
         make.edges.equalTo(self.playView);
     }];
     [self configureVideo:NO];
-//    self.playerView.userInteractionEnabled = NO;
+    self.playerView.userInteractionEnabled = NO;
 
     
     _titleImageView = [UIImageView new];
@@ -184,13 +184,15 @@
     if (self.lvModel != nil) {
         return;
     }
+    
     MyEquipmentsModel *myModel = obj;
     self.lvModel = myModel.model;
     
-    if (![WWPublicMethod isStringEmptyText:self.lvModel.hls]) {
+//    if (![WWPublicMethod isStringEmptyText:self.lvModel.hls]) {
+    if (!self.lvModel.online) {
         _coverView.hidden = NO;
         _titleImageView.hidden = NO;
-//        _timeLabel.text = self.lvModel.StartAt;
+        _timeLabel.text = self.lvModel.createdAt;
     }else{
         
         _coverView.hidden = YES;

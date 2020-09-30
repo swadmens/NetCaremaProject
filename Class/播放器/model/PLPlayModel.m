@@ -22,6 +22,9 @@
     model.size = [NSString stringWithFormat:@"%@",[dic objectForKey:@"size"]];
     model.videoUrl = [NSString stringWithFormat:@"%@",[dic objectForKey:@"url"]];
     model.videoHDUrl = [NSString stringWithFormat:@"%@",[dic objectForKey:@"urlHd"]];
+    model.appKey = [NSString stringWithFormat:@"%@",[dic objectForKey:@"appKey"]];
+    model.token = [NSString stringWithFormat:@"%@",[dic objectForKey:@"token"]];
+    model.deviceId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceId"]];
 
     
     return model;

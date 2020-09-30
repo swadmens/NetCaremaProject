@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol showCarmeraDelegate <NSObject>
 
--(void)getNewInfoArray:(NSArray*)infoArray withModelArray:(NSArray*)mdArray withIndex:(NSInteger)index;
+-(void)getNewInfoArray:(NSArray *)infoArray withIndex:(NSInteger)index;
 
 @end
 
@@ -23,10 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) NSString *equipment_id;
 @property (nonatomic,assign) NSInteger indexRow;
-
 @property (nonatomic, strong) NSMutableArray *dataArray;
-@property (nonatomic, strong) NSMutableArray *liveDataArray;
-
 
 @end
 

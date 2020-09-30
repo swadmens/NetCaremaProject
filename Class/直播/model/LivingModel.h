@@ -22,7 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *rtmp;
 @property (nonatomic,strong) NSString *rtmpHd;
 @property (nonatomic,strong) NSString *snap;
-@property (nonatomic,assign) BOOL status;
+@property (nonatomic,strong) NSString *status;
+@property (nonatomic,assign) BOOL online;
 @property (nonatomic,strong) NSString *streamId;
 @property (nonatomic,strong) NSString *createdAt;
 @property (nonatomic,strong) NSString *name;

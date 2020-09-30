@@ -24,7 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *owner;
 @property (nonatomic,strong) NSString *system_Source;
 @property (nonatomic,strong) NSString *deviceSerial;
-@property (nonatomic,assign) BOOL status;
+@property (nonatomic,strong) NSString *responseInterval;
+@property (nonatomic,assign) BOOL online;
+
 
 
 @property (nonatomic,strong) NSString *source_id;
@@ -46,8 +48,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *source_catalogInterval;
 
 
-
-@property (nonatomic,strong) NSMutableArray *liveModelArray;//直播集合
 @property (nonatomic,strong) NSMutableArray *childDevices_info;//子设备组信息
 @property (nonatomic,strong) NSString *childDevices_id;//子设备id
 @property (nonatomic,strong) NSArray *equipment_nums;//设备数量

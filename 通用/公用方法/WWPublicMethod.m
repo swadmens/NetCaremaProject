@@ -126,7 +126,7 @@
 {
     NSString *theString = [str stringByReplacingOccurrencesOfString:@" " withString:@""];
     
-    if (theString.length == 0 || theString == nil || theString == NULL || [theString isEqualToString:@""] || [@"(null)" isEqualToString:theString]) {
+    if (theString.length == 0 || theString == nil || theString == NULL || [theString isEqualToString:@""] || [@"(null)" isEqualToString:theString] || [@"<null>" isEqualToString:theString]) {
         return NO;
     }
     return YES;

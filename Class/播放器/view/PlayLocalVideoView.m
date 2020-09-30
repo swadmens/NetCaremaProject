@@ -91,12 +91,21 @@
                           @"endTime":model.endTime,
     };
     PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
-    self.playerView.plModel = pModel;
     
     if ([model.url hasPrefix:@"ezopen://"]) {
         self.playerView.playType = PlayerStatusHk;
+        self.playerView.plModel = pModel;
+    }else if ([model.url hasPrefix:@"imou://"]){
+        self.playerView.playType = PlayerStatusDH;
+        NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
+        [mutDic setObject:model.appKey forKey:@"appKey"];
+        [mutDic setObject:model.token forKey:@"token"];
+        
+        PLPlayModel *mutModel = [PLPlayModel makeModelData:mutDic];
+        self.playerView.plModel = mutModel;
     }else{
         self.playerView.playType = PlayerStatusGBS;
+        self.playerView.plModel = pModel;
     }
     [self configureVideo:NO];
     [self.playerView play];

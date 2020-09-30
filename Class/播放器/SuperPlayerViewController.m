@@ -134,7 +134,7 @@
         [self startLoadDataRequest:self.selectModel.deviceId];
         [self tipViewHidden:YES withTitle:@"开始录像"];
         if (MyModel.model != nil) {
-            [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withEquimentId:self.equiment_id withIndex:0];
+            [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withIndex:0];
         }
   
     }
@@ -578,18 +578,21 @@
 }
 
 
-- (void)selectCellCarmera:(PlayerTableViewCell *)cell withData:(LivingModel *)model withIndex:(NSInteger)index
+- (void)selectCellCarmera:(PlayerTableViewCell *)cell withData:(MyEquipmentsModel *)model withIndex:(NSInteger)index
 {
     if ([self.streamid isEqualToString:model.deviceSerial]) {
         return;
     }
     
-    self.selectModel = model;
+    self.selectModel = model.model;
     
-    self.carmer_id = model.deviceId;
-    self.streamid = model.deviceSerial;
-    [self startLoadDataRequest:model.deviceId];
-    [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withEquimentId:self.equiment_id withIndex:index];
+    self.carmer_id = self.selectModel.deviceId;
+    self.streamid = self.selectModel.deviceSerial;
+    [self startLoadDataRequest:self.selectModel.deviceId];
+    if (self.selectModel != nil) {
+        [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withIndex:index];
+    }
+    
 }
 //右上角按钮
 -(void)sharaBtnCLick

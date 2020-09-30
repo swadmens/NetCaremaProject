@@ -13,7 +13,7 @@
 #import <UIImageView+WebCache.h>
 #import <EZUIKit/EZUIPlayer.h>
 #import <EZUIKit/EZUIError.h>
-
+#import <LCOpenSDKDynamic/LCOpenSDKDynamic.h>
 
 @class PLControlView;
 
@@ -75,8 +75,11 @@ EZUIPlayerDelegate
 // 适配iPhone X
 @property (nonatomic, assign) CGFloat edgeSpace;
 
-@property (nonatomic,strong) EZUIPlayer *ePlayer;
+@property (nonatomic,strong) EZUIPlayer *ePlayer;//海康播放器
 @property (nonatomic,assign) int ePlayTime;
+
+@property (nonatomic,strong) LCOpenSDK_PlayWindow* m_play;//大华播放器
+
 
 @end
 
@@ -826,6 +829,8 @@ EZUIPlayerDelegate
     self.thumbImageView.hidden = NO;
     [self.thumbImageView yy_setImageWithURL:[NSURL URLWithString:_plModel.picUrl] options:YYWebImageOptionProgressive];
     
+    CGFloat height = kScreenWidth * 0.68 + 0.5;
+
     
     if (self.playType == PlayerStatusGBS) {
         
@@ -877,7 +882,6 @@ EZUIPlayerDelegate
         self.ePlayTime = 0;
         
 //        NSString *str = @"ezopen://open.ys7.com/E16543953/1.rec?begin=20200928000000&end=20200929235959";
-        CGFloat height = kScreenWidth * 0.68 + 0.5;
 
         self.ePlayer = [EZUIPlayer createPlayerWithUrl:_plModel.videoUrl];
         self.ePlayer.mDelegate = self;
@@ -893,10 +897,42 @@ EZUIPlayerDelegate
 
     }else{
         //大华视频加载
-        ///
-        ///
+        self.m_play = [[LCOpenSDK_PlayWindow alloc] initPlayWindow:CGRectMake(0, 0,kScreenWidth,height) Index:1];
+        [self.m_play setSurfaceBGColor:[UIColor blackColor]];
+        [self addSubview:[self.m_play getWindowView]];
+        
+        
+    
+        LCOpenSDK_ParamDeviceRecordUTCTime  *paramDeviceRecordUTCTime  = [[LCOpenSDK_ParamDeviceRecordUTCTime alloc] init];
+        paramDeviceRecordUTCTime.accessToken = _plModel.token;
+        paramDeviceRecordUTCTime.deviceID = @"525917";
+        paramDeviceRecordUTCTime.psk = _plModel.appKey;
+        paramDeviceRecordUTCTime.channel = 1;
+        paramDeviceRecordUTCTime.playToken = _plModel.token;
+        paramDeviceRecordUTCTime.beginTime = [self timeIntervalOfString:_plModel.startTime];
+        paramDeviceRecordUTCTime.endTime = [self timeIntervalOfString:_plModel.endTime] ;
+        paramDeviceRecordUTCTime.defiMode =  DEFINITION_MODE_HG;
+        paramDeviceRecordUTCTime.isOpt = YES;
+        [self.m_play playDeviceRecordByUtcTime:paramDeviceRecordUTCTime];
     }
 }
+- (NSTimeInterval)timeIntervalOfString:(NSString*)strTime
+{
+    NSString* regex = @"[1-9]\\d{3}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"; //正常字符范围
+    NSPredicate* pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex]; //比较处理
+
+    //不符合格式的返回0
+    if (![pred evaluateWithObject:strTime]) {
+        NSLog(@"Time format error:%@", strTime);
+        return 0;
+    }
+
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate* date = [formatter dateFromString:strTime];
+    return [date timeIntervalSince1970];
+}
+
 
 - (void)unsetupPlayer {
     [self stop];
@@ -1016,6 +1052,7 @@ EZUIPlayerDelegate
     [self removeFullStreenNotify];
     [self resetUI];
     [self.controlView resetStatus];
+    [self hideFullLoading];
     self.isStop = YES;
     self.isStartPlay = NO;
     [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
@@ -1294,7 +1331,7 @@ EZUIPlayerDelegate
  */
 - (void) EZUIPlayer:(EZUIPlayer *) player didPlayFailed:(EZUIError *) error
 {    
-    [self stop];
+//    [self stop];
     if (self.isFullScreen) {
         [self clickExitFullScreenButton];
     }
@@ -1323,7 +1360,7 @@ EZUIPlayerDelegate
     else
     {
         [_kHUDManager showMsgInView:nil withTitle:@"播放失败" isSuccess:YES];
-//        [self play];
+        [self play];
     }
 
     NSLog(@"play error:%@(%ld)",error.errorString,error.internalErrorCode);

@@ -8,6 +8,7 @@
 
 #import "LiveViewCollectionViewCell.h"
 #import "LivingModel.h"
+#import "MyEquipmentsModel.h"
 #import <UIImageView+YYWebImage.h>
 
 @interface LiveViewCollectionViewCell ()
@@ -56,6 +57,7 @@
     [backView addSubview:_titleLabel];
     [_titleLabel yCenterToView:backView];
     [_titleLabel leftToView:backView withSpace:5];
+    [_titleLabel addWidth:width-50];
    
    
     _tagLabel = [UILabel new];
@@ -72,16 +74,12 @@
     [_tagLabel addHeight:15.5];
     
 }
--(void)makeCellData:(LivingModel*)model
+-(void)makeCellData:(MyEquipmentsModel*)model
 {
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:[UIImage imageWithColor:kColorBackSecondColor]];
-    _titleLabel.text = model.rtmp;
-    
-    if ([WWPublicMethod isStringEmptyText:model.hls]) {
-        _tagLabel.text = @"直播中";
-    }else{
-        _tagLabel.text = @"离线";
-    }
+    LivingModel *lvModel = model.model;
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:lvModel.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
+    _titleLabel.text = lvModel.name;
+    _tagLabel.text = lvModel.online?@"直播中":@"离线";
 }
 
 

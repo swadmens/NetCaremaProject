@@ -22,6 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *size;
 @property (nonatomic,strong) NSString *videoUrl;
 @property (nonatomic,strong) NSString *videoHDUrl;
+@property (nonatomic,strong) NSString *appKey;
+@property (nonatomic,strong) NSString *token;
+@property (nonatomic,strong) NSString *deviceId;
 
 @end
 

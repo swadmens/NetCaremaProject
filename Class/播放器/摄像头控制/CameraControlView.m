@@ -41,7 +41,7 @@
 
 @property (nonatomic,strong) NSString *systemSource;//设备类型
 @property (nonatomic,strong) NSString *device_id;//设备id
-@property (nonatomic,strong) NSString *equiment_id;//父设备id
+//@property (nonatomic,strong) NSString *equiment_id;//父设备id
 @property (nonatomic,strong) NSString *presetIndex;//预置点
 @property (nonatomic,assign) NSInteger indexItem;//选择的视图位置
 @property (nonatomic,strong) NSMutableArray *mutPresets;//预置点数组
@@ -345,13 +345,12 @@
     self.setView.frame = CGRectMake(kScreenWidth, 45, kScreenWidth, kScreenHeight - KTopviewheight - 222);
     
 }
--(void)makeAllData:(NSArray*)presets withSystemSource:(NSString*)systemSource withDevice_id:(NSString*)device_id withEquimentId:(NSString*)equiment_id withIndex:(NSInteger)index
+-(void)makeAllData:(NSArray*)presets withSystemSource:(NSString*)systemSource withDevice_id:(NSString*)device_id withIndex:(NSInteger)index
 {
     self.mutPresets = [NSMutableArray arrayWithArray:presets];
     
     self.systemSource = [NSString stringWithString:systemSource];
     self.device_id = [NSString stringWithString:device_id];
-    self.equiment_id = [NSString stringWithString:equiment_id];
     self.indexItem = index;
 
     [self.setView makeAllData:presets withSystemSource:systemSource withDevice_id:device_id];

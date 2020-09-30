@@ -123,13 +123,13 @@
     
     
 }
--(void)makeCellData:(LivingModel *)model withOnline:(BOOL)online
+-(void)makeCellData:(LivingModel*)model
 {
     self.model = model;
     _titleLabel.text = model.name;
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
     
-    if (online) {
+    if (self.model.online) {
         self.isLiving = YES;
         self.coverView.hidden = YES;
     }else{

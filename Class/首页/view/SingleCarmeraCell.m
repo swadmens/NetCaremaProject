@@ -94,6 +94,8 @@
     [backView addSubview:_equipmentAddress];
     [_equipmentAddress leftToView:addressView withSpace:2];
     [_equipmentAddress yCenterToView:addressView];
+    [_equipmentAddress addWidth:kScreenWidth-85];
+
  
     
     
@@ -124,14 +126,14 @@
 }
 -(void)makeCellData:(IndexDataModel *)model
 {
+    MyEquipmentsModel *myModel = model.childDevices_info.firstObject;
+    
     _equipmentName.text = model.equipment_name;
-    _equipmentAddress.text = model.equipment_address;    
-    _equipmentStates.text = model.status?@"在线":@"离线";
+    _equipmentAddress.text = model.creationTime;
+    _equipmentStates.text = model.equipment_states;
 
-    _equipmentStates.backgroundColor = model.status?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
-
-    LivingModel *lvModel = model.liveModelArray.firstObject;
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:lvModel.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
+    _equipmentStates.backgroundColor = model.online?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:myModel.model.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
 }
 -(void)moreButtonClick
 {

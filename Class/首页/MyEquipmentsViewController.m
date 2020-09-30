@@ -11,7 +11,6 @@
 #import "MyEquipmentsCell.h"
 #import "RequestSence.h"
 #import "MyEquipmentsModel.h"
-#import "LivingModel.h"
 
 @interface MyEquipmentsViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -68,24 +67,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    
-//    NSDictionary *dic = @{
-//                          @"id":model.equipment_id,
-//                          @"name":model.equipment_name,
-//                          @"c8y_Notes":model.c8y_Notes,
-//                          @"CameraId":model.CameraId,
-//                          @"Channel":model.equipment_Channel,
-//                          @"ClientId":model.ClientId,
-//                          @"DeviceId":model.DeviceId,
-//                          @"owner":model.owner,
-//                          @"lastUpdated":model.lastUpdated,
-//                          @"responseInterval":model.responseInterval,
-//                         };
-//    NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
-//
-//    [TargetEngine controller:self pushToController:PushTargetEquipmentInformation WithTargetId:pushId];
-    
-    [self.delegate selectCarmeraModel:model.model];
+    [self.delegate selectCarmeraModel:model];
     [self.navigationController popViewControllerAnimated:YES];
 
 }

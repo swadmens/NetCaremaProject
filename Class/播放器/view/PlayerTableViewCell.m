@@ -404,7 +404,7 @@
     [self.collectionView reloadData];
 }
 #pragma mark - MyEquipmentsDelegate
--(void)selectCarmeraModel:(LivingModel *)model
+-(void)selectCarmeraModel:(MyEquipmentsModel *)model
 {
     if (model == nil) {
         return;

@@ -8,7 +8,6 @@
 
 #import "IndexViewController.h"
 #import "WWTableView.h"
-#import "IndexTableViewCell.h"
 #import "RequestSence.h"
 #import "IndexDataModel.h"
 #import "IndexTopView.h"
@@ -41,7 +40,6 @@
 
 @property (nonatomic,assign) BOOL isLogion;//是否登录
 @property (nonatomic,strong) MyEquipmentsModel *selectModel;
-@property (nonatomic,strong) LivingModel *selectLvModel;
 
 //直播数据源
 @property (nonatomic,strong) NSMutableDictionary *modelDic;
@@ -75,7 +73,6 @@
     [self.tableView alignTop:@"110" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    [self.tableView registerClass:[IndexTableViewCell class] forCellReuseIdentifier:[IndexTableViewCell getCellIDStr]];
     [self.tableView registerClass:[SingleCarmeraCell class] forCellReuseIdentifier:[SingleCarmeraCell getCellIDStr]];
     [self.tableView registerClass:[MoreCarmerasCell class] forCellReuseIdentifier:[MoreCarmerasCell getCellIDStr]];
     self.tableView.refreshEnable = YES;
@@ -184,7 +181,6 @@
         cell.moreDealClick = ^(NSInteger selectRow, BOOL offline) {
             
             self.selectModel = [model.childDevices_info objectAtIndex:selectRow];
-            self.selectLvModel = [model.liveModelArray objectAtIndex:selectRow];
 
             [self moreDealwith:offline];
         };
@@ -195,7 +191,6 @@
             vc.delegate = self;
             vc.indexRow = indexPath.row;
             vc.dataArray = [NSMutableArray arrayWithArray:model.childDevices_info];
-            vc.liveDataArray = [NSMutableArray arrayWithArray:model.liveModelArray];
             vc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vc animated:YES];
             self.hidesBottomBarWhenPushed = NO;
@@ -217,14 +212,13 @@
         cell.moreClick = ^{
             self.selectModel = model.childDevices_info.firstObject;
 //            self.selectLvModel = model.liveModelArray.firstObject;
-            [self moreDealwith:model.status];
+            [self moreDealwith:model.online];
         };
         cell.getSingleModelBackdata = ^(LivingModel * _Nonnull model) {
             NSArray *arr = [NSArray arrayWithObjects:model, nil];
             [self.modelDic removeObjectForKey:@(indexPath.row)];
             [self.modelDic setObject:arr forKey:@(indexPath.row)];
         };
-        
         
         return cell;
     }  
@@ -238,7 +232,6 @@
     vc.allDataArray = [NSArray arrayWithArray:model.childDevices_info];
     vc.isLiving = YES;
     vc.title_value = model.equipment_name;
-    vc.equiment_id = model.equipment_id;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
     
@@ -262,9 +255,7 @@
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
     NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?type=camera_Root&fragmentType=camera_Device&pageSize=100&currentPage=%ld",(long)self.page];
-//    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?pageSize=100&fragmentType=quark_GBSManageDevice&currentPage=%ld",(long)self.page];
-    
-    
+
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/vnd.com.nsn.cumulocity.managedobjectcollection+json";
@@ -490,7 +481,7 @@
     vc.hidesBottomBarWhenPushed = YES;
     vc.isFromIndex = YES;
     vc.device_id = self.selectModel.equipment_id;
-    vc.code = self.selectLvModel.deviceSerial;
+    vc.code = self.selectModel.model.deviceSerial;
     vc.system_Source = self.selectModel.system_Source;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
@@ -517,16 +508,12 @@
 
 }
 #pragma LocalVideoDelegate
--(void)selectRowData:(NSInteger)value
-{
-    
-}
+-(void)selectRowData:(CarmeaVideosModel*)model{}
 #pragma showCarmeraDelegate
--(void)getNewInfoArray:(NSArray *)infoArray withModelArray:(NSArray *)mdArray withIndex:(NSInteger)index
+-(void)getNewInfoArray:(NSArray *)infoArray withIndex:(NSInteger)index
 {
     IndexDataModel *model = [self.dataArray objectAtIndex:index];
-    model.childDevices_info = infoArray;
-    model.liveModelArray = [NSMutableArray arrayWithArray:mdArray];
+    model.childDevices_info = [NSMutableArray arrayWithArray:infoArray];
     [self.dataArray replaceObjectAtIndex:index withObject:model];
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
     

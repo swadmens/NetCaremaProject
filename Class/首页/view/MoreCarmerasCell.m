@@ -126,7 +126,8 @@
     [backView addSubview:_equipmentAddress];
     [_equipmentAddress leftToView:addressView withSpace:2];
     [_equipmentAddress yCenterToView:addressView];
-    
+    [_equipmentAddress addWidth:kScreenWidth-105];
+
     
     UIButton *rightBtn = [UIButton new];
     [rightBtn setImage:UIImageWithFileName(@"index_right_image") forState:UIControlStateNormal];
@@ -154,10 +155,11 @@
 -(void)makeCellData:(IndexDataModel *)model
 {
     _equipmentName.text = model.equipment_name;
-    _equipmentAddress.text = model.equipment_address;
-    _equipmentStates.text = model.status?@"在线":@"离线";
+    _equipmentAddress.text = model.creationTime;
+    _equipmentStates.text = model.equipment_states;
 
-    _equipmentStates.backgroundColor = model.status?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
+    _equipmentStates.backgroundColor = model.online?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
+    
     self.dataArray = [NSArray arrayWithArray:model.childDevices_info];
     
     [self.collectionView reloadData];
@@ -173,7 +175,7 @@
     MoreCarmerasCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MoreCarmerasCollectionViewCell getCellIDStr] forIndexPath:indexPath];
     
     MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    [cell makeCellData:model.model withOnline:model.online];
+    [cell makeCellData:model.model];
 
     cell.moreBtnClick = ^(BOOL offline) {
         if (self.moreDealClick) {
