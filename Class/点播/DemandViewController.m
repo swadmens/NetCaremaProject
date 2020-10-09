@@ -344,8 +344,7 @@
         DemandModel *model = [self.dataArray objectAtIndex:indexPath.row];
         
         NSDictionary *dic = @{
-                               @"name":model.vodName,
-                               @"duration":model.duration,
+                               @"name":model.name,
                                @"url":model.filePath,
                               };
         CarmeaVideosModel *models = [CarmeaVideosModel makeModelData:dic];
@@ -355,7 +354,7 @@
         vc.indexInteger = indexPath.row;
         vc.isRecordFile = NO;
         vc.isLiving = NO;
-        vc.title_value = model.vodName;
+        vc.title_value = model.name;
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
@@ -406,37 +405,37 @@
 }
 -(void)loadData
 {
-    [_kHUDManager showActivityInView:nil withTitle:nil];
-
-    NSString *url = [NSString stringWithFormat:@"http://39.108.208.122:5080/LiveApp/rest/v2/vods/list/%ld/10",self.page];
+//    [_kHUDManager showActivityInView:nil withTitle:nil];
+//
+//    NSString *url = [NSString stringWithFormat:@"http://39.108.208.122:5080/LiveApp/rest/v2/vods/list/%ld/10",self.page];
+//
+//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+//    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+//
+//    __unsafe_unretained typeof(self) weak_self = self;
+//
+//    NSURLSessionDataTask *task = [manager GET:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
+//
+//        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//
+//            [_kHUDManager hideAfter:0.1 onHide:nil];
+//            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
+//
+//            DLog(@"\n~~~~~完成请求地址:%@\n",httpResponse.URL.absoluteString);
+//            DLog(@"Received: %@", responseObject);
+//            DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
+//
+//            [weak_self handleObject:responseObject];
+//
+//        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//            // 请求失败
+//            [_kHUDManager hideAfter:0.1 onHide:nil];
+//            [_kHUDManager showMsgInView:nil withTitle:@"请求失败" isSuccess:NO];
+//        }];
+//    [task resume];
     
-    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFJSONResponseSerializer serializer];
     
-    __unsafe_unretained typeof(self) weak_self = self;
-
-    NSURLSessionDataTask *task = [manager GET:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
-            
-        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-             
-            [_kHUDManager hideAfter:0.1 onHide:nil];
-            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-           
-            DLog(@"\n~~~~~完成请求地址:%@\n",httpResponse.URL.absoluteString);
-            DLog(@"Received: %@", responseObject);
-            DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-            
-            [weak_self handleObject:responseObject];
-
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            // 请求失败
-            [_kHUDManager hideAfter:0.1 onHide:nil];
-            [_kHUDManager showMsgInView:nil withTitle:@"请求失败" isSuccess:NO];
-        }];
-    [task resume];
-    
-    
-//    [self startLoadDataRequest];
+    [self startLoadDataRequest];
 }
 - (void)startLoadDataRequest
 {
@@ -459,17 +458,18 @@
     }
     
     //提交数据
-    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/list";
+//    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/list";
+    NSString *url = [NSString stringWithFormat:@"/inventory/managedObjects?type=vod&fragmentType=camera_Vod&pageSize=10&currentPage=%ld",(long)self.page];
     
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mutData
                                                        options:0
                                                          error:nil];
     
     RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"BODY";
+    sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
-    sence.body = jsonData;
-    sence.pathURL = @"service/video/liveqing/vod/list";
+//    sence.body = jsonData;
+    sence.pathURL = url;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
@@ -552,7 +552,7 @@
     [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
-//        NSArray *data = [obj objectForKey:@"references"];
+        NSArray *data = [obj objectForKey:@"managedObjects"];
 //        NSDictionary *data = [obj objectForKey:@"data"];
 //        NSArray *rows= [data objectForKey:@"rows"];
         NSMutableArray *tempArray = [NSMutableArray array];
@@ -561,7 +561,7 @@
             [weak_self.dataArray removeAllObjects];
         }
 
-        [obj enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             DemandModel *model = [DemandModel makeModelData:dic];
             [tempArray addObject:model];

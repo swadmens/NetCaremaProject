@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *startTime;
 @property (nonatomic,strong) NSString *token;
 @property (nonatomic,strong) NSString *url;
+@property (nonatomic,strong) NSString *deviceId;
 
 @end
 

@@ -733,7 +733,9 @@
         return;
     }
     __unsafe_unretained typeof(self) weak_self = self;
-    NSString *recordType = [self.selectModel.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
+//    NSString *recordType = [self.selectModel.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
+    NSString *recordType = @"cloud";
+
 
     NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.selectModel.system_Source,carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],recordType];
     
@@ -788,7 +790,7 @@
 - (void)failedOperation
 {
     [_kHUDManager hideAfter:0.1 onHide:nil];
-    [_kHUDManager showMsgInView:nil withTitle:@"请求失败" isSuccess:NO];
+//    [_kHUDManager showMsgInView:nil withTitle:@"请求失败" isSuccess:NO];
 }
 - (void)handleObject:(id)obj
 {
@@ -803,7 +805,9 @@
         
         [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
-            CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:dic];
+            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
+            [mutDic setObject:self.selectModel.deviceId forKey:@"deviceId"];
+            CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
             [tempArray addObject:model];
         }];
         [self.localVideosArray addObjectsFromArray:tempArray];

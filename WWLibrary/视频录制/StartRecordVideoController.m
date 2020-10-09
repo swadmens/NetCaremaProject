@@ -161,6 +161,34 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 
 }
 
+- (AVCaptureVideoOrientation)getCaptureVideoOrientation {
+    AVCaptureVideoOrientation result;
+    
+    UIDeviceOrientation deviceOrientation = [UIDevice currentDevice].orientation;
+    switch (deviceOrientation) {
+        case UIDeviceOrientationPortrait:
+        case UIDeviceOrientationFaceUp:
+        case UIDeviceOrientationFaceDown:
+            result = AVCaptureVideoOrientationPortrait;
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            //如果这里设置成AVCaptureVideoOrientationPortraitUpsideDown，则视频方向和拍摄时的方向是相反的。
+            result = AVCaptureVideoOrientationPortrait;
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+            result = AVCaptureVideoOrientationLandscapeRight;
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            result = AVCaptureVideoOrientationLandscapeLeft;
+            break;
+        default:
+            result = AVCaptureVideoOrientationPortrait;
+            break;
+    }
+    
+    return result;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -306,7 +334,11 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
             [[NSFileManager defaultManager] removeItemAtURL:self.saveVideoUrl error:nil];
         }
         //预览图层和视频方向保持一致
-        connection.videoOrientation = [self.previewLayer connection].videoOrientation;
+//        connection.videoOrientation = [self.previewLayer connection].videoOrientation;
+        if ([connection isVideoOrientationSupported]) {
+            connection.videoOrientation = [self getCaptureVideoOrientation];
+        }
+
         [self.captureMovieFileOutput startRecordingToOutputFileURL:[self outputCaches] recordingDelegate:self];
     } else {
         [self.captureMovieFileOutput stopRecording];

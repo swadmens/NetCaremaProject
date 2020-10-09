@@ -18,6 +18,7 @@
 @property (strong, nonatomic) NSMutableArray *dataArray;
 
 @property (strong, nonatomic) UIView *noDataView;
+@property (strong,nonatomic) UILabel *otherLabel;
 
 @end
 
@@ -74,14 +75,14 @@
     [iconImageView leftToView:backView withSpace:15];
     
     
-    UILabel *otherLabel = [UILabel new];
-    otherLabel.text = @"本地录像";
-    otherLabel.textColor = UIColorFromRGB(0x2e2e2e, 1);
-    otherLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [otherLabel sizeToFit];
-    [backView addSubview:otherLabel];
-    [otherLabel leftToView:iconImageView withSpace:5];
-    [otherLabel yCenterToView:iconImageView];
+    _otherLabel = [UILabel new];
+    _otherLabel.text = @"本地录像";
+    _otherLabel.textColor = UIColorFromRGB(0x2e2e2e, 1);
+    _otherLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+    [_otherLabel sizeToFit];
+    [backView addSubview:_otherLabel];
+    [_otherLabel leftToView:iconImageView withSpace:5];
+    [_otherLabel yCenterToView:iconImageView];
     
     
     
@@ -96,7 +97,7 @@
     CGFloat marginGay = 22;
     allButton.imageEdgeInsets = UIEdgeInsetsMake(0, marginGay, 0, margin - marginGay);
     [backView addSubview:allButton];
-    [allButton yCenterToView:otherLabel];
+    [allButton yCenterToView:_otherLabel];
     [allButton rightToView:backView withSpace:25];
     [allButton addTarget:self action:@selector(allVideosClick) forControlEvents:UIControlEventTouchUpInside];
     
@@ -154,7 +155,6 @@
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return self.dataArray.count;
-//    return 5;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {

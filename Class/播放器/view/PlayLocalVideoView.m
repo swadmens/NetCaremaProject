@@ -89,6 +89,7 @@
                           @"url":model.url,
                           @"startTime":model.startTime,
                           @"endTime":model.endTime,
+                          @"deviceId":model.deviceId,
     };
     PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
     

@@ -22,6 +22,7 @@
     model.size = [NSString stringWithFormat:@"%@",[dic objectForKey:@"size"]];
     model.token = [NSString stringWithFormat:@"%@",[dic objectForKey:@"token"]];
     model.url = [NSString stringWithFormat:@"%@",[dic objectForKey:@"url"]];
+    model.deviceId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceId"]];
 
     
     return model;

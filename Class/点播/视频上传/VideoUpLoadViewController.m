@@ -379,8 +379,8 @@
 {
     [_kHUDManager showActivityInView:nil withTitle:@"正在上传..."];
     __unsafe_unretained typeof(self) weak_self = self;
-
-    NSString *url = [NSString stringWithFormat:@"http://39.108.208.122:5080/LiveApp/rest/v2/vods/create?name=%@",fileName];
+    
+    NSString *url = [NSString stringWithFormat:@"http://192.168.6.120:11026/camera/vod/upload?name=%@",fileName];
     NSString *newUrlString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];//链接含有中文转码
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -389,9 +389,9 @@
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"application/json",@"text/javascript",@"text/json",@"text/plain",@"multipart/form-data",nil];
 
     // 设置请求头
-//    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-//    [manager.requestSerializer setValue:@"multipart/form-data" forHTTPHeaderField:@"Content-Type"];
-//@{@"accept":@"video/*"}
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [manager.requestSerializer setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
 
     NSURLSessionDataTask *task = [manager POST:newUrlString parameters:nil headers:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
 
@@ -401,23 +401,14 @@
 
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-
         DLog(@"responseObject ==  %@",responseObject)
-
-        BOOL success = [[NSString stringWithFormat:@"%@",[responseObject objectForKey:@"success"]] boolValue];
-        if (success) {
-            [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
-            [weak_self.navigationController popViewControllerAnimated:YES];
-        }else{
-            [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
-        }
-
+        [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
+        [weak_self.navigationController popViewControllerAnimated:YES];
+     
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         [_kHUDManager showMsgInView:nil withTitle:@"上传失败，请重试！" isSuccess:YES];
-
-        DLog(@"error ==  %@",error.userInfo)
-
+        DLog(@"error ==  %@",error)
     }];
 
     [task resume];

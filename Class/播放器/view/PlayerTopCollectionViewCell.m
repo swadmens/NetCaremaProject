@@ -203,6 +203,7 @@
                                @"picUrl":myModel.snapURL,
                                @"url":self.lvModel.hls,
                                @"urlHd":self.lvModel.hlsHd,
+                               @"deviceId":self.lvModel.deviceId
                               };
         PLPlayModel *models = [PLPlayModel makeModelData:dic];
         self.playerView.plModel = models;

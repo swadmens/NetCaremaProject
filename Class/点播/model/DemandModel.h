@@ -14,15 +14,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(DemandModel*)makeModelData:(NSDictionary*)dic;
 
-@property (nonatomic,strong) NSString *streamName;
-@property (nonatomic,strong) NSString *duration;
-@property (nonatomic,strong) NSString *creationDate;
+@property (nonatomic,strong) NSString *creationTime;
 @property (nonatomic,strong) NSString *filePath;
-@property (nonatomic,strong) NSString *fileSize;
-@property (nonatomic,strong) NSString *streamId;
+@property (nonatomic,strong) NSString *file_id;
+@property (nonatomic,strong) NSString *lastUpdated;
+@property (nonatomic,strong) NSString *name;
+@property (nonatomic,strong) NSString *owner;
+@property (nonatomic,strong) NSString *size;
 @property (nonatomic,strong) NSString *type;
 @property (nonatomic,strong) NSString *vodId;
-@property (nonatomic,strong) NSString *vodName;
 
 
 @end

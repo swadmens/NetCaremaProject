@@ -238,9 +238,8 @@
     }else{       
         NSDictionary *dic = @{
 //            @"name":model.video_name,
-                              @"snapUrl":model.picUrl,
-                              @"videoUrl":model.url,
-//                              @"createAt":model.start_time,
+                              @"filePath":model.url,
+//                              @"creationTime":model.start_time,
                              };
        
         DemandModel *models = [DemandModel makeModelData:dic];

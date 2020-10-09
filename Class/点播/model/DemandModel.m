@@ -13,15 +13,15 @@
 {
     DemandModel *model = [DemandModel new];
     
-    model.creationDate = [NSString stringWithFormat:@"%@",[dic objectForKey:@"creationDate"]];
-    model.duration = [NSString stringWithFormat:@"%@",[dic objectForKey:@"duration"]];
-    model.filePath = [NSString stringWithFormat:@"http://39.108.208.122:5080/LiveApp/%@",[dic objectForKey:@"filePath"]];
-    model.fileSize = [NSString stringWithFormat:@"%@",[dic objectForKey:@"fileSize"]];
-    model.streamId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"streamId"]];
-    model.streamName = [NSString stringWithFormat:@"%@",[dic objectForKey:@"streamName"]];
+    model.creationTime = [NSString stringWithFormat:@"%@",[dic objectForKey:@"creationTime"]];
+    model.filePath = [NSString stringWithFormat:@"%@",[dic objectForKey:@"filePath"]];
+    model.file_id = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
+    model.lastUpdated = [NSString stringWithFormat:@"%@",[dic objectForKey:@"lastUpdated"]];
+    model.name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    model.owner = [NSString stringWithFormat:@"%@",[dic objectForKey:@"owner"]];
     model.type = [NSString stringWithFormat:@"%@",[dic objectForKey:@"type"]];
     model.vodId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"vodId"]];
-    model.vodName = [NSString stringWithFormat:@"%@",[dic objectForKey:@"vodName"]];
+    model.size = [NSString stringWithFormat:@"%@",[dic objectForKey:@"size"]];
 
     
     return model;

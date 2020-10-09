@@ -57,7 +57,7 @@
     
     //此处获取视频封面，会有卡顿
 //    _showImageView.image = [self getImage:self.model.videoUrl];
-    _titleLabel.text = self.model.vodName;
+    _titleLabel.text = self.model.name;
 }
 //根据视频地址获取视频封面
 -(UIImage *)getImage:(NSString *)videoURL

@@ -15,6 +15,12 @@
 #import <EZUIKit/EZUIError.h>
 #import <LCOpenSDKDynamic/LCOpenSDKDynamic.h>
 
+typedef NS_ENUM(NSInteger, PlayLCState) {
+    Play = 0,
+    Pause = 1,
+    Stop = 2
+};
+
 @class PLControlView;
 
 @interface PLPlayerView ()
@@ -22,7 +28,8 @@
 PLPlayerDelegate,
 PLControlViewDelegate,
 UIGestureRecognizerDelegate,
-EZUIPlayerDelegate
+EZUIPlayerDelegate,
+LCOpenSDK_EventListener
 >
 
 @property (nonatomic, strong) UIView *topBarView;
@@ -79,7 +86,7 @@ EZUIPlayerDelegate
 @property (nonatomic,assign) int ePlayTime;
 
 @property (nonatomic,strong) LCOpenSDK_PlayWindow* m_play;//大华播放器
-
+@property (nonatomic,assign) PlayLCState m_playState;
 
 @end
 
@@ -900,20 +907,36 @@ EZUIPlayerDelegate
         self.m_play = [[LCOpenSDK_PlayWindow alloc] initPlayWindow:CGRectMake(0, 0,kScreenWidth,height) Index:1];
         [self.m_play setSurfaceBGColor:[UIColor blackColor]];
         [self addSubview:[self.m_play getWindowView]];
+        [self.m_play getWindowListener];
+        [self.m_play setWindowListener:(id<LCOpenSDK_EventListener>)(self)];
         
+        //    LCOpenSDK_ParamDeviceRecordUTCTime  *paramDeviceRecordUTCTime  = [[LCOpenSDK_ParamDeviceRecordUTCTime alloc] init];
+        //    paramDeviceRecordUTCTime.accessToken = @"bd14c81bcbae4aa9";
+        //    paramDeviceRecordUTCTime.deviceID = _plModel.deviceId;
+        //    paramDeviceRecordUTCTime.psk = _plModel.appKey;
+        //    paramDeviceRecordUTCTime.channel = 0;
+        //    paramDeviceRecordUTCTime.playToken = _plModel.token;
+        //    paramDeviceRecordUTCTime.beginTime = [self timeIntervalOfString:_plModel.startTime];
+        //    paramDeviceRecordUTCTime.endTime = [self timeIntervalOfString:_plModel.endTime];
+        //    paramDeviceRecordUTCTime.defiMode =  DEFINITION_MODE_HG;
+        //    paramDeviceRecordUTCTime.isOpt = YES;
+        //    NSInteger success = [self.m_play playDeviceRecordByUtcTime:paramDeviceRecordUTCTime];
+            
+                
+            
+        LCOpenSDK_ParamCloudRecord *paramCloudRecord = [[LCOpenSDK_ParamCloudRecord alloc] init];
+        paramCloudRecord.accessToken = @"Kt_34ffe237991642abb8ce05cec43c0b41";
+        paramCloudRecord.deviceID = @"5K016EEPBZ77795";
+        paramCloudRecord.channel = 0;
+        paramCloudRecord.psk = @"";
+        paramCloudRecord.recordRegionID = @"";
+        paramCloudRecord.offsetTime = 0;
+        paramCloudRecord.recordType = RECORD_TYPE_ALL;
+        paramCloudRecord.timeOut = 60;
+        NSInteger success = [self.m_play playCloudRecord:paramCloudRecord];
+
         
-    
-        LCOpenSDK_ParamDeviceRecordUTCTime  *paramDeviceRecordUTCTime  = [[LCOpenSDK_ParamDeviceRecordUTCTime alloc] init];
-        paramDeviceRecordUTCTime.accessToken = _plModel.token;
-        paramDeviceRecordUTCTime.deviceID = @"525917";
-        paramDeviceRecordUTCTime.psk = _plModel.appKey;
-        paramDeviceRecordUTCTime.channel = 1;
-        paramDeviceRecordUTCTime.playToken = _plModel.token;
-        paramDeviceRecordUTCTime.beginTime = [self timeIntervalOfString:_plModel.startTime];
-        paramDeviceRecordUTCTime.endTime = [self timeIntervalOfString:_plModel.endTime] ;
-        paramDeviceRecordUTCTime.defiMode =  DEFINITION_MODE_HG;
-        paramDeviceRecordUTCTime.isOpt = YES;
-        [self.m_play playDeviceRecordByUtcTime:paramDeviceRecordUTCTime];
+        DLog(@"success ==  %ld",success);
     }
 }
 - (NSTimeInterval)timeIntervalOfString:(NSString*)strTime
@@ -1458,6 +1481,296 @@ EZUIPlayerDelegate
     self.slider.value = self.ePlayTime * 1000 / [_plModel.duration floatValue];
     self.bottomPlayProgreeeView.progress = self.slider.value / [_plModel.duration floatValue];
 
+}
+
+#pragma mark - 设备录像播放回调
+-(void)onPlayerResult:(NSString *)code Type:(NSInteger)type Index:(NSInteger)index
+{
+    DLog(@"code[%@] type[%ld]", code, (long)type);
+//    switch (m_recordType) {
+//    case DeviceRecord:
+        [self onPlayDeviceRecordResult:code Type:type];
+//        break;
+//    case CloudRecord:
+//        [self onPlayCloudRecordResult:code Type:type];
+//    default:
+//        break;
+//    }
+    
+}
+- (void)onPlayDeviceRecordResult:(NSString*)code Type:(NSInteger)type
+{
+//    NSString* displayLab;
+    if (99 == type) {
+//        displayLab = [code isEqualToString:@"-1000"] ? NSLocalizedString(NETWORK_TIMEOUT_TXT, nil) : [NSLocalizedString(REST_LINK_FAILED_TXT, nil) stringByAppendingFormat:@",[%@]", code];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"RecordPlayViewController, OpenApi connect error!");
+            _m_playState = Stop;
+        });
+        return;
+    }
+    
+    if(5 == type)
+    {
+        /* 优化拉流设备 */
+        if([@"0" isEqualToString:code]){
+            return;
+        }
+        if([@"1000" isEqualToString:code] || [@"4000" isEqualToString:code])
+        {
+            return;
+        }
+    }
+    
+//    if ([RTSP_Result_String(STATE_RTSP_TEARDOWN_ERROR) isEqualToString:code]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//
+//        });
+//        return;
+//    }
+//    if ([RTSP_Result_String(STATE_RTSP_PLAY_READY) isEqualToString:code]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            if (YES == m_isSeeking) {
+//                if (Pause == m_playState) {
+//                    m_playState = Play;
+//                    Float64 m_Rate = m_playSlider.value / (m_playSlider.maximumValue - m_playSlider.minimumValue);
+//                    [m_play seek:m_Rate * m_deltaTime];
+//                } else {
+//                    m_isSeeking = NO;
+//                }
+//            }
+//        });
+//        return;
+//    }
+//    if ([RTSP_Result_String(STATE_RTSP_FILE_PLAY_OVER) isEqualToString:code]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//
+//                       });
+//        return;
+//    }
+//    if ([RTSP_Result_String(STATE_RTSP_PAUSE_READY) isEqualToString:code]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//
+//                       });
+//        return;
+//    }
+//    if ([RTSP_Result_String(STATE_RTSP_KEY_MISMATCH) isEqualToString:code]) {
+//        displayLab = @"Key Error";
+//    } else {
+//        displayLab = [NSString stringWithFormat:@"Rest Failed，[%@]", code];
+//    }
+//
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [m_tipLab setText:displayLab];
+//        [self hideLoading];
+//        m_playImg.hidden = NO;
+//        m_playState = Stop;
+//        [m_playBtn setBackgroundImage:[UIImage leChangeImageNamed:VideoPlay_Play_Png] forState:UIControlStateNormal];
+//        m_playBtn.enabled = YES;
+//        [self enableOtherBtn:NO];
+//        [m_play stopDeviceRecord:NO];
+//
+//        m_startTimeLab.text = [self transformToShortTime:m_beginTimeSelected];
+//        [m_playSlider setValue:0];
+//    });
+//    return;
+}
+
+#pragma mark - 云录像播放回调
+- (void)onPlayCloudRecordResult:(NSString*)code Type:(NSInteger)type
+{
+
+    DLog(@"code[%@] type[%ld]", code, (long)type);
+//    if (99 == type) {
+//        NSString* hint = [code isEqualToString:@"-1000"] ? NSLocalizedString(NETWORK_TIMEOUT_TXT, nil) : [NSLocalizedString(REST_LINK_FAILED_TXT, nil) stringByAppendingFormat:@",[%@]", code];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSLog(@"RecordPlayViewController, OpenApi connect error!");
+//            m_tipLab.text = hint;
+//            [self hideLoading];
+//            m_playState = Stop;
+//            m_playImg.hidden = NO;
+//            m_playBtn.enabled = YES;
+//            [self enableOtherBtn:NO];
+//        });
+//        return;
+//    }
+//    if ([HLS_Result_String(HLS_DOWNLOAD_FAILD) isEqualToString:code]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSLog(@"HLS DOWNLOAD FAILED!");
+//            m_tipLab.text = @"HLS download failed";
+//            [self hideLoading];
+//            m_playState = Stop;
+//            m_playImg.hidden = NO;
+//            m_playBtn.enabled = YES;
+//            [self enableOtherBtn:NO];
+//            [m_playBtn setBackgroundImage:[UIImage leChangeImageNamed:VideoPlay_Play_Png] forState:UIControlStateNormal];
+//
+//            m_startTimeLab.text = [self transformToShortTime:m_beginTimeSelected];
+//            [m_playSlider setValue:0];
+//        });
+//        return;
+//    }
+//    if ([HLS_Result_String(HLS_DOWNLOAD_BEGIN) isEqualToString:code]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSLog(@"HLS DOWNLOAD BEGIN!");
+//        });
+//        return;
+//    }
+//    if ([HLS_Result_String(HLS_DOWNLOAD_END) isEqualToString:code]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSLog(@"HLS DOWNLOAD END!");
+//        });
+//        return;
+//    }
+//    if ([HLS_Result_String(HLS_SEEK_SUCCESS) isEqualToString:code]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSLog(@"HLS SEEK SUCCESS!");
+//            m_isSeeking = NO;
+//            [self hideLoading];
+//        });
+//        return;
+//    }
+//    if ([HLS_Result_String(HLS_SEEK_FAILD) isEqualToString:code]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSLog(@"HLS SEEK FAILD!");
+//            [m_play stopCloud:NO];
+//            m_playState = Stop;
+//            [self hideLoading];
+//            [m_playBtn setBackgroundImage:[UIImage leChangeImageNamed:VideoPlay_Play_Png] forState:UIControlStateNormal];
+//
+//            m_startTimeLab.text = [self transformToShortTime:m_beginTimeSelected];
+//            [m_playSlider setValue:0];
+//        });
+//        return;
+//    }
+//    if ([HLS_Result_String(HLS_ABORT_DONE) isEqualToString:code]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSLog(@"HLS ABORT DONE!");
+//            m_startTimeLab.text = [self transformToShortTime:m_beginTimeSelected];
+//            [m_playSlider setValue:0];
+//        });
+//        return;
+//    }
+//    if ([HLS_Result_String(HLS_RESUME_DONE) isEqualToString:code]) {
+//
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            NSLog(@"HLS RESUME DONE!");
+//        });
+//        return;
+//    }
+//    // 密钥错误码STATE_HLS_KEY_ERROR = 11
+//    if ([HLS_Result_String(HLS_KEY_ERROR) isEqualToString:code]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//
+//            [m_play stopCloud:NO];
+//            [self hideLoading];
+//            m_tipLab.text = @"Key Error";
+//            m_playState = Stop;
+//            m_playImg.hidden = NO;
+//            m_playBtn.enabled = YES;
+//            [self enableOtherBtn:NO];
+//            [m_playBtn setBackgroundImage:[UIImage leChangeImageNamed:VideoPlay_Play_Png] forState:UIControlStateNormal];
+//        });
+//        return;
+//    }
+}
+
+#pragma mark - 录像开始播放回调
+- (void)onPlayBegan:(NSInteger)index
+{
+    DLog(@"onPlayBegan  index ==  %ld",index);
+
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        DLog(@"index ==  %ld",index);
+//    });
+}
+
+#pragma mark - 录像播放结束回调
+- (void)onPlayFinished:(NSInteger)index
+{
+    DLog(@"onPlayFinished  index ==  %ld",index);
+
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if (DeviceRecord == m_recordType) {
+//            [m_play stopDeviceRecord:YES];
+//        } else if (CloudRecord == m_recordType) {
+//            [m_play stopCloud:YES];
+//        }
+//        m_tipLab.text = @"play over";
+//        [self hideLoading];
+//        [self enableOtherBtn:NO];
+//        [m_startTimeLab setText:[self transformToShortTime:m_beginTimeSelected]];
+//        [m_playSlider setValue:m_playSlider.minimumValue animated:YES];
+//        m_playState = Stop;
+//        [m_playBtn setBackgroundImage:[UIImage leChangeImageNamed:VideoPlay_Play_Png] forState:UIControlStateNormal];
+//    });
+}
+
+#pragma mark - 录像时间状态回调
+- (void)onPlayerTime:(long)time Index:(NSInteger)index
+{
+    DLog(@"onPlayerTime  time ===== %ld",time);
+    DLog(@"onPlayerTime  index ===== %ld",index);
+
+//    if (YES == m_isSeeking) {
+//        return;
+//    }
+//
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        NSString* currentTime = [self transformTimeFromLong:time];
+//        [m_startTimeLab setText:[self transformToShortTime:currentTime]];
+//        NSLog(@"_m_startTimeLab.text = %@", m_startTimeLab.text);
+//        Float64 rate = [self transformToDeltaTime:m_beginTimeSelected EndTime:currentTime] / m_deltaTime;
+//        Float64 slider_value = rate * (m_playSlider.maximumValue - m_playSlider.minimumValue);
+//        [m_playSlider setValue:slider_value animated:YES];
+//    });
+}
+
+#pragma mark - TS/PS标准流数据回调
+- (void)onStreamCallback:(NSData*)data Index:(NSInteger)index
+{
+    DLog(@"onStreamCallback  data == %@",data)
+//    if (m_streamPath) {
+//        NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:m_streamPath];
+//
+//        [fileHandle seekToEndOfFile]; //将节点跳到文件的末尾
+//
+//        [fileHandle writeData:data]; //追加写入数据
+//
+//        [fileHandle closeFile];
+//        return;
+//    }
+//    NSDateFormatter* dataFormat = [[NSDateFormatter alloc] init];
+//    [dataFormat setDateFormat:@"yyyyMMddHHmmss"];
+//    NSString* strDate = [dataFormat stringFromDate:[NSDate date]];
+//    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory,
+//        NSUserDomainMask, YES);
+//    NSString* libraryDirectory = [paths objectAtIndex:0];
+//
+//    NSString* myDirectory =
+//        [libraryDirectory stringByAppendingPathComponent:@"lechange"];
+//    NSString* davDirectory =
+//        [myDirectory stringByAppendingPathComponent:@"HLSexportStream"];
+//    m_streamPath = [davDirectory stringByAppendingFormat:@"/%@.ps", strDate];
+//    NSFileManager* fileManage = [NSFileManager defaultManager];
+//    NSError* pErr;
+//    BOOL isDir;
+//    if (NO == [fileManage fileExistsAtPath:myDirectory isDirectory:&isDir]) {
+//        [fileManage createDirectoryAtPath:myDirectory
+//              withIntermediateDirectories:YES
+//                               attributes:nil
+//                                    error:&pErr];
+//    }
+//    if (NO == [fileManage fileExistsAtPath:davDirectory isDirectory:&isDir]) {
+//        [fileManage createDirectoryAtPath:davDirectory
+//              withIntermediateDirectories:YES
+//                               attributes:nil
+//                                    error:&pErr];
+//    }
+//    if (NO == [fileManage fileExistsAtPath:m_streamPath]) //如果不存在
+//    {
+//        [data writeToFile:m_streamPath atomically:YES];
+//    }
 }
 
 @end
