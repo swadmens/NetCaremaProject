@@ -15,13 +15,14 @@
     MyEquipmentsModel *model = [MyEquipmentsModel new];
     
     NSDictionary *managedObject = [dic objectForKey:@"managedObject"];
-    model.deviceSerial = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"deviceSerial"]];
     model.equipment_id = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"id"]];
     model.equipment_name = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"name"]];
     model.owner = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"owner"]];
     model.lastUpdated = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"lastUpdated"]];
     model.creationTime = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"creationTime"]];
     model.system_Source = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"system_Source"]];
+    model.channel = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"channel"]];
+    model.deviceSerial = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"deviceSerial"]];
 
     
     NSArray *preArr = [NSArray arrayWithArray:[managedObject objectForKey:@"presets"]];
@@ -49,7 +50,6 @@
     model.updatedAt = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"updatedAt"]];
     model.manufacturer = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"manufacturer"]];
     model.civilCode = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"civilCode"]];
-    model.channel = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"channel"]];
     model.snapURL = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"snapURL"]];
 
     

@@ -231,6 +231,7 @@
     vc.hidesBottomBarWhenPushed = YES;
     vc.allDataArray = [NSArray arrayWithArray:model.childDevices_info];
     vc.isLiving = YES;
+    vc.isDemandFile = NO;
     vc.title_value = model.equipment_name;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
@@ -417,6 +418,8 @@
         [dic setObject:meModel.equipment_id forKey:@"deviceId"];
         [dic setObject:meModel.system_Source forKey:@"system_Source"];
         [dic setObject:meModel.presets forKey:@"presets"];
+        [dic setObject:meModel.channel forKey:@"channel"];
+        [dic setObject:meModel.deviceSerial forKey:@"deviceSerial"];
         LivingModel *lvModel = [LivingModel makeModelData:dic];
 
         IndexDataModel *model = [self.dataArray objectAtIndex:index];
@@ -464,6 +467,7 @@
     SuperPlayerViewController *vc = [SuperPlayerViewController new];
     vc.hidesBottomBarWhenPushed = YES;
     vc.isLiving = YES;
+    vc.isDemandFile = NO;
     vc.title_value = model.equipment_name;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
@@ -483,6 +487,8 @@
     vc.device_id = self.selectModel.equipment_id;
     vc.code = self.selectModel.model.deviceSerial;
     vc.system_Source = self.selectModel.system_Source;
+    vc.channel = self.selectModel.channel;
+    vc.deviceSerial = self.selectModel.deviceSerial;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }

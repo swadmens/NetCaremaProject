@@ -90,6 +90,12 @@
                           @"startTime":model.startTime,
                           @"endTime":model.endTime,
                           @"deviceId":model.deviceId,
+                          @"accessToken":model.accessToken,
+                          @"recordId":model.recordId,
+                          @"channel":model.channel,
+                          @"deviceSerial":model.deviceSerial,
+                          @"recordRegionId":model.recordRegionId,
+                          @"playToken":model.playToken
     };
     PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
     

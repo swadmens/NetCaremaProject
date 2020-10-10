@@ -25,8 +25,13 @@
     model.appKey = [NSString stringWithFormat:@"%@",[dic objectForKey:@"appKey"]];
     model.token = [NSString stringWithFormat:@"%@",[dic objectForKey:@"token"]];
     model.deviceId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceId"]];
+    model.channel = [NSString stringWithFormat:@"%@",[dic objectForKey:@"channel"]];
+    model.deviceSerial = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceSerial"]];
+    model.accessToken = [NSString stringWithFormat:@"%@",[dic objectForKey:@"accessToken"]];
+    model.recordId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"recordId"]];
+    model.recordRegionId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"recordRegionId"]];
+    model.playToken = [NSString stringWithFormat:@"%@",[dic objectForKey:@"playToken"]];
 
-    
     return model;
 }
 

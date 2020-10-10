@@ -25,6 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *appKey;
 @property (nonatomic,strong) NSString *token;
 @property (nonatomic,strong) NSString *deviceId;
+@property (nonatomic,strong) NSString *channel;
+@property (nonatomic,strong) NSString *deviceSerial;
+@property (nonatomic,strong) NSString *accessToken;
+@property (nonatomic,strong) NSString *recordId;
+@property (nonatomic,strong) NSString *recordRegionId;
+@property (nonatomic,strong) NSString *playToken;
 
 @end
 

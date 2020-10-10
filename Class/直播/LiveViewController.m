@@ -219,6 +219,7 @@
         vc.hidesBottomBarWhenPushed = YES;
         vc.allDataArray = [NSArray arrayWithObjects:model, nil];
         vc.isLiving = YES;
+        vc.isDemandFile = NO;
         vc.title_value = model.model.name;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;

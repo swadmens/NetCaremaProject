@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) CarmeaVideosModel *model;
 @property (nonatomic,strong) NSArray *allDataArray;
 @property (nonatomic,assign) NSInteger indexInteger;
-@property (nonatomic, assign) BOOL isRecordFile;
+@property (nonatomic, assign) BOOL isDemandFile;//是否是点播文件
 
 +(UIViewController *)viewController:(UIView *)view;
 

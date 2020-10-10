@@ -15,6 +15,7 @@
   
     model.channelId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"channelId"]];
     model.deviceSerial = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceSerial"]];
+    model.channel = [NSString stringWithFormat:@"%@",[dic objectForKey:@"channel"]];
     model.flv = [NSString stringWithFormat:@"%@",[dic objectForKey:@"flv"]];
     model.hls = [NSString stringWithFormat:@"%@",[dic objectForKey:@"hls"]];
     model.hlsHd = [NSString stringWithFormat:@"%@",[dic objectForKey:@"hlsHd"]];

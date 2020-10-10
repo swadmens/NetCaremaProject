@@ -143,6 +143,9 @@
     if (isLiving) {
         _controlBtn.hidden = NO;
         _gongGeBtn.enabled = YES;
+        
+        _videoBtn.enabled = YES;
+        _screenshotsBtn.enabled = YES;
 
         [_videoBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
             make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter);
@@ -158,6 +161,9 @@
         _controlBtn.hidden = YES;
         _gongGeBtn.selected = YES;
         _gongGeBtn.enabled = NO;
+        
+        _videoBtn.enabled = NO;
+        _screenshotsBtn.enabled = NO;
         
         [_videoBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
             make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter).lgx_floatOffset(40);

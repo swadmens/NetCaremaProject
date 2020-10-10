@@ -253,7 +253,7 @@
             SuperPlayerViewController *vc = [SuperPlayerViewController new];
             vc.model = model;
             vc.indexInteger = indexPath.row;
-            vc.isRecordFile = YES;
+            vc.isDemandFile = YES;
             vc.isLiving = NO;
             vc.title_value = model.duration;
             [self.navigationController pushViewController:vc animated:YES];
@@ -350,7 +350,11 @@
         
         [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
-            CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:dic];
+            NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
+            [mutDic setObject:self.device_id forKey:@"deviceId"];
+            [mutDic setObject:self.channel forKey:@"channel"];
+            [mutDic setObject:self.deviceSerial forKey:@"deviceSerial"];
+            CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
             [tempArray addObject:model];
         }];
         [self.dataArray addObjectsFromArray:tempArray];

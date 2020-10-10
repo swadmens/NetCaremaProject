@@ -25,10 +25,10 @@
 #import "DownLoadSence.h"
 #import "AFHTTPSessionManager.h"
 
-
 #define KTopviewheight kScreenWidth*0.68
 
-@interface SuperPlayerViewController ()<UITableViewDelegate,UITableViewDataSource,PlayerControlDelegate,CameraControlDelete,LocalVideoDelegate,PlayerTableViewCellDelegate>
+@interface SuperPlayerViewController ()<UITableViewDelegate,UITableViewDataSource,PlayerControlDelegate,CameraControlDelete,LocalVideoDelegate,PlayerTableViewCellDelegate
+>
 
 @property (nonatomic,strong) WWTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -52,7 +52,6 @@
 @property (nonatomic,assign) BOOL videoing;//是否正在录像
 @property (nonatomic,strong) UIView *videoTipView;//录像提示view
 @property (nonatomic,strong) UILabel *videoTipLabel;//录像提示view
-
 
 @end
 
@@ -136,7 +135,6 @@
         if (MyModel.model != nil) {
             [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withIndex:0];
         }
-  
     }
    
     //右上角按钮组
@@ -165,7 +163,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return _isDemandFile?2:3;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -505,8 +503,9 @@
     sence.errorBlock = ^(NSError *error) {
 
         [_kHUDManager hideAfter:0.1 onHide:nil];
+        [weak_self tipViewHidden:YES withTitle:@"录像未完成"];
         // 请求失败
-        DLog(@"error  ==  %@",error.userInfo);
+        DLog(@"error  ==  %@",error);
     };
     [sence sendRequest];
 }
@@ -807,6 +806,8 @@
             NSDictionary *dic = obj;
             NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
             [mutDic setObject:self.selectModel.deviceId forKey:@"deviceId"];
+            [mutDic setObject:self.selectModel.channel forKey:@"channel"];
+            [mutDic setObject:self.selectModel.deviceSerial forKey:@"deviceSerial"];
             CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
             [tempArray addObject:model];
         }];

@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) NSString *channelId;
 @property (nonatomic,strong) NSString *deviceSerial;
+@property (nonatomic,strong) NSString *channel;
 @property (nonatomic,strong) NSString *flv;
 @property (nonatomic,strong) NSString *hls;
 @property (nonatomic,strong) NSString *hlsHd;

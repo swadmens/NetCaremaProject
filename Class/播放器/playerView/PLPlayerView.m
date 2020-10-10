@@ -87,6 +87,7 @@ LCOpenSDK_EventListener
 
 @property (nonatomic,strong) LCOpenSDK_PlayWindow* m_play;//大华播放器
 @property (nonatomic,assign) PlayLCState m_playState;
+@property (nonatomic,strong) LCOpenSDK_Api* m_hc;
 
 @end
 
@@ -892,6 +893,7 @@ LCOpenSDK_EventListener
 
         self.ePlayer = [EZUIPlayer createPlayerWithUrl:_plModel.videoUrl];
         self.ePlayer.mDelegate = self;
+        self.ePlayer.previewView.userInteractionEnabled = YES;
        //添加预览视图到当前界面
         self.ePlayer.previewView.contentMode = UIViewContentModeScaleAspectFit;
         [self insertSubview:self.ePlayer.previewView atIndex:0];
@@ -903,40 +905,33 @@ LCOpenSDK_EventListener
         }];
 
     }else{
+        
+        //接口初始化
+        LCOpenSDK_ApiParam * apiParam = [[LCOpenSDK_ApiParam alloc] init];
+        apiParam.procotol =  PROCOTOL_TYPE_HTTPS;
+        apiParam.addr = @"openapi.lechange.cn";
+        apiParam.port = 443;
+        apiParam.token = _plModel.accessToken;
+        self.m_hc = [[LCOpenSDK_Api shareMyInstance] initOpenApi:apiParam];
+
         //大华视频加载
         self.m_play = [[LCOpenSDK_PlayWindow alloc] initPlayWindow:CGRectMake(0, 0,kScreenWidth,height) Index:1];
         [self.m_play setSurfaceBGColor:[UIColor blackColor]];
         [self addSubview:[self.m_play getWindowView]];
-        [self.m_play getWindowListener];
-        [self.m_play setWindowListener:(id<LCOpenSDK_EventListener>)(self)];
+        [self.m_play setWindowListener:self];
+        self.m_play.getWindowView.userInteractionEnabled = YES;
         
-        //    LCOpenSDK_ParamDeviceRecordUTCTime  *paramDeviceRecordUTCTime  = [[LCOpenSDK_ParamDeviceRecordUTCTime alloc] init];
-        //    paramDeviceRecordUTCTime.accessToken = @"bd14c81bcbae4aa9";
-        //    paramDeviceRecordUTCTime.deviceID = _plModel.deviceId;
-        //    paramDeviceRecordUTCTime.psk = _plModel.appKey;
-        //    paramDeviceRecordUTCTime.channel = 0;
-        //    paramDeviceRecordUTCTime.playToken = _plModel.token;
-        //    paramDeviceRecordUTCTime.beginTime = [self timeIntervalOfString:_plModel.startTime];
-        //    paramDeviceRecordUTCTime.endTime = [self timeIntervalOfString:_plModel.endTime];
-        //    paramDeviceRecordUTCTime.defiMode =  DEFINITION_MODE_HG;
-        //    paramDeviceRecordUTCTime.isOpt = YES;
-        //    NSInteger success = [self.m_play playDeviceRecordByUtcTime:paramDeviceRecordUTCTime];
-            
-                
-            
+        //播放云录像
         LCOpenSDK_ParamCloudRecord *paramCloudRecord = [[LCOpenSDK_ParamCloudRecord alloc] init];
-        paramCloudRecord.accessToken = @"Kt_34ffe237991642abb8ce05cec43c0b41";
-        paramCloudRecord.deviceID = @"5K016EEPBZ77795";
-        paramCloudRecord.channel = 0;
+        paramCloudRecord.accessToken = self.plModel.accessToken;
+        paramCloudRecord.deviceID = self.plModel.deviceSerial;
+        paramCloudRecord.channel = [self.plModel.channel integerValue];
         paramCloudRecord.psk = @"";
-        paramCloudRecord.recordRegionID = @"";
+        paramCloudRecord.recordRegionID = self.plModel.recordRegionId;
         paramCloudRecord.offsetTime = 0;
         paramCloudRecord.recordType = RECORD_TYPE_ALL;
         paramCloudRecord.timeOut = 60;
-        NSInteger success = [self.m_play playCloudRecord:paramCloudRecord];
-
-        
-        DLog(@"success ==  %ld",success);
+        [self.m_play playCloudRecord:paramCloudRecord];
     }
 }
 - (NSTimeInterval)timeIntervalOfString:(NSString*)strTime
@@ -1066,6 +1061,9 @@ LCOpenSDK_EventListener
     
     [self.ePlayer stopPlay];
     [self.ePlayer releasePlayer];
+    [self.m_play stopCloud:YES];
+    [self.m_play stopFile:YES];
+    [self.m_hc uninitOpenApi];
     
     if (date) {
         NSLog(@"stop 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
@@ -1504,8 +1502,8 @@ LCOpenSDK_EventListener
     if (99 == type) {
 //        displayLab = [code isEqualToString:@"-1000"] ? NSLocalizedString(NETWORK_TIMEOUT_TXT, nil) : [NSLocalizedString(REST_LINK_FAILED_TXT, nil) stringByAppendingFormat:@",[%@]", code];
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"RecordPlayViewController, OpenApi connect error!");
-            _m_playState = Stop;
+//            NSLog(@"OpenApi connect error!");
+//            _m_playState = Stop;
         });
         return;
     }

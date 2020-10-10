@@ -352,7 +352,7 @@
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
         vc.model = models;
         vc.indexInteger = indexPath.row;
-        vc.isRecordFile = NO;
+        vc.isDemandFile = YES;
         vc.isLiving = NO;
         vc.title_value = model.name;
         vc.hidesBottomBarWhenPushed = YES;
@@ -441,29 +441,28 @@
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
-    NSString *start = [NSString stringWithFormat:@"%ld",(self.page - 1)*10];
-    
-    NSDictionary *finalParams = @{
-                                  @"start":start,
-                                  @"limit":@"10",
-                                  };
-    
-    NSMutableDictionary *mutData = [NSMutableDictionary dictionaryWithDictionary:finalParams];
-    if ([WWPublicMethod isStringEmptyText:self.folder]) {
-        [mutData setValue:self.folder forKey:@"folder"];
-    }
-    
-    if ([WWPublicMethod isStringEmptyText:self.searchValue]) {
-        [mutData setValue:self.searchValue forKey:@"q"];
-    }
+//    NSString *start = [NSString stringWithFormat:@"%ld",(self.page - 1)*10];
+//
+//    NSDictionary *finalParams = @{
+//                                  @"start":start,
+//                                  @"limit":@"10",
+//                                  };
+//
+//    NSMutableDictionary *mutData = [NSMutableDictionary dictionaryWithDictionary:finalParams];
+//    if ([WWPublicMethod isStringEmptyText:self.folder]) {
+//        [mutData setValue:self.folder forKey:@"folder"];
+//    }
+//
+//    if ([WWPublicMethod isStringEmptyText:self.searchValue]) {
+//        [mutData setValue:self.searchValue forKey:@"q"];
+//    }
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mutData options:0 error:nil];
     
     //提交数据
 //    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/list";
     NSString *url = [NSString stringWithFormat:@"/inventory/managedObjects?type=vod&fragmentType=camera_Vod&pageSize=10&currentPage=%ld",(long)self.page];
     
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mutData
-                                                       options:0
-                                                         error:nil];
+    
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -499,7 +498,7 @@
     [request setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
     
     // 设置body
-    [request setHTTPBody:jsonData];
+//    [request setHTTPBody:jsonData];
 //    __unsafe_unretained typeof(self) weak_self = self;
 
     NSURLSessionDataTask *task = [manager uploadTaskWithStreamedRequest:request progress:^(NSProgress * _Nonnull uploadProgress) {
