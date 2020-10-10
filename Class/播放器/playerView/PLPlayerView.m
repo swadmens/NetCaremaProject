@@ -14,12 +14,14 @@
 #import <EZUIKit/EZUIPlayer.h>
 #import <EZUIKit/EZUIError.h>
 #import <LCOpenSDKDynamic/LCOpenSDKDynamic.h>
-
+#import <EZUIKit/EZUIKit.h>
+#import <EZOpenSDKFramework/EZOpenSDK.h>
 typedef NS_ENUM(NSInteger, PlayLCState) {
     Play = 0,
     Pause = 1,
     Stop = 2
 };
+#define HikSecret @"0a042989a3dc9fc8c1bd2f26ac88e99d"
 
 @class PLControlView;
 
@@ -889,8 +891,13 @@ LCOpenSDK_EventListener
         self.isLiving = NO;
         self.ePlayTime = 0;
         
-//        NSString *str = @"ezopen://open.ys7.com/E16543953/1.rec?begin=20200928000000&end=20200929235959";
+        [EZUIKit initWithAppKey:_plModel.appKey];
+        [EZUIKit setAccessToken:_plModel.token];
 
+        [EZOpenSDK initLibWithAppKey:_plModel.appKey];
+        [EZOpenSDK setAccessToken:_plModel.token];
+
+        
         self.ePlayer = [EZUIPlayer createPlayerWithUrl:_plModel.videoUrl];
         self.ePlayer.mDelegate = self;
         self.ePlayer.previewView.userInteractionEnabled = YES;
@@ -1380,8 +1387,8 @@ LCOpenSDK_EventListener
     }
     else
     {
-        [_kHUDManager showMsgInView:nil withTitle:@"播放失败" isSuccess:YES];
-        [self play];
+//        [_kHUDManager showMsgInView:nil withTitle:@"播放失败" isSuccess:YES];
+//        [self play];
     }
 
     NSLog(@"play error:%@(%ld)",error.errorString,error.internalErrorCode);

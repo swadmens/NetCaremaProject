@@ -209,6 +209,8 @@
             vc.isFromIndex = NO;
             vc.device_id = self.carmer_id;
             vc.system_Source = self.selectModel.system_Source;
+            vc.channel = self.selectModel.channel;
+            vc.deviceSerial = self.selectModel.deviceSerial;
             [weakSelf.navigationController pushViewController:vc animated:YES];
            
         };
@@ -732,9 +734,7 @@
         return;
     }
     __unsafe_unretained typeof(self) weak_self = self;
-//    NSString *recordType = [self.selectModel.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
-    NSString *recordType = @"cloud";
-
+    NSString *recordType = [self.selectModel.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
 
     NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.selectModel.system_Source,carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],recordType];
     

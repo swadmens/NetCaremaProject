@@ -9,19 +9,10 @@
 #import "AppDelegate.h"
 #import "GuideViewController.h" // 引导页
 #import "GuideNewController.h"//新的引导页
-
 #import "LGXThirdEngine.h" // 第三方管理
-//#import <TXLiteAVSDK_Professional/TXLiteAVSDK.h>
-#import <EZUIKit/EZUIKit.h>
-#import <EZOpenSDKFramework/EZOpenSDK.h>
 
 //#import "netsdk.h"
 //#import "Global.h"
-
-
-#define HikAppKey @"a2fafc9c1ebd422cb440ecd0b59e582a"
-#define HikSecret @"0a042989a3dc9fc8c1bd2f26ac88e99d"
-#define HikAccessToken @"at.az10g79b7r52pugrc51l3o4ibfqq4rtq-5tpe3tvzre-0gryxf8-zyaf6otfu"
 
 @interface AppDelegate ()
 {
@@ -103,14 +94,6 @@
     NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     [cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
     
-    
-    [EZUIKit initWithAppKey:HikAppKey];
-    [EZUIKit setAccessToken:HikAccessToken];
-
-
-    [EZOpenSDK initLibWithAppKey:HikAppKey];
-    [EZOpenSDK setAccessToken:HikAccessToken];
-
     /// 引导页，判断是否是第一次
 //    [self setupGuideView];
     

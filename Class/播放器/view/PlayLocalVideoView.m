@@ -84,34 +84,48 @@
 }
 -(void)setModel:(CarmeaVideosModel *)model
 {
-    NSDictionary *dic = @{@"name":model.video_name,
-                          @"duration":model.duration,
-                          @"url":model.url,
-                          @"startTime":model.startTime,
-                          @"endTime":model.endTime,
-                          @"deviceId":model.deviceId,
-                          @"accessToken":model.accessToken,
-                          @"recordId":model.recordId,
-                          @"channel":model.channel,
-                          @"deviceSerial":model.deviceSerial,
-                          @"recordRegionId":model.recordRegionId,
-                          @"playToken":model.playToken
-    };
-    PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
-    
     if ([model.url hasPrefix:@"ezopen://"]) {
         self.playerView.playType = PlayerStatusHk;
+        NSDictionary *dic = @{@"name":model.video_name,
+                              @"duration":model.duration,
+                              @"url":model.url,
+                              @"startTime":model.startTime,
+                              @"endTime":model.endTime,
+                              @"deviceId":model.deviceId,
+                              @"token":model.token,
+                              @"appKey":model.appKey
+        };
+        PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
         self.playerView.plModel = pModel;
     }else if ([model.url hasPrefix:@"imou://"]){
         self.playerView.playType = PlayerStatusDH;
-        NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-        [mutDic setObject:model.appKey forKey:@"appKey"];
-        [mutDic setObject:model.token forKey:@"token"];
-        
-        PLPlayModel *mutModel = [PLPlayModel makeModelData:mutDic];
-        self.playerView.plModel = mutModel;
+        NSDictionary *dic = @{@"name":model.video_name,
+                              @"duration":model.duration,
+                              @"url":model.url,
+                              @"startTime":model.startTime,
+                              @"endTime":model.endTime,
+                              @"deviceId":model.deviceId,
+                              @"accessToken":model.accessToken,
+                              @"recordId":model.recordId,
+                              @"channel":model.channel,
+                              @"deviceSerial":model.deviceSerial,
+                              @"recordRegionId":model.recordRegionId,
+                              @"playToken":model.playToken,
+                              @"token":model.token,
+                              @"appKey":model.appKey
+        };
+        PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
+        self.playerView.plModel = pModel;
     }else{
         self.playerView.playType = PlayerStatusGBS;
+        NSDictionary *dic = @{@"name":model.video_name,
+                              @"duration":model.duration,
+                              @"url":model.url,
+                              @"startTime":model.startTime,
+                              @"endTime":model.endTime,
+                              @"deviceId":model.deviceId,
+        };
+        PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
         self.playerView.plModel = pModel;
     }
     [self configureVideo:NO];

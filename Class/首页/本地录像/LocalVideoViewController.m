@@ -277,7 +277,6 @@
 
     NSString *recordType = [self.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
     
-    
     NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.system_Source,self.device_id,self.date_value,recordType];
  
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
