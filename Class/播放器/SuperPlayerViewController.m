@@ -43,7 +43,8 @@
 @property (nonatomic,strong) UIView *saveBackView;
 @property (nonatomic, strong) LGXShareParams *shareParams;
 
-@property (nonatomic, strong) NSMutableArray *localVideosArray;
+@property (nonatomic, strong) NSMutableArray *localVideosArray;//本地录像数据
+@property (nonatomic, strong) NSMutableArray *cloudVideosArray;//云端录像数据
 
 @property (nonatomic,strong) NSString *carmer_id;//摄像头ID
 @property (nonatomic,strong) NSString *streamid;
@@ -70,10 +71,17 @@
     }
     return _localVideosArray;
 }
+-(NSMutableArray*)cloudVideosArray
+{
+    if (!_cloudVideosArray) {
+        _cloudVideosArray = [NSMutableArray array];
+    }
+    return _cloudVideosArray;
+}
 - (void)setupTableView
 {
     self.tableView = [[WWTableView alloc] init];
-    [self.tableView setScrollEnabled:NO];
+//    [self.tableView setScrollEnabled:NO];
     self.tableView.backgroundColor = kColorBackgroundColor;
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -130,7 +138,8 @@
         self.selectModel = MyModel.model;
         self.carmer_id = self.selectModel.deviceId;
         self.streamid = self.selectModel.deviceSerial;
-        [self startLoadDataRequest:self.selectModel.deviceId];
+        [self startLoadDataRequest:self.selectModel.deviceId withRecordType:@"local"];//本地录像
+        [self startLoadDataRequest:self.selectModel.deviceId withRecordType:@"cloud"];//云端录像
         [self tipViewHidden:YES withTitle:@"开始录像"];
         if (MyModel.model != nil) {
             [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withIndex:0];
@@ -163,7 +172,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return _isDemandFile?2:3;
+    return _isDemandFile?2:4;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -192,11 +201,14 @@
         return cell;
     }else{
         
-
         PlayerLocalVideosCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerLocalVideosCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-        [cell makeCellData:self.localVideosArray];
+        if (indexPath.row == 2) {
+            [cell makeCellData:self.localVideosArray withTitle:@"本地录像"];
+        }else{
+            [cell makeCellData:self.cloudVideosArray withTitle:@"云端录像"];
+        }
         
         cell.allBtn = ^{
              
@@ -211,6 +223,7 @@
             vc.system_Source = self.selectModel.system_Source;
             vc.channel = self.selectModel.channel;
             vc.deviceSerial = self.selectModel.deviceSerial;
+            vc.recordType = indexPath.row == 2?@"local":@"cloud";
             [weakSelf.navigationController pushViewController:vc animated:YES];
            
         };
@@ -589,7 +602,7 @@
     
     self.carmer_id = self.selectModel.deviceId;
     self.streamid = self.selectModel.deviceSerial;
-    [self startLoadDataRequest:self.selectModel.deviceId];
+    [self startLoadDataRequest:self.selectModel.deviceId withRecordType:@"local"];
     if (self.selectModel != nil) {
         [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withIndex:index];
     }
@@ -725,7 +738,7 @@
 
 
 //如果是直播，获取该摄像头下的录像文件
-- (void)startLoadDataRequest:(NSString*)carmeraId;
+- (void)startLoadDataRequest:(NSString*)carmeraId withRecordType:(NSString*)type
 {
    if (self.allDataArray.count == 0) {
           return;
@@ -734,9 +747,9 @@
         return;
     }
     __unsafe_unretained typeof(self) weak_self = self;
-    NSString *recordType = [self.selectModel.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
+//    NSString *recordType = [self.selectModel.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
 
-    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.selectModel.system_Source,carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],recordType];
+    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.selectModel.system_Source,carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],type];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
@@ -756,7 +769,7 @@
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"responseObject == %@",responseObject);
-        [weak_self handleObject:responseObject];
+        [weak_self handleObject:responseObject withRecordType:type];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         // 请求失败
@@ -775,7 +788,7 @@
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"Received: %@", obj);
-        [weak_self handleObject:obj];
+        [weak_self handleObject:obj withRecordType:type];
     };
     sence.errorBlock = ^(NSError *error) {
 
@@ -791,7 +804,7 @@
     [_kHUDManager hideAfter:0.1 onHide:nil];
 //    [_kHUDManager showMsgInView:nil withTitle:@"请求失败" isSuccess:NO];
 }
-- (void)handleObject:(id)obj
+- (void)handleObject:(id)obj withRecordType:(NSString*)type
 {
     [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
@@ -800,22 +813,25 @@
         NSArray *list = (NSArray*)obj;
         NSMutableArray *tempArray = [NSMutableArray array];
         
-        [self.localVideosArray removeAllObjects];
-        
         [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
             [mutDic setObject:self.selectModel.deviceId forKey:@"deviceId"];
             [mutDic setObject:self.selectModel.channel forKey:@"channel"];
             [mutDic setObject:self.selectModel.deviceSerial forKey:@"deviceSerial"];
+            [mutDic setObject:type forKey:@"recordType"];
             CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
             [tempArray addObject:model];
         }];
-        [self.localVideosArray addObjectsFromArray:tempArray];
+        if ([type isEqualToString:@"local"]) {
+            [self.localVideosArray addObjectsFromArray:tempArray];
+        }else{
+            [self.cloudVideosArray addObjectsFromArray:tempArray];
+        }
 
         [[GCDQueue mainQueue] queueBlock:^{
     
-            [weak_self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            [weak_self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:0],[NSIndexPath indexPathForRow:3 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
         }];
     }];
 }

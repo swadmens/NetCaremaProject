@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *recordId;
 @property (nonatomic,strong) NSString *recordRegionId;
 @property (nonatomic,strong) NSString *playToken;
+@property (nonatomic,strong) NSString *recordType;//本地或云端录像
 
 @end
 

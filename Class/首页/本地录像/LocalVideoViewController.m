@@ -103,7 +103,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"本地录像";
+    self.title = [self.recordType isEqualToString:@"local"]?@"本地录像":@"云端录像";
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     
@@ -275,9 +275,9 @@
     [_kHUDManager showActivityInView:nil withTitle:nil];
     __unsafe_unretained typeof(self) weak_self = self;
 
-    NSString *recordType = [self.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
+//    NSString *recordType = [self.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
     
-    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.system_Source,self.device_id,self.date_value,recordType];
+    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.system_Source,self.device_id,self.date_value,self.recordType];
  
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
@@ -353,6 +353,7 @@
             [mutDic setObject:self.device_id forKey:@"deviceId"];
             [mutDic setObject:self.channel forKey:@"channel"];
             [mutDic setObject:self.deviceSerial forKey:@"deviceSerial"];
+            [mutDic setObject:self.recordType forKey:@"recordType"];
             CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
             [tempArray addObject:model];
         }];

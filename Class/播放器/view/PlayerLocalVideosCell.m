@@ -137,8 +137,9 @@
     }
     
 }
--(void)makeCellData:(NSArray *)array
+-(void)makeCellData:(NSArray*)array withTitle:(NSString*)title
 {
+    _otherLabel.text = title;
     if (array.count == 0) {
         self.collectionView.hidden = YES;
         self.noDataView.hidden = NO;

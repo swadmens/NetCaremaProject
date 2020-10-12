@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,copy) void(^allBtn)(void);
 @property (nonatomic,copy) void(^selectedRowData)(CarmeaVideosModel*model);
--(void)makeCellData:(NSArray*)array;
+-(void)makeCellData:(NSArray*)array withTitle:(NSString*)title;
 
 @end
 

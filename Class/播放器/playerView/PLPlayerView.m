@@ -85,11 +85,16 @@ LCOpenSDK_EventListener
 @property (nonatomic, assign) CGFloat edgeSpace;
 
 @property (nonatomic,strong) EZUIPlayer *ePlayer;//海康播放器
-@property (nonatomic,assign) int ePlayTime;
+@property (nonatomic,strong) NSDate *mBeginDate;//滚动视图开始日期点
+@property (nonatomic,strong) NSDateFormatter *mFormatter;//格式化日期
 
 @property (nonatomic,strong) LCOpenSDK_PlayWindow* m_play;//大华播放器
 @property (nonatomic,assign) PlayLCState m_playState;
 @property (nonatomic,strong) LCOpenSDK_Api* m_hc;
+@property (nonatomic,assign) NSTimeInterval m_deltaTime;
+@property (nonatomic,assign) BOOL m_isSeeking;
+@property (nonatomic,strong) NSString* m_streamPath;
+
 
 @end
 
@@ -177,7 +182,7 @@ LCOpenSDK_EventListener
         self.playTimeLabel.font= [UIFont monospacedDigitSystemFontOfSize:12 weight:(UIFontWeightRegular)];
     }
     self.playTimeLabel.textColor = [UIColor whiteColor];
-    self.playTimeLabel.text = @"0:00:00";
+    self.playTimeLabel.text = @"00:00:00";
     [self.playTimeLabel sizeToFit];
     
     self.durationLabel = [[UILabel alloc] init];
@@ -186,7 +191,7 @@ LCOpenSDK_EventListener
         self.durationLabel.font= [UIFont monospacedDigitSystemFontOfSize:12 weight:(UIFontWeightRegular)];
     }
     self.durationLabel.textColor = [UIColor whiteColor];
-    self.durationLabel.text = @"0:00:00";
+    self.durationLabel.text = @"00:00:00";
     [self.durationLabel sizeToFit];
     
     self.slider = [[UISlider alloc] init];
@@ -377,7 +382,7 @@ LCOpenSDK_EventListener
 }
 
 - (void)timerAction {
-    if (self.playType == PlayerStatusHk) {
+    if (self.playType == PlayerStatusHk || self.playType == PlayerStatusDH) {
         return;
     }
     self.slider.value = CMTimeGetSeconds(self.player.currentTime);
@@ -585,14 +590,50 @@ LCOpenSDK_EventListener
 }
 
 - (void)sliderValueChange {
-    [self.player seekTo:CMTimeMake(self.slider.value * 1000, 1000)];
     
     NSInteger currentProgess = self.slider.value * [_plModel.duration floatValue]/1000;
     NSInteger hour = currentProgess / 3600;
     NSInteger minutes = currentProgess / 60;
     NSInteger second = currentProgess % 60;
 
-    [self.ePlayer seekToTime:[self dateStringAfterFor:hour minutes:minutes second:second]];
+    Float64 delta = self.slider.maximumValue - self.slider.value;
+    
+    switch (_playType) {
+        case PlayerStatusGBS:
+            [self.player seekTo:CMTimeMake(self.slider.value * 1000, 1000)];
+            break;
+        case PlayerStatusHk:
+            
+            [self showFullLoading];
+            [self.ePlayer seekToTime:[self dateStringAfterFor:hour minutes:minutes second:second]];
+
+            break;
+        case PlayerStatusDH:
+            _m_isSeeking = YES;
+            [self showFullLoading];
+
+            if (Pause == _m_playState) {
+                [self.m_play resume];
+                if ([self.plModel.recordType isEqualToString:@"local"]) {
+                    return;
+                }
+            }
+            _m_playState = Play;
+            
+            // seek到录像最后2秒内，录像可能无法播放,强制使seek在录像最后2秒以外
+            if (delta < (2.0 / self.m_deltaTime)) {
+                self.slider.value = (self.slider.maximumValue - 2.0 / _m_deltaTime) < self.slider.minimumValue ? self.slider.minimumValue : (self.slider.maximumValue - 2.0 / _m_deltaTime);
+            }
+            Float64 rate = self.slider.value / (self.slider.maximumValue - self.slider.minimumValue);
+            [self.m_play seek:rate * _m_deltaTime];
+            
+            break;
+            
+        default:
+            break;
+    }
+    
+    
 }
 
 //HikPlayer时间处理
@@ -601,7 +642,7 @@ LCOpenSDK_EventListener
     //视频开始时间
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];//解决8小时时间差问题
+//    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];//解决8小时时间差问题
     NSDate *start_time = [dateFormatter dateFromString:_plModel.startTime];
     
     NSCalendar *gregorian = [[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
@@ -612,6 +653,10 @@ LCOpenSDK_EventListener
     
     //结果时间
     NSDate *resultDate = [gregorian dateByAddingComponents:offsetComponents toDate:start_time options:0];
+//    NSString *strDate = [dateFormatter stringFromDate:resultDate];
+//    NSDate *newDate = [dateFormatter dateFromString:strDate];
+    DLog(@"resultDate == %@",resultDate)
+
     return resultDate;
 }
 
@@ -889,15 +934,20 @@ LCOpenSDK_EventListener
     }else if (self.playType == PlayerStatusHk){
         
         self.isLiving = NO;
-        self.ePlayTime = 0;
         
         [EZUIKit initWithAppKey:_plModel.appKey];
         [EZUIKit setAccessToken:_plModel.token];
 
         [EZOpenSDK initLibWithAppKey:_plModel.appKey];
         [EZOpenSDK setAccessToken:_plModel.token];
-
         
+        _m_deltaTime = [self transformToDeltaTime:_plModel.startTime EndTime:_plModel.endTime];
+
+
+//        NSString *url = @"ezopen://open.ys7.com/E16543953/1.rec?begin=20201011000000&end=20201011235959";
+        //ezopen://open.ys7.com/E16543953/1.local.rec?begin=20201012000800&end=20201012000817
+//        self.ePlayer = [EZUIPlayer createPlayerWithUrl:url];
+
         self.ePlayer = [EZUIPlayer createPlayerWithUrl:_plModel.videoUrl];
         self.ePlayer.mDelegate = self;
         self.ePlayer.previewView.userInteractionEnabled = YES;
@@ -913,6 +963,8 @@ LCOpenSDK_EventListener
 
     }else{
         
+        _m_isSeeking = NO;
+        
         //接口初始化
         LCOpenSDK_ApiParam * apiParam = [[LCOpenSDK_ApiParam alloc] init];
         apiParam.procotol =  PROCOTOL_TYPE_HTTPS;
@@ -922,23 +974,16 @@ LCOpenSDK_EventListener
         self.m_hc = [[LCOpenSDK_Api shareMyInstance] initOpenApi:apiParam];
 
         //大华视频加载
-        self.m_play = [[LCOpenSDK_PlayWindow alloc] initPlayWindow:CGRectMake(0, 0,kScreenWidth,height) Index:1];
+        self.m_play = [[LCOpenSDK_PlayWindow alloc] initPlayWindow:CGRectMake(0, 0,kScreenWidth,height) Index:0];
         [self.m_play setSurfaceBGColor:[UIColor blackColor]];
-        [self addSubview:[self.m_play getWindowView]];
+//        [self addSubview:[self.m_play getWindowView]];
+        [self insertSubview:[self.m_play getWindowView] atIndex:0];
         [self.m_play setWindowListener:self];
-        self.m_play.getWindowView.userInteractionEnabled = YES;
+//        self.m_play.getWindowView.userInteractionEnabled = NO;
         
-        //播放云录像
-        LCOpenSDK_ParamCloudRecord *paramCloudRecord = [[LCOpenSDK_ParamCloudRecord alloc] init];
-        paramCloudRecord.accessToken = self.plModel.accessToken;
-        paramCloudRecord.deviceID = self.plModel.deviceSerial;
-        paramCloudRecord.channel = [self.plModel.channel integerValue];
-        paramCloudRecord.psk = @"";
-        paramCloudRecord.recordRegionID = self.plModel.recordRegionId;
-        paramCloudRecord.offsetTime = 0;
-        paramCloudRecord.recordType = RECORD_TYPE_ALL;
-        paramCloudRecord.timeOut = 60;
-        [self.m_play playCloudRecord:paramCloudRecord];
+        _m_deltaTime = [self transformToDeltaTime:_plModel.startTime EndTime:_plModel.endTime];
+
+        
     }
 }
 - (NSTimeInterval)timeIntervalOfString:(NSString*)strTime
@@ -980,30 +1025,8 @@ LCOpenSDK_EventListener
     [self.thumbImageView yy_setImageWithURL:[NSURL URLWithString:_plModel.picUrl] options:YYWebImageOptionProgressive];
 }
 
-- (void)play {
-    
-//    if (self.isNeedSetupPlayer) {
-//        [self setupPlayer];
-//        self.isNeedSetupPlayer = NO;
-//    }
-//    self.isStop = NO;
-//
-//    [self.delegate playerViewWillPlay:self];
-//    [self addFullStreenNotify];
-//    [self addTimer];
-//    [self resetButton:YES];
-//
-//    if (!(PLPlayerStatusReady == self.player.status ||
-//        PLPlayerStatusOpen == self.player.status ||
-//        PLPlayerStatusCaching == self.player.status ||
-//        PLPlayerStatusPlaying == self.player.status ||
-//        PLPlayerStatusPreparing == self.player.status)
-//        ) {
-//        NSDate *date = [NSDate date];
-//        [self.player play];
-//        NSLog(@"play 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
-//    }
-    
+- (void)play
+{
     if (self.isNeedSetupPlayer) {
         [self setupPlayer];
         self.isNeedSetupPlayer = NO;
@@ -1032,9 +1055,39 @@ LCOpenSDK_EventListener
         case PlayerStatusHk:
 
             [self.ePlayer startPlay];
+            self.centerPauseButton.hidden = YES;
 
             break;
         case PlayerStatusDH:
+            
+            [self showFullLoading];
+            self.centerPauseButton.hidden = YES;
+            _m_isSeeking = NO;
+            
+            CGFloat fduration = [_plModel.duration floatValue];
+            int duration = fduration / 1000 + .5;
+            int hour = duration / 3600;
+            int min  = (duration % 3600) / 60;
+            int sec  = duration % 60;
+            self.durationLabel.text = [NSString stringWithFormat:@"%d:%02d:%02d", hour, min, sec];
+
+            if ([_plModel.recordType isEqualToString:@"cloud"]) {
+                //播放云录像
+                LCOpenSDK_ParamCloudRecord *paramCloudRecord = [[LCOpenSDK_ParamCloudRecord alloc] init];
+                paramCloudRecord.accessToken = self.plModel.accessToken;
+                paramCloudRecord.deviceID = self.plModel.deviceSerial;
+                paramCloudRecord.channel = [self.plModel.channel integerValue];
+                paramCloudRecord.psk = @"";
+                paramCloudRecord.recordRegionID = self.plModel.recordRegionId;
+                paramCloudRecord.offsetTime = 0;
+                paramCloudRecord.recordType = RECORD_TYPE_ALL;
+                paramCloudRecord.timeOut = 60;
+                [self.m_play playCloudRecord:paramCloudRecord];
+            }else{
+                //播放本地录像
+                
+            }
+            
             break;
 
         default:
@@ -1060,17 +1113,26 @@ LCOpenSDK_EventListener
 
 - (void)stop {
     
+    [self.ePlayer stopPlay];
+    [self.ePlayer releasePlayer];
+    [self.ePlayer.previewView removeFromSuperview];
+    [self.m_play stopCloud:YES];
+    [self.m_play stopDeviceRecord:YES];
+    [self.m_hc uninitOpenApi];
+    [self.m_play.getWindowView removeFromSuperview];
+    self.m_playState = Stop;
+    
+    
+    if (_playType == PlayerStatusHk || _playType == PlayerStatusDH) {
+        self.isNeedSetupPlayer = YES;
+    }
+    
+    
     NSDate *date = nil;
     if ([self.player isPlaying]) {
         date = [NSDate date];
     }
     [self.player stop];
-    
-    [self.ePlayer stopPlay];
-    [self.ePlayer releasePlayer];
-    [self.m_play stopCloud:YES];
-    [self.m_play stopFile:YES];
-    [self.m_hc uninitOpenApi];
     
     if (date) {
         NSLog(@"stop 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
@@ -1090,8 +1152,8 @@ LCOpenSDK_EventListener
     
     self.bufferingView.progress = 0;
     self.slider.value = 0;
-    self.playTimeLabel.text = @"0:00:00";
-    self.durationLabel.text = @"0:00:00";
+    self.playTimeLabel.text = @"00:00:00";
+    self.durationLabel.text = @"00:00:00";
     self.thumbImageView.hidden = NO;
     
     [self resetButton:NO];
@@ -1434,13 +1496,11 @@ LCOpenSDK_EventListener
 {
     if ([EZUIPlayer getPlayModeWithUrl:_plModel.videoUrl] ==  EZUIKIT_PLAYMODE_REC)
     {
-        CGFloat fduration = [_plModel.duration floatValue];
-        int duration = fduration / 1000 + .5;
-        int hour = duration / 3600;
-        int min  = (duration % 3600) / 60;
-        int sec  = duration % 60;
-        self.durationLabel.text = [NSString stringWithFormat:@"%d:%02d:%02d", hour, min, sec];
-        
+        NSArray *startArr = [self.plModel.startTime componentsSeparatedByString:@" "];
+        NSArray *endArr = [self.plModel.endTime componentsSeparatedByString:@" "];
+        self.playTimeLabel.text = startArr.lastObject;
+        self.durationLabel.text = endArr.lastObject;
+ 
         [self showFullLoading];
         self.centerPauseButton.hidden = YES;
     }
@@ -1463,319 +1523,253 @@ LCOpenSDK_EventListener
  */
 - (void) EZUIPlayerPlayTime:(NSDate *) osdTime
 {
-    self.ePlayTime++;
+//    self.ePlayTime++;
+//
+//    NSString *minutes;
+//    NSString *second;
+//    //秒
+//    if (self.ePlayTime%60 < 10) {
+//        second = [NSString stringWithFormat:@"0%d",self.ePlayTime%60];
+//    }else{
+//        second = [NSString stringWithFormat:@"%d",self.ePlayTime%60];
+//    }
+//    //分钟
+//    if (self.ePlayTime/60 < 10) {
+//        minutes = [NSString stringWithFormat:@"0%d",self.ePlayTime/60];
+//    }else{
+//        minutes = [NSString stringWithFormat:@"%d",self.ePlayTime/60];
+//    }
+//    //小时
+//    NSString *hours = [NSString stringWithFormat:@"%d",self.ePlayTime/3600];
+//    self.playTimeLabel.text = [NSString stringWithFormat:@"%@:%@:%@",hours,minutes,second];
+//
+//    self.slider.value = self.ePlayTime * 1000 / [_plModel.duration floatValue];
+//    self.bottomPlayProgreeeView.progress = self.slider.value / [_plModel.duration floatValue];
     
-    NSString *minutes;
-    NSString *second;
-    //秒
-    if (self.ePlayTime%60 < 10) {
-        second = [NSString stringWithFormat:@"0%d",self.ePlayTime%60];
-    }else{
-        second = [NSString stringWithFormat:@"%d",self.ePlayTime%60];
-    }
-    //分钟
-    if (self.ePlayTime/60 < 10) {
-        minutes = [NSString stringWithFormat:@"0%d",self.ePlayTime/60];
-    }else{
-        minutes = [NSString stringWithFormat:@"%d",self.ePlayTime/60];
-    }
-    //小时
-    NSString *hours = [NSString stringWithFormat:@"%d",self.ePlayTime/3600];
-    self.playTimeLabel.text = [NSString stringWithFormat:@"%@:%@:%@",hours,minutes,second];
+//    NSTimeInterval time = [osdTime timeIntervalSinceDate:self.mBeginDate];
+    DLog(@"osdTime ==  %@",osdTime);
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH:mm:ss"];
+    self.playTimeLabel.text = [dateFormatter stringFromDate:osdTime];
     
-    self.slider.value = self.ePlayTime * 1000 / [_plModel.duration floatValue];
+    NSDateFormatter *date1Formatter = [[NSDateFormatter alloc] init];
+    [date1Formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *currentTime = [date1Formatter stringFromDate:osdTime];
+    Float64 rate = [self transformToDeltaTime:self.plModel.startTime EndTime:currentTime] / self.m_deltaTime;
+    Float64 slider_value = rate * (self.slider.maximumValue - self.slider.minimumValue);
+    [self.slider setValue:slider_value animated:YES];
     self.bottomPlayProgreeeView.progress = self.slider.value / [_plModel.duration floatValue];
 
+}
+- (NSTimeInterval)pleaseInsertStarTime:(NSString *)starTime andInsertEndTime:(NSString *)endTime{
+    NSDateFormatter* formater = [[NSDateFormatter alloc] init];
+    [formater setDateFormat:@"mm:ss"];//根据自己的需求定义格式
+    NSDate* startDate = [formater dateFromString:starTime];
+    NSDate* endDate = [formater dateFromString:endTime];
+    NSTimeInterval time = [endDate timeIntervalSinceDate:startDate];
+    return time;
 }
 
 #pragma mark - 设备录像播放回调
 -(void)onPlayerResult:(NSString *)code Type:(NSInteger)type Index:(NSInteger)index
 {
     DLog(@"code[%@] type[%ld]", code, (long)type);
-//    switch (m_recordType) {
-//    case DeviceRecord:
+    if ([_plModel.recordType isEqualToString:@"local"]) {
         [self onPlayDeviceRecordResult:code Type:type];
-//        break;
-//    case CloudRecord:
-//        [self onPlayCloudRecordResult:code Type:type];
-//    default:
-//        break;
-//    }
-    
+    }else{
+        [self onPlayCloudRecordResult:code Type:type];
+    }
 }
 - (void)onPlayDeviceRecordResult:(NSString*)code Type:(NSInteger)type
 {
-//    NSString* displayLab;
     if (99 == type) {
-//        displayLab = [code isEqualToString:@"-1000"] ? NSLocalizedString(NETWORK_TIMEOUT_TXT, nil) : [NSLocalizedString(REST_LINK_FAILED_TXT, nil) stringByAppendingFormat:@",[%@]", code];
         dispatch_async(dispatch_get_main_queue(), ^{
-//            NSLog(@"OpenApi connect error!");
-//            _m_playState = Stop;
+            [self hideLoadingHUD];
+            self.m_playState = Stop;
+            self.playTimeLabel.text = @"00:00:00";
+            [self.slider setValue:0];
         });
         return;
     }
-    
-    if(5 == type)
-    {
-        /* 优化拉流设备 */
-        if([@"0" isEqualToString:code]){
-            return;
-        }
-        if([@"1000" isEqualToString:code] || [@"4000" isEqualToString:code])
-        {
-            return;
-        }
-    }
-    
-//    if ([RTSP_Result_String(STATE_RTSP_TEARDOWN_ERROR) isEqualToString:code]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//
-//        });
-//        return;
-//    }
-//    if ([RTSP_Result_String(STATE_RTSP_PLAY_READY) isEqualToString:code]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            if (YES == m_isSeeking) {
-//                if (Pause == m_playState) {
-//                    m_playState = Play;
-//                    Float64 m_Rate = m_playSlider.value / (m_playSlider.maximumValue - m_playSlider.minimumValue);
-//                    [m_play seek:m_Rate * m_deltaTime];
-//                } else {
-//                    m_isSeeking = NO;
-//                }
-//            }
-//        });
-//        return;
-//    }
-//    if ([RTSP_Result_String(STATE_RTSP_FILE_PLAY_OVER) isEqualToString:code]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//
-//                       });
-//        return;
-//    }
-//    if ([RTSP_Result_String(STATE_RTSP_PAUSE_READY) isEqualToString:code]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//
-//                       });
-//        return;
-//    }
-//    if ([RTSP_Result_String(STATE_RTSP_KEY_MISMATCH) isEqualToString:code]) {
-//        displayLab = @"Key Error";
-//    } else {
-//        displayLab = [NSString stringWithFormat:@"Rest Failed，[%@]", code];
-//    }
-//
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [m_tipLab setText:displayLab];
-//        [self hideLoading];
-//        m_playImg.hidden = NO;
-//        m_playState = Stop;
-//        [m_playBtn setBackgroundImage:[UIImage leChangeImageNamed:VideoPlay_Play_Png] forState:UIControlStateNormal];
-//        m_playBtn.enabled = YES;
-//        [self enableOtherBtn:NO];
-//        [m_play stopDeviceRecord:NO];
-//
-//        m_startTimeLab.text = [self transformToShortTime:m_beginTimeSelected];
-//        [m_playSlider setValue:0];
-//    });
-//    return;
 }
 
 #pragma mark - 云录像播放回调
 - (void)onPlayCloudRecordResult:(NSString*)code Type:(NSInteger)type
 {
-
-    DLog(@"code[%@] type[%ld]", code, (long)type);
-//    if (99 == type) {
-//        NSString* hint = [code isEqualToString:@"-1000"] ? NSLocalizedString(NETWORK_TIMEOUT_TXT, nil) : [NSLocalizedString(REST_LINK_FAILED_TXT, nil) stringByAppendingFormat:@",[%@]", code];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            NSLog(@"RecordPlayViewController, OpenApi connect error!");
-//            m_tipLab.text = hint;
-//            [self hideLoading];
-//            m_playState = Stop;
-//            m_playImg.hidden = NO;
-//            m_playBtn.enabled = YES;
-//            [self enableOtherBtn:NO];
-//        });
-//        return;
-//    }
-//    if ([HLS_Result_String(HLS_DOWNLOAD_FAILD) isEqualToString:code]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            NSLog(@"HLS DOWNLOAD FAILED!");
-//            m_tipLab.text = @"HLS download failed";
-//            [self hideLoading];
-//            m_playState = Stop;
-//            m_playImg.hidden = NO;
-//            m_playBtn.enabled = YES;
-//            [self enableOtherBtn:NO];
-//            [m_playBtn setBackgroundImage:[UIImage leChangeImageNamed:VideoPlay_Play_Png] forState:UIControlStateNormal];
-//
-//            m_startTimeLab.text = [self transformToShortTime:m_beginTimeSelected];
-//            [m_playSlider setValue:0];
-//        });
-//        return;
-//    }
-//    if ([HLS_Result_String(HLS_DOWNLOAD_BEGIN) isEqualToString:code]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            NSLog(@"HLS DOWNLOAD BEGIN!");
-//        });
-//        return;
-//    }
-//    if ([HLS_Result_String(HLS_DOWNLOAD_END) isEqualToString:code]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            NSLog(@"HLS DOWNLOAD END!");
-//        });
-//        return;
-//    }
-//    if ([HLS_Result_String(HLS_SEEK_SUCCESS) isEqualToString:code]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            NSLog(@"HLS SEEK SUCCESS!");
-//            m_isSeeking = NO;
-//            [self hideLoading];
-//        });
-//        return;
-//    }
-//    if ([HLS_Result_String(HLS_SEEK_FAILD) isEqualToString:code]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            NSLog(@"HLS SEEK FAILD!");
-//            [m_play stopCloud:NO];
-//            m_playState = Stop;
-//            [self hideLoading];
-//            [m_playBtn setBackgroundImage:[UIImage leChangeImageNamed:VideoPlay_Play_Png] forState:UIControlStateNormal];
-//
-//            m_startTimeLab.text = [self transformToShortTime:m_beginTimeSelected];
-//            [m_playSlider setValue:0];
-//        });
-//        return;
-//    }
-//    if ([HLS_Result_String(HLS_ABORT_DONE) isEqualToString:code]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            NSLog(@"HLS ABORT DONE!");
-//            m_startTimeLab.text = [self transformToShortTime:m_beginTimeSelected];
-//            [m_playSlider setValue:0];
-//        });
-//        return;
-//    }
-//    if ([HLS_Result_String(HLS_RESUME_DONE) isEqualToString:code]) {
-//
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            NSLog(@"HLS RESUME DONE!");
-//        });
-//        return;
-//    }
-//    // 密钥错误码STATE_HLS_KEY_ERROR = 11
-//    if ([HLS_Result_String(HLS_KEY_ERROR) isEqualToString:code]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//
-//            [m_play stopCloud:NO];
-//            [self hideLoading];
-//            m_tipLab.text = @"Key Error";
-//            m_playState = Stop;
-//            m_playImg.hidden = NO;
-//            m_playBtn.enabled = YES;
-//            [self enableOtherBtn:NO];
-//            [m_playBtn setBackgroundImage:[UIImage leChangeImageNamed:VideoPlay_Play_Png] forState:UIControlStateNormal];
-//        });
-//        return;
-//    }
+    if (99 == type) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self hideLoadingHUD];
+            self.m_playState = Stop;
+            self.playTimeLabel.text = @"00:00:00";
+            [self.slider setValue:0];
+        });
+        return;
+    }
+    if ([@"3" isEqualToString:code]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"HLS SEEK SUCCESS!");
+            self.m_isSeeking = NO;
+            [self hideFullLoading];
+        });
+        return;
+    }
 }
 
 #pragma mark - 录像开始播放回调
 - (void)onPlayBegan:(NSInteger)index
 {
-    DLog(@"onPlayBegan  index ==  %ld",index);
-
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        DLog(@"index ==  %ld",index);
-//    });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideFullLoading];
+        self.m_playState = Play;
+        self.m_isSeeking = NO;
+        if (self.bottomBarView.frame.origin.y >= self.bounds.size.height) {
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideBar) object:nil];
+            [self performSelector:@selector(hideBar) withObject:nil afterDelay:3];
+        }
+    });
+    
 }
 
 #pragma mark - 录像播放结束回调
 - (void)onPlayFinished:(NSInteger)index
 {
-    DLog(@"onPlayFinished  index ==  %ld",index);
-
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        if (DeviceRecord == m_recordType) {
-//            [m_play stopDeviceRecord:YES];
-//        } else if (CloudRecord == m_recordType) {
-//            [m_play stopCloud:YES];
-//        }
-//        m_tipLab.text = @"play over";
-//        [self hideLoading];
-//        [self enableOtherBtn:NO];
-//        [m_startTimeLab setText:[self transformToShortTime:m_beginTimeSelected]];
-//        [m_playSlider setValue:m_playSlider.minimumValue animated:YES];
-//        m_playState = Stop;
-//        [m_playBtn setBackgroundImage:[UIImage leChangeImageNamed:VideoPlay_Play_Png] forState:UIControlStateNormal];
-//    });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([self.plModel.recordType isEqualToString:@"local"]) {
+            [self.m_play stopDeviceRecord:YES];
+        } else {
+            [self.m_play stopCloud:YES];
+        }
+        [self hiddenLoading];
+        [self.slider setValue:self.slider.minimumValue animated:YES];
+        self.m_playState = Stop;
+    });
 }
 
 #pragma mark - 录像时间状态回调
 - (void)onPlayerTime:(long)time Index:(NSInteger)index
 {
-    DLog(@"onPlayerTime  time ===== %ld",time);
-    DLog(@"onPlayerTime  index ===== %ld",index);
+    if (YES == _m_isSeeking) {
+        return;
+    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSString* currentTime = [self transformTimeFromLong:time];
+        [self.playTimeLabel setText:[self transformToShortTime:currentTime]];
+        NSLog(@"self.playTimeLabel.text = %@", self.playTimeLabel.text);
+        Float64 rate = [self transformToDeltaTime:self.plModel.startTime EndTime:currentTime] / self.m_deltaTime;
+        Float64 slider_value = rate * (self.slider.maximumValue - self.slider.minimumValue);
+        [self.slider setValue:slider_value animated:YES];
 
-//    if (YES == m_isSeeking) {
-//        return;
-//    }
-//
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        NSString* currentTime = [self transformTimeFromLong:time];
-//        [m_startTimeLab setText:[self transformToShortTime:currentTime]];
-//        NSLog(@"_m_startTimeLab.text = %@", m_startTimeLab.text);
-//        Float64 rate = [self transformToDeltaTime:m_beginTimeSelected EndTime:currentTime] / m_deltaTime;
-//        Float64 slider_value = rate * (m_playSlider.maximumValue - m_playSlider.minimumValue);
-//        [m_playSlider setValue:slider_value animated:YES];
-//    });
+    });
+}
+- (NSString*)transformTimeFromLong:(long)time
+{
+    NSDate* resDate = [NSDate dateWithTimeIntervalSince1970:time];
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+
+    NSString* strTime = [formatter stringFromDate:resDate];
+    NSLog(@"时间戳转日期%@", strTime);
+    return strTime;
+}
+- (NSString*)transformToShortTime:(NSString*)time
+{
+    NSString* regex = @"[1-9]\\d{3}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}"; //正常字符范围
+    NSPredicate* pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex]; //比较处理
+    if (![pred evaluateWithObject:time]) {
+        NSLog(@"Time format error:%@", time);
+        return 0;
+    }
+    NSString* shortTime;
+    NSArray* array = [time componentsSeparatedByString:@" "]; //从字符' '中分隔成2个元素的数组
+    NSLog(@"array:%@", array); //结果是"yyyy-mm-dd"和"HH:MM:SS"
+    shortTime = array[1];
+
+    return shortTime;
+}
+- (NSTimeInterval)transformToDeltaTime:(NSString*)beginTime EndTime:(NSString*)endTime
+{
+    NSTimeInterval t_beginTime;
+    NSTimeInterval t_endTime;
+    NSTimeInterval t_deltaTime;
+
+    t_beginTime = [self timeIntervalOfString:beginTime];
+    t_endTime = [self timeIntervalOfString:endTime];
+
+    if (t_endTime >= t_beginTime && t_beginTime != 0 && t_endTime != 0) {
+        t_deltaTime = t_endTime - t_beginTime;
+    } else {
+        return 0;
+    }
+    return t_deltaTime;
 }
 
 #pragma mark - TS/PS标准流数据回调
 - (void)onStreamCallback:(NSData*)data Index:(NSInteger)index
 {
     DLog(@"onStreamCallback  data == %@",data)
-//    if (m_streamPath) {
-//        NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:m_streamPath];
-//
-//        [fileHandle seekToEndOfFile]; //将节点跳到文件的末尾
-//
-//        [fileHandle writeData:data]; //追加写入数据
-//
-//        [fileHandle closeFile];
-//        return;
-//    }
-//    NSDateFormatter* dataFormat = [[NSDateFormatter alloc] init];
-//    [dataFormat setDateFormat:@"yyyyMMddHHmmss"];
-//    NSString* strDate = [dataFormat stringFromDate:[NSDate date]];
-//    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory,
-//        NSUserDomainMask, YES);
-//    NSString* libraryDirectory = [paths objectAtIndex:0];
-//
-//    NSString* myDirectory =
-//        [libraryDirectory stringByAppendingPathComponent:@"lechange"];
-//    NSString* davDirectory =
-//        [myDirectory stringByAppendingPathComponent:@"HLSexportStream"];
-//    m_streamPath = [davDirectory stringByAppendingFormat:@"/%@.ps", strDate];
-//    NSFileManager* fileManage = [NSFileManager defaultManager];
-//    NSError* pErr;
-//    BOOL isDir;
-//    if (NO == [fileManage fileExistsAtPath:myDirectory isDirectory:&isDir]) {
-//        [fileManage createDirectoryAtPath:myDirectory
-//              withIntermediateDirectories:YES
-//                               attributes:nil
-//                                    error:&pErr];
-//    }
-//    if (NO == [fileManage fileExistsAtPath:davDirectory isDirectory:&isDir]) {
-//        [fileManage createDirectoryAtPath:davDirectory
-//              withIntermediateDirectories:YES
-//                               attributes:nil
-//                                    error:&pErr];
-//    }
-//    if (NO == [fileManage fileExistsAtPath:m_streamPath]) //如果不存在
-//    {
-//        [data writeToFile:m_streamPath atomically:YES];
-//    }
+    if (_m_streamPath) {
+        NSFileHandle* fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:_m_streamPath];
+
+        [fileHandle seekToEndOfFile]; //将节点跳到文件的末尾
+
+        [fileHandle writeData:data]; //追加写入数据
+
+        [fileHandle closeFile];
+        return;
+    }
+    NSDateFormatter* dataFormat = [[NSDateFormatter alloc] init];
+    [dataFormat setDateFormat:@"yyyyMMddHHmmss"];
+    NSString* strDate = [dataFormat stringFromDate:[NSDate date]];
+    NSArray* paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory,
+        NSUserDomainMask, YES);
+    NSString* libraryDirectory = [paths objectAtIndex:0];
+
+    NSString* myDirectory =
+        [libraryDirectory stringByAppendingPathComponent:@"lechange"];
+    NSString* davDirectory =
+        [myDirectory stringByAppendingPathComponent:@"HLSexportStream"];
+    _m_streamPath = [davDirectory stringByAppendingFormat:@"/%@.ps", strDate];
+    NSFileManager* fileManage = [NSFileManager defaultManager];
+    NSError* pErr;
+    BOOL isDir;
+    if (NO == [fileManage fileExistsAtPath:myDirectory isDirectory:&isDir]) {
+        [fileManage createDirectoryAtPath:myDirectory
+              withIntermediateDirectories:YES
+                               attributes:nil
+                                    error:&pErr];
+    }
+    if (NO == [fileManage fileExistsAtPath:davDirectory isDirectory:&isDir]) {
+        [fileManage createDirectoryAtPath:davDirectory
+              withIntermediateDirectories:YES
+                               attributes:nil
+                                    error:&pErr];
+    }
+    if (NO == [fileManage fileExistsAtPath:_m_streamPath]) //如果不存在
+    {
+        [data writeToFile:_m_streamPath atomically:YES];
+    }
+}
+/**
+ *  单击回调
+ *
+ *  @param dx    [out]  窗口X坐标
+ *  @param dy    [out]  窗口Y坐标
+ *  @param index [out]  窗口索引值
+ */
+- (void)onControlClick:(CGFloat)dx dy:(CGFloat)dy Index:(NSInteger)index
+{
+    // 如果还木有初始化，直接初始化播放
+    if (self.isNeedSetupPlayer) {
+        [self play];
+        return;
+    }
+
+    if (self.bottomBarView.frame.origin.y >= self.bounds.size.height) {
+        [self showBar];
+    } else {
+        [self hideBar];
+    }
 }
 
 @end

@@ -93,7 +93,8 @@
                               @"endTime":model.endTime,
                               @"deviceId":model.deviceId,
                               @"token":model.token,
-                              @"appKey":model.appKey
+                              @"appKey":model.appKey,
+                              @"recordType":model.recordType
         };
         PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
         self.playerView.plModel = pModel;
@@ -112,7 +113,8 @@
                               @"recordRegionId":model.recordRegionId,
                               @"playToken":model.playToken,
                               @"token":model.token,
-                              @"appKey":model.appKey
+                              @"appKey":model.appKey,
+                              @"recordType":model.recordType
         };
         PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
         self.playerView.plModel = pModel;
@@ -124,6 +126,7 @@
                               @"startTime":model.startTime,
                               @"endTime":model.endTime,
                               @"deviceId":model.deviceId,
+                              @"recordType":model.recordType
         };
         PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
         self.playerView.plModel = pModel;

@@ -29,6 +29,7 @@
     model.deviceSerial = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceSerial"]];
     model.recordRegionId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"recordRegionId"]];
     model.playToken = [NSString stringWithFormat:@"%@",[dic objectForKey:@"playToken"]];
+    model.recordType = [NSString stringWithFormat:@"%@",[dic objectForKey:@"recordType"]];
 
     return model;
 }
