@@ -43,6 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)changeVolume:(float)volume;
 
 - (void)startOrStopVideo:(BOOL)start;
+-(void)videoStandardClarity:(BOOL)standard;
 
 
 @end

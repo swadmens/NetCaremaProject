@@ -58,6 +58,7 @@ LCOpenSDK_EventListener
 @property (nonatomic, assign) BOOL isNeedSetupPlayer;
 @property (nonatomic, assign) BOOL isLiving;//是否是直播
 @property (nonatomic, assign) BOOL isFullScreen;//是否是全屏
+@property (nonatomic, assign) BOOL clarity;//是否是标清
 
 @property (nonatomic, strong) NSTimer *playTimer;
 
@@ -162,6 +163,7 @@ LCOpenSDK_EventListener
     [self.exitfullScreenButton addTarget:self action:@selector(clickExitFullScreenButton) forControlEvents:(UIControlEventTouchUpInside)];
     
     self.moreButton = [[UIButton alloc] init];
+    self.moreButton.hidden = YES;
     [self.moreButton setImage:[UIImage imageNamed:@"more"] forState:(UIControlStateNormal)];
     [self.moreButton addTarget:self action:@selector(clickMoreButton) forControlEvents:(UIControlEventTouchUpInside)];
     
@@ -251,6 +253,7 @@ LCOpenSDK_EventListener
     [self.centerPauseButton addTarget:self action:@selector(clickPauseButton) forControlEvents:(UIControlEventTouchUpInside)];
     
     self.snapshotButton = [[UIButton alloc] init];
+    self.snapshotButton.hidden = YES;
     [self.snapshotButton addTarget:self action:@selector(clickSnapshotButton) forControlEvents:(UIControlEventTouchUpInside)];
     [self.snapshotButton setImage:[UIImage imageNamed:@"screen-cut"] forState:(UIControlStateNormal)];
     
@@ -272,6 +275,7 @@ LCOpenSDK_EventListener
     
     self.pauseButton.hidden = YES;
     self.centerPauseButton.hidden = YES;
+    self.clarity = YES;
 }
 
 // 这些控件的 Constraints 不会随着全屏和非全屏而需要做改变的
@@ -871,13 +875,14 @@ LCOpenSDK_EventListener
 - (void)setupPlayer {
     [self unsetupPlayer];
     
-    NSLog(@"播放地址: %@", _plModel.videoUrl);
+    NSLog(@"播放地址: %@", self.clarity?_plModel.videoUrl:_plModel.videoHDUrl);
     
-    if (![WWPublicMethod isStringEmptyText:_plModel.videoUrl]) {
-//        [_kHUDManager showMsgInView:nil withTitle:@"视频播放有误！" isSuccess:YES];
-        if (_isFullScreen){
-            [self clickExitFullScreenButton];
-        }
+    if (![WWPublicMethod isStringEmptyText:_plModel.videoHDUrl]) {
+        _plModel.videoHDUrl = _plModel.videoUrl;
+    }
+    
+    if (![WWPublicMethod isStringEmptyText:_plModel.videoUrl] && ![WWPublicMethod isStringEmptyText:_plModel.videoHDUrl]) {
+        [_kHUDManager showMsgInView:nil withTitle:@"视频地址有误！！！" isSuccess:YES];
         return;
     }
  
@@ -909,8 +914,7 @@ LCOpenSDK_EventListener
         [self.playerOption setOptionValue:@(kPLLogNone) forKey:PLPlayerOptionKeyLogLevel];
         
         NSDate *date = [NSDate date];
-        self.player = [PLPlayer playerWithURL:[NSURL URLWithString:_plModel.videoUrl] option:self.playerOption];
-        
+        self.player = [PLPlayer playerWithURL:[NSURL URLWithString:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl] option:self.playerOption];
         NSLog(@"playerWithURL 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
         
         self.player.delegateQueue = dispatch_get_main_queue();
@@ -943,12 +947,10 @@ LCOpenSDK_EventListener
         
         _m_deltaTime = [self transformToDeltaTime:_plModel.startTime EndTime:_plModel.endTime];
 
-
-//        NSString *url = @"ezopen://open.ys7.com/E16543953/1.rec?begin=20201011000000&end=20201011235959";
-        //ezopen://open.ys7.com/E16543953/1.local.rec?begin=20201012000800&end=20201012000817
+//        NSString *url = @"http://hls01open.ys7.com/openlive/ed751f99c9a9446f8235f09152e3abd3.m3u8";
 //        self.ePlayer = [EZUIPlayer createPlayerWithUrl:url];
 
-        self.ePlayer = [EZUIPlayer createPlayerWithUrl:_plModel.videoUrl];
+        self.ePlayer = [EZUIPlayer createPlayerWithUrl:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl];
         self.ePlayer.mDelegate = self;
         self.ePlayer.previewView.userInteractionEnabled = YES;
        //添加预览视图到当前界面
@@ -1024,7 +1026,13 @@ LCOpenSDK_EventListener
     self.isNeedSetupPlayer = YES;
     [self.thumbImageView yy_setImageWithURL:[NSURL URLWithString:_plModel.picUrl] options:YYWebImageOptionProgressive];
 }
-
+//清晰度变化
+-(void)videoStandardClarity:(BOOL)standard
+{
+    self.clarity = standard;
+    self.isNeedSetupPlayer = YES;
+    [self play];
+}
 - (void)play
 {
     if (self.isNeedSetupPlayer) {
@@ -1300,6 +1308,8 @@ LCOpenSDK_EventListener
 
 - (void)player:(PLPlayer *)player statusDidChange:(PLPlayerStatus)state
 {
+    DLog(@"PLPlayerStatus ==  %ld",state);
+    
     if (self.isStop) {
         static NSString * statesString[] = {
             @"PLPlayerStatusUnknow"
@@ -1314,7 +1324,7 @@ LCOpenSDK_EventListener
             @"PLPlayerStateAutoReconnecting",
             @"PLPlayerStatusCompleted"
         };
-//        NSLog(@"stop statusDidChange self,= %p state = %@", self, statesString[state]);
+        NSLog(@"stop statusDidChange self,= %p state = %@", self, statesString[state]);
         [self stop];
         return;
     }
@@ -1523,31 +1533,6 @@ LCOpenSDK_EventListener
  */
 - (void) EZUIPlayerPlayTime:(NSDate *) osdTime
 {
-//    self.ePlayTime++;
-//
-//    NSString *minutes;
-//    NSString *second;
-//    //秒
-//    if (self.ePlayTime%60 < 10) {
-//        second = [NSString stringWithFormat:@"0%d",self.ePlayTime%60];
-//    }else{
-//        second = [NSString stringWithFormat:@"%d",self.ePlayTime%60];
-//    }
-//    //分钟
-//    if (self.ePlayTime/60 < 10) {
-//        minutes = [NSString stringWithFormat:@"0%d",self.ePlayTime/60];
-//    }else{
-//        minutes = [NSString stringWithFormat:@"%d",self.ePlayTime/60];
-//    }
-//    //小时
-//    NSString *hours = [NSString stringWithFormat:@"%d",self.ePlayTime/3600];
-//    self.playTimeLabel.text = [NSString stringWithFormat:@"%@:%@:%@",hours,minutes,second];
-//
-//    self.slider.value = self.ePlayTime * 1000 / [_plModel.duration floatValue];
-//    self.bottomPlayProgreeeView.progress = self.slider.value / [_plModel.duration floatValue];
-    
-//    NSTimeInterval time = [osdTime timeIntervalSinceDate:self.mBeginDate];
-    DLog(@"osdTime ==  %@",osdTime);
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm:ss"];
     self.playTimeLabel.text = [dateFormatter stringFromDate:osdTime];
@@ -1559,7 +1544,6 @@ LCOpenSDK_EventListener
     Float64 slider_value = rate * (self.slider.maximumValue - self.slider.minimumValue);
     [self.slider setValue:slider_value animated:YES];
     self.bottomPlayProgreeeView.progress = self.slider.value / [_plModel.duration floatValue];
-
 }
 - (NSTimeInterval)pleaseInsertStarTime:(NSString *)starTime andInsertEndTime:(NSString *)endTime{
     NSDateFormatter* formater = [[NSDateFormatter alloc] init];

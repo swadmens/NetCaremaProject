@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)clickSnapshotButton;
 -(void)makePlayerViewFullScreen;
 - (void)changeVolume:(float)volume;
+-(void)videoStandardClarity:(BOOL)standard;
 
 
 @end

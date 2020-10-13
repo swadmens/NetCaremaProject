@@ -570,6 +570,26 @@
     }
  
 }
+-(void)videoStandardClarity:(BOOL)standard
+{
+    if (![self chengkVideoNormalPlay]) {
+        return;
+    }
+
+    if (self.isPlayerVideo) {
+        [_localVideoView videoStandardClarity:standard];
+    }else{
+        PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
+        NSArray *array = [self.collectionView visibleCells];
+        for (PlayerTopCollectionViewCell *cell in array) {
+            
+            if (cell == selectCell) {
+                [cell videoStandardClarity:standard];
+            }
+        }
+    }
+    
+}
 -(void)startOrStopVideo:(BOOL)start
 {
     self.videoing = start;

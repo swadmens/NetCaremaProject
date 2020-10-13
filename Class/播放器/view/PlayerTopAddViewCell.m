@@ -38,7 +38,7 @@
 -(void)makePlayerViewFullScreen:(BOOL)selected{}
 -(void)clickSnapshotButton{}
 - (void)changeVolume:(float)volume{}
-
+-(void)videoStandardClarity:(BOOL)standard{}
 -(void)makeCellData:(NSString *)icon
 {
     _titleImageView.image = UIImageWithFileName(icon);

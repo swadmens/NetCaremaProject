@@ -57,6 +57,7 @@ typedef enum {
 
 - (void)changeVolume:(float)volume;
 
+-(void)videoStandardClarity:(BOOL)standard;
 
 @end
 

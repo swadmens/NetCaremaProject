@@ -71,7 +71,9 @@
     
     _clarityBtn = [UIButton new];
     [_clarityBtn setTitle:@"标清" forState:UIControlStateNormal];
+    [_clarityBtn setTitle:@"高清" forState:UIControlStateSelected];
     [_clarityBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_clarityBtn setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
     _clarityBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEleven];
     [topView addSubview:_clarityBtn];
     [_clarityBtn yCenterToView:topView];
@@ -146,6 +148,7 @@
         
         _videoBtn.enabled = YES;
         _screenshotsBtn.enabled = YES;
+        _clarityBtn.enabled = YES;
 
         [_videoBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
             make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter);
@@ -164,7 +167,8 @@
         
         _videoBtn.enabled = NO;
         _screenshotsBtn.enabled = NO;
-        
+        _clarityBtn.enabled = NO;
+
         [_videoBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
             make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter).lgx_floatOffset(40);
             make.bottomEdge.lgx_equalTo(self.contentView.lgx_bottomEdge).lgx_floatOffset(-15);
@@ -180,13 +184,6 @@
 
 -(void)gongGeBtnClick:(UIButton*)sender
 {
-//    _gongGeBtn.selected = !_gongGeBtn.selected;
-//
-//
-//    NSDictionary *userDic = @{@"value":@(_gongGeBtn.selected)};
-//    //注册通知
-//    [[NSNotificationCenter defaultCenter] postNotificationName:@"gonggeChangeInfomation" object:nil userInfo:userDic];
-//    
     [self.delegate playerControlwithState:videoSateGongge withButton:sender];
 }
 -(void)voiceBtnClick:(UIButton*)sender
@@ -207,17 +204,14 @@
 }
 -(void)videoBtnClick:(UIButton*)sender
 {
-//    _videoBtn.selected = !_videoBtn.selected;
     [self.delegate playerControlwithState:videoSateVideing withButton:sender];
 }
 -(void)screenshotsBtnClick:(UIButton*)sender
 {
-//    _screenshotsBtn.selected = !_screenshotsBtn.selected;
     [self.delegate playerControlwithState:videoSatesSreenshots withButton:sender];
 }
 -(void)controlBtnClick:(UIButton*)sender
 {
-//    _controlBtn.selected = !_controlBtn.selected;
     [self.delegate playerControlwithState:videoSateYuntai withButton:sender];
 }
 

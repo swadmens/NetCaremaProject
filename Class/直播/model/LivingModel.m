@@ -17,6 +17,7 @@
     model.deviceSerial = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceSerial"]];
     model.channel = [NSString stringWithFormat:@"%@",[dic objectForKey:@"channel"]];
     model.flv = [NSString stringWithFormat:@"%@",[dic objectForKey:@"flv"]];
+    model.flvHd = [NSString stringWithFormat:@"%@",[dic objectForKey:@"flvHd"]];
     model.hls = [NSString stringWithFormat:@"%@",[dic objectForKey:@"hls"]];
     model.hlsHd = [NSString stringWithFormat:@"%@",[dic objectForKey:@"hlsHd"]];
     model.liveToken = [NSString stringWithFormat:@"%@",[dic objectForKey:@"liveToken"]];

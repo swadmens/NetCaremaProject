@@ -179,6 +179,10 @@
 {
     [self.playerView changeVolume:volume];
 }
+-(void)videoStandardClarity:(BOOL)standard
+{
+    [self.playerView videoStandardClarity:standard];
+}
 -(void)makeCellData:(id)obj
 {
     if (self.lvModel != nil) {
@@ -198,11 +202,20 @@
         _coverView.hidden = YES;
         _titleImageView.hidden = YES;
         
+        NSString *url;
+        NSString *urlHd;
+        if ([self.lvModel.system_Source isEqualToString:@"Hik"]) {
+            url = self.lvModel.rtmp;
+            urlHd = self.lvModel.rtmpHd;
+        }else{
+            url = self.lvModel.hls;
+            urlHd = self.lvModel.hlsHd;
+        }
         NSDictionary *dic = @{
                                @"name":myModel.equipment_name,
                                @"picUrl":myModel.snapURL,
-                               @"url":self.lvModel.hls,
-                               @"urlHd":self.lvModel.hlsHd,
+                               @"url":url,
+                               @"urlHd":urlHd,
                                @"deviceId":self.lvModel.deviceId,
                               };
         PLPlayModel *models = [PLPlayModel makeModelData:dic];

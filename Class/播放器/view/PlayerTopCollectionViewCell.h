@@ -45,6 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)clickSnapshotButton;
 - (void)changeVolume:(float)volume;
+-(void)videoStandardClarity:(BOOL)standard;
+
 
 @end
 

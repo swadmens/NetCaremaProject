@@ -39,10 +39,10 @@
 @property (nonatomic,strong) CameraControlView *clView;
 @property (nonatomic,strong) LGXVerticalButton *controlBtn;
 
+@property (nonatomic,strong) UIButton *backLiveBtn;//返回直播按钮
 
 @property (nonatomic,strong) UIView *saveBackView;
 @property (nonatomic, strong) LGXShareParams *shareParams;
-
 @property (nonatomic, strong) NSMutableArray *localVideosArray;//本地录像数据
 @property (nonatomic, strong) NSMutableArray *cloudVideosArray;//云端录像数据
 
@@ -142,7 +142,8 @@
         [self startLoadDataRequest:self.selectModel.deviceId withRecordType:@"cloud"];//云端录像
         [self tipViewHidden:YES withTitle:@"开始录像"];
         if (MyModel.model != nil) {
-            [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withIndex:0];
+            //控制台信息
+            [self getCarmarPresetInfo];
         }
     }
    
@@ -164,7 +165,32 @@
     
     self.navigationItem.rightBarButtonItems  = @[settingBtnItem,fixedSpaceBarButtonItem,sharaBtnItem];
     
+    //返回直播按钮
+    self.backLiveBtn = [UIButton new];
+    self.backLiveBtn.hidden = YES;
+    [self.backLiveBtn setBGColor:UIColorFromRGB(0x000000, 0.3) forState:UIControlStateNormal];
+    [self.backLiveBtn setTitle:@"返回\n直播" forState:UIControlStateNormal];
+    self.backLiveBtn.titleLabel.lineBreakMode = 0;
+    [self.backLiveBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    self.backLiveBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
+    [self.backLiveBtn addTarget:self action:@selector(backLivBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.backLiveBtn];
+    [self.backLiveBtn leftToView:self.view];
+    [self.backLiveBtn addCenterY:42 toView:self.view];
+    [self.backLiveBtn addWidth:50];
+    [self.backLiveBtn addHeight:40];
+    
+    
 }
+-(void)backLivBtnClick
+{
+    self.isLiving = YES;
+    self.backLiveBtn.hidden = YES;
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+
+}
+
+
 -(void)tipViewHidden:(BOOL)hidden withTitle:(NSString*)title
 {
     _videoTipView.hidden = hidden;
@@ -186,7 +212,6 @@
         [self.topCell makeCellDataNoLiving:self.model witnLive:_isLiving];
         [self.topCell makeCellDataLiving:self.allDataArray witnLive:_isLiving];
         self.topCell.delegate = self;
-        
         
         return self.topCell;
         
@@ -230,6 +255,7 @@
         cell.selectedRowData = ^(CarmeaVideosModel * _Nonnull model) {
             weakSelf.model = model;
             weakSelf.isLiving = NO;
+            weakSelf.backLiveBtn.hidden = NO;
             [weakSelf.tableView reloadData];
         };
    
@@ -280,7 +306,8 @@
             
             break;
         case videoSateClarity://清晰度
-        
+            self.controlBtn.selected = !self.controlBtn.selected;
+            [self.topCell videoStandardClarity:!self.controlBtn.selected];
         
             break;
         case videoSateFullScreen://全屏
@@ -325,8 +352,36 @@
         //Y轴向上平移
         self.clView.transform = CGAffineTransformMakeTranslation(0, -kScreenHeight + KTopviewheight + 114);
     }];
-    
 }
+//获取预置点信息
+-(void)getCarmarPresetInfo
+{
+    [_kHUDManager showActivityInView:nil withTitle:nil];
+    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",self.selectModel.deviceId];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"obj ==  %@",obj)
+        NSArray *data = [obj objectForKey:@"presets"];
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:data.count];
+        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *Mdic = obj;
+            PresetsModel *model = [PresetsModel makeModelData:Mdic];
+            [tempArr addObject:model];
+        }];
+        [weak_self.clView makeAllData:tempArr withSystemSource:weak_self.selectModel.system_Source withDevice_id:weak_self.selectModel.deviceId withIndex:0];
+    };
+    sence.errorBlock = ^(NSError *error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error: %@", error);
+    };
+    [sence sendRequest];
+}
+
 //摄像头控制回调
 -(void)cameraControl:(CameraControlView *)CameraControlView withState:(ControlState)state
 {
@@ -710,7 +765,7 @@
     
     self.isLiving = NO;
     self.model = model;
-    
+    self.backLiveBtn.hidden = NO;
     [self.tableView reloadData];
 }
 +(UIViewController *)viewController:(UIView *)view{

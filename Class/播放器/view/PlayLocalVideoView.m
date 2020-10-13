@@ -155,6 +155,10 @@
 {
     [self.playerView changeVolume:volume];
 }
+-(void)videoStandardClarity:(BOOL)standard
+{
+    [self.playerView videoStandardClarity:standard];
+}
 
 - (void)configureVideo:(BOOL)enableRender {
     [self.playerView configureVideo:enableRender];
