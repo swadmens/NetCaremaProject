@@ -165,20 +165,23 @@
     
     self.navigationItem.rightBarButtonItems  = @[settingBtnItem,fixedSpaceBarButtonItem,sharaBtnItem];
     
-    //返回直播按钮
-    self.backLiveBtn = [UIButton new];
-    self.backLiveBtn.hidden = YES;
-    [self.backLiveBtn setBGColor:UIColorFromRGB(0x000000, 0.3) forState:UIControlStateNormal];
-    [self.backLiveBtn setTitle:@"返回\n直播" forState:UIControlStateNormal];
-    self.backLiveBtn.titleLabel.lineBreakMode = 0;
-    [self.backLiveBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    self.backLiveBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
-    [self.backLiveBtn addTarget:self action:@selector(backLivBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.backLiveBtn];
-    [self.backLiveBtn leftToView:self.view];
-    [self.backLiveBtn addCenterY:42 toView:self.view];
-    [self.backLiveBtn addWidth:50];
-    [self.backLiveBtn addHeight:40];
+    /**
+     //返回直播按钮
+     self.backLiveBtn = [UIButton new];
+     self.backLiveBtn.hidden = YES;
+     [self.backLiveBtn setBGColor:UIColorFromRGB(0x000000, 0.3) forState:UIControlStateNormal];
+     [self.backLiveBtn setTitle:@"返回\n直播" forState:UIControlStateNormal];
+     self.backLiveBtn.titleLabel.lineBreakMode = 0;
+     [self.backLiveBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+     self.backLiveBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
+     [self.backLiveBtn addTarget:self action:@selector(backLivBtnClick) forControlEvents:UIControlEventTouchUpInside];
+     [self.view addSubview:self.backLiveBtn];
+     [self.backLiveBtn leftToView:self.view];
+     [self.backLiveBtn addCenterY:42 toView:self.view];
+     [self.backLiveBtn addWidth:50];
+     [self.backLiveBtn addHeight:40];
+     */
+    
     
     
 }
@@ -209,10 +212,12 @@
         self.topCell = [tableView dequeueReusableCellWithIdentifier:[PlayerTableViewCell getCellIDStr] forIndexPath:indexPath];
         self.topCell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        [self.topCell makeCellDataNoLiving:self.model witnLive:_isLiving];
-        [self.topCell makeCellDataLiving:self.allDataArray witnLive:_isLiving];
+        if (_isLiving) {
+            [self.topCell makeCellDataLiving:self.allDataArray witnLive:YES];
+        }else{
+            [self.topCell makeCellDataNoLiving:self.model witnLive:NO];
+        }
         self.topCell.delegate = self;
-        
         return self.topCell;
         
     }else if (indexPath.row == 1){
@@ -762,7 +767,6 @@
         [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
         return;
     }
-    
     self.isLiving = NO;
     self.model = model;
     self.backLiveBtn.hidden = NO;
@@ -823,7 +827,7 @@
 
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"responseObject == %@",responseObject);
+        DLog(@"%@ == %@",type,responseObject);
         [weak_self handleObject:responseObject withRecordType:type];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];

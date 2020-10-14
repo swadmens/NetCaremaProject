@@ -29,7 +29,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) id<PlayLocalVideoViewDelegate> delegate;
 
-@property (nonatomic,strong) CarmeaVideosModel *model;
 - (void)stop;
 - (void)play;
 - (void)pause;
@@ -39,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)makePlayerViewFullScreen;
 - (void)changeVolume:(float)volume;
 -(void)videoStandardClarity:(BOOL)standard;
+-(void)makeModelData:(CarmeaVideosModel*)model;
 
 
 @end

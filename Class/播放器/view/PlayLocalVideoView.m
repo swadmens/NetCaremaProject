@@ -63,15 +63,6 @@
     [_titleImageView addSubview:_coverView];
     [_coverView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:_titleImageView];
     
-    
-    self.playerView = [[PLPlayerView alloc] init];
-    self.playerView.delegate = self;
-    [_playView addSubview:self.playerView];
-    self.playerView.isLocalVideo = YES;   
-    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.playView);
-    }];
-    
 
     UILabel *outlineLabel = [UILabel new];
     outlineLabel.text = @"离线";
@@ -82,8 +73,20 @@
     [outlineLabel yCenterToView:_coverView];
 
 }
--(void)setModel:(CarmeaVideosModel *)model
+-(void)makeModelData:(CarmeaVideosModel*)model
 {
+    if (model == nil) {
+        return;
+    }
+    
+    self.playerView = [[PLPlayerView alloc] init];
+    self.playerView.delegate = self;
+    [_playView addSubview:self.playerView];
+    self.playerView.isLocalVideo = YES;
+    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.playView);
+    }];
+    
     if ([model.url hasPrefix:@"ezopen://"]) {
         self.playerView.playType = PlayerStatusHk;
         NSDictionary *dic = @{@"name":model.video_name,
@@ -131,7 +134,7 @@
         PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
         self.playerView.plModel = pModel;
     }
-    [self configureVideo:NO];
+//    [self configureVideo:NO]; 
     [self.playerView play];
 }
 - (void)play {

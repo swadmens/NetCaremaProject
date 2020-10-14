@@ -31,9 +31,6 @@
 
 
 @implementation PlayerTopCollectionViewCell
-- (void)dealloc {
-    [self stop];
-}
 -(void)doSetup
 {
     [super doSetup];
@@ -221,7 +218,6 @@
         PLPlayModel *models = [PLPlayModel makeModelData:dic];
         self.playerView.plModel = models;
         [self.playerView play];
-        
     }
 }
 

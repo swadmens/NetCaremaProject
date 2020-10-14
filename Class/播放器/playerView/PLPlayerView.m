@@ -16,12 +16,14 @@
 #import <LCOpenSDKDynamic/LCOpenSDKDynamic.h>
 #import <EZUIKit/EZUIKit.h>
 #import <EZOpenSDKFramework/EZOpenSDK.h>
+#import <EZOpenSDKFramework/EZPlayer.h>
 typedef NS_ENUM(NSInteger, PlayLCState) {
     Play = 0,
     Pause = 1,
     Stop = 2
 };
 #define HikSecret @"0a042989a3dc9fc8c1bd2f26ac88e99d"
+#define EZOPENSDK [EZOpenSDK class]
 
 @class PLControlView;
 
@@ -31,7 +33,8 @@ PLPlayerDelegate,
 PLControlViewDelegate,
 UIGestureRecognizerDelegate,
 EZUIPlayerDelegate,
-LCOpenSDK_EventListener
+LCOpenSDK_EventListener,
+EZPlayerDelegate
 >
 
 @property (nonatomic, strong) UIView *topBarView;
@@ -86,6 +89,7 @@ LCOpenSDK_EventListener
 @property (nonatomic, assign) CGFloat edgeSpace;
 
 @property (nonatomic,strong) EZUIPlayer *ePlayer;//海康播放器
+@property (nonatomic,strong) EZPlayer *ezPlayer;//海康播放器
 @property (nonatomic,strong) NSDate *mBeginDate;//滚动视图开始日期点
 @property (nonatomic,strong) NSDateFormatter *mFormatter;//格式化日期
 
@@ -545,11 +549,8 @@ LCOpenSDK_EventListener
     }];
 }
 
-- (void)clickExitFullScreenButton {
-//    if (self.isLocalVideo) {
-//        [self.player stop];
-//    }
-    
+- (void)clickExitFullScreenButton
+{
     [self hideBottomBar];
     [self hideBottomProgressView];
     self.centerPauseButton.hidden = !self.isLiving;
@@ -928,13 +929,6 @@ LCOpenSDK_EventListener
             make.edges.equalTo(self);
         }];
         
-        _slider.hidden = self.isLiving;
-//        _bufferingView.hidden = _isLiving;
-    //    _playTimeLabel.hidden = self.isLiving && !_isFullScreen;
-    //    _durationLabel.hidden = self.isLiving && !_isFullScreen;
-    //    _enterFullScreenButton.hidden = self.isLiving && !_isFullScreen;
-//        self.bottomBarView.hidden = self.isLiving && !_isFullScreen;
-        
     }else if (self.playType == PlayerStatusHk){
         
         self.isLiving = NO;
@@ -950,21 +944,27 @@ LCOpenSDK_EventListener
 //        NSString *url = @"http://hls01open.ys7.com/openlive/ed751f99c9a9446f8235f09152e3abd3.m3u8";
 //        self.ePlayer = [EZUIPlayer createPlayerWithUrl:url];
 
-        self.ePlayer = [EZUIPlayer createPlayerWithUrl:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl];
-        self.ePlayer.mDelegate = self;
-        self.ePlayer.previewView.userInteractionEnabled = YES;
-       //添加预览视图到当前界面
-        self.ePlayer.previewView.contentMode = UIViewContentModeScaleAspectFit;
-        [self insertSubview:self.ePlayer.previewView atIndex:0];
-        self.ePlayer.previewView.frame = self.bounds;
-        [self.ePlayer.previewView mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.edges.equalTo(self);
-            make.center.equalTo(self);
-            make.size.equalTo(CGSizeMake(kScreenWidth, height));
-        }];
+//        self.ePlayer = [EZUIPlayer createPlayerWithUrl:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl];
+//        self.ePlayer.mDelegate = self;
+//        self.ePlayer.previewView.userInteractionEnabled = YES;
+//       //添加预览视图到当前界面
+//        self.ePlayer.previewView.contentMode = UIViewContentModeScaleAspectFit;
+//        [self insertSubview:self.ePlayer.previewView atIndex:0];
+//        self.ePlayer.previewView.frame = self.bounds;
+//        [self.ePlayer.previewView mas_makeConstraints:^(MASConstraintMaker *make) {
+////            make.edges.equalTo(self);
+//            make.center.equalTo(self);
+//            make.size.equalTo(CGSizeMake(kScreenWidth, height));
+//        }];
+        
+        self.ezPlayer = [EZOpenSDK createPlayerWithUrl:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl];
+        self.ezPlayer.delegate = self;
+        [self.ezPlayer setPlayerView:self];
+//        BOOL hdStatus = [[NSUserDefaults standardUserDefaults] boolForKey:[NSString stringWithFormat:@"EZVideoPlayHardDecodingStatus_%@", _plModel.deviceSerial]];
+//        [self.ezPlayer setHDPriority:hdStatus];
+//        [self.ezPlayer startRealPlay];
 
     }else{
-        
         _m_isSeeking = NO;
         
         //接口初始化
@@ -978,10 +978,8 @@ LCOpenSDK_EventListener
         //大华视频加载
         self.m_play = [[LCOpenSDK_PlayWindow alloc] initPlayWindow:CGRectMake(0, 0,kScreenWidth,height) Index:0];
         [self.m_play setSurfaceBGColor:[UIColor blackColor]];
-//        [self addSubview:[self.m_play getWindowView]];
         [self insertSubview:[self.m_play getWindowView] atIndex:0];
         [self.m_play setWindowListener:self];
-//        self.m_play.getWindowView.userInteractionEnabled = NO;
         
         _m_deltaTime = [self transformToDeltaTime:_plModel.startTime EndTime:_plModel.endTime];
 
@@ -1007,14 +1005,18 @@ LCOpenSDK_EventListener
 
 
 - (void)unsetupPlayer {
+    
     [self stop];
     
     if (self.player.playerView.superview) {
         [self.player.playerView removeFromSuperview];
     }
-    
+
     if (self.ePlayer.previewView.superview) {
         [self.ePlayer.previewView removeFromSuperview];
+    }
+    if (self.m_play.getWindowView.superview) {
+        [self.m_play.getWindowView removeFromSuperview];
     }
     
     [self removeTimer];
@@ -1061,8 +1063,9 @@ LCOpenSDK_EventListener
             }
             break;
         case PlayerStatusHk:
-
+            
             [self.ePlayer startPlay];
+            [self.ezPlayer startRealPlay];
             self.centerPauseButton.hidden = YES;
 
             break;
@@ -1108,6 +1111,7 @@ LCOpenSDK_EventListener
     
     [self.player pause];
     [self.ePlayer pausePlay];
+    [self.m_play pause];
     [self resetButton:NO];
 }
 
@@ -1116,25 +1120,19 @@ LCOpenSDK_EventListener
     [self.delegate playerViewWillPlay:self];
     [self.player resume];
     [self.ePlayer resumePlay];
+    [self.m_play resume];
     [self resetButton:YES];
 }
 
-- (void)stop {
-    
+- (void)stop
+{
     [self.ePlayer stopPlay];
     [self.ePlayer releasePlayer];
-    [self.ePlayer.previewView removeFromSuperview];
+
     [self.m_play stopCloud:YES];
     [self.m_play stopDeviceRecord:YES];
     [self.m_hc uninitOpenApi];
-    [self.m_play.getWindowView removeFromSuperview];
     self.m_playState = Stop;
-    
-    
-    if (_playType == PlayerStatusHk || _playType == PlayerStatusDH) {
-        self.isNeedSetupPlayer = YES;
-    }
-    
     
     NSDate *date = nil;
     if ([self.player isPlaying]) {
@@ -1145,7 +1143,6 @@ LCOpenSDK_EventListener
     if (date) {
         NSLog(@"stop 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
     }
-    
     
     [self removeFullStreenNotify];
     [self resetUI];
@@ -1307,9 +1304,7 @@ LCOpenSDK_EventListener
 }
 
 - (void)player:(PLPlayer *)player statusDidChange:(PLPlayerStatus)state
-{
-    DLog(@"PLPlayerStatus ==  %ld",state);
-    
+{    
     if (self.isStop) {
         static NSString * statesString[] = {
             @"PLPlayerStatusUnknow"

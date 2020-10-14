@@ -58,14 +58,9 @@
 @property (nonatomic,strong) UIImageView *tipImageView;//录像提示点
 @property (nonatomic,assign) BOOL videoing;//是否正在录像
 
-
 @end
 
 @implementation PlayerTableViewCell
--(void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:@"gonggeChangeInfomation"];
-}
 - (void)onUIApplication:(BOOL)active {
     if (self.playingCell) {
         [self.playingCell configureVideo:active];
@@ -117,7 +112,6 @@
     self.showDeleteView = YES;
     self.selectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     self.videoing = NO;
-    
     
     //录像提示图示
     _tipImageView = [UIImageView new];
@@ -366,28 +360,29 @@
 }
 -(void)makeCellDataNoLiving:(CarmeaVideosModel*)model witnLive:(BOOL)isLiving
 {
-    if (model == nil || isLiving) {
-        return;
+    NSArray *array = [self.collectionView visibleCells];
+    for (PlayerTopCollectionViewCell *cell in array) {
+        [cell stop];
     }
     
     _localVideoView = [PlayLocalVideoView new];
-    self.localVideoView.model = model;
     self.localVideoView.delegate = self;
-    [self.contentView addSubview:self.localVideoView];
-    [self.localVideoView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.contentView];
+    [self.playerView addSubview:self.localVideoView];
+    [self.localVideoView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.playerView];
     
-    self.isPlayerVideo = !isLiving;
-    self.localVideoView.hidden = isLiving;
-    self.playerView.hidden = !isLiving;
-       
+    self.isPlayerVideo = YES;
+    self.collectionView.hidden = YES;
+    [self.localVideoView makeModelData:model];
+    
 }
 -(void)makeCellDataLiving:(NSArray*)array witnLive:(BOOL)isLiving
 {
-    self.isPlayerVideo = !isLiving;
-    self.localVideoView.hidden = isLiving;
-    self.playerView.hidden = !isLiving;
-    self.allDataArray = [NSArray arrayWithArray:array];
+    [self.localVideoView stop];
+    [self.localVideoView removeFromSuperview];
     
+    self.isPlayerVideo = NO;
+    self.allDataArray = [NSArray arrayWithArray:array];
+
     [self.dataArray removeAllObjects];
     if (array.count > 3) {
         NSArray *arr = [array subarrayWithRange:NSMakeRange(0, 4)];
@@ -414,7 +409,6 @@
     [UIView performWithoutAnimation:^{
        [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.selectIndex inSection:0]]];
    }];
-//    [self.collectionView reloadData];
     
     if ([self.delegate respondsToSelector:@selector(selectCellCarmera:withData:withIndex:)]) {
         [self.delegate selectCellCarmera:self withData:model withIndex:self.selectIndex];
@@ -428,7 +422,6 @@
 
 - (void)tableViewCellEnterFullScreen:(PlayLocalVideoView *)view
 {
-//    [[SuperPlayerViewController viewController:self] setNeedsStatusBarAppearanceUpdate];
     [self.delegate tableViewCellEnterFullScreen:self];
 }
 
@@ -622,10 +615,13 @@
         [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
         return NO;
     }
+    if (self.isPlayerVideo) {
+        return YES;
+    }
     id obj = [self.dataArray objectAtIndex:self.selectIndexPath.row];
     if ([obj isKindOfClass:[LivingModel class]]) {
         LivingModel *model = obj;
-        if (![WWPublicMethod isStringEmptyText:model.hls]) {
+        if (![WWPublicMethod isStringEmptyText:model.hls] && ![WWPublicMethod isStringEmptyText:model.flv] && ![WWPublicMethod isStringEmptyText:model.rtmp]) {
             return NO;
         }else{
             return YES;
