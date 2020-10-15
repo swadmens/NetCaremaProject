@@ -167,7 +167,7 @@ EZPlayerDelegate
     [self.exitfullScreenButton addTarget:self action:@selector(clickExitFullScreenButton) forControlEvents:(UIControlEventTouchUpInside)];
     
     self.moreButton = [[UIButton alloc] init];
-    self.moreButton.hidden = YES;
+//    self.moreButton.hidden = YES;
     [self.moreButton setImage:[UIImage imageNamed:@"more"] forState:(UIControlStateNormal)];
     [self.moreButton addTarget:self action:@selector(clickMoreButton) forControlEvents:(UIControlEventTouchUpInside)];
     
@@ -766,6 +766,12 @@ EZPlayerDelegate
                make.center.equalTo(self);
                make.size.equalTo(CGSizeMake(kScreenWidth, height));
            }];
+           
+           [self.m_play setWindowFrame:CGRectMake(0, 0, kScreenHeight, height)];
+           [self.m_play.getWindowView mas_remakeConstraints:^(MASConstraintMaker *make) {
+               make.center.equalTo(self);
+               make.size.equalTo(CGSizeMake(kScreenHeight, height));
+           }];
           
            
            if (!isFirst) {
@@ -818,6 +824,12 @@ EZPlayerDelegate
                
                [self.ePlayer setPreviewFrame:CGRectMake(0, 0, kScreenHeight, kScreenWidth)];
                [self.ePlayer.previewView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                   make.center.equalTo(self);
+                   make.size.equalTo(CGSizeMake(kScreenHeight, kScreenWidth));
+               }];
+               
+               [self.m_play setWindowFrame:CGRectMake(0, 0, kScreenHeight, kScreenWidth)];
+               [self.m_play.getWindowView mas_remakeConstraints:^(MASConstraintMaker *make) {
                    make.center.equalTo(self);
                    make.size.equalTo(CGSizeMake(kScreenHeight, kScreenWidth));
                }];
@@ -944,22 +956,21 @@ EZPlayerDelegate
 //        NSString *url = @"http://hls01open.ys7.com/openlive/ed751f99c9a9446f8235f09152e3abd3.m3u8";
 //        self.ePlayer = [EZUIPlayer createPlayerWithUrl:url];
 
-//        self.ePlayer = [EZUIPlayer createPlayerWithUrl:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl];
-//        self.ePlayer.mDelegate = self;
-//        self.ePlayer.previewView.userInteractionEnabled = YES;
-//       //添加预览视图到当前界面
-//        self.ePlayer.previewView.contentMode = UIViewContentModeScaleAspectFit;
-//        [self insertSubview:self.ePlayer.previewView atIndex:0];
-//        self.ePlayer.previewView.frame = self.bounds;
-//        [self.ePlayer.previewView mas_makeConstraints:^(MASConstraintMaker *make) {
-////            make.edges.equalTo(self);
-//            make.center.equalTo(self);
-//            make.size.equalTo(CGSizeMake(kScreenWidth, height));
-//        }];
+        self.ePlayer = [EZUIPlayer createPlayerWithUrl:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl];
+        self.ePlayer.mDelegate = self;
+        self.ePlayer.previewView.userInteractionEnabled = YES;
+       //添加预览视图到当前界面
+        self.ePlayer.previewView.contentMode = UIViewContentModeScaleAspectFit;
+        [self insertSubview:self.ePlayer.previewView atIndex:0];
+        self.ePlayer.previewView.frame = self.bounds;
+        [self.ePlayer.previewView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.center.equalTo(self);
+            make.size.equalTo(CGSizeMake(kScreenWidth, height));
+        }];
         
-        self.ezPlayer = [EZOpenSDK createPlayerWithUrl:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl];
-        self.ezPlayer.delegate = self;
-        [self.ezPlayer setPlayerView:self];
+//        self.ezPlayer = [EZOpenSDK createPlayerWithUrl:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl];
+//        self.ezPlayer.delegate = self;
+//        [self.ezPlayer setPlayerView:self];
 //        BOOL hdStatus = [[NSUserDefaults standardUserDefaults] boolForKey:[NSString stringWithFormat:@"EZVideoPlayHardDecodingStatus_%@", _plModel.deviceSerial]];
 //        [self.ezPlayer setHDPriority:hdStatus];
 //        [self.ezPlayer startRealPlay];
@@ -1065,7 +1076,7 @@ EZPlayerDelegate
         case PlayerStatusHk:
             
             [self.ePlayer startPlay];
-            [self.ezPlayer startRealPlay];
+//            [self.ezPlayer startRealPlay];
             self.centerPauseButton.hidden = YES;
 
             break;

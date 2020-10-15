@@ -1,19 +1,19 @@
 //
-//  PlayLocalVideoView.m
+//  PlayVideoDemadCell.m
 //  NetCamera
 //
-//  Created by 汪伟 on 2020/5/13.
+//  Created by 汪伟 on 2020/10/15.
 //  Copyright © 2020 Guangzhou Eston Trade Co.,Ltd. All rights reserved.
 //
 
-#import "PlayLocalVideoView.h"
+#import "PlayVideoDemadCell.h"
 #import "PLPlayerView.h"
 #import "CarmeaVideosModel.h"
 #import "HikPlayerView.h"
 #import "PLPlayModel.h"
 
 
-@interface PlayLocalVideoView ()<PLPlayerViewDelegate>
+@interface PlayVideoDemadCell ()<PLPlayerViewDelegate>
 
 @property (nonatomic,strong) UIImageView *titleImageView;
 
@@ -26,36 +26,23 @@
 
 @property (nonatomic,strong) UIView *coverView;
 
-
 @end
-
-@implementation PlayLocalVideoView
-
+@implementation PlayVideoDemadCell
 -(void)dealloc
 {
     [self stop];
-//    [[NSNotificationCenter defaultCenter] removeObserver:@"FullScreebInfomation"];
-}
-- (void)prepareForReuse {
-    [self stop];
-//    [super prepareForReuse];
 }
 
--(instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        self.backgroundColor = [UIColor whiteColor];
-        [self createUI];
-    }
-    return self;
-}
--(void)createUI
-{
+- (void)dosetup {
+    [super dosetup];
+    // Initialization code
+    CGFloat height = kScreenWidth * 0.68 + 0.5;
+
     _playView = [UIView new];
     _playView.backgroundColor = [UIColor whiteColor];
     [self addSubview:_playView];
     [_playView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self];
+    [_playView addHeight:height];
 
     
     _coverView = [UIView new];
@@ -71,8 +58,8 @@
     [_coverView addSubview:outlineLabel];
     [outlineLabel xCenterToView:_coverView];
     [outlineLabel yCenterToView:_coverView];
-
 }
+
 -(void)makeModelData:(CarmeaVideosModel*)model
 {
     if (model == nil) {
@@ -134,7 +121,7 @@
         PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
         self.playerView.plModel = pModel;
     }
-//    [self configureVideo:NO]; 
+//    [self configureVideo:NO];
     [self.playerView play];
 }
 - (void)play {
@@ -212,9 +199,7 @@
 }
 -(void)getSnapshot:(PLPlayerView *)playerView with:(UIImage *)image
 {
-    if ([self.delegate respondsToSelector:@selector(getLocalViewSnap:with:)]) {
-        [self.delegate getLocalViewSnap:self with:image];
-    }
+    
 }
 -(void)clickSnapshotButton
 {
@@ -229,12 +214,10 @@
     [self.delegate tableViewWillPlay:self];
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+
+    // Configure the view for the selected state
 }
-*/
 
 @end

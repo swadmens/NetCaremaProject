@@ -10,9 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class LivingModel;
 @interface ChannelDetailController : WWViewController
 
-@property (nonatomic,strong) NSString *device_id;//具体设备id
+@property (nonatomic,strong) LivingModel *lvModel;
 
 
 @end

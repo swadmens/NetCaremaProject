@@ -31,7 +31,6 @@
 #import "EquimentBasicInfoController.h"//设备基本信息
 #import "MessageNoticesDealController.h"//消息通知
 #import "ChannelDetailController.h"//通道详情
-#import "ChannelMoreSystemController.h"//更多设置
 #import "EquimentSharedViewController.h"//设备共享
 #import "AddNewFriendsController.h"//添加好友
 #import "DeleteGroupsViewController.h"//删除分组
@@ -587,15 +586,13 @@
         case PushTargetChannelDetail: //通道详情
         {
             ChannelDetailController *controller = [[ChannelDetailController alloc] init];
-            controller.device_id = pushId;
+//            controller.device_id = pushId;
             toController = controller;
         }
             break;
         case PushTargetChannelMoreSystem: //更多设置
         {
-            ChannelMoreSystemController *controller = [[ChannelMoreSystemController alloc] init];
-            controller.pushId = pushId;
-            toController = controller;
+            
         }
             break;
         case PushTargetEquimentShared: //设备共享

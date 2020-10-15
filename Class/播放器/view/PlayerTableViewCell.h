@@ -30,8 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id<PlayerTableViewCellDelegate> delegate;
 
--(void)makeCellDataNoLiving:(CarmeaVideosModel*)model witnLive:(BOOL)isLiving;
--(void)makeCellDataLiving:(NSArray*)array witnLive:(BOOL)isLiving;
+-(void)makeCellDataLiving:(NSArray*)array;
 
 - (void)stop;
 -(void)play;

@@ -13,7 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 @class DemandModel;
 @interface DemandViewCell : WWCollectionViewCell
 
-
 -(void)makeCellData:(DemandModel*)model;
 
 @end

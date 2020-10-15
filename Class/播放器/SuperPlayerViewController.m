@@ -14,6 +14,7 @@
 #import "CameraControlView.h"
 #import "LGXVerticalButton.h"
 #import "PlayBottomDateCell.h"
+#import "PlayVideoDemadCell.h"
 #import "LGXThirdEngine.h"
 #import "ShareSDKMethod.h"
 #import "LocalVideoViewController.h"
@@ -27,7 +28,15 @@
 
 #define KTopviewheight kScreenWidth*0.68
 
-@interface SuperPlayerViewController ()<UITableViewDelegate,UITableViewDataSource,PlayerControlDelegate,CameraControlDelete,LocalVideoDelegate,PlayerTableViewCellDelegate
+@interface SuperPlayerViewController ()
+<
+UITableViewDelegate,
+UITableViewDataSource,
+PlayerControlDelegate,
+CameraControlDelete,
+LocalVideoDelegate,
+PlayerTableViewCellDelegate,
+PlayVideoDemadDelegate
 >
 
 @property (nonatomic,strong) WWTableView *tableView;
@@ -35,6 +44,7 @@
 @property(nonatomic,assign) NSInteger page;
 
 @property (nonatomic,strong) PlayerTableViewCell *topCell;
+@property (nonatomic,strong) PlayVideoDemadCell *videoCell;
 
 @property (nonatomic,strong) CameraControlView *clView;
 @property (nonatomic,strong) LGXVerticalButton *controlBtn;
@@ -93,6 +103,7 @@
     [self.tableView registerClass:[PlayerControlCell class] forCellReuseIdentifier:[PlayerControlCell getCellIDStr]];
     [self.tableView registerClass:[PlayerLocalVideosCell class] forCellReuseIdentifier:[PlayerLocalVideosCell getCellIDStr]];
     [self.tableView registerClass:[PlayBottomDateCell class] forCellReuseIdentifier:[PlayBottomDateCell getCellIDStr]];
+    [self.tableView registerClass:[PlayVideoDemadCell class] forCellReuseIdentifier:[PlayVideoDemadCell getCellIDStr]];
 
 }
 //控制台
@@ -165,24 +176,21 @@
     
     self.navigationItem.rightBarButtonItems  = @[settingBtnItem,fixedSpaceBarButtonItem,sharaBtnItem];
     
-    /**
-     //返回直播按钮
-     self.backLiveBtn = [UIButton new];
-     self.backLiveBtn.hidden = YES;
-     [self.backLiveBtn setBGColor:UIColorFromRGB(0x000000, 0.3) forState:UIControlStateNormal];
-     [self.backLiveBtn setTitle:@"返回\n直播" forState:UIControlStateNormal];
-     self.backLiveBtn.titleLabel.lineBreakMode = 0;
-     [self.backLiveBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-     self.backLiveBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
-     [self.backLiveBtn addTarget:self action:@selector(backLivBtnClick) forControlEvents:UIControlEventTouchUpInside];
-     [self.view addSubview:self.backLiveBtn];
-     [self.backLiveBtn leftToView:self.view];
-     [self.backLiveBtn addCenterY:42 toView:self.view];
-     [self.backLiveBtn addWidth:50];
-     [self.backLiveBtn addHeight:40];
-     */
-    
-    
+     
+    //返回直播按钮
+    self.backLiveBtn = [UIButton new];
+    self.backLiveBtn.hidden = YES;
+    [self.backLiveBtn setBGColor:UIColorFromRGB(0x000000, 0.3) forState:UIControlStateNormal];
+    [self.backLiveBtn setTitle:@"返回\n直播" forState:UIControlStateNormal];
+    self.backLiveBtn.titleLabel.lineBreakMode = 0;
+    [self.backLiveBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    self.backLiveBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
+    [self.backLiveBtn addTarget:self action:@selector(backLivBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.backLiveBtn];
+    [self.backLiveBtn leftToView:self.view];
+    [self.backLiveBtn addCenterY:42 toView:self.view];
+    [self.backLiveBtn addWidth:50];
+    [self.backLiveBtn addHeight:40];
     
 }
 -(void)backLivBtnClick
@@ -209,16 +217,31 @@
     
     if (indexPath.row == 0) {
         
-        self.topCell = [tableView dequeueReusableCellWithIdentifier:[PlayerTableViewCell getCellIDStr] forIndexPath:indexPath];
-        self.topCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
         if (_isLiving) {
-            [self.topCell makeCellDataLiving:self.allDataArray witnLive:YES];
+            
+            [self.videoCell stop];
+            self.videoCell = nil;
+            
+            self.topCell = [tableView dequeueReusableCellWithIdentifier:[PlayerTableViewCell getCellIDStr] forIndexPath:indexPath];
+            self.topCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            [self.topCell makeCellDataLiving:self.allDataArray];
+            self.topCell.delegate = self;
+            
+            return self.topCell;
         }else{
-            [self.topCell makeCellDataNoLiving:self.model witnLive:NO];
+            
+            [self.topCell stop];
+            self.topCell = nil;
+            
+            self.videoCell = [tableView dequeueReusableCellWithIdentifier:[PlayVideoDemadCell getCellIDStr] forIndexPath:indexPath];
+            self.videoCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            [self.videoCell makeModelData:self.model];
+            self.videoCell.delegate = self;
+            
+            return self.videoCell;
         }
-        self.topCell.delegate = self;
-        return self.topCell;
         
     }else if (indexPath.row == 1){
         
@@ -283,23 +306,32 @@
     self.controlBtn = (LGXVerticalButton*)sender;
     switch (state) {
         case videoSatePlay://播放暂停
- 
+            self.controlBtn.selected = !self.controlBtn.selected;
+
             if (!_isLiving) {
-                self.controlBtn.selected = !self.controlBtn.selected;
                 if (self.controlBtn.selected) {
                     [self.topCell pause];
                 }else{
                     [self.topCell resume];
+                }
+            }else{
+                if (self.controlBtn.selected) {
+                    [self.videoCell pause];
+                }else{
+                    [self.videoCell resume];
                 }
             }
             
             break;
         case videoSateVoice://声音控制
             
-                
             self.controlBtn.selected = !self.controlBtn.selected;
             float volume = self.controlBtn.selected?0.01:1.0;
-            [self.topCell changeVolume:volume];
+            if (_isLiving) {
+                [self.topCell changeVolume:volume];
+            }else{
+                [self.videoCell changeVolume:volume];
+            }
             
             break;
         case videoSateGongge://宫格变化
@@ -317,12 +349,19 @@
             break;
         case videoSateFullScreen://全屏
 
-            [self.topCell makePlayerViewFullScreen];
+            if (_isLiving) {
+                [self.topCell makePlayerViewFullScreen];
+            }else{
+                [self.videoCell makePlayerViewFullScreen];
+            }
         
             break;
         case videoSatesSreenshots://截图
-
-            [self.topCell clickSnapshotButton];
+            if (_isLiving) {
+                [self.topCell clickSnapshotButton];
+            }else{
+                [self.videoCell clickSnapshotButton];
+            }
            
             break;
         case videoSateVideing://录像
@@ -361,7 +400,7 @@
 //获取预置点信息
 -(void)getCarmarPresetInfo
 {
-    [_kHUDManager showActivityInView:nil withTitle:nil];
+//    [_kHUDManager showActivityInView:nil withTitle:nil];
     NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",self.selectModel.deviceId];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -710,7 +749,7 @@
     if (self.selectModel == nil) {
         return;
     }
-    NSDictionary *dic = @{@"SnapURL":self.selectModel.snap,@"ChannelName":self.selectModel.rtmp};
+    NSDictionary *dic = @{@"SnapURL":self.selectModel.snap,@"ChannelName":self.selectModel.channel};
     NSString *pushid = [WWPublicMethod jsonTransFromObject:dic];
     
     [TargetEngine controller:self pushToController:PushTargetChannelMoreSystem WithTargetId:pushid];
@@ -809,7 +848,7 @@
 //    NSString *recordType = [self.selectModel.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
 
     NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.selectModel.system_Source,carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],type];
-    
+
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
     manager.requestSerializer = [AFHTTPRequestSerializer serializer];
@@ -837,26 +876,27 @@
 
     }];
     [task resume];
-    return;
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.selectModel.system_Source,@"524508",@"20200918"];
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathHeader = @"application/json";
-    sence.pathURL = url;
-//    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"Received: %@", obj);
-        [weak_self handleObject:obj withRecordType:type];
-    };
-    sence.errorBlock = ^(NSError *error) {
-
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        // 请求失败
-        DLog(@"error  ==  %@",error.userInfo);
-        [weak_self failedOperation];
-    };
-    [sence sendRequest];
+    
+//    return;   
+//    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.selectModel.system_Source,carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],type];
+//    RequestSence *sence = [[RequestSence alloc] init];
+//    sence.requestMethod = @"GET";
+//    sence.pathHeader = @"application/json";
+//    sence.pathURL = url;
+////    __unsafe_unretained typeof(self) weak_self = self;
+//    sence.successBlock = ^(id obj) {
+//        [_kHUDManager hideAfter:0.1 onHide:nil];
+//        DLog(@"Received: %@", obj);
+//        [weak_self handleObject:obj withRecordType:type];
+//    };
+//    sence.errorBlock = ^(NSError *error) {
+//
+//        [_kHUDManager hideAfter:0.1 onHide:nil];
+//        // 请求失败
+//        DLog(@"error  ==  %@",error.userInfo);
+//        [weak_self failedOperation];
+//    };
+//    [sence sendRequest];
 }
 - (void)failedOperation
 {
@@ -943,11 +983,13 @@
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
     [self.topCell stop];
+    [self.videoCell stop];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.topCell play];
+    [self.videoCell play];
 }
 
 /*

@@ -79,18 +79,6 @@
 - (void)setupNoDataView
 {
     self.noDataView = [self setupnoDataContentViewWithTitle:@"暂无点播文件" andImageNamed:@"device_empty_backimage" andTop:@"60"];
-//    // label
-//    UILabel *tipLabel = [self getNoDataTipLabel];
-//
-//    UIButton *againBtn = [UIButton new];
-//    [againBtn setEnabled:NO];
-//    [againBtn setTitle:@"暂无点播文件" forState:UIControlStateNormal];
-//    [againBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
-//    againBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-//    [againBtn addTarget:self action:@selector(againLoadDataBtn) forControlEvents:UIControlEventTouchUpInside];
-//    [self.noDataView addSubview:againBtn];
-//    [againBtn xCenterToView:self.noDataView];
-//    [againBtn bottomToView:tipLabel withSpace:80];
 }
 -(void)againLoadDataBtn
 {
@@ -191,10 +179,7 @@
         UICollectionViewFlowLayout *flowlayout = [[UICollectionViewFlowLayout alloc] init];
         //设置滚动方向
         flowlayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        //左右间距
-//        flowlayout.minimumInteritemSpacing = 20;
-//        //上下间距
-//        flowlayout.minimumLineSpacing = 0.1;
+        //item大小
         flowlayout.estimatedItemSize = CGSizeMake(70, 35);
         _collectionUpView = [[WWCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowlayout];
         // 注册
@@ -214,13 +199,12 @@
         UICollectionViewFlowLayout *flowlayout = [[UICollectionViewFlowLayout alloc] init];
         //设置滚动方向
         flowlayout.scrollDirection = UICollectionViewScrollDirectionVertical;
-        //左右间距
-        flowlayout.minimumInteritemSpacing = 10;
-        //上下间距
-        flowlayout.minimumLineSpacing = 10;
+     
+        //item大小
+//        CGFloat width = kScreenWidth/2-21;
+//        flowlayout.itemSize = CGSizeMake(width, width*0.85);
+        flowlayout.itemSize = CGSizeMake(kScreenWidth-0.2, 100);
         
-        CGFloat width = kScreenWidth/2-21;
-        flowlayout.itemSize = CGSizeMake(width, width*0.85);
         
         _collectionView = [[WWCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowlayout];
         _collectionView.backgroundColor = kColorBackgroundColor;
@@ -280,8 +264,6 @@
     
     
     //右上角
-    
-    
     UIButton *upLoadBtn = [UIButton new];
     [upLoadBtn setBackgroundImage:UIImageWithFileName(@"demand_upload_image") forState:UIControlStateNormal];
     [upLoadBtn setTitle:@"上传" forState:UIControlStateNormal];
@@ -372,11 +354,11 @@
     if ([collectionView isEqual:self.collectionUpView]) {
            return UIEdgeInsetsMake(0, 0, 0, 0);
        }else{
-           return UIEdgeInsetsMake(0, 15, 0, 15);
+           return UIEdgeInsetsMake(0, 0, 0, 0);
        }
     
 }
-//两个cell之间的间距（同一行的cell的间距）
+//这个是两行cell之间的间距（上下行cell的间距）
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     if ([collectionView isEqual:self.collectionUpView]) {
@@ -385,13 +367,13 @@
         return 10;
     }
 }
-//这个是两行cell之间的间距（上下行cell的间距）
+//两个cell之间的间距（同一行的cell的间距）
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
     if ([collectionView isEqual:self.collectionUpView]) {
         return 0.1;
     }else{
-        return 5;
+        return 0.1;
     }
 }
 - (void)loadNewData
@@ -405,36 +387,6 @@
 }
 -(void)loadData
 {
-//    [_kHUDManager showActivityInView:nil withTitle:nil];
-//
-//    NSString *url = [NSString stringWithFormat:@"http://39.108.208.122:5080/LiveApp/rest/v2/vods/list/%ld/10",self.page];
-//
-//    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-//    manager.responseSerializer = [AFJSONResponseSerializer serializer];
-//
-//    __unsafe_unretained typeof(self) weak_self = self;
-//
-//    NSURLSessionDataTask *task = [manager GET:url parameters:nil headers:nil progress:^(NSProgress * _Nonnull downloadProgress) {
-//
-//        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-//
-//            [_kHUDManager hideAfter:0.1 onHide:nil];
-//            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)task.response;
-//
-//            DLog(@"\n~~~~~完成请求地址:%@\n",httpResponse.URL.absoluteString);
-//            DLog(@"Received: %@", responseObject);
-//            DLog(@"Received HTTP %ld", (long)httpResponse.statusCode);
-//
-//            [weak_self handleObject:responseObject];
-//
-//        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-//            // 请求失败
-//            [_kHUDManager hideAfter:0.1 onHide:nil];
-//            [_kHUDManager showMsgInView:nil withTitle:@"请求失败" isSuccess:NO];
-//        }];
-//    [task resume];
-    
-    
     [self startLoadDataRequest];
 }
 - (void)startLoadDataRequest
@@ -461,8 +413,6 @@
     //提交数据
 //    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/list";
     NSString *url = [NSString stringWithFormat:@"/inventory/managedObjects?type=vod&fragmentType=camera_Vod&pageSize=10&currentPage=%ld",(long)self.page];
-    
-    
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";

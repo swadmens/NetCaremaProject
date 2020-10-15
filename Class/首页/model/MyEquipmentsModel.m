@@ -23,6 +23,10 @@
     model.system_Source = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"system_Source"]];
     model.channel = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"channel"]];
     model.deviceSerial = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"deviceSerial"]];
+    
+    
+    NSString *switchStatus = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"status"]];
+    model.cloudStatus = [[switchStatus isEqualToString:@"on"] || [switchStatus isEqualToString:@"ON"]?@(YES):@(NO) boolValue];
 
     
     NSArray *preArr = [NSArray arrayWithArray:[managedObject objectForKey:@"presets"]];

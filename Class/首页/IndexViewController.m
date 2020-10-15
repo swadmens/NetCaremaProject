@@ -23,7 +23,7 @@
 #import "PLPlayModel.h"
 
 #import "LocalVideoViewController.h"
-
+#import "ChannelDetailController.h"
 
 @interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource,IndexTopDelegate,IndexBottomDelegate,showCarmeraDelegate,LocalVideoDelegate>
 {
@@ -338,7 +338,7 @@
 -(void)getDeviceInfo:(NSString*)device_id withIndex:(NSInteger)index
 {
     NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
-//    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
+//    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",device_id];
 
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -497,20 +497,25 @@
     if (self.selectModel == nil) {
         return;
     }
-    NSDictionary *dic = @{
-                          @"id":self.selectModel.equipment_id,
-                          @"name":self.selectModel.equipment_name,
-                          @"ChannelName":self.selectModel.equipment_name,
-                          @"SnapURL":self.selectModel.snapURL,
-                          @"serial":self.selectModel.childDevice_id,
-                          @"code":self.selectModel.deviceSerial,
-                          @"owner":self.selectModel.owner,
-                          @"lastUpdated":self.selectModel.lastUpdated,
-                          @"responseInterval":self.selectModel.responseInterval,
-                         };
-    NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
-
-    [TargetEngine controller:nil pushToController:PushTargetChannelDetail WithTargetId:pushId];
+//    NSDictionary *dic = @{
+//                          @"id":self.selectModel.equipment_id,
+//                          @"name":self.selectModel.equipment_name,
+//                          @"ChannelName":self.selectModel.equipment_name,
+//                          @"SnapURL":self.selectModel.snapURL,
+//                          @"serial":self.selectModel.childDevice_id,
+//                          @"code":self.selectModel.deviceSerial,
+//                          @"owner":self.selectModel.owner,
+//                          @"lastUpdated":self.selectModel.lastUpdated,
+//                          @"responseInterval":self.selectModel.responseInterval,
+//                         };
+//    NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
+//
+//    [TargetEngine controller:nil pushToController:PushTargetChannelDetail WithTargetId:pushId];
+    ChannelDetailController *cvc = [ChannelDetailController new];
+    cvc.hidesBottomBarWhenPushed = YES;
+    cvc.lvModel = self.selectModel.model;
+    [self.navigationController pushViewController:cvc animated:YES];
+    cvc.hidesBottomBarWhenPushed = YES;
 
 }
 #pragma LocalVideoDelegate

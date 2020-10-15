@@ -31,6 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) LivingModel *model;
 
 @property (nonatomic,strong) NSString *deviceSerial;
+@property (nonatomic,assign) BOOL cloudStatus;//云端录像开关状态
 
 
 @property (nonatomic,strong) NSString *address;
