@@ -30,6 +30,8 @@
     model.recordRegionId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"recordRegionId"]];
     model.playToken = [NSString stringWithFormat:@"%@",[dic objectForKey:@"playToken"]];
     model.recordType = [NSString stringWithFormat:@"%@",[dic objectForKey:@"recordType"]];
+    model.system_Source = [NSString stringWithFormat:@"%@",[dic objectForKey:@"system_Source"]];
+    model.StreamID = [NSString stringWithFormat:@"%@",[dic objectForKey:@"StreamID"]];
 
     return model;
 }

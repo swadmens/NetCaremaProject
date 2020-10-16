@@ -211,7 +211,6 @@
         
         cell.moreClick = ^{
             self.selectModel = model.childDevices_info.firstObject;
-//            self.selectLvModel = model.liveModelArray.firstObject;
             [self moreDealwith:model.online];
         };
         cell.getSingleModelBackdata = ^(LivingModel * _Nonnull model) {

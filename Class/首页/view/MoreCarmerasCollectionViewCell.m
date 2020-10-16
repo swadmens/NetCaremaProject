@@ -146,9 +146,8 @@
 }
 -(void)moreButtonClick
 {
-//    BOOL offline = ![WWPublicMethod isStringEmptyText:self.model.hls];
     if (self.moreBtnClick) {
-        self.moreBtnClick(self.model.status);
+        self.moreBtnClick(self.model.online);
     }
 }
 @end

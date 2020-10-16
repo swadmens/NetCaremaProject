@@ -68,7 +68,7 @@
 -(void)makeCellData:(NSInteger)indexRow withData:(NSDictionary*)dic
 {
     _titleLabel.text = [dic objectForKey:@"name"];
-    _detailLabel.text = [dic objectForKey:@"value"];
+    _detailLabel.text = [dic objectForKey:@"detail"];
     _switchView.on = [[dic objectForKey:@"value"] boolValue];
     _switchView.hidden = ![[dic objectForKey:@"showSwitch"] boolValue];
     _detailLabel.hidden = [[dic objectForKey:@"showSwitch"] boolValue];

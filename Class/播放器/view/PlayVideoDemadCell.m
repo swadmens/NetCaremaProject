@@ -11,6 +11,7 @@
 #import "CarmeaVideosModel.h"
 #import "HikPlayerView.h"
 #import "PLPlayModel.h"
+#import "RequestSence.h"
 
 
 @interface PlayVideoDemadCell ()<PLPlayerViewDelegate>
@@ -20,6 +21,7 @@
 @property (nonatomic,strong) UIView *playView;
 @property (nonatomic, strong) PLPlayerView *playerView;
 @property (nonatomic, strong) HikPlayerView *hkPlayerView;
+@property (nonatomic, strong) CarmeaVideosModel *model;
 
 @property (nonatomic, assign) BOOL isFullScreen;   /// 是否全屏标记
 @property (nonatomic, assign) BOOL isPlaying;
@@ -65,6 +67,12 @@
     if (model == nil) {
         return;
     }
+    
+    if (self.model != nil) {
+        [self.playerView stop];
+    }
+    
+    self.model = model;
     
     self.playerView = [[PLPlayerView alloc] init];
     self.playerView.delegate = self;
@@ -116,7 +124,8 @@
                               @"startTime":model.startTime,
                               @"endTime":model.endTime,
                               @"deviceId":model.deviceId,
-                              @"recordType":model.recordType
+                              @"recordType":model.recordType,
+                              @"StreamID":[model.recordType isEqualToString:@"local"]?model.StreamID:@" "
         };
         PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
         self.playerView.plModel = pModel;
@@ -130,8 +139,37 @@
 }
 
 - (void)stop {
-    [self.playerView stop];
+    
+    if ([self.model.system_Source isEqualToString:@"GBS"] && [self.model.recordType isEqualToString:@"local"]) {
+        
+        NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/playback/stop?streamid=%@",self.model.StreamID];
+        RequestSence *sence = [[RequestSence alloc] init];
+        sence.requestMethod = @"GET";
+        sence.pathHeader = @"application/json";
+        sence.pathURL = url;
+        __unsafe_unretained typeof(self) weak_self = self;
+        sence.successBlock = ^(id obj) {
+            [_kHUDManager hideAfter:0.1 onHide:nil];
+            DLog(@"Received: %@", obj);
+            
+            [weak_self.playerView stop];
+        };
+        sence.errorBlock = ^(NSError *error) {
+            [_kHUDManager hideAfter:0.1 onHide:nil];
+            // 请求失败
+            DLog(@"error  ==  %@",error);
+        };
+        [sence sendRequest];
+    }else{
+        [self.playerView stop];
+
+    }
+    
     self.isPlaying = NO;
+}
+-(void)theLocalFileDoesNotExist:(PLPlayerView *)playerView
+{
+    
 }
 - (void)pause {
     [self.playerView pause];

@@ -35,7 +35,6 @@
     [_showImageView topToView:self.contentView];
     [_showImageView bottomToView:self.contentView withSpace:32.5];
     [_showImageView addWidth:width];
-    [_showImageView addHeight:width*0.6];
     
     
     _titleLabel = [UILabel new];

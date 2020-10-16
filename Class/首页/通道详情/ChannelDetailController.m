@@ -59,9 +59,8 @@
     self.title = @"通道详情";
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
-      
+ 
     [self getEquimentAbility];
-    [self getSingelEquimentInfo];
     [self setupTableView];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -96,7 +95,7 @@
         [cell makeCellData:indexPath.row withData:dic];
         
         cell.switchChange = ^(BOOL switchOn) {
-            [self getSwitchChange:switchOn withIndex:indexPath.row];
+            [self getSwitchChange:switchOn withType:[dic objectForKey:@"type"]];
         };
         
         
@@ -120,13 +119,16 @@
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
     sence.pathURL = url;
-//    __unsafe_unretained typeof(self) weak_self = self;
+    __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"obj ==  %@",obj)
         
-        self.abModel = [EquipmentAbilityModel makeModelData:obj];
-
+        [[GCDQueue mainQueue] queueBlock:^{
+            weak_self.abModel = [EquipmentAbilityModel makeModelData:obj];
+            [weak_self getSingelEquimentInfo];
+        }];
+        
     };
     sence.errorBlock = ^(NSError *error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
@@ -153,17 +155,22 @@
         
         NSDictionary *dic = [NSDictionary dictionaryWithDictionary:obj];
         weak_self.model = [SingleEquipmentModel makeModelData:dic];
-        NSArray *arr = @[@{@"name":self.model.name,@"value":@""},
+        
+        NSArray *arr = @[@{@"name":weak_self.model.deviceSerial,@"value":@""},
                          @{@"name":@"封面",@"value":self.lvModel.snap},
-                         @{@"name":@"报警消息提醒",@"value":@(YES),@"showSwitch":@(YES)},
-                         @{@"name":@"设备音频采集",@"value":@(YES),@"showSwitch":@(YES)},
-                         @{@"name":@"云端录像",@"value":@(self.model.cloudRecordStatus),@"showSwitch":@(YES)},
-                         @{@"name":@"设备分享",@"value":@"",@"showSwitch":@(NO)},
-                         @{@"name":@"通道名称",@"value":self.model.channel,@"showSwitch":@(NO)}];
-
+                         @{@"name":@"报警消息提醒",@"value":@(YES),@"showSwitch":@(YES),@"type":@"alarm"},
+                         @{@"name":@"设备音频采集",@"value":@(YES),@"showSwitch":@(YES),@"type":@"audio"},
+                         @{@"name":@"云端录像",@"value":@(self.model.cloudRecordStatus),@"showSwitch":@(YES),@"type":@"cloud"},
+                         @{@"name":@"设备分享",@"detail":@"无",@"showSwitch":@(NO)},
+                         @{@"name":@"通道名称",@"detail":self.model.channel,@"showSwitch":@(NO)}];
         [weak_self.dataArray addObjectsFromArray:arr];
+ 
         
         [[GCDQueue mainQueue] queueBlock:^{
+            
+            if (!weak_self.abModel.cloudStorage) {
+                [weak_self.dataArray removeObjectAtIndex:4];
+            }
             [weak_self.tableView reloadData];
         }];
         
@@ -176,17 +183,26 @@
 }
 
 //开关操作
--(void)getSwitchChange:(BOOL)swichOn withIndex:(NSInteger)indexRow
+-(void)getSwitchChange:(BOOL)swichOn withType:(NSString*)type
 {
     NSString *shared;
     NSString *url;
-    if (indexRow == 2) {
+    
+    if ([type isEqualToString:@"alarm"]) {
+        //报警消息提醒
+        shared = swichOn?@"true":@"false";
+        url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/setchannelshared?serial=%@&code=%@&shared=%@",self.model.system_Source,self.model.equipment_id,shared];
+        
+    }else if ([type isEqualToString:@"audio"]){
+        //音频采集
         shared = swichOn?@"true":@"false";
         url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/setchannelshared?serial=%@&code=%@&shared=%@",self.model.system_Source,self.model.equipment_id,shared];
     }else{
+        //云端录像
         shared = swichOn?@"on":@"off";
         url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/setcloudrecord?systemSource=%@&id=%@&command=%@",self.model.system_Source,self.model.equipment_id,shared];
     }
+
     
     [_kHUDManager showActivityInView:nil withTitle:nil];
     RequestSence *sence = [[RequestSence alloc] init];

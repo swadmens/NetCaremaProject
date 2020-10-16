@@ -17,6 +17,8 @@
 #import <EZUIKit/EZUIKit.h>
 #import <EZOpenSDKFramework/EZOpenSDK.h>
 #import <EZOpenSDKFramework/EZPlayer.h>
+#import "RequestSence.h"
+
 typedef NS_ENUM(NSInteger, PlayLCState) {
     Play = 0,
     Pause = 1,
@@ -167,7 +169,6 @@ EZPlayerDelegate
     [self.exitfullScreenButton addTarget:self action:@selector(clickExitFullScreenButton) forControlEvents:(UIControlEventTouchUpInside)];
     
     self.moreButton = [[UIButton alloc] init];
-//    self.moreButton.hidden = YES;
     [self.moreButton setImage:[UIImage imageNamed:@"more"] forState:(UIControlStateNormal)];
     [self.moreButton addTarget:self action:@selector(clickMoreButton) forControlEvents:(UIControlEventTouchUpInside)];
     
@@ -393,15 +394,29 @@ EZPlayerDelegate
     if (self.playType == PlayerStatusHk || self.playType == PlayerStatusDH) {
         return;
     }
-    self.slider.value = CMTimeGetSeconds(self.player.currentTime);
-    if (CMTimeGetSeconds(self.player.totalDuration)) {
+    
+    if ([_plModel.recordType isEqualToString:@"local"]) {
+        self.slider.value = CMTimeGetSeconds(self.player.currentTime);
         int duration = self.slider.value + .5;
         int hour = duration / 3600;
         int min  = (duration % 3600) / 60;
         int sec  = duration % 60;
         self.playTimeLabel.text = [NSString stringWithFormat:@"%d:%02d:%02d", hour, min, sec];
         self.bottomPlayProgreeeView.progress = self.slider.value / CMTimeGetSeconds(self.player.totalDuration);
+    }else{
+        self.slider.value = CMTimeGetSeconds(self.player.currentTime);
+        if (CMTimeGetSeconds(self.player.totalDuration)) {
+            int duration = self.slider.value + .5;
+            int hour = duration / 3600;
+            int min  = (duration % 3600) / 60;
+            int sec  = duration % 60;
+            self.playTimeLabel.text = [NSString stringWithFormat:@"%d:%02d:%02d", hour, min, sec];
+            self.bottomPlayProgreeeView.progress = self.slider.value / CMTimeGetSeconds(self.player.totalDuration);
+        }
     }
+    
+    
+    
 }
 
 - (void)panGesture:(UIPanGestureRecognizer *)panGesture {
@@ -605,7 +620,15 @@ EZPlayerDelegate
     
     switch (_playType) {
         case PlayerStatusGBS:
-            [self.player seekTo:CMTimeMake(self.slider.value * 1000, 1000)];
+            
+            if ([_plModel.recordType isEqualToString:@"local"]) {
+                NSInteger timeInte = [[NSString stringWithFormat:@"%ld",(long)self.slider.value] integerValue];
+                NSString *range = [NSString stringWithFormat:@"%ld",(long)timeInte];
+                [self gbsLocalVideoPlayControl:@"play" withScale:@"1" withRange:range];
+            }else{
+                [self.player seekTo:CMTimeMake(self.slider.value * 1000, 1000)];
+            }
+            
             break;
         case PlayerStatusHk:
             
@@ -926,6 +949,9 @@ EZPlayerDelegate
         [self.playerOption setOptionValue:@(format) forKey:PLPlayerOptionKeyVideoPreferFormat];
         [self.playerOption setOptionValue:@(kPLLogNone) forKey:PLPlayerOptionKeyLogLevel];
         
+//        self.player = [PLPlayer playerWithURL:[NSURL URLWithString:@"http://gbs.etoneiot.com:10000/sms/34020000002020000001/api/v1/downloads/34020000001320000001_34020000001320000001_1200000455.mp4"] option:self.playerOption];
+
+        
         NSDate *date = [NSDate date];
         self.player = [PLPlayer playerWithURL:[NSURL URLWithString:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl] option:self.playerOption];
         NSLog(@"playerWithURL 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
@@ -940,6 +966,9 @@ EZPlayerDelegate
         [self.player.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self);
         }];
+        
+        //更多操作，直播时隐藏
+        self.moreButton.hidden = _isLiving;
         
     }else if (self.playType == PlayerStatusHk){
         
@@ -1120,16 +1149,29 @@ EZPlayerDelegate
 
 - (void)pause {
     
-    [self.player pause];
+    if (_playType == PlayerStatusGBS && [_plModel.recordType isEqualToString:@"local"]) {
+        [self gbsLocalVideoPlayControl:@"pause" withScale:@"1" withRange:@"range"];
+    }else{
+        [self.player pause];
+    }
+    
     [self.ePlayer pausePlay];
     [self.m_play pause];
     [self resetButton:NO];
+    
+    
+    
 }
 
 - (void)resume {
     
+    if (_playType == PlayerStatusGBS && [_plModel.recordType isEqualToString:@"local"]) {
+        [self gbsLocalVideoPlayControl:@"play" withScale:@"1" withRange:@"now"];
+    }else{
+        [self.player resume];
+    }
+    
     [self.delegate playerViewWillPlay:self];
-    [self.player resume];
     [self.ePlayer resumePlay];
     [self.m_play resume];
     [self resetButton:YES];
@@ -1144,6 +1186,7 @@ EZPlayerDelegate
     [self.m_play stopDeviceRecord:YES];
     [self.m_hc uninitOpenApi];
     self.m_playState = Stop;
+    
     
     NSDate *date = nil;
     if ([self.player isPlaying]) {
@@ -1331,7 +1374,15 @@ EZPlayerDelegate
             @"PLPlayerStatusCompleted"
         };
         NSLog(@"stop statusDidChange self,= %p state = %@", self, statesString[state]);
-        [self stop];
+        
+        if (state == PLPlayerStatusError) {
+            if (_playType == PlayerStatusGBS && [_plModel.recordType isEqualToString:@"local"]) {
+                [self pause];
+            }else{
+                [self stop];
+            }
+        }
+        
         return;
     }
     
@@ -1384,6 +1435,7 @@ EZPlayerDelegate
 }
 
 - (void)player:(nonnull PLPlayer *)player willRenderFrame:(nullable CVPixelBufferRef)frame pts:(int64_t)pts sarNumerator:(int)sarNumerator sarDenominator:(int)sarDenominator {
+    
     dispatch_main_async_safe(^{
         if (![UIApplication sharedApplication].isIdleTimerDisabled) {
             [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
@@ -1399,10 +1451,19 @@ EZPlayerDelegate
     if (PLPlayerFirstRenderTypeVideo == firstRenderType) {
         self.thumbImageView.hidden = YES;
     }
-    self.slider.maximumValue = CMTimeGetSeconds(self.player.totalDuration);
+    
     self.slider.minimumValue = 0;
     
-    CGFloat fduration = CMTimeGetSeconds(self.player.totalDuration);
+    CGFloat fduration;
+    
+    if (_playType == PlayerStatusGBS && [_plModel.recordType isEqualToString:@"local"]) {
+        fduration = [_plModel.duration floatValue];
+        self.slider.maximumValue = [_plModel.duration floatValue];
+    }else{
+        self.slider.maximumValue = CMTimeGetSeconds(self.player.totalDuration);
+        fduration = CMTimeGetSeconds(self.player.totalDuration);
+    }
+    
     int duration = fduration + .5;
     int hour = duration / 3600;
     int min  = (duration % 3600) / 60;
@@ -1415,7 +1476,6 @@ EZPlayerDelegate
     [self showTip:info];
     
     [self stop];
-   
 }
 
 - (void)player:(PLPlayer *)player loadedTimeRange:(CMTime)timeRange {
@@ -1426,7 +1486,6 @@ EZPlayerDelegate
     self.bufferingView.progress = (durationSeconds - startSeconds) / totalDuration;
     self.bottomBufferingProgressView.progress = self.bufferingView.progress;
 }
-
 #pragma mark - EZUIPlayerDelegate
 
 /**
@@ -1761,6 +1820,56 @@ EZPlayerDelegate
         [self hideBar];
     }
 }
+
+//GBS本地录像播放控制
+-(void)gbsLocalVideoPlayControl:(NSString*)command withScale:(NSString*)scale withRange:(NSString*)range
+{
+    
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/playback/control?streamid=%@&command=%@&scale=%@",_plModel.StreamID,command,scale];
+    
+    NSDictionary *finalParams = @{
+                                  @"streamid": _plModel.StreamID,
+                                  @"command": command,
+                                  @"range": range,
+                                  @"scale": scale
+                                  };
+
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
+                                                       options:0
+                                                         error:nil];
+    
+    
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"BODY";
+    sence.pathHeader = @"application/json";
+    sence.body = jsonData;
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+//        if (![range isEqualToString:@"now"]) {
+//            [weak_self.player play];
+//            return;
+//        }
+
+        if ([command isEqualToString:@"play"]) {
+            [weak_self.player resume];
+        }else if ([command isEqualToString:@"pause"]){
+            [weak_self.player pause];
+        }else if ([command isEqualToString:@"stop"]){
+            [weak_self.player stop];
+        }
+        
+    };
+    sence.errorBlock = ^(NSError *error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error);
+    };
+    [sence sendRequest];
+}
+
 
 @end
 

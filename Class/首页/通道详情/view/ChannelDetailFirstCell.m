@@ -26,18 +26,18 @@
     UIImageView *iconImageView = [UIImageView new];
     iconImageView.image = UIImageWithFileName(@"channel_detail_carmera_image");
     [self.contentView addSubview:iconImageView];
-    [iconImageView yCenterToView:self.contentView];
     [iconImageView leftToView:self.contentView withSpace:15];
-    
+    [iconImageView topToView:self.contentView withSpace:20];
+    [iconImageView bottomToView:self.contentView withSpace:20];
+
     
     _titleLabel = [UILabel new];
     _titleLabel.text = @"测试的";
     _titleLabel.textColor = kColorMainTextColor;
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
     [self.contentView addSubview:_titleLabel];
-    [_titleLabel leftToView:iconImageView withSpace:5];
-    [_titleLabel topToView:self.contentView withSpace:15];
-    [_titleLabel bottomToView:self.contentView withSpace:15];
+    [_titleLabel leftToView:iconImageView withSpace:15];
+    [_titleLabel yCenterToView:self.contentView];
 
     
     UIImageView *rightImageView = [UIImageView new];

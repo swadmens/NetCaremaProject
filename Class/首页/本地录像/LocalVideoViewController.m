@@ -248,20 +248,27 @@
         }
 
     }else{
-        if (_isFromIndex) {
-            
-            SuperPlayerViewController *vc = [SuperPlayerViewController new];
-            vc.model = model;
-            vc.indexInteger = indexPath.row;
-            vc.isDemandFile = YES;
-            vc.isLiving = NO;
-            vc.title_value = model.duration;
-            [self.navigationController pushViewController:vc animated:YES];
-
+        
+        if ([model.system_Source isEqualToString:@"GBS"] && [model.recordType isEqualToString:@"local"]) {
+            [self getGBSLocalVideo:model withIndex:indexPath.row];
         }else{
-            [self.delegate selectRowData:model];
-            [self.navigationController popViewControllerAnimated:YES];
+            if (_isFromIndex) {
+                
+                SuperPlayerViewController *vc = [SuperPlayerViewController new];
+                vc.model = model;
+                vc.indexInteger = indexPath.row;
+                vc.isDemandFile = YES;
+                vc.isLiving = NO;
+                vc.title_value = model.duration;
+                [self.navigationController pushViewController:vc animated:YES];
+
+            }else{
+                [self.delegate selectRowData:model];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
         }
+        
+        
     }
 }
 - (void)startLoadDataRequest
@@ -354,6 +361,7 @@
             [mutDic setObject:self.channel forKey:@"channel"];
             [mutDic setObject:self.deviceSerial forKey:@"deviceSerial"];
             [mutDic setObject:self.recordType forKey:@"recordType"];
+            [mutDic setObject:self.system_Source forKey:@"system_Source"];
             CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
             [tempArray addObject:model];
         }];
@@ -584,6 +592,67 @@
 
     
 }
+
+
+//获取GBS本地录像视频播放流
+-(void)getGBSLocalVideo:(CarmeaVideosModel*)model withIndex:(NSInteger)indexRow
+{
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/playback/start?serial=%@&channel=%@&starttime=%@&endtime=%@",model.deviceSerial,model.channel,model.startTime,model.endTime];
+    NSDictionary *finalParams = @{
+                                  @"serial": model.deviceSerial, //设备序列号
+                                  @"channel": model.channel, // 通道号
+                                  @"starttime": model.startTime, //开始时间，格式 YYYY-MM-DDTHH:mm:ss
+                                  @"endtime": model.endTime // 结束时间，格式 YYYY-MM-DDTHH:mm:ss
+                                  };
+
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
+                                                       options:0
+                                                         error:nil];
+    
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"BODY";
+    sence.pathHeader = @"application/json";
+    sence.body = jsonData;
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+        NSDictionary *received = [NSDictionary dictionaryWithDictionary:obj];
+        model.picUrl = [NSString stringWithFormat:@"%@",[received objectForKey:@"SnapURL"]];
+        model.url = [NSString stringWithFormat:@"%@",[received objectForKey:@"RTMP"]];
+        model.StreamID = [NSString stringWithFormat:@"%@",[received objectForKey:@"StreamID"]];
+        model.duration = [NSString stringWithFormat:@"%@",[received objectForKey:@"PlaybackDuration"]];
+        
+        [[GCDQueue mainQueue] queueBlock:^{
+            
+            if (weak_self.isFromIndex) {
+                
+                SuperPlayerViewController *vc = [SuperPlayerViewController new];
+                vc.model = model;
+                vc.indexInteger = indexRow;
+                vc.isDemandFile = YES;
+                vc.isLiving = NO;
+                vc.title_value = model.duration;
+                [weak_self.navigationController pushViewController:vc animated:YES];
+
+            }else{
+                [weak_self.delegate selectRowData:model];
+                [weak_self.navigationController popViewControllerAnimated:YES];
+            }
+            
+        }];
+    
+    };
+    sence.errorBlock = ^(NSError *error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+        
+    };
+    [sence sendRequest];
+}
+
 /*
 #pragma mark - Navigation
 

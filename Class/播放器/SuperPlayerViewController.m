@@ -919,6 +919,7 @@ PlayVideoDemadDelegate
             [mutDic setObject:self.selectModel.channel forKey:@"channel"];
             [mutDic setObject:self.selectModel.deviceSerial forKey:@"deviceSerial"];
             [mutDic setObject:type forKey:@"recordType"];
+            [mutDic setObject:self.selectModel.system_Source forKey:@"system_Source"];
             CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
             [tempArray addObject:model];
         }];
