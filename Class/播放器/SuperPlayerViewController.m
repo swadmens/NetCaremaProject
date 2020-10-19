@@ -25,6 +25,8 @@
 #import "MyEquipmentsModel.h"
 #import "DownLoadSence.h"
 #import "AFHTTPSessionManager.h"
+#import "EquipmentAbilityModel.h"
+#import "ChannelDetailController.h"
 
 #define KTopviewheight kScreenWidth*0.68
 
@@ -63,6 +65,8 @@ PlayVideoDemadDelegate
 @property (nonatomic,assign) BOOL videoing;//是否正在录像
 @property (nonatomic,strong) UIView *videoTipView;//录像提示view
 @property (nonatomic,strong) UILabel *videoTipLabel;//录像提示view
+
+@property (nonatomic,strong) EquipmentAbilityModel *abModel;//设备能力集
 
 @end
 
@@ -153,8 +157,7 @@ PlayVideoDemadDelegate
         [self startLoadDataRequest:self.selectModel.deviceId withRecordType:@"cloud"];//云端录像
         [self tipViewHidden:YES withTitle:@"开始录像"];
         if (MyModel.model != nil) {
-            //控制台信息
-            [self getCarmarPresetInfo];
+            [self getEquimentAbility];//获取设备能力集
         }
     }
    
@@ -198,7 +201,6 @@ PlayVideoDemadDelegate
     self.isLiving = YES;
     self.backLiveBtn.hidden = YES;
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-
 }
 
 
@@ -249,7 +251,7 @@ PlayVideoDemadDelegate
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.delegate = self;
         
-        cell.isLiving = _isLiving;
+        [cell makeCellData:_isLiving withAbility:self.abModel];
 
         return cell;
     }else{
@@ -417,7 +419,11 @@ PlayVideoDemadDelegate
             PresetsModel *model = [PresetsModel makeModelData:Mdic];
             [tempArr addObject:model];
         }];
-        [weak_self.clView makeAllData:tempArr withSystemSource:weak_self.selectModel.system_Source withDevice_id:weak_self.selectModel.deviceId withIndex:0];
+        
+        [[GCDQueue mainQueue] queueBlock:^{
+            [weak_self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            [weak_self.clView makeAllData:tempArr withSystemSource:weak_self.selectModel.system_Source withDevice_id:weak_self.selectModel.deviceId withIndex:0 withAbility:weak_self.abModel];
+        }];
     };
     sence.errorBlock = ^(NSError *error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
@@ -702,9 +708,10 @@ PlayVideoDemadDelegate
     self.carmer_id = self.selectModel.deviceId;
     self.streamid = self.selectModel.deviceSerial;
     [self startLoadDataRequest:self.selectModel.deviceId withRecordType:@"local"];
-    if (self.selectModel != nil) {
-        [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withIndex:index];
-    }
+    [self getEquimentAbility];
+//    if (self.selectModel != nil) {
+//        [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withIndex:index  withAbility:self.abModel];
+//    }
     
 }
 //右上角按钮
@@ -749,10 +756,12 @@ PlayVideoDemadDelegate
     if (self.selectModel == nil) {
         return;
     }
-    NSDictionary *dic = @{@"SnapURL":self.selectModel.snap,@"ChannelName":self.selectModel.channel};
-    NSString *pushid = [WWPublicMethod jsonTransFromObject:dic];
     
-    [TargetEngine controller:self pushToController:PushTargetChannelMoreSystem WithTargetId:pushid];
+    ChannelDetailController *cvc = [ChannelDetailController new];
+    cvc.hidesBottomBarWhenPushed = YES;
+    cvc.lvModel = self.selectModel;
+    [self.navigationController pushViewController:cvc animated:YES];
+    cvc.hidesBottomBarWhenPushed = YES;
 }
 //生成二维码并保存到相册
 -(void)generatingTwoDimensionalCode:(NSString *)value {
@@ -847,7 +856,8 @@ PlayVideoDemadDelegate
     __unsafe_unretained typeof(self) weak_self = self;
 //    NSString *recordType = [self.selectModel.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
 
-    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.selectModel.system_Source,carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],type];
+    NSString *recordUrl = [NSString stringWithFormat:@"http://management.etoneiot.com/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.selectModel.system_Source,carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],type];
+//    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.selectModel.system_Source,carmeraId,[_kDatePicker getCurrentTimes:@"YYYYMMdd"],type];
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
@@ -993,6 +1003,37 @@ PlayVideoDemadDelegate
     [self.videoCell play];
 }
 
+//获取设备能力集
+-(void)getEquimentAbility
+{
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/device/getability/%@/%@",self.selectModel.system_Source,self.selectModel.deviceId];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"obj ==  %@",obj)
+        weak_self.abModel = [EquipmentAbilityModel makeModelData:obj];
+
+        [[GCDQueue mainQueue] queueBlock:^{
+            
+//            [weak_self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+
+            //控制台信息
+            [weak_self getCarmarPresetInfo];
+        }];
+        
+    };
+    sence.errorBlock = ^(NSError *error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error: %@", error);
+        //控制台信息
+        [weak_self getCarmarPresetInfo];
+    };
+    [sence sendRequest];
+}
 /*
 #pragma mark - Navigation
 

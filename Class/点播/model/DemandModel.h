@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *size;
 @property (nonatomic,strong) NSString *type;
 @property (nonatomic,strong) NSString *vodId;
+@property (nonatomic,strong) NSString *describe;
+@property (nonatomic,strong) NSString *title;
 
 
 @end

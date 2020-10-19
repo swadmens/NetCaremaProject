@@ -38,7 +38,7 @@
 }
 - (void)setupTableView
 {
-    self.tableView = [[WWTableView alloc] init];
+    self.tableView = [[WWTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     self.tableView.backgroundColor = kColorBackgroundColor;
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -62,6 +62,10 @@
  
     [self getEquimentAbility];
     [self setupTableView];
+}
+-(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -109,7 +113,77 @@
     if (indexPath.row == 0){
         [TargetEngine controller:self pushToController:PushTargetEquimentBasicInfo WithTargetId:self.model.equipment_id];
     }
+}
+-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView *headerView = [UIView new];
+    headerView.backgroundColor = [UIColor whiteColor];
+
+    return headerView;
+}
+-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    UIView *footerView = [UIView new];
+    footerView.backgroundColor = kColorBackgroundColor;
     
+    
+    UIButton *deleteBtn = [UIButton new];
+    deleteBtn.clipsToBounds = YES;
+    deleteBtn.layer.cornerRadius = 3;
+    [deleteBtn setBGColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [deleteBtn setTitle:@"删除设备" forState:UIControlStateNormal];
+    [deleteBtn setTitleColor:UIColorFromRGB(0xFD1616, 1) forState:UIControlStateNormal];
+    deleteBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
+    [deleteBtn addTarget:self action:@selector(deleteCarmeraClick) forControlEvents:UIControlEventTouchUpInside];
+    [footerView addSubview:deleteBtn];
+    [deleteBtn leftToView:footerView withSpace:16];
+    [deleteBtn yCenterToView:footerView];
+    [deleteBtn addHeight:37];
+    [deleteBtn addWidth:kScreenWidth/2-32];
+    
+    UIButton *restartBtn = [UIButton new];
+    restartBtn.clipsToBounds = YES;
+    restartBtn.layer.cornerRadius = 3;
+    [restartBtn setBGColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [restartBtn setTitle:@"重启设备" forState:UIControlStateNormal];
+    [restartBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
+    restartBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
+    [restartBtn addTarget:self action:@selector(restartEquipmentClick) forControlEvents:UIControlEventTouchUpInside];
+    [footerView addSubview:restartBtn];
+    [restartBtn rightToView:footerView withSpace:16];
+    [restartBtn yCenterToView:footerView];
+    [restartBtn addHeight:37];
+    [restartBtn addWidth:kScreenWidth/2-32];
+    
+    
+    return footerView;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 0.1;
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 74;
+}
+
+-(void)deleteCarmeraClick
+{
+    [[TCNewAlertView shareInstance] showAlert:nil message:@"确认删除设备吗？" cancelTitle:@"取消" viewController:self confirm:^(NSInteger buttonTag) {
+        
+        if (buttonTag == 0) {
+            [_kHUDManager showMsgInView:nil withTitle:@"删除了设备" isSuccess:YES];
+        }
+    } buttonTitles:@"确定", nil];
+}
+-(void)restartEquipmentClick
+{
+    [[TCNewAlertView shareInstance] showAlert:nil message:@"确认重启设备吗？" cancelTitle:@"取消" viewController:self confirm:^(NSInteger buttonTag) {
+        
+        if (buttonTag == 0) {
+            [_kHUDManager showMsgInView:nil withTitle:@"重启了设备" isSuccess:YES];
+        }
+    } buttonTitles:@"确定", nil];
 }
 //获取设备能力集
 -(void)getEquimentAbility
@@ -156,12 +230,14 @@
         NSDictionary *dic = [NSDictionary dictionaryWithDictionary:obj];
         weak_self.model = [SingleEquipmentModel makeModelData:dic];
         
-        NSArray *arr = @[@{@"name":weak_self.model.deviceSerial,@"value":@""},
+        NSArray *arr = @[@{@"name":weak_self.model.name,@"value":@""},
                          @{@"name":@"封面",@"value":self.lvModel.snap},
                          @{@"name":@"报警消息提醒",@"value":@(YES),@"showSwitch":@(YES),@"type":@"alarm"},
                          @{@"name":@"设备音频采集",@"value":@(YES),@"showSwitch":@(YES),@"type":@"audio"},
+                         @{@"name":@"音视频加密",@"value":@(YES),@"showSwitch":@(YES),@"type":@"encryption"},
                          @{@"name":@"云端录像",@"value":@(self.model.cloudRecordStatus),@"showSwitch":@(YES),@"type":@"cloud"},
                          @{@"name":@"设备分享",@"detail":@"无",@"showSwitch":@(NO)},
+                         @{@"name":@"设备程序版本",@"detail":@"v1.0",@"showSwitch":@(NO)},
                          @{@"name":@"通道名称",@"detail":self.model.channel,@"showSwitch":@(NO)}];
         [weak_self.dataArray addObjectsFromArray:arr];
  

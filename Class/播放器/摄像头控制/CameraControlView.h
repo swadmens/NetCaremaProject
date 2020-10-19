@@ -38,12 +38,12 @@ typedef enum {
 
 
 NS_ASSUME_NONNULL_BEGIN
-
+@class EquipmentAbilityModel;
 @interface CameraControlView : UIView
 
 @property (nonatomic, weak) id<CameraControlDelete> delegate;
 
--(void)makeAllData:(NSArray*)presets withSystemSource:(NSString*)systemSource withDevice_id:(NSString*)device_id withIndex:(NSInteger)index;
+-(void)makeAllData:(NSArray*)presets withSystemSource:(NSString*)systemSource withDevice_id:(NSString*)device_id withIndex:(NSInteger)index withAbility:(EquipmentAbilityModel*)model;
 
 
 @end

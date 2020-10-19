@@ -22,6 +22,8 @@
     model.type = [NSString stringWithFormat:@"%@",[dic objectForKey:@"type"]];
     model.vodId = [NSString stringWithFormat:@"%@",[dic objectForKey:@"vodId"]];
     model.size = [NSString stringWithFormat:@"%@",[dic objectForKey:@"size"]];
+    model.describe = [NSString stringWithFormat:@"%@",[dic objectForKey:@"description"]];
+    model.title = [NSString stringWithFormat:@"%@",[dic objectForKey:@"title"]];
 
     
     return model;

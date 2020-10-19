@@ -96,6 +96,7 @@
         
     
     UIButton *allPlayBtn = [UIButton new];
+    allPlayBtn.hidden = YES;
     [allPlayBtn setImage:UIImageWithFileName(@"index_search_player_image") forState:UIControlStateNormal];
     [self addSubview:allPlayBtn];
     [allPlayBtn yCenterToView:self.searchButton];

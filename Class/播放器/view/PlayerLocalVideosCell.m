@@ -214,7 +214,7 @@
         DLog(@"Received: %@", obj);
         NSDictionary *received = [NSDictionary dictionaryWithDictionary:obj];
         model.picUrl = [NSString stringWithFormat:@"%@",[received objectForKey:@"SnapURL"]];
-        model.url = [NSString stringWithFormat:@"%@",[received objectForKey:@"RTMP"]];
+        model.url = [NSString stringWithFormat:@"%@",[received objectForKey:@"FLV"]];
         model.StreamID = [NSString stringWithFormat:@"%@",[received objectForKey:@"StreamID"]];        
         model.duration = [NSString stringWithFormat:@"%@",[received objectForKey:@"PlaybackDuration"]];
 

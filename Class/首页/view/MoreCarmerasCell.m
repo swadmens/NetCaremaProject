@@ -175,11 +175,11 @@
     MoreCarmerasCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[MoreCarmerasCollectionViewCell getCellIDStr] forIndexPath:indexPath];
     
     MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    [cell makeCellData:model.model];
+    [cell makeCellData:model];
 
-    cell.moreBtnClick = ^(BOOL offline) {
+    cell.moreBtnClick = ^{
         if (self.moreDealClick) {
-            self.moreDealClick(indexPath.row,offline);
+            self.moreDealClick(indexPath.row,model.online);
         }
     };
     

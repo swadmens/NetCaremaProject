@@ -123,17 +123,17 @@
     
     
 }
--(void)makeCellData:(LivingModel*)model
+-(void)makeCellData:(MyEquipmentsModel*)model
 {
-    self.model = model;
-    _titleLabel.text = model.name;
-    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
+    self.model = model.model;
+    _titleLabel.text = model.model.name;
+    [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.model.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
     
-    if (self.model.online) {
+    if (model.online) {
         self.isLiving = YES;
         self.coverView.hidden = YES;
     }else{
-        self.timeLabel.text = model.createdAt;
+        self.timeLabel.text = model.creationTime;
         self.isLiving = NO;
         self.coverView.hidden = NO;
     }
@@ -147,7 +147,7 @@
 -(void)moreButtonClick
 {
     if (self.moreBtnClick) {
-        self.moreBtnClick(self.model.online);
+        self.moreBtnClick();
     }
 }
 @end

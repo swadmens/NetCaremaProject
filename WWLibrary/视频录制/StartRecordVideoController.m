@@ -327,9 +327,9 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     //根据连接取得设备输出的数据
     if (![self.captureMovieFileOutput isRecording]) {
         //如果支持多任务则开始多任务
-        if ([[UIDevice currentDevice] isMultitaskingSupported]) {
-            self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
-        }
+//        if ([[UIDevice currentDevice] isMultitaskingSupported]) {
+//            self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:nil];
+//        }
         if (self.saveVideoUrl) {
             [[NSFileManager defaultManager] removeItemAtURL:self.saveVideoUrl error:nil];
         }
@@ -424,6 +424,10 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     if (self.saveVideoUrl) {
         
         [self mov2mp4:self.saveVideoUrl];
+        
+//        if (self.lastBackgroundTaskIdentifier!= UIBackgroundTaskInvalid) {
+//            [[UIApplication sharedApplication] endBackgroundTask:self.lastBackgroundTaskIdentifier];
+//        }
     
 //        return;
 //        ALAssetsLibrary *assetsLibrary=[[ALAssetsLibrary alloc]init];

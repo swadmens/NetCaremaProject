@@ -9,6 +9,7 @@
 #import "ShowCarmerasTableViewCell.h"
 #import "MyEquipmentsModel.h"
 #import <UIImageView+YYWebImage.h>
+#import "LivingModel.h"
 
 @interface ShowCarmerasTableViewCell ()
 
@@ -39,7 +40,7 @@
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeSixteen];
     [_titleLabel sizeToFit];
     [self.contentView addSubview:_titleLabel];
-    [_titleLabel yCenterToView:self.contentView];
+    [_titleLabel addCenterY:-12 toView:self.contentView];
     [_titleLabel leftToView:_titleImageView withSpace:10];
     
     _statesLabel = [UILabel new];
@@ -51,8 +52,8 @@
     _statesLabel.textAlignment = NSTextAlignmentCenter;
     _statesLabel.font = [UIFont customFontWithSize:kFontSizeTen];
     [self.contentView addSubview:_statesLabel];
-    [_statesLabel leftToView:_titleLabel withSpace:10];
-    [_statesLabel yCenterToView:self.contentView];
+    [_statesLabel leftToView:_titleImageView withSpace:10];
+    [_statesLabel addCenterY:12 toView:self.contentView];
     [_statesLabel addWidth:35];
     [_statesLabel addHeight:16];
     
@@ -75,8 +76,8 @@
 {
     _titleLabel.text = model.equipment_name;
     _statesLabel.text = model.equipment_states;
-//    [_titleImageView yy_setImageWithURL:[NSURL URLWithString:snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
-    _statesLabel.backgroundColor = !model.online?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
+    [_titleImageView yy_setImageWithURL:[NSURL URLWithString:model.model.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
+    _statesLabel.backgroundColor = model.online?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
     
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

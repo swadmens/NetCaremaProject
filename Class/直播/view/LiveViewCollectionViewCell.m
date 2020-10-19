@@ -79,7 +79,9 @@
     LivingModel *lvModel = model.model;
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:lvModel.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
     _titleLabel.text = lvModel.name;
-    _tagLabel.text = lvModel.online?@"直播中":@"离线";
+    _tagLabel.text = model.online?@"直播中":@"离线";
+    _tagLabel.textColor = model.online?[UIColor whiteColor]:kColorSecondTextColor;
+
 }
 
 

@@ -411,7 +411,6 @@
 //    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mutData options:0 error:nil];
     
     //提交数据
-//    NSString *url = @"http://ncore.iot/service/video/liveqing/vod/list";
     NSString *url = [NSString stringWithFormat:@"/inventory/managedObjects?type=vod&fragmentType=camera_Vod&pageSize=10&currentPage=%ld",(long)self.page];
     
     RequestSence *sence = [[RequestSence alloc] init];

@@ -365,7 +365,8 @@
 
             NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
             NSString *startTime = [mutDic objectForKey:@"start_time"];
-            NSString *snap = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/record/getsnap?id=%@&period=%@",self.device_id,startTime];
+            NSString *snap = [NSString stringWithFormat:@"http://management.etoneiot.com/service/video/liveqing/record/getsnap?id=%@&period=%@",self.device_id,startTime];
+//            NSString *snap = [NSString stringWithFormat:@"http://ncore.iot/service/video/liveqing/record/getsnap?id=%@&period=%@",self.device_id,startTime];
             if (![WWPublicMethod isStringEmptyText:originalSnap]) {
                 [mutDic setValue:snap forKey:@"snap"];
                 [self getRecordCoverPhoto:start_time withData:idx];

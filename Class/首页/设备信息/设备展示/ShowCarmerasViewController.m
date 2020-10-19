@@ -11,6 +11,7 @@
 #import "ShowCarmerasTableViewCell.h"
 #import "RequestSence.h"
 #import "MyEquipmentsModel.h"
+#import "ChannelDetailController.h"
 
 @interface ShowCarmerasViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -118,7 +119,10 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [TargetEngine controller:self pushToController:PushTargetCarmeraDetailInfo WithTargetId:nil];
+    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    ChannelDetailController *cvc = [ChannelDetailController new];
+    cvc.lvModel = model.model;
+    [self.navigationController pushViewController:cvc animated:YES];
 }
 #pragma mark 选择编辑模式，添加模式很少用,默认是删除
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath

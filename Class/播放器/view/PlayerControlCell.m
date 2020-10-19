@@ -8,6 +8,7 @@
 
 #import "PlayerControlCell.h"
 #import "LGXVerticalButton.h"
+#import "EquipmentAbilityModel.h"
 
 @interface PlayerControlCell ()
 
@@ -129,6 +130,7 @@
     _controlBtn = [LGXVerticalButton new];
     [_controlBtn setImage:UIImageWithFileName(@"player_control_image") forState:UIControlStateNormal];
     [_controlBtn setImage:UIImageWithFileName(@"player_control_select_image") forState:UIControlStateSelected];
+    [_controlBtn setImage:UIImageWithFileName(@"player_control_disabled_image") forState:UIControlStateDisabled];
     [_controlBtn setTitle:@"云台" forState:UIControlStateNormal];
     [_controlBtn setTitleColor:kColorSecondTextColor forState:UIControlStateNormal];
     _controlBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEight];
@@ -137,13 +139,13 @@
     [_controlBtn yCenterToView:_videoBtn];
     [_controlBtn addTarget:self action:@selector(controlBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 }
-
--(void)setIsLiving:(BOOL)isLiving
+-(void)makeCellData:(BOOL)isLiving withAbility:(EquipmentAbilityModel*)model
 {
     CGFloat bigSpace = kScreenWidth * 0.3;
     
     if (isLiving) {
         _controlBtn.hidden = NO;
+        _controlBtn.enabled = model.ptz;
         _gongGeBtn.enabled = YES;
         
         _videoBtn.enabled = YES;
@@ -179,7 +181,6 @@
             make.yCenter.lgx_equalTo(self.videoBtn.lgx_yCenter);
         }];
     }
-        
 }
 
 -(void)gongGeBtnClick:(UIButton*)sender

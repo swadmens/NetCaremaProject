@@ -111,11 +111,9 @@ NSString *_kStaticURL;
         [[SharedClient sharedInstance].requestSerializer setValue:_pathHeader forHTTPHeaderField:@"Accept"];
         [[SharedClient sharedInstance].requestSerializer setValue:_pathHeader forHTTPHeaderField:@"Content-Type"];
     }
-    
     //添加授权
     [[SharedClient sharedInstance].requestSerializer setValue:_kUserModel.userInfo.Authorization forHTTPHeaderField:@"Authorization"];
         
-    
     if ([self.requestMethod isEqual:@"GET"]) {
         
         self.task = [[SharedClient sharedInstance] requestGet:self.pathURL parameters:self.params completion:^(id results, NSError *error) {
@@ -189,6 +187,15 @@ NSString *_kStaticURL;
         DLog(@"\n ~~~~~~ 报错啦 : %@ \n ~~~~~~ \n",results);
         DLog(@"\n ~~~~~~ 报错啦 : %@ \n ~~~~~~ \n",error);
         [self requestError:error];
+        
+        NSString *unauthorized = [error.userInfo objectForKey:@"NSLocalizedDescription"];
+        if ([unauthorized containsString:@"401"]) {
+            if (_kUserModel.isLogined) {
+                _kUserModel.isLogined = NO;
+                [_kUserModel checkLoginStatus];
+            }
+        }
+        
         return ;
     }
     @try {

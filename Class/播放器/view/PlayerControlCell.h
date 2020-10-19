@@ -34,11 +34,12 @@ typedef enum {
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class EquipmentAbilityModel;
 @interface PlayerControlCell : WWTableViewCell
 
 @property (nonatomic,weak) id<PlayerControlDelegate>delegate;
 
-@property (nonatomic,assign) BOOL isLiving;//是否是直播
+-(void)makeCellData:(BOOL)isLiving withAbility:(EquipmentAbilityModel*)model;
 
 @end
 

@@ -11,6 +11,7 @@
 #import "LEEAlert.h"
 #import "RequestSence.h"
 #import "MyEquipmentsModel.h"
+#import "EquipmentAbilityModel.h"
 
 #define KTopviewheight kScreenWidth*0.68
 
@@ -28,14 +29,14 @@
 @property (nonatomic,strong) UIButton *rightUpBtn;
 @property (nonatomic,strong) UIButton *rightDownBtn;
 
-@property (nonatomic,strong) UIButton *focusin;
-@property (nonatomic,strong) UIButton *focusout;
-
-@property (nonatomic,strong) UIButton *aperturein;
-@property (nonatomic,strong) UIButton *apertureout;
+//@property (nonatomic,strong) UIButton *focusin;
+//@property (nonatomic,strong) UIButton *focusout;
+//
+//@property (nonatomic,strong) UIButton *aperturein;
+//@property (nonatomic,strong) UIButton *apertureout;
 
 @property (nonatomic,strong) PresetView *setView;
-
+@property (nonatomic,strong) UIButton *scSetBtn;//收藏位置按钮
 
 @property (nonatomic,strong) UIScrollView *sView;//滚动视图
 
@@ -89,17 +90,14 @@
     _CollectionBtn = [UIButton new];
     [_CollectionBtn setTitle:@"收藏位置" forState:UIControlStateNormal];
     [_CollectionBtn setTitleColor:kColorMainTextColor forState:UIControlStateNormal];
+    [_CollectionBtn setTitleColor:kColorThirdTextColor forState:UIControlStateDisabled];
     _CollectionBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [_CollectionBtn addTarget:self action:@selector(collectionBtnClick) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_CollectionBtn];
     [_CollectionBtn yCenterToView:_ControlBtn];
     [_CollectionBtn leftToView:_ControlBtn withSpace:20];
     
-    
-    
-    
-    
-    
+
     _sView = [UIScrollView new];
     _sView.backgroundColor = [UIColor whiteColor];
     [self addSubview:_sView];
@@ -166,7 +164,6 @@
     UIButton *rightBtn = [UIButton new];
     [rightBtn setImage:UIImageWithFileName(@"video_control_right_image") forState:UIControlStateNormal];
     [rightBtn addTarget:self action:@selector(controlRightClick) forControlEvents:UIControlEventTouchUpInside];
-//    [rightBtn setBGColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [centerView addSubview:rightBtn];
     [rightBtn yCenterToView:centerView];
     [rightBtn rightToView:centerView withSpace:3];
@@ -177,7 +174,6 @@
     UIButton *stopBtn = [UIButton new];
     [stopBtn setImage:UIImageWithFileName(@"video_control_stop_image") forState:UIControlStateNormal];
     [stopBtn addTarget:self action:@selector(controlStopClick) forControlEvents:UIControlEventTouchUpInside];
-//    [stopBtn setBGColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [centerView addSubview:stopBtn];
     [stopBtn yCenterToView:centerView];
     [stopBtn xCenterToView:centerView];
@@ -237,106 +233,37 @@
     
     
     UIButton *zoomin = [UIButton new];
-//    zoomin.hidden = YES;
-//    zoomin.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-//    [zoomin setTitle:@"放大" forState:UIControlStateNormal];
-//    [zoomin setBGColor:[UIColor blackColor] forState:UIControlStateNormal];
-    
-    [zoomin setImage:UIImageWithFileName(@"group_add_image") forState:UIControlStateNormal];
+    [zoomin setImage:UIImageWithFileName(@"index_add_image") forState:UIControlStateNormal];
     [zoomin addTarget:self action:@selector(controlZoominClick) forControlEvents:UIControlEventTouchUpInside];
     [_sView addSubview:zoomin];
     [zoomin topToView:centerView withSpace:25];
-    [zoomin leftToView:_sView withSpace:25];
-    [zoomin addWidth:40];
-    [zoomin addHeight:30];
-    
+    [zoomin leftToView:_sView withSpace:30];
+
     
     UIButton *zoomout = [UIButton new];
-//    zoomout.hidden = YES;
-//    zoomout.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-//    [zoomout setTitle:@"缩小" forState:UIControlStateNormal];
-//    [zoomout setBGColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [zoomout setImage:UIImageWithFileName(@"group_remove_image") forState:UIControlStateNormal];
+    [zoomout setImage:UIImageWithFileName(@"index_reduce_image") forState:UIControlStateNormal];
     [zoomout addTarget:self action:@selector(controlZoomoutClick) forControlEvents:UIControlEventTouchUpInside];
     [_sView addSubview:zoomout];
     [zoomout yCenterToView:zoomin];
-    [zoomout leftToView:zoomin withSpace:15];
-    [zoomout addWidth:40];
-    [zoomout addHeight:30];
+    [zoomout leftToView:zoomin withSpace:35];
     
     
     
-    
-    UIButton *scSetBtn = [UIButton new];
-    scSetBtn.clipsToBounds = YES;
-    scSetBtn.layer.borderColor = kColorMainColor.CGColor;
-    scSetBtn.layer.borderWidth = 1.0f;
-    scSetBtn.layer.cornerRadius = 3;
-    [scSetBtn setTitle:@"收藏位置" forState:UIControlStateNormal];
-    [scSetBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
-    scSetBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [_sView addSubview:scSetBtn];
-    [scSetBtn yCenterToView:zoomin];
-    [scSetBtn addCenterX:50 toView:_sView];
-    [scSetBtn addWidth:90];
-    [scSetBtn addHeight:30];
-    [scSetBtn addTarget:self action:@selector(collectionSetBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    
-    
-    
-    
-    
-    
-    
-    _focusin = [UIButton new];
-    _focusin.hidden = YES;
-    _focusin.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [_focusin setTitle:@"聚焦-" forState:UIControlStateNormal];
-    [_focusin addTarget:self action:@selector(controlFocusinClick) forControlEvents:UIControlEventTouchUpInside];
-    [_focusin setBGColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self addSubview:_focusin];
-    [_focusin topToView:zoomin withSpace:25];
-    [_focusin rightToView:self withSpace:5];
-    [_focusin addWidth:40];
-    [_focusin addHeight:30];
-    
-    
-    _focusout = [UIButton new];
-    _focusout.hidden = YES;
-    _focusout.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [_focusout setTitle:@"聚焦+" forState:UIControlStateNormal];
-    [_focusout addTarget:self action:@selector(controlFocusoutClick) forControlEvents:UIControlEventTouchUpInside];
-    [_focusout setBGColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self addSubview:_focusout];
-    [_focusout yCenterToView:_focusin];
-    [_focusout rightToView:_focusin withSpace:5];
-    [_focusout addWidth:40];
-    [_focusout addHeight:30];
-    
-    _aperturein = [UIButton new];
-    _aperturein.hidden = YES;
-    _aperturein.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [_aperturein setTitle:@"光圈-" forState:UIControlStateNormal];
-    [_aperturein addTarget:self action:@selector(controlApertureinClick) forControlEvents:UIControlEventTouchUpInside];
-    [_aperturein setBGColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self addSubview:_aperturein];
-    [_aperturein topToView:_focusin withSpace:25];
-    [_aperturein rightToView:self withSpace:5];
-    [_aperturein addWidth:40];
-    [_aperturein addHeight:30];
-    
-    
-    _apertureout = [UIButton new];
-    _apertureout.hidden = YES;
-    _apertureout.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
-    [_apertureout setTitle:@"光圈+" forState:UIControlStateNormal];
-    [_apertureout addTarget:self action:@selector(controlApertureoutClick) forControlEvents:UIControlEventTouchUpInside];
-    [_apertureout setBGColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self addSubview:_apertureout];
-    [_apertureout yCenterToView:_aperturein];
-    [_apertureout rightToView:_aperturein withSpace:5];
-    [_apertureout addWidth:40];
-    [_apertureout addHeight:30];
+    _scSetBtn = [UIButton new];
+    _scSetBtn.clipsToBounds = YES;
+    _scSetBtn.layer.borderColor = kColorMainColor.CGColor;
+    _scSetBtn.layer.borderWidth = 1.0f;
+    _scSetBtn.layer.cornerRadius = 3;
+    [_scSetBtn setTitle:@"收藏位置" forState:UIControlStateNormal];
+    [_scSetBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
+    [_scSetBtn setTitleColor:kColorThirdTextColor forState:UIControlStateDisabled];
+    _scSetBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+    [_sView addSubview:_scSetBtn];
+    [_scSetBtn yCenterToView:zoomin];
+    [_scSetBtn addCenterX:50 toView:_sView];
+    [_scSetBtn addWidth:90];
+    [_scSetBtn addHeight:30];
+    [_scSetBtn addTarget:self action:@selector(collectionSetBtnClick) forControlEvents:UIControlEventTouchUpInside];
     
     
     //预置点视图
@@ -345,7 +272,7 @@
     self.setView.frame = CGRectMake(kScreenWidth, 45, kScreenWidth, kScreenHeight - KTopviewheight - 222);
     
 }
--(void)makeAllData:(NSArray*)presets withSystemSource:(NSString*)systemSource withDevice_id:(NSString*)device_id withIndex:(NSInteger)index
+-(void)makeAllData:(NSArray*)presets withSystemSource:(NSString*)systemSource withDevice_id:(NSString*)device_id withIndex:(NSInteger)index withAbility:(EquipmentAbilityModel*)model
 {
     self.mutPresets = [NSMutableArray arrayWithArray:presets];
     
@@ -354,6 +281,12 @@
     self.indexItem = index;
 
     [self.setView makeAllData:presets withSystemSource:systemSource withDevice_id:device_id];
+    
+    
+    _scSetBtn.enabled = model.preset;
+    _scSetBtn.layer.borderColor = model.preset?kColorMainColor.CGColor:kColorThirdTextColor.CGColor;
+    _CollectionBtn.enabled = model.preset;
+    
 }
 
 
@@ -389,21 +322,6 @@
 
     }];
       
-}
-
--(void)setIsLiveGBS:(BOOL)isLiveGBS
-{
-//    _leftUpBtn.hidden = !isLiveGBS;
-//    _leftDownBtn.hidden = !isLiveGBS;
-//    _rightUpBtn.hidden = !isLiveGBS;
-//    _rightDownBtn.hidden = !isLiveGBS;
-//
-//
-//    _focusin.hidden = isLiveGBS;
-//    _focusout.hidden = isLiveGBS;
-//    _aperturein.hidden = isLiveGBS;
-//    _apertureout.hidden = isLiveGBS;
-
 }
 
 -(void)controlUpClick
@@ -472,31 +390,6 @@
         [self.delegate cameraControl:self withState:ControlStaterZoomout];
     }
 }
--(void)controlFocusinClick
-{
-    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
-        [self.delegate cameraControl:self withState:ControlStaterFocusin];
-    }
-}
--(void)controlFocusoutClick
-{
-    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
-        [self.delegate cameraControl:self withState:ControlStaterFocusout];
-    }
-}
--(void)controlApertureinClick
-{
-    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
-        [self.delegate cameraControl:self withState:ControlStaterAperturein];
-    }
-}
--(void)controlApertureoutClick
-{
-    if ([self.delegate respondsToSelector:@selector(cameraControl:withState:)]) {
-        [self.delegate cameraControl:self withState:ControlStaterApertureout];
-    }
-}
-
 
 //点击收藏位置
 -(void)collectionSetBtnClick

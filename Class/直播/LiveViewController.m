@@ -213,7 +213,7 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     MyEquipmentsModel *model = [self.dataModelArray objectAtIndex:indexPath.row];
-    if (model.model.online) {
+    if (model.online) {
         //live直播
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
         vc.hidesBottomBarWhenPushed = YES;

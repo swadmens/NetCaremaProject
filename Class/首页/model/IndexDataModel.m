@@ -21,10 +21,13 @@
     model.equipment_address = [NSString stringWithFormat:@"%@",[dic objectForKey:@"address"]];
     model.equipment_type = [NSString stringWithFormat:@"%@",[dic objectForKey:@"type"]];
     model.lastUpdated = [NSString stringWithFormat:@"%@",[dic objectForKey:@"lastUpdated"]];
-    model.creationTime = [NSString stringWithFormat:@"%@",[dic objectForKey:@"creationTime"]];
+//    model.creationTime = [NSString stringWithFormat:@"%@",[dic objectForKey:@"creationTime"]];
     model.owner = [NSString stringWithFormat:@"%@",[dic objectForKey:@"owner"]];
     model.system_Source = [NSString stringWithFormat:@"%@",[dic objectForKey:@"system_Source"]];
     model.deviceSerial = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceSerial"]];
+    
+    NSArray *time1 = [[NSString stringWithFormat:@"%@",[dic objectForKey:@"creationTime"]] componentsSeparatedByString:@"."];
+    model.creationTime = [time1[0] stringByReplacingOccurrencesOfString:@"T" withString:@" "];
     
     
     NSDictionary *statesDic = [dic objectForKey:@"c8y_Availability"];

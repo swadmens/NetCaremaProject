@@ -19,10 +19,12 @@
     model.equipment_name = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"name"]];
     model.owner = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"owner"]];
     model.lastUpdated = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"lastUpdated"]];
-    model.creationTime = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"creationTime"]];
     model.system_Source = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"system_Source"]];
     model.channel = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"channel"]];
     model.deviceSerial = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"deviceSerial"]];
+    
+    NSArray *time1 = [[NSString stringWithFormat:@"%@",[managedObject objectForKey:@"creationTime"]] componentsSeparatedByString:@"."];
+    model.creationTime = [time1[0] stringByReplacingOccurrencesOfString:@"T" withString:@" "];
     
     
     NSString *switchStatus = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"status"]];

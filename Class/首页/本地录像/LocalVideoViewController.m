@@ -283,8 +283,9 @@
     __unsafe_unretained typeof(self) weak_self = self;
 
 //    NSString *recordType = [self.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
-    
-    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.system_Source,self.device_id,self.date_value,self.recordType];
+    NSString *recordUrl = [NSString stringWithFormat:@"http://management.etoneiot.com/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.system_Source,self.device_id,self.date_value,self.recordType];
+
+//    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.system_Source,self.device_id,self.date_value,self.recordType];
  
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFJSONResponseSerializer serializer];
@@ -620,7 +621,7 @@
         DLog(@"Received: %@", obj);
         NSDictionary *received = [NSDictionary dictionaryWithDictionary:obj];
         model.picUrl = [NSString stringWithFormat:@"%@",[received objectForKey:@"SnapURL"]];
-        model.url = [NSString stringWithFormat:@"%@",[received objectForKey:@"RTMP"]];
+        model.url = [NSString stringWithFormat:@"%@",[received objectForKey:@"FLV"]];
         model.StreamID = [NSString stringWithFormat:@"%@",[received objectForKey:@"StreamID"]];
         model.duration = [NSString stringWithFormat:@"%@",[received objectForKey:@"PlaybackDuration"]];
         

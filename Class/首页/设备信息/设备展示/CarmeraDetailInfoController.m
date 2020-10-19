@@ -53,7 +53,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"全部分组";
+    self.title = @"设备详情";
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
    
@@ -61,8 +61,6 @@
     NSArray *arr = @[@"866262045665618",@"设备程序版本",@"自定义音视频加密",@"更多设置"];
     
     [self.dataArray addObjectsFromArray:arr];
-    
-    
     
     
     [self setupTableView];

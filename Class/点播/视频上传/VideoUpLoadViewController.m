@@ -29,7 +29,6 @@
 
 @property (nonatomic,strong) NSURL *fileUrl;
 
-
 @property (nonatomic,strong) NSString *fileName;//文件名称
 @property (nonatomic,assign) BOOL isAddVideo;//是否添加了视频
 
@@ -144,13 +143,16 @@
         [_kHUDManager showMsgInView:nil withTitle:@"视频名称不能为空" isSuccess:YES];
         return;
     }
+    if (![WWPublicMethod isStringEmptyText:self.msg_content]) {
+        [_kHUDManager showMsgInView:nil withTitle:@"视频描述不能为空" isSuccess:YES];
+        return;
+    }
     if (!_isAddVideo) {
         [_kHUDManager showMsgInView:nil withTitle:@"请添加一个您要上传的视频！" isSuccess:YES];
         return;
     }
     
-    NSString *string = [NSString stringWithFormat:@"%@.mp4",self.fileName];
-    [self getUploadVideoAddress:self.fileData withFileName:string];
+    [self getUploadVideoAddress:self.fileData withFileName:self.fileName];
 //    [self sendImageWithImage:string];
 }
 #pragma mark - UITextFieldDelegate
@@ -380,7 +382,12 @@
     [_kHUDManager showActivityInView:nil withTitle:@"正在上传..."];
     __unsafe_unretained typeof(self) weak_self = self;
     
-    NSString *url = [NSString stringWithFormat:@"http://192.168.6.120:11026/camera/vod/upload?name=%@",fileName];
+    NSString *string = [NSString stringWithFormat:@"%@.mp4",self.fileName];
+    
+//
+    NSString *url = [NSString stringWithFormat:@"http://39.108.215.35:11026/camera/vod/upload?name=%@&title=%@&description=%@",string,fileName,self.msg_content];
+
+//    NSString *url = [NSString stringWithFormat:@"http://192.168.6.120:11026/camera/vod/upload?name=%@&title=%@&description=%@",string,fileName,self.msg_content];
     NSString *newUrlString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];//链接含有中文转码
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];

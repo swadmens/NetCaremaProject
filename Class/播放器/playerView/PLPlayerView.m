@@ -1377,6 +1377,7 @@ EZPlayerDelegate
         
         if (state == PLPlayerStatusError) {
             if (_playType == PlayerStatusGBS && [_plModel.recordType isEqualToString:@"local"]) {
+                self.isNeedSetupPlayer = YES;
                 [self pause];
             }else{
                 [self stop];

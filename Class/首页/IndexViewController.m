@@ -337,7 +337,6 @@
 -(void)getDeviceInfo:(NSString*)device_id withIndex:(NSInteger)index
 {
     NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
-//    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",device_id];
 
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -383,8 +382,6 @@
 //获取直播数据
 -(void)getDeviceLivingData:(MyEquipmentsModel*)meModel withIndex:(NSInteger)index withEquimentIndex:(NSInteger)equiIndex
 {
-
-//    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/live/infos?systemSource=GBS&deviceSerial=%@&channel=1",meModel.deviceSerial];
     NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/live/infos?systemSource=%@&id=%@",meModel.system_Source,meModel.equipment_id];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -412,7 +409,7 @@
     [[GCDQueue globalQueue] queueBlock:^{
 
         NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:obj];
-        [dic setObject:meModel.createdAt forKey:@"createdAt"];
+        [dic setObject:meModel.creationTime forKey:@"createdAt"];
         [dic setObject:meModel.equipment_name forKey:@"name"];
         [dic setObject:meModel.equipment_id forKey:@"deviceId"];
         [dic setObject:meModel.system_Source forKey:@"system_Source"];

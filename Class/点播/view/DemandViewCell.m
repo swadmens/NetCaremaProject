@@ -48,7 +48,7 @@
     
     
     _describeLabel = [UILabel new];
-    _describeLabel.text = @"视频描述视频描述视频描述视频描述视频描述视频描述视频描述视频描述视频描述视频描述";
+    _describeLabel.text = @"视频描述";
     _describeLabel.textColor = kColorSecondTextColor;
     _describeLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
     _describeLabel.numberOfLines = 2;
@@ -82,6 +82,7 @@
     _titleLabel.text = self.model.name;
     NSArray *time1 = [self.model.creationTime componentsSeparatedByString:@"."];
     _createTimeLabel.text = [time1[0] stringByReplacingOccurrencesOfString:@"T" withString:@" "];
+    _describeLabel.text = self.model.describe;
 }
 //根据视频地址获取视频封面
 -(UIImage *)getImage:(NSString *)videoURL

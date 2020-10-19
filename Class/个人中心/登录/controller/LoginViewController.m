@@ -11,10 +11,6 @@
 #import "RequestSence.h"
 
 
-//设置租户
-#define KAPPTenant @"lpc"
-
-
 @interface LoginViewController ()<UITextFieldDelegate>
 
 @property (nonatomic,strong) UITextField *nameTextField;
@@ -51,7 +47,8 @@
     
     _nameTextField = [UITextField new];
     _nameTextField.placeholder = @"请输入账号";
-    _nameTextField.text = @"admin";
+    _nameTextField.text = @"lishaoyu/admin";
+//    _nameTextField.text = @"lpc/admin";
     _nameTextField.textColor = kColorMainTextColor;
     _nameTextField.font = [UIFont customFontWithSize:kFontSizeFifty];
     _nameTextField.delegate = self;
@@ -81,7 +78,8 @@
     
     _passwordTextField = [UITextField new];
     _passwordTextField.placeholder = @"请输入密码";
-    _passwordTextField.text = @"admin123";
+    _passwordTextField.text = @"admin@1234";
+//    _passwordTextField.text = @"admin123";
     _passwordTextField.textColor = kColorMainTextColor;
     _passwordTextField.font = [UIFont customFontWithSize:kFontSizeFifty];
     _passwordTextField.delegate = self;
@@ -167,10 +165,14 @@
     }
     
     //配置租户(lpc)、用户名、密码，保存授权
-    NSString *str1 = [NSString stringWithFormat:@"%@/%@:%@",KAPPTenant,_nameTextField.text,_passwordTextField.text];
+    NSString *str1 = [NSString stringWithFormat:@"%@:%@",_nameTextField.text,_passwordTextField.text];
     //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
     NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
     _kUserModel.userInfo.Authorization = str2;
+    
+    DLog(@"_kUserModel.userInfo.Authorization ==  %@",_kUserModel.userInfo.Authorization);
+    
+    [_kUserModel.userInfo save];
 
     
     [_kHUDManager showActivityInView:nil withTitle:@"登录中..."];
