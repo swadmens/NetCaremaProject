@@ -121,7 +121,7 @@
 {
     MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
     ChannelDetailController *cvc = [ChannelDetailController new];
-    cvc.lvModel = model.model;
+    cvc.eqModel = model;
     [self.navigationController pushViewController:cvc animated:YES];
 }
 #pragma mark 选择编辑模式，添加模式很少用,默认是删除

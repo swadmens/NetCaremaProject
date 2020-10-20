@@ -226,6 +226,16 @@
 {
     IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
     
+//    [model.childDevices_info enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        MyEquipmentsModel *meModel = obj;
+//        if ([meModel.system_Source isEqualToString:@"GBS"] && meModel.online && !meModel.model.online) {
+//        }else{
+//
+//        }
+//    }];
+    
+    
+    
     SuperPlayerViewController *vc = [SuperPlayerViewController new];
     vc.hidesBottomBarWhenPushed = YES;
     vc.allDataArray = [NSArray arrayWithArray:model.childDevices_info];
@@ -431,7 +441,6 @@
     }];
 }
 
-
 #pragma IndexTopDelegate
 -(void)collectionSelect:(NSInteger)index
 {
@@ -480,11 +489,8 @@
     vc.delegate = self;
     vc.hidesBottomBarWhenPushed = YES;
     vc.isFromIndex = YES;
-    vc.device_id = self.selectModel.equipment_id;
-    vc.code = self.selectModel.model.deviceSerial;
-    vc.system_Source = self.selectModel.system_Source;
-    vc.channel = self.selectModel.channel;
-    vc.deviceSerial = self.selectModel.deviceSerial;
+    vc.model = self.selectModel;
+    vc.recordType = self.selectModel.cloudRecordStatus?@"cloud":@"local";
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }
@@ -493,23 +499,9 @@
     if (self.selectModel == nil) {
         return;
     }
-//    NSDictionary *dic = @{
-//                          @"id":self.selectModel.equipment_id,
-//                          @"name":self.selectModel.equipment_name,
-//                          @"ChannelName":self.selectModel.equipment_name,
-//                          @"SnapURL":self.selectModel.snapURL,
-//                          @"serial":self.selectModel.childDevice_id,
-//                          @"code":self.selectModel.deviceSerial,
-//                          @"owner":self.selectModel.owner,
-//                          @"lastUpdated":self.selectModel.lastUpdated,
-//                          @"responseInterval":self.selectModel.responseInterval,
-//                         };
-//    NSString *pushId = [WWPublicMethod jsonTransFromObject:dic];
-//
-//    [TargetEngine controller:nil pushToController:PushTargetChannelDetail WithTargetId:pushId];
     ChannelDetailController *cvc = [ChannelDetailController new];
     cvc.hidesBottomBarWhenPushed = YES;
-    cvc.lvModel = self.selectModel.model;
+    cvc.eqModel = self.selectModel;
     [self.navigationController pushViewController:cvc animated:YES];
     cvc.hidesBottomBarWhenPushed = YES;
 

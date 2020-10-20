@@ -360,10 +360,8 @@
         return;
     }
     
-    DLog(@"self.allDataArray == %@",self.allDataArray);
-    
     self.allDataArray = [NSArray arrayWithArray:array];
-
+    
     [self.dataArray removeAllObjects];
     if (array.count > 3) {
         NSArray *arr = [array subarrayWithRange:NSMakeRange(0, 4)];
@@ -537,19 +535,21 @@
     if (self.videoing) {
         [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
         return NO;
+    }else{
+        return YES;
     }
     
-    id obj = [self.dataArray objectAtIndex:self.selectIndexPath.row];
-    if ([obj isKindOfClass:[LivingModel class]]) {
-        LivingModel *model = obj;
-        if (![WWPublicMethod isStringEmptyText:model.hls] && ![WWPublicMethod isStringEmptyText:model.flv] && ![WWPublicMethod isStringEmptyText:model.rtmp]) {
-            return NO;
-        }else{
-            return YES;
-        }
-    }else{
-       return YES;
-    }
+//    id obj = [self.dataArray objectAtIndex:self.selectIndexPath.row];
+//    if ([obj isKindOfClass:[LivingModel class]]) {
+//        LivingModel *model = obj;
+//        if (![WWPublicMethod isStringEmptyText:model.hls] && ![WWPublicMethod isStringEmptyText:model.flv] && ![WWPublicMethod isStringEmptyText:model.rtmp]) {
+//            return NO;
+//        }else{
+//            return YES;
+//        }
+//    }else{
+//       return YES;
+//    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

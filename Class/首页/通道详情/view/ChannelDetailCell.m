@@ -15,8 +15,7 @@
 @property (nonatomic,strong) UISwitch *switchView;
 
 @property (nonatomic,assign) NSInteger indexRow;
-//@property (nonatomic,strong) SingleEquipmentModel *myModel;
-
+@property (nonatomic,strong) UIImageView *rightImageView;
 
 @end
 @implementation ChannelDetailCell
@@ -36,15 +35,7 @@
     [_titleLabel topToView:self.contentView withSpace:15];
     [_titleLabel bottomToView:self.contentView withSpace:15];
     
-    _detailLabel = [UILabel new];
-    _detailLabel.text = @"无";
-    _detailLabel.textColor = kColorThirdTextColor;
-    _detailLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
-    [self.contentView addSubview:_detailLabel];
-    [_detailLabel yCenterToView:self.contentView];
-    [_detailLabel rightToView:self.contentView withSpace:15];
-    
-    
+
     _switchView = [UISwitch new];
     _switchView.on = YES;
 //    _switchView.tintColor = [UIColor redColor];
@@ -56,7 +47,19 @@
     [_switchView yCenterToView:self.contentView];
     [_switchView rightToView:self.contentView withSpace:15];
     
+    _rightImageView = [UIImageView new];
+    _rightImageView.image = UIImageWithFileName(@"mine_right_arrows");
+    [self.contentView addSubview:_rightImageView];
+    [_rightImageView yCenterToView:self.contentView];
+    [_rightImageView rightToView:self.contentView withSpace:15];
     
+    _detailLabel = [UILabel new];
+    _detailLabel.text = @"无";
+    _detailLabel.textColor = kColorThirdTextColor;
+    _detailLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+    [self.contentView addSubview:_detailLabel];
+    [_detailLabel yCenterToView:self.contentView];
+    [_detailLabel rightToView:self.contentView withSpace:15];
     
 }
 -(void)valueChanged:(UISwitch*)mySwitch
@@ -72,6 +75,7 @@
     _switchView.on = [[dic objectForKey:@"value"] boolValue];
     _switchView.hidden = ![[dic objectForKey:@"showSwitch"] boolValue];
     _detailLabel.hidden = [[dic objectForKey:@"showSwitch"] boolValue];
+    _rightImageView.hidden = ![[dic objectForKey:@"right"] boolValue];
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

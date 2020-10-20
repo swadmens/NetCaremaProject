@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4A04620D24F5F9ED00DDD408 /* WWMQTTManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A04620C24F5F9ED00DDD408 /* WWMQTTManager.m */; };
+		4A0465CE253E7CEA004B8575 /* ChannelMoreSystemController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0465CD253E7CEA004B8575 /* ChannelMoreSystemController.m */; };
 		4A0CA8C72488896E00DC97BC /* player_voice_select_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0CA8BF2488896C00DC97BC /* player_voice_select_image@3x.png */; };
 		4A0CA8C82488896E00DC97BC /* group_remove_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0CA8C02488896C00DC97BC /* group_remove_image@2x.png */; };
 		4A0CA8C92488896E00DC97BC /* player_play_select_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0CA8C12488896C00DC97BC /* player_play_select_image@3x.png */; };
@@ -435,7 +436,6 @@
 		4A6869BF245ACEB10036355E /* share_add_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A6869BD245ACEB00036355E /* share_add_image@2x.png */; };
 		4A6869C0245ACEB10036355E /* share_add_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A6869BE245ACEB00036355E /* share_add_image@3x.png */; };
 		4A68BC472537D70F0024A9BF /* PlayVideoDemadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A68BC462537D70F0024A9BF /* PlayVideoDemadCell.m */; };
-		4A68BC5A25383F570024A9BF /* SingleEquipmentModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A68BC5925383F570024A9BF /* SingleEquipmentModel.m */; };
 		4A68BC602538492F0024A9BF /* ChannelDetailFirstCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A68BC5F2538492F0024A9BF /* ChannelDetailFirstCell.m */; };
 		4A68BC67253849410024A9BF /* ChannelDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A68BC66253849410024A9BF /* ChannelDetailCell.m */; };
 		4A68BC6C25385BE60024A9BF /* ChannelDetailImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A68BC6B25385BE60024A9BF /* ChannelDetailImageCell.m */; };
@@ -758,6 +758,8 @@
 /* Begin PBXFileReference section */
 		4A04620B24F5F9ED00DDD408 /* WWMQTTManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WWMQTTManager.h; sourceTree = "<group>"; };
 		4A04620C24F5F9ED00DDD408 /* WWMQTTManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WWMQTTManager.m; sourceTree = "<group>"; };
+		4A0465CC253E7CEA004B8575 /* ChannelMoreSystemController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChannelMoreSystemController.h; sourceTree = "<group>"; };
+		4A0465CD253E7CEA004B8575 /* ChannelMoreSystemController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChannelMoreSystemController.m; sourceTree = "<group>"; };
 		4A0CA8BF2488896C00DC97BC /* player_voice_select_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_voice_select_image@3x.png"; sourceTree = "<group>"; };
 		4A0CA8C02488896C00DC97BC /* group_remove_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "group_remove_image@2x.png"; sourceTree = "<group>"; };
 		4A0CA8C12488896C00DC97BC /* player_play_select_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_play_select_image@3x.png"; sourceTree = "<group>"; };
@@ -1500,8 +1502,6 @@
 		4A6869BE245ACEB00036355E /* share_add_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "share_add_image@3x.png"; sourceTree = "<group>"; };
 		4A68BC452537D70F0024A9BF /* PlayVideoDemadCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayVideoDemadCell.h; sourceTree = "<group>"; };
 		4A68BC462537D70F0024A9BF /* PlayVideoDemadCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayVideoDemadCell.m; sourceTree = "<group>"; };
-		4A68BC5825383F570024A9BF /* SingleEquipmentModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SingleEquipmentModel.h; sourceTree = "<group>"; };
-		4A68BC5925383F570024A9BF /* SingleEquipmentModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SingleEquipmentModel.m; sourceTree = "<group>"; };
 		4A68BC5E2538492F0024A9BF /* ChannelDetailFirstCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChannelDetailFirstCell.h; sourceTree = "<group>"; };
 		4A68BC5F2538492F0024A9BF /* ChannelDetailFirstCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChannelDetailFirstCell.m; sourceTree = "<group>"; };
 		4A68BC65253849410024A9BF /* ChannelDetailCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChannelDetailCell.h; sourceTree = "<group>"; };
@@ -2317,8 +2317,6 @@
 				4A4608682408E6A8007C209A /* IndexDataModel.m */,
 				4A4608772408F438007C209A /* MyEquipmentsModel.h */,
 				4A4608782408F438007C209A /* MyEquipmentsModel.m */,
-				4A68BC5825383F570024A9BF /* SingleEquipmentModel.h */,
-				4A68BC5925383F570024A9BF /* SingleEquipmentModel.m */,
 				4A68BC712538616B0024A9BF /* EquipmentAbilityModel.h */,
 				4A68BC722538616B0024A9BF /* EquipmentAbilityModel.m */,
 			);
@@ -3821,6 +3819,8 @@
 				4A68BC5D253849190024A9BF /* view */,
 				4A6869B3245AB9B90036355E /* ChannelDetailController.h */,
 				4A6869B4245AB9B90036355E /* ChannelDetailController.m */,
+				4A0465CC253E7CEA004B8575 /* ChannelMoreSystemController.h */,
+				4A0465CD253E7CEA004B8575 /* ChannelMoreSystemController.m */,
 			);
 			path = "通道详情";
 			sourceTree = "<group>";
@@ -5135,7 +5135,6 @@
 				4A580FF124075F2D00E82675 /* NSString+MKNetworkKitAdditions.m in Sources */,
 				4AD26FCC24625B5A00D462B4 /* AddNewFriendsController.m in Sources */,
 				4A64ECDF242D862C00D30FB1 /* VideoRecordProcessView.m in Sources */,
-				4A68BC5A25383F570024A9BF /* SingleEquipmentModel.m in Sources */,
 				4A580FF024075F2D00E82675 /* NSData+MKBase64.m in Sources */,
 				4A580F7224075F2D00E82675 /* DTTimePeriod.m in Sources */,
 				4A580FC224075F2D00E82675 /* BindPhoneSence.m in Sources */,
@@ -5344,6 +5343,7 @@
 				4A58102024075F2D00E82675 /* IFTTTRotationAnimation.m in Sources */,
 				4A58101A24075F2D00E82675 /* UICollectionViewController+ADFlipTransition.m in Sources */,
 				4A8D98EA25217C2800295CAC /* CGXPickerViewManager.m in Sources */,
+				4A0465CE253E7CEA004B8575 /* ChannelMoreSystemController.m in Sources */,
 				4A7007DB241766660024DFB8 /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m in Sources */,
 				4A58104124075F2E00E82675 /* NSObject+Json.m in Sources */,
 				4A7007E0241766660024DFB8 /* WXApiManager.m in Sources */,

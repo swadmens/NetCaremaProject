@@ -10,9 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MyEquipmentsModel;
 @interface ConnectionMonitoringCell : WWTableViewCell
 
--(void)makeCellData:(NSDictionary*)dic;
+-(void)makeCellData:(MyEquipmentsModel*)model;
 
 @end
 

@@ -193,13 +193,14 @@
 //视频播放
 -(void)startPlayVideo:(NSString*)fil_path
 {
-    NSDictionary *dic = @{@"name":self.cacheModel.name,
-                          @"picUrl":self.cacheModel.snap,
-                          @"startTime":self.cacheModel.start_time,
-                          @"duration":self.cacheModel.duration,
-                          @"url":fil_path,
-                          };
-    PLPlayModel *models = [PLPlayModel makeModelData:dic];
+    
+    PLPlayModel *models = [PLPlayModel new];
+    
+    models.video_name = self.cacheModel.name;
+    models.picUrl = self.cacheModel.snap;
+    models.startTime = self.cacheModel.start_time;
+    models.duration = self.cacheModel.duration;
+    models.videoUrl = fil_path;
 
     self.playerView = [PLPlayerView new];
     self.playerView.delegate = self;

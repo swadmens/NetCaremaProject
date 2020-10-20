@@ -84,50 +84,46 @@
     
     if ([model.url hasPrefix:@"ezopen://"]) {
         self.playerView.playType = PlayerStatusHk;
-        NSDictionary *dic = @{@"name":model.video_name,
-                              @"duration":model.duration,
-                              @"url":model.url,
-                              @"startTime":model.startTime,
-                              @"endTime":model.endTime,
-                              @"deviceId":model.deviceId,
-                              @"token":model.token,
-                              @"appKey":model.appKey,
-                              @"recordType":model.recordType
-        };
-        PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
+        PLPlayModel *pModel = [PLPlayModel new];
+        pModel.video_name = model.video_name;
+        pModel.duration = model.duration;
+        pModel.videoUrl = model.url;
+        pModel.startTime = model.startTime;
+        pModel.endTime = model.endTime;
+        pModel.deviceId = model.deviceId;
+        pModel.token = model.token;
+        pModel.appKey = model.appKey;
+        pModel.recordType = model.recordType;
         self.playerView.plModel = pModel;
     }else if ([model.url hasPrefix:@"imou://"]){
         self.playerView.playType = PlayerStatusDH;
-        NSDictionary *dic = @{@"name":model.video_name,
-                              @"duration":model.duration,
-                              @"url":model.url,
-                              @"startTime":model.startTime,
-                              @"endTime":model.endTime,
-                              @"deviceId":model.deviceId,
-                              @"accessToken":model.accessToken,
-                              @"recordId":model.recordId,
-                              @"channel":model.channel,
-                              @"deviceSerial":model.deviceSerial,
-                              @"recordRegionId":model.recordRegionId,
-                              @"playToken":model.playToken,
-                              @"token":model.token,
-                              @"appKey":model.appKey,
-                              @"recordType":model.recordType
-        };
-        PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
+        PLPlayModel *pModel = [PLPlayModel new];
+        pModel.video_name = model.video_name;
+        pModel.duration = model.duration;
+        pModel.videoUrl = model.url;
+        pModel.startTime = model.startTime;
+        pModel.endTime = model.endTime;
+        pModel.deviceId = model.deviceId;
+        pModel.accessToken = model.accessToken;
+        pModel.channel = model.channel;
+        pModel.deviceSerial = model.deviceSerial;
+        pModel.recordRegionId = model.recordRegionId;
+        pModel.playToken = model.playToken;
+        pModel.token = model.token;
+        pModel.appKey = model.appKey;
+        pModel.recordType = model.recordType;
         self.playerView.plModel = pModel;
     }else{
         self.playerView.playType = PlayerStatusGBS;
-        NSDictionary *dic = @{@"name":model.video_name,
-                              @"duration":model.duration,
-                              @"url":model.url,
-                              @"startTime":model.startTime,
-                              @"endTime":model.endTime,
-                              @"deviceId":model.deviceId,
-                              @"recordType":model.recordType,
-                              @"StreamID":[model.recordType isEqualToString:@"local"]?model.StreamID:@" "
-        };
-        PLPlayModel *pModel = [PLPlayModel makeModelData:dic];
+        PLPlayModel *pModel = [PLPlayModel new];
+        pModel.video_name = model.video_name;
+        pModel.duration = model.duration;
+        pModel.videoUrl = model.url;
+        pModel.startTime = model.startTime;
+        pModel.endTime = model.endTime;
+        pModel.deviceId = model.deviceId;
+        pModel.StreamID = [model.recordType isEqualToString:@"local"]?model.StreamID:@" ";
+        pModel.recordType = model.recordType;
         self.playerView.plModel = pModel;
     }
 //    [self configureVideo:NO];

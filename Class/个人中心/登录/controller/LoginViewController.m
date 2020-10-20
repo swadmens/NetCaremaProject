@@ -169,9 +169,6 @@
     //进行加密  [str base64EncodedString]使用开源Base64.h分类文件加密
     NSString *str2 = [NSString stringWithFormat:@"Basic %@",[WWPublicMethod encodeBase64:str1]];
     _kUserModel.userInfo.Authorization = str2;
-    
-    DLog(@"_kUserModel.userInfo.Authorization ==  %@",_kUserModel.userInfo.Authorization);
-    
     [_kUserModel.userInfo save];
 
     

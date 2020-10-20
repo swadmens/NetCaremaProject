@@ -7,6 +7,7 @@
 //
 
 #import "ConfigurationFileCell.h"
+#import "MyEquipmentsModel.h"
 
 @interface ConfigurationFileCell ()<UITextFieldDelegate,UITextViewDelegate>
 
@@ -249,18 +250,18 @@
     
     
 }
--(void)makeCellData:(NSDictionary *)dic
+-(void)makeCellData:(MyEquipmentsModel *)model
 {
     if (![WWPublicMethod isStringEmptyText:_equipment_name.text]) {
-        _equipment_name.text = [dic objectForKey:@"name"];
+        _equipment_name.text = model.equipment_name;
     }
     if (![WWPublicMethod isStringEmptyText:_annotation_view.text]) {
-        _annotation_view.text = [dic objectForKey:@"c8y_Notes"];
+        _annotation_view.text = model.c8y_Notes;
     }
-    _equipment_id.text = [NSString stringWithFormat:@"ID：%@",[dic objectForKey:@"id"]];
-    _equipment_user.text = [NSString stringWithFormat:@"拥有者：%@",[dic objectForKey:@"owner"]];
-    _timeLabel.text = [NSString stringWithFormat:@"最近更新：%@",[dic objectForKey:@"lastUpdated"]];
-    _addressLabel.text = [dic objectForKey:@"address"];
+    _equipment_id.text = [NSString stringWithFormat:@"ID：%@",model.equipment_id];
+    _equipment_user.text = [NSString stringWithFormat:@"拥有者：%@",model.owner];
+    _timeLabel.text = [NSString stringWithFormat:@"最近更新：%@",model.lastUpdated];
+    _addressLabel.text = model.address;
     
 }
 -(void)textfieldChangeValue:(UITextField *)textField

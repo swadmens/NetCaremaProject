@@ -42,7 +42,6 @@ PlayVideoDemadDelegate
 >
 
 @property (nonatomic,strong) WWTableView *tableView;
-@property (nonatomic, strong) NSMutableArray *dataArray;
 @property(nonatomic,assign) NSInteger page;
 
 @property (nonatomic,strong) PlayerTableViewCell *topCell;
@@ -58,26 +57,17 @@ PlayVideoDemadDelegate
 @property (nonatomic, strong) NSMutableArray *localVideosArray;//本地录像数据
 @property (nonatomic, strong) NSMutableArray *cloudVideosArray;//云端录像数据
 
-@property (nonatomic,strong) NSString *carmer_id;//摄像头ID
-@property (nonatomic,strong) NSString *streamid;
 
-@property (nonatomic,strong) LivingModel *selectModel;
+@property (nonatomic,strong) MyEquipmentsModel *selectModel;
 @property (nonatomic,assign) BOOL videoing;//是否正在录像
 @property (nonatomic,strong) UIView *videoTipView;//录像提示view
-@property (nonatomic,strong) UILabel *videoTipLabel;//录像提示view
+@property (nonatomic,strong) UILabel *videoTipLabel;//录像提示label
 
 @property (nonatomic,strong) EquipmentAbilityModel *abModel;//设备能力集
 
 @end
 
 @implementation SuperPlayerViewController
--(NSMutableArray*)dataArray
-{
-    if (!_dataArray) {
-        _dataArray = [NSMutableArray array];
-    }
-    return _dataArray;
-}
 -(NSMutableArray*)localVideosArray
 {
     if (!_localVideosArray) {
@@ -149,16 +139,15 @@ PlayVideoDemadDelegate
     
     
     if (_isLiving) {
-        MyEquipmentsModel *MyModel = self.allDataArray.firstObject;
-        self.selectModel = MyModel.model;
-        self.carmer_id = self.selectModel.deviceId;
-        self.streamid = self.selectModel.deviceSerial;
-        [self startLoadDataRequest:self.selectModel.deviceId withRecordType:@"local"];//本地录像
-        [self startLoadDataRequest:self.selectModel.deviceId withRecordType:@"cloud"];//云端录像
+            
+        self.selectModel = self.allDataArray.firstObject;
+        [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"local"];//本地录像
+        [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"cloud"];//云端录像
         [self tipViewHidden:YES withTitle:@"开始录像"];
-        if (MyModel.model != nil) {
+        if (self.selectModel.model != nil) {
             [self getEquimentAbility];//获取设备能力集
         }
+        
     }
    
     //右上角按钮组
@@ -274,10 +263,7 @@ PlayVideoDemadDelegate
             LocalVideoViewController *vc = [LocalVideoViewController new];
             vc.delegate = self;
             vc.isFromIndex = NO;
-            vc.device_id = self.carmer_id;
-            vc.system_Source = self.selectModel.system_Source;
-            vc.channel = self.selectModel.channel;
-            vc.deviceSerial = self.selectModel.deviceSerial;
+            vc.model = self.selectModel;
             vc.recordType = indexPath.row == 2?@"local":@"cloud";
             [weakSelf.navigationController pushViewController:vc animated:YES];
            
@@ -297,7 +283,8 @@ PlayVideoDemadDelegate
 #pragma mark - PlayerControlDelegate
 -(void)playerControlwithState:(videoSate)state withButton:(UIButton *)sender
 {
-    if (![WWPublicMethod isStringEmptyText:self.streamid] && _isLiving == YES) {
+    //直播状态下，设备不在线的时候禁用控制
+    if (!self.selectModel.online && _isLiving == YES) {
         return;
     }
 //    if (self.videoing) {
@@ -403,7 +390,7 @@ PlayVideoDemadDelegate
 -(void)getCarmarPresetInfo
 {
 //    [_kHUDManager showActivityInView:nil withTitle:nil];
-    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",self.selectModel.deviceId];
+    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",self.selectModel.equipment_id];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
@@ -422,7 +409,7 @@ PlayVideoDemadDelegate
         
         [[GCDQueue mainQueue] queueBlock:^{
             [weak_self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-            [weak_self.clView makeAllData:tempArr withSystemSource:weak_self.selectModel.system_Source withDevice_id:weak_self.selectModel.deviceId withIndex:0 withAbility:weak_self.abModel];
+            [weak_self.clView makeAllData:tempArr withSystemSource:weak_self.selectModel.system_Source withDevice_id:weak_self.selectModel.equipment_id withIndex:0 withAbility:weak_self.abModel];
         }];
     };
     sence.errorBlock = ^(NSError *error) {
@@ -522,7 +509,7 @@ PlayVideoDemadDelegate
 -(void)cameraControl:(NSString*)controls
 {
     //提交数据
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/operation/ptz?systemSource=%@&id=%@&command=%@",self.selectModel.system_Source,self.carmer_id,controls];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/operation/ptz?systemSource=%@&id=%@&command=%@",self.selectModel.system_Source,self.selectModel.equipment_id,controls];
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -604,7 +591,7 @@ PlayVideoDemadDelegate
 //开始或停止录像
 -(void)startOrStopVideo:(NSString*)states
 {
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/%@?systemSource=%@&id=%@",states,self.selectModel.system_Source,self.selectModel.deviceId];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/%@?systemSource=%@&id=%@",states,self.selectModel.system_Source,self.selectModel.equipment_id];
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -699,19 +686,15 @@ PlayVideoDemadDelegate
 
 - (void)selectCellCarmera:(PlayerTableViewCell *)cell withData:(MyEquipmentsModel *)model withIndex:(NSInteger)index
 {
-    if ([self.streamid isEqualToString:model.deviceSerial]) {
+    if ([self.selectModel.deviceSerial isEqualToString:model.deviceSerial]) {
         return;
     }
     
+    self.selectModel = model;
     self.selectModel = model.model;
     
-    self.carmer_id = self.selectModel.deviceId;
-    self.streamid = self.selectModel.deviceSerial;
-    [self startLoadDataRequest:self.selectModel.deviceId withRecordType:@"local"];
+    [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"local"];
     [self getEquimentAbility];
-//    if (self.selectModel != nil) {
-//        [self.clView makeAllData:self.selectModel.presets withSystemSource:self.selectModel.system_Source withDevice_id:self.selectModel.deviceId withIndex:index  withAbility:self.abModel];
-//    }
     
 }
 //右上角按钮
@@ -759,7 +742,7 @@ PlayVideoDemadDelegate
     
     ChannelDetailController *cvc = [ChannelDetailController new];
     cvc.hidesBottomBarWhenPushed = YES;
-    cvc.lvModel = self.selectModel;
+    cvc.eqModel = self.selectModel;
     [self.navigationController pushViewController:cvc animated:YES];
     cvc.hidesBottomBarWhenPushed = YES;
 }
@@ -925,7 +908,7 @@ PlayVideoDemadDelegate
         [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-            [mutDic setObject:self.selectModel.deviceId forKey:@"deviceId"];
+            [mutDic setObject:self.selectModel.equipment_id forKey:@"deviceId"];
             [mutDic setObject:self.selectModel.channel forKey:@"channel"];
             [mutDic setObject:self.selectModel.deviceSerial forKey:@"deviceSerial"];
             [mutDic setObject:type forKey:@"recordType"];
@@ -983,7 +966,7 @@ PlayVideoDemadDelegate
     CarmeaVideosModel *model = [self.localVideosArray objectAtIndex:indexInteger];
     model.picUrl = [NSString stringWithFormat:@"%@",[obj objectForKey:@"url"]];
     [weak_self.localVideosArray replaceObjectAtIndex:indexInteger withObject:model];
-//    weak_self.allDataArray = [NSMutableArray arrayWithArray:weak_self.dataArray];
+//    weak_self.dataArray = [NSMutableArray arrayWithArray:weak_self.dataArray];
     [[GCDQueue mainQueue] queueBlock:^{
 
 //        [weak_self.tableView reloadData];
@@ -1006,7 +989,7 @@ PlayVideoDemadDelegate
 //获取设备能力集
 -(void)getEquimentAbility
 {
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/device/getability/%@/%@",self.selectModel.system_Source,self.selectModel.deviceId];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/device/getability/%@/%@",self.selectModel.system_Source,self.selectModel.equipment_id];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
@@ -1019,8 +1002,6 @@ PlayVideoDemadDelegate
 
         [[GCDQueue mainQueue] queueBlock:^{
             
-//            [weak_self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-
             //控制台信息
             [weak_self getCarmarPresetInfo];
         }];

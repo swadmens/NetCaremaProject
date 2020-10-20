@@ -11,6 +11,7 @@
 #import "PLPlayModel.h"
 #import "LivingModel.h"
 #import "MyEquipmentsModel.h"
+#import "RequestSence.h"
 
 @interface PlayerTopCollectionViewCell ()<PLPlayerViewDelegate>
 
@@ -56,7 +57,7 @@
     }];
     [self configureVideo:NO];
     self.playerView.userInteractionEnabled = NO;
-
+    
     
     _titleImageView = [UIImageView new];
     _titleImageView.image = UIImageWithFileName(@"player_hoder_image");
@@ -189,8 +190,7 @@
     MyEquipmentsModel *myModel = obj;
     self.lvModel = myModel.model;
     
-//    if (![WWPublicMethod isStringEmptyText:self.lvModel.hls]) {
-    if (!self.lvModel.online) {
+    if (!myModel.online) {
         _coverView.hidden = NO;
         _titleImageView.hidden = NO;
         _timeLabel.text = self.lvModel.createdAt;
@@ -198,26 +198,15 @@
         
         _coverView.hidden = YES;
         _titleImageView.hidden = YES;
+//        [self dealwithLiveData:myModel withLive:self.lvModel];
         
-        NSString *url;
-        NSString *urlHd;
-        if ([self.lvModel.system_Source isEqualToString:@"Hik"]) {
-            url = self.lvModel.rtmp;
-            urlHd = self.lvModel.rtmpHd;
-        }else{
-            url = self.lvModel.hls;
-            urlHd = self.lvModel.hlsHd;
+        if ([myModel.system_Source isEqualToString:@"GBS"] && !self.lvModel.online) {
+            [self gbsGetNewLiveData:myModel withLive:self.lvModel];
         }
-        NSDictionary *dic = @{
-                               @"name":myModel.equipment_name,
-                               @"picUrl":myModel.snapURL,
-                               @"url":url,
-                               @"urlHd":urlHd,
-                               @"deviceId":self.lvModel.deviceId,
-                              };
-        PLPlayModel *models = [PLPlayModel makeModelData:dic];
-        self.playerView.plModel = models;
-        [self.playerView play];
+        else{
+            [self dealwithLiveData:myModel withLive:self.lvModel];
+        }
+        
     }
 }
 
@@ -240,6 +229,67 @@
 -(void)clickSnapshotButton
 {
     [self.playerView clickSnapshotButton];
+}
+
+//gbs 设备在线，直播关闭的时候，开始直播获取新数据
+-(void)gbsGetNewLiveData:(MyEquipmentsModel*)myModel withLive:(LivingModel*)lvModel
+{
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/live/start?systemSource=GBS&id=%@",myModel.equipment_id];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"newLivingData: %@", obj);
+        NSDictionary *dic = [NSDictionary dictionaryWithDictionary:obj];
+        LivingModel *newModel = [LivingModel makeModelData:dic];
+
+        [[GCDQueue mainQueue] queueBlock:^{
+            [weak_self dealwithLiveData:myModel withLive:newModel];
+        }];
+    };
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+        [weak_self dealwithLiveData:myModel withLive:lvModel];
+        
+    };
+    [sence sendRequest];
+}
+
+//处理直播数据
+-(void)dealwithLiveData:(MyEquipmentsModel*)myModel withLive:(LivingModel*)lvModel
+{
+    NSString *url;
+    NSString *urlHd;
+    if ([lvModel.system_Source isEqualToString:@"Hik"]) {
+        url = lvModel.rtmp;
+        urlHd = lvModel.rtmpHd;
+    }else{
+        url = lvModel.hls;
+        urlHd = lvModel.hlsHd;
+    }
+    PLPlayModel *models = [PLPlayModel new];
+    models.video_name = myModel.equipment_name;
+    models.picUrl = myModel.model.snap;
+    models.videoUrl = url;
+    models.videoHDUrl = urlHd;
+    models.deviceId = myModel.equipment_id;
+    models.online = myModel.model.online;
+    models.system_Source = myModel.system_Source;
+    models.online = YES;
+    
+    self.playerView.plModel = models;
+    
+    //延迟处理一下
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        __weak __typeof(&*self)weakSelf = self;
+        [weakSelf.playerView play];
+    });
 }
 
 @end

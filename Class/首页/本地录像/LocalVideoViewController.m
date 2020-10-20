@@ -18,8 +18,8 @@
 #import "CGXPickerView.h"
 #import "RequestSence.h"
 #import "WXZPickDateView.h"
-
 #import "AFHTTPSessionManager.h"
+#import "MyEquipmentsModel.h"
 
 
 @interface LocalVideoViewController ()<UITableViewDelegate,UITableViewDataSource,PickerDateViewDelegate>
@@ -179,7 +179,6 @@
     }
     [UIView animateWithDuration:0.3 animations:^{
         self.editView.transform = CGAffineTransformMakeTranslation(0, -48);
-//        self.tableView.transform = CGAffineTransformMakeTranslation(0, -48);
     }];
     
     [self.tableView lgx_remakeConstraints:^(LGXLayoutMaker *make) {
@@ -201,7 +200,6 @@
     }
     [UIView animateWithDuration:0.3 animations:^{
         self.editView.transform = CGAffineTransformIdentity;
-//        self.tableView.transform = CGAffineTransformIdentity;
     }];
     
    [self.tableView lgx_remakeConstraints:^(LGXLayoutMaker *make) {
@@ -274,7 +272,7 @@
 - (void)startLoadDataRequest
 {
     
-    if (![WWPublicMethod isStringEmptyText:self.device_id]) {
+    if (![WWPublicMethod isStringEmptyText:self.model.equipment_id]) {
         _isHadFirst = YES;
         [self changeNoDataViewHiddenStatus];
         return;
@@ -282,8 +280,7 @@
     [_kHUDManager showActivityInView:nil withTitle:nil];
     __unsafe_unretained typeof(self) weak_self = self;
 
-//    NSString *recordType = [self.system_Source isEqualToString:@"Hik"]?@"local":@"cloud";
-    NSString *recordUrl = [NSString stringWithFormat:@"http://management.etoneiot.com/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.system_Source,self.device_id,self.date_value,self.recordType];
+    NSString *recordUrl = [NSString stringWithFormat:@"http://management.etoneiot.com/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.model.system_Source,self.model.equipment_id,self.date_value,self.recordType];
 
 //    NSString *recordUrl = [NSString stringWithFormat:@"http://ncore.iot/service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@&type=%@",self.system_Source,self.device_id,self.date_value,self.recordType];
  
@@ -316,7 +313,7 @@
     [task resume];
     return;
 
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.system_Source,@"524508",_date_value];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/list?systemSource=%@&id=%@&date=%@",self.model.system_Source,@"524508",_date_value];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
@@ -358,11 +355,11 @@
         [list enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             NSMutableDictionary *mutDic = [NSMutableDictionary dictionaryWithDictionary:dic];
-            [mutDic setObject:self.device_id forKey:@"deviceId"];
-            [mutDic setObject:self.channel forKey:@"channel"];
-            [mutDic setObject:self.deviceSerial forKey:@"deviceSerial"];
+            [mutDic setObject:self.model.equipment_id forKey:@"deviceId"];
+            [mutDic setObject:self.model.channel forKey:@"channel"];
+            [mutDic setObject:self.model.deviceSerial forKey:@"deviceSerial"];
             [mutDic setObject:self.recordType forKey:@"recordType"];
-            [mutDic setObject:self.system_Source forKey:@"system_Source"];
+            [mutDic setObject:self.model.system_Source forKey:@"system_Source"];
             CarmeaVideosModel *model = [CarmeaVideosModel makeModelData:mutDic];
             [tempArray addObject:model];
         }];
@@ -396,7 +393,7 @@
 //获取录像封面快照
 -(void)getRecordCoverPhoto:(NSString*)period withData:(NSInteger)indexInteger
 {
-    NSString *url = [NSString stringWithFormat:@"service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.device_id,period];
+    NSString *url = [NSString stringWithFormat:@"service/video/liveqing/record/getsnap?forUrl=true&id=%@&&period=%@",self.model.equipment_id,period];
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -447,7 +444,7 @@
 -(void)deleteNumbersVideo:(NSString*)startime withInteger:(NSInteger)integer
 {
     NSDictionary *finalParams = @{
-                                      @"id":self.device_id,
+                                      @"id":self.model.equipment_id,
                                       @"period": startime,
                                       };
         
@@ -495,7 +492,7 @@
     
     DownloadListController *dvc = [DownloadListController new];
     dvc.dataArray = tempArray;
-    dvc.downLoad_id = self.device_id;
+    dvc.downLoad_id = self.model.equipment_id;
     dvc.isRecord = YES;
     [self.navigationController pushViewController:dvc animated:YES];
 }

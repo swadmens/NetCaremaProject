@@ -12,6 +12,7 @@
 #import "ConnectionMonitoringCell.h"
 #import "AddCarmeraAddressController.h"
 #import "RequestSence.h"
+#import "MyEquipmentsModel.h"
 
 
 @interface EquimentBasicInfoController ()<UITableViewDelegate,UITableViewDataSource,AddCarmeraAddressDelegate>
@@ -22,20 +23,13 @@
 @property (nonatomic,strong) NSString *name;
 @property (nonatomic,strong) NSString *c8y_Notes;
 
-@property (nonatomic,strong) NSMutableDictionary *dicData;
 
 @property (nonatomic,assign)BOOL isSave;
 
 @end
 
 @implementation EquimentBasicInfoController
--(NSMutableDictionary*)dicData
-{
-    if (!_dicData) {
-        _dicData = [NSMutableDictionary new];
-    }
-    return _dicData;
-}
+
 - (void)setupTableView
 {
     self.tableView = [[WWTableView alloc] init];
@@ -56,6 +50,11 @@
     self.title = @"我的设备";
     self.view.backgroundColor = kColorBackgroundColor;
 
+    
+    self.name = self.model.equipment_name;
+    self.c8y_Notes = self.model.c8y_Notes;
+    
+    [self.tableView reloadData];
     
     [self setupTableView];
     self.isSave = NO;
@@ -78,11 +77,6 @@
     if (self.isSave) {
         return;
     }
-    NSDictionary *data = [NSDictionary dictionaryWithDictionary:[WWPublicMethod objectTransFromJson:self.equiment_id]];
-    [self.dicData addEntriesFromDictionary:data];
-    self.name = [self.dicData objectForKey:@"name"];
-    self.c8y_Notes = [self.dicData objectForKey:@"c8y_Notes"];
-    [self.tableView reloadData];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -94,7 +88,7 @@
         ConfigurationFileCell *cell = [tableView dequeueReusableCellWithIdentifier:[ConfigurationFileCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-        [cell makeCellData:self.dicData];
+        [cell makeCellData:self.model];
         
         cell.textFieldName = ^(NSString * _Nonnull text) {
             self.name = text;
@@ -109,12 +103,14 @@
             [self.navigationController pushViewController:vc animated:YES];
         };
        return cell;
+        
     }else{
         
         ConnectionMonitoringCell *cell = [tableView dequeueReusableCellWithIdentifier:[ConnectionMonitoringCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
-        [cell makeCellData:self.dicData];
+        [cell makeCellData:self.model];
+        
        return cell;
     }
     
@@ -146,7 +142,7 @@
         
     //提交数据
 //    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",[self.dicData objectForKey:@"serial"]];
-    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/setinfo?serial=%@&name=%@&media_transport=%@",[self.dicData objectForKey:@"serial"],self.name,[self.dicData objectForKey:@"media_transport"]];
+    NSString *url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/setinfo?system_Source=%@&name=%@&deviceId=%@",self.model.system_Source,self.name,self.model.equipment_id];
 
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:finalParams
                                                        options:0
@@ -178,7 +174,7 @@
 #pragma AddCarmeraAddressDelegate
 -(void)addNewAddress:(NSString *)address
 {
-    [self.dicData setObject:address forKey:@"address"];
+    self.model.address = address;
     [self.tableView reloadData];
 }
 

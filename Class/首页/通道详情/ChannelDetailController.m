@@ -10,20 +10,20 @@
 #import "WWTableView.h"
 #import "WWTableViewCell.h"
 #import "RequestSence.h"
-#import "SingleEquipmentModel.h"
 #import "LivingModel.h"
 #import "ChannelDetailFirstCell.h"
 #import "ChannelDetailCell.h"
 #import "ChannelDetailImageCell.h"
 #import "EquipmentAbilityModel.h"
-
+#import "MyEquipmentsModel.h"
+#import "EquimentBasicInfoController.h"
+#import "ChannelMoreSystemController.h"
 
 @interface ChannelDetailController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong) WWTableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
-@property (nonatomic,strong) SingleEquipmentModel *model;
 @property (nonatomic,strong) EquipmentAbilityModel *abModel;
 
 @end
@@ -38,7 +38,7 @@
 }
 - (void)setupTableView
 {
-    self.tableView = [[WWTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+    self.tableView = [[WWTableView alloc] init];
     self.tableView.backgroundColor = kColorBackgroundColor;
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -56,17 +56,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"通道详情";
+    self.title = @"设备详情";
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
  
     [self getEquimentAbility];
     [self setupTableView];
 }
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.dataArray.count;
@@ -111,84 +108,21 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == 0){
-        [TargetEngine controller:self pushToController:PushTargetEquimentBasicInfo WithTargetId:self.model.equipment_id];
+//        [TargetEngine controller:self pushToController:PushTargetEquimentBasicInfo WithTargetId:self.model.equipment_id];
+        EquimentBasicInfoController *infoVc = [EquimentBasicInfoController new];
+        infoVc.model = self.eqModel;
+        [self.navigationController pushViewController:infoVc animated:YES];
+    }else if (indexPath.row == self.dataArray.count - 1){
+        ChannelMoreSystemController *svc = [ChannelMoreSystemController new];
+        svc.eqModel = self.eqModel;
+        [self.navigationController pushViewController:svc animated:YES];
     }
 }
--(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *headerView = [UIView new];
-    headerView.backgroundColor = [UIColor whiteColor];
 
-    return headerView;
-}
--(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    UIView *footerView = [UIView new];
-    footerView.backgroundColor = kColorBackgroundColor;
-    
-    
-    UIButton *deleteBtn = [UIButton new];
-    deleteBtn.clipsToBounds = YES;
-    deleteBtn.layer.cornerRadius = 3;
-    [deleteBtn setBGColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [deleteBtn setTitle:@"删除设备" forState:UIControlStateNormal];
-    [deleteBtn setTitleColor:UIColorFromRGB(0xFD1616, 1) forState:UIControlStateNormal];
-    deleteBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
-    [deleteBtn addTarget:self action:@selector(deleteCarmeraClick) forControlEvents:UIControlEventTouchUpInside];
-    [footerView addSubview:deleteBtn];
-    [deleteBtn leftToView:footerView withSpace:16];
-    [deleteBtn yCenterToView:footerView];
-    [deleteBtn addHeight:37];
-    [deleteBtn addWidth:kScreenWidth/2-32];
-    
-    UIButton *restartBtn = [UIButton new];
-    restartBtn.clipsToBounds = YES;
-    restartBtn.layer.cornerRadius = 3;
-    [restartBtn setBGColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [restartBtn setTitle:@"重启设备" forState:UIControlStateNormal];
-    [restartBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
-    restartBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
-    [restartBtn addTarget:self action:@selector(restartEquipmentClick) forControlEvents:UIControlEventTouchUpInside];
-    [footerView addSubview:restartBtn];
-    [restartBtn rightToView:footerView withSpace:16];
-    [restartBtn yCenterToView:footerView];
-    [restartBtn addHeight:37];
-    [restartBtn addWidth:kScreenWidth/2-32];
-    
-    
-    return footerView;
-}
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 0.1;
-}
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 74;
-}
-
--(void)deleteCarmeraClick
-{
-    [[TCNewAlertView shareInstance] showAlert:nil message:@"确认删除设备吗？" cancelTitle:@"取消" viewController:self confirm:^(NSInteger buttonTag) {
-        
-        if (buttonTag == 0) {
-            [_kHUDManager showMsgInView:nil withTitle:@"删除了设备" isSuccess:YES];
-        }
-    } buttonTitles:@"确定", nil];
-}
--(void)restartEquipmentClick
-{
-    [[TCNewAlertView shareInstance] showAlert:nil message:@"确认重启设备吗？" cancelTitle:@"取消" viewController:self confirm:^(NSInteger buttonTag) {
-        
-        if (buttonTag == 0) {
-            [_kHUDManager showMsgInView:nil withTitle:@"重启了设备" isSuccess:YES];
-        }
-    } buttonTitles:@"确定", nil];
-}
 //获取设备能力集
 -(void)getEquimentAbility
 {
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/device/getability/%@/%@",self.lvModel.system_Source,self.lvModel.deviceId];
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/device/getability/%@/%@",self.eqModel.system_Source,self.eqModel.equipment_id];
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
@@ -197,53 +131,22 @@
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"obj ==  %@",obj)
-        
-        [[GCDQueue mainQueue] queueBlock:^{
-            weak_self.abModel = [EquipmentAbilityModel makeModelData:obj];
-            [weak_self getSingelEquimentInfo];
-        }];
-        
-    };
-    sence.errorBlock = ^(NSError *error) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"error: %@", error);
-    };
-    [sence sendRequest];
-}
+        weak_self.abModel = [EquipmentAbilityModel makeModelData:obj];
 
-
-
-//获取设备详情
--(void)getSingelEquimentInfo
-{
-    [_kHUDManager showActivityInView:nil withTitle:nil];
-    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",self.lvModel.deviceId];
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathHeader = @"application/json";
-    sence.pathURL = url;
-    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"obj ==  %@",obj)
+        NSArray *arr = @[@{@"name":weak_self.eqModel.equipment_name,@"value":@""},
+                         @{@"name":@"封面",@"value":self.eqModel.model.snap},
+                         @{@"name":@"通道名称",@"detail":self.eqModel.channel,@"showSwitch":@(NO),@"right":@(NO)},
+                         @{@"name":@"报警消息提醒",@"value":@(YES),@"showSwitch":@(YES),@"type":@"alarm",@"right":@(NO)},
+                         @{@"name":@"设备音频采集",@"value":@(YES),@"showSwitch":@(YES),@"type":@"audio",@"right":@(NO)},
+                         @{@"name":@"音视频加密",@"value":@(YES),@"showSwitch":@(YES),@"type":@"encryption",@"right":@(NO)},
+                         @{@"name":@"云端录像",@"value":@(self.eqModel.cloudRecordStatus),@"showSwitch":@(YES),@"type":@"cloud",@"right":@(NO)},
+                         @{@"name":@"设备分享",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)},
+                         @{@"name":@"设备程序版本",@"detail":@"v1.0",@"showSwitch":@(NO),@"right":@(NO)},
+                         @{@"name":@"更多设置",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)}];
         
-        NSDictionary *dic = [NSDictionary dictionaryWithDictionary:obj];
-        weak_self.model = [SingleEquipmentModel makeModelData:dic];
-        
-        NSArray *arr = @[@{@"name":weak_self.model.name,@"value":@""},
-                         @{@"name":@"封面",@"value":self.lvModel.snap},
-                         @{@"name":@"报警消息提醒",@"value":@(YES),@"showSwitch":@(YES),@"type":@"alarm"},
-                         @{@"name":@"设备音频采集",@"value":@(YES),@"showSwitch":@(YES),@"type":@"audio"},
-                         @{@"name":@"音视频加密",@"value":@(YES),@"showSwitch":@(YES),@"type":@"encryption"},
-                         @{@"name":@"云端录像",@"value":@(self.model.cloudRecordStatus),@"showSwitch":@(YES),@"type":@"cloud"},
-                         @{@"name":@"设备分享",@"detail":@"无",@"showSwitch":@(NO)},
-                         @{@"name":@"设备程序版本",@"detail":@"v1.0",@"showSwitch":@(NO)},
-                         @{@"name":@"通道名称",@"detail":self.model.channel,@"showSwitch":@(NO)}];
         [weak_self.dataArray addObjectsFromArray:arr];
- 
         
         [[GCDQueue mainQueue] queueBlock:^{
-            
             if (!weak_self.abModel.cloudStorage) {
                 [weak_self.dataArray removeObjectAtIndex:4];
             }
@@ -267,16 +170,16 @@
     if ([type isEqualToString:@"alarm"]) {
         //报警消息提醒
         shared = swichOn?@"true":@"false";
-        url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/setchannelshared?serial=%@&code=%@&shared=%@",self.model.system_Source,self.model.equipment_id,shared];
+        url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/setchannelshared?serial=%@&code=%@&shared=%@",self.eqModel.system_Source,self.eqModel.equipment_id,shared];
         
     }else if ([type isEqualToString:@"audio"]){
         //音频采集
         shared = swichOn?@"true":@"false";
-        url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/setchannelshared?serial=%@&code=%@&shared=%@",self.model.system_Source,self.model.equipment_id,shared];
+        url = [NSString stringWithFormat:@"service/video/livegbs/api/v1/device/setchannelshared?serial=%@&code=%@&shared=%@",self.eqModel.system_Source,self.eqModel.equipment_id,shared];
     }else{
         //云端录像
         shared = swichOn?@"on":@"off";
-        url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/setcloudrecord?systemSource=%@&id=%@&command=%@",self.model.system_Source,self.model.equipment_id,shared];
+        url = [NSString stringWithFormat:@"service/cameraManagement/camera/record/setcloudrecord?systemSource=%@&id=%@&command=%@",self.eqModel.system_Source,self.eqModel.equipment_id,shared];
     }
 
     

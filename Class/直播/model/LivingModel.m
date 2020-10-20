@@ -32,7 +32,7 @@
     model.status = [NSString stringWithFormat:@"%@",[dic objectForKey:@"status"]];
     
     model.online = [[model.status isEqualToString:@"on"]?@(YES):@(NO) boolValue];
-    
+
     model.presets = [NSArray arrayWithArray:[dic objectForKey:@"presets"]];//预置点数组
 
     

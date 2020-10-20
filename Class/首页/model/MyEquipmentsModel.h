@@ -19,8 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *equipment_Channel;//通道
 @property (nonatomic,strong) NSString *equipment_states;//设备状态
 @property (nonatomic,strong) NSString *c8y_Notes;
-@property (nonatomic,strong) NSString *CameraId;
-@property (nonatomic,strong) NSString *ClientId;
 @property (nonatomic,strong) NSString *owner;
 @property (nonatomic,strong) NSString *lastUpdated;
 @property (nonatomic,strong) NSString *creationTime;
@@ -31,9 +29,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) LivingModel *model;
 
 @property (nonatomic,strong) NSString *deviceSerial;
-@property (nonatomic,assign) BOOL cloudStatus;//云端录像开关状态
+@property (nonatomic,assign) BOOL cloudRecordStatus;//云端录像开关状态
 
+@property (nonatomic,strong) NSArray *presets;
 
+//sourceInfo 里面的东西
 @property (nonatomic,strong) NSString *address;
 @property (nonatomic,strong) NSString *createdAt;
 @property (nonatomic,strong) NSString *deviceID;
@@ -43,8 +43,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *manufacturer;
 @property (nonatomic,strong) NSString *civilCode;
 @property (nonatomic,strong) NSString *channel;
-
-@property (nonatomic,strong) NSArray *presets;
 
 
 

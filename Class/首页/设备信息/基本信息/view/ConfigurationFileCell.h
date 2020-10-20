@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MyEquipmentsModel;
 @interface ConfigurationFileCell : WWTableViewCell
 
 @property (nonatomic,strong) void(^textFieldName)(NSString*text);
@@ -17,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) void(^addAddressClick)(void);
 
 
--(void)makeCellData:(NSDictionary*)dic;
+-(void)makeCellData:(MyEquipmentsModel*)model;
 
 @end
 

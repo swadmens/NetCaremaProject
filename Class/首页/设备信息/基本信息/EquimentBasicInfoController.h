@@ -10,9 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MyEquipmentsModel;
 @interface EquimentBasicInfoController : WWViewController
 
 @property (nonatomic,strong) NSString *equiment_id;
+@property (nonatomic,strong) MyEquipmentsModel *model;
 
 
 @end

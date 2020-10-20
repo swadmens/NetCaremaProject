@@ -18,6 +18,8 @@
 #import <EZOpenSDKFramework/EZOpenSDK.h>
 #import <EZOpenSDKFramework/EZPlayer.h>
 #import "RequestSence.h"
+#import "LivingModel.h"
+
 
 typedef NS_ENUM(NSInteger, PlayLCState) {
     Play = 0,
@@ -521,11 +523,15 @@ EZPlayerDelegate
 
 - (void)showBar {
     
-    [self showBottomBar];
+    if (!_isLiving) {
+        [self showBottomBar];
+    }
     self.centerPauseButton.hidden = NO;
+    
     if ([self isFullScreen]) {
         [self showTopBar];
     }
+    
     [self doConstraintAnimation];
     
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideBar) object:nil];
@@ -918,8 +924,11 @@ EZPlayerDelegate
     }
     
     if (![WWPublicMethod isStringEmptyText:_plModel.videoUrl] && ![WWPublicMethod isStringEmptyText:_plModel.videoHDUrl]) {
-        [_kHUDManager showMsgInView:nil withTitle:@"视频地址有误！！！" isSuccess:YES];
-        return;
+//        [_kHUDManager showMsgInView:nil withTitle:@"视频地址有误！！！" isSuccess:YES];
+        if (_isFullScreen) {
+            [self clickExitFullScreenButton];
+        }
+//        return;
     }
  
     self.thumbImageView.hidden = NO;
@@ -927,7 +936,6 @@ EZPlayerDelegate
     
     CGFloat height = kScreenWidth * 0.68 + 0.5;
 
-    
     if (self.playType == PlayerStatusGBS) {
         
         self.playerOption = [PLPlayerOption defaultOption];
@@ -1067,6 +1075,7 @@ EZPlayerDelegate
     self.titleLabel.text = plModel.video_name;
     self.isNeedSetupPlayer = YES;
     [self.thumbImageView yy_setImageWithURL:[NSURL URLWithString:_plModel.picUrl] options:YYWebImageOptionProgressive];
+//    [self play];
 }
 //清晰度变化
 -(void)videoStandardClarity:(BOOL)standard

@@ -7,7 +7,7 @@
 //
 
 #import "ConnectionMonitoringCell.h"
-
+#import "MyEquipmentsModel.h"
 
 @interface ConnectionMonitoringCell ()<UITextFieldDelegate>
 
@@ -156,9 +156,9 @@
     [fzLabel yCenterToView:_minTextFiled];
     
 }
--(void)makeCellData:(NSDictionary *)dic
+-(void)makeCellData:(MyEquipmentsModel *)model
 {
-    _minTextFiled.text = [dic objectForKey:@"responseInterval"];
+    _minTextFiled.text = model.responseInterval;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

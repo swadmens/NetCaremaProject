@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PLPlayModel : NSObject
 
-+(PLPlayModel*)makeModelData:(NSDictionary*)dic;
+//+(PLPlayModel*)makeModelData:(NSDictionary*)dic;
 
 @property (nonatomic,strong) NSString *video_name;
 @property (nonatomic,strong) NSString *duration;
@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *playToken;
 @property (nonatomic,strong) NSString *recordType;//本地或云端录像
 @property (nonatomic,strong) NSString *StreamID;
+@property (nonatomic,assign) BOOL online;//GBS摄像头是否是on
+@property (nonatomic,strong) NSString *system_Source;
 
 @end
 
