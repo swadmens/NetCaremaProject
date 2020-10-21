@@ -43,11 +43,6 @@
         UICollectionViewFlowLayout *flowlayout = [[UICollectionViewFlowLayout alloc] init];
         //设置滚动方向
         flowlayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-        //左右间距
-        flowlayout.minimumInteritemSpacing = 5;
-//        //上下间距
-        flowlayout.minimumLineSpacing = 0.1;
-//        flowlayout.estimatedItemSize = CGSizeMake(40, 35);
         _collectionView = [[WWCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowlayout];
         // 注册
         [_collectionView registerClass:[MoreCarmerasCollectionViewCell class] forCellWithReuseIdentifier:[MoreCarmerasCollectionViewCell getCellIDStr]];
@@ -214,7 +209,6 @@
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
     return 5;
- 
 }
 //这个是两行cell之间的间距（上下行cell的间距）
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section

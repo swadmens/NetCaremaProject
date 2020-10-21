@@ -28,11 +28,11 @@
 @implementation ChannelMoreSystemController
 - (void)setupTableView
 {
-    self.tableView = [[WWTableView alloc] init];
+    self.tableView = [[WWTableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     self.tableView.backgroundColor = kColorBackgroundColor;
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = 50;
-    [self.tableView alignTop:@"50" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
+    [self.tableView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[ChannelMoreSystemCell class] forCellReuseIdentifier:[ChannelMoreSystemCell getCellIDStr]];
@@ -75,6 +75,7 @@
             
             if (buttonTag == 0) {
                 [_kHUDManager showMsgInView:nil withTitle:@"删除了设备" isSuccess:YES];
+                [self.navigationController popToRootViewControllerAnimated:YES];
             }
         } buttonTitles:@"确定", nil];
     }

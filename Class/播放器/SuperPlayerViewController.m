@@ -129,7 +129,7 @@ PlayVideoDemadDelegate
     [_videoTipView bottomToView:self.view withSpace:35];
     [_videoTipView addWidth:108];
     [_videoTipView addHeight:30];
-    
+
     _videoTipLabel = [UILabel new];
     _videoTipLabel.textColor = [UIColor whiteColor];
     _videoTipLabel.font = [UIFont customFontWithSize:kFontSizeEleven];
@@ -287,23 +287,13 @@ PlayVideoDemadDelegate
     if (!self.selectModel.online && _isLiving == YES) {
         return;
     }
-//    if (self.videoing) {
-//        [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
-//        return;
-//    }
     
     self.controlBtn = (LGXVerticalButton*)sender;
     switch (state) {
         case videoSatePlay://播放暂停
-            self.controlBtn.selected = !self.controlBtn.selected;
 
             if (!_isLiving) {
-                if (self.controlBtn.selected) {
-                    [self.topCell pause];
-                }else{
-                    [self.topCell resume];
-                }
-            }else{
+                self.controlBtn.selected = !self.controlBtn.selected;
                 if (self.controlBtn.selected) {
                     [self.videoCell pause];
                 }else{
@@ -360,6 +350,7 @@ PlayVideoDemadDelegate
             [self.topCell startOrStopVideo:self.controlBtn.selected];
             self.videoing = self.controlBtn.selected;
             [self tipViewHidden:NO withTitle:@"正在录像"];
+//            [_kHUDManager showMsgInView:nil withTitle:@"开始录像" isSuccess:YES];
 
             break;
         case videoSateYuntai://云台控制
@@ -602,7 +593,7 @@ PlayVideoDemadDelegate
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"Received: %@", obj);
         if ([states isEqualToString:@"stop"]) {
-//            [weak_self videoFinishDownload:obj];
+            [weak_self videoFinishDownload:obj];
             [weak_self tipViewHidden:YES withTitle:@"录像完成"];
 
         }
@@ -622,19 +613,12 @@ PlayVideoDemadDelegate
     if (obj == nil) {
         return;
     }
-    NSArray *data = [obj objectForKey:@"RecordList"];
-    NSDictionary *dic = (NSDictionary*)data.firstObject;
     
-    NSString *DownloadURL = [dic objectForKey:@"DownloadURL"];
-    NSString *EndTime = [dic objectForKey:@"EndTime"];
-    NSString *StartTime = [dic objectForKey:@"StartTime"];
-
+    NSString *DownloadURL = [obj objectForKey:@"data"];
     [self tipViewHidden:NO withTitle:@"正在处理录像"];
 
     DownLoadSence *sence = [[DownLoadSence alloc]init];
     sence.url = DownloadURL;
-//    sence.filePath = @"";
-//    sence.fileName = @"";
     __unsafe_unretained typeof(self) weak_self = self;
     sence.finishedBlock = ^(NSString *filePath) {
         DLog(@"filePath ==  %@",filePath);
@@ -686,14 +670,16 @@ PlayVideoDemadDelegate
 
 - (void)selectCellCarmera:(PlayerTableViewCell *)cell withData:(MyEquipmentsModel *)model withIndex:(NSInteger)index
 {
-    if ([self.selectModel.deviceSerial isEqualToString:model.deviceSerial]) {
+    if ([self.selectModel.equipment_id isEqualToString:model.equipment_id]) {
         return;
     }
     
     self.selectModel = model;
-    self.selectModel = model.model;
-    
-    [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"local"];
+
+    [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"local"];//本地录像
+    [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"cloud"];//云端录像
+
+    //获取选择设备的能力集
     [self getEquimentAbility];
     
 }

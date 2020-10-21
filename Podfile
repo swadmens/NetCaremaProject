@@ -50,7 +50,7 @@ pod 'JGProgressHUD'
  pod 'TZImagePickerController'
  
  #MQTT及时通讯
- pod 'MQTTClient'
+# pod 'MQTTClient'
 
  #萤石
  pod 'EZOpenSDK'

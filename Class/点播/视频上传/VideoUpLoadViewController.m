@@ -360,7 +360,6 @@
         NSData *data = [NSData dataWithContentsOfFile:videoPath];
         self.fileUrl = [x objectForKey:UIImagePickerControllerMediaURL];
         
-
         [picker dismissViewControllerAnimated:YES completion:^{
             self.fileData = data;
             self.isAddVideo = YES;

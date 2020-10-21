@@ -1005,13 +1005,6 @@ EZPlayerDelegate
             make.size.equalTo(CGSizeMake(kScreenWidth, height));
         }];
         
-//        self.ezPlayer = [EZOpenSDK createPlayerWithUrl:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl];
-//        self.ezPlayer.delegate = self;
-//        [self.ezPlayer setPlayerView:self];
-//        BOOL hdStatus = [[NSUserDefaults standardUserDefaults] boolForKey:[NSString stringWithFormat:@"EZVideoPlayHardDecodingStatus_%@", _plModel.deviceSerial]];
-//        [self.ezPlayer setHDPriority:hdStatus];
-//        [self.ezPlayer startRealPlay];
-
     }else{
         _m_isSeeking = NO;
         

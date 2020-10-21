@@ -376,6 +376,39 @@
         return 0.1;
     }
 }
+/*
+ #pragma mark ---- 侧滑删除
+ // 点击了“左滑出现的Delete按钮”会调用这个方法
+ - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+     [self deletePresetwithIndex:indexPath];
+ }
+
+ //定义编辑样式
+ - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+     
+     return UITableViewCellEditingStyleDelete;
+ }
+
+ // 修改Delete按钮文字为“删除”
+ - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+ {
+     return @"删除";
+ }
+
+ //先要设Cell可编辑
+ - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+     return YES;
+ }
+
+ //设置进入编辑状态时，Cell不会缩进
+ - (BOOL)tableView: (UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
+       return NO;
+ }
+
+ //删除预置点
+ -(void)deletePresetwithIndex:(NSIndexPath*)path
+ */
 - (void)loadNewData
 {
     self.page = 1;

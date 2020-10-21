@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "GuideViewController.h" // 引导页
 #import "GuideNewController.h"//新的引导页
-#import "LGXThirdEngine.h" // 第三方管理
+//#import "LGXThirdEngine.h" // 第三方管理
 
 //#import "netsdk.h"
 //#import "Global.h"
@@ -89,7 +89,7 @@
     
     
     /// 第三方分享初始化
-    [_kThirdManager setupShareSDK];
+//    [_kThirdManager setupShareSDK];
     /// cookie设置
     NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
     [cookieStorage setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];

@@ -17,7 +17,8 @@
 #import "SuperPlayerViewController.h"
 #import "LivingModel.h"
 #import "CarmeaVideosModel.h"
-
+#import "RequestSence.h"
+#import "MyEquipmentsModel.h"
 
 #define KDeleteHeight 60
 
@@ -28,7 +29,7 @@
 
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSArray *changeDataArray;
-@property (strong, nonatomic) NSArray *allDataArray;
+@property (strong, nonatomic) NSMutableArray *allDataArray;
 @property (nonatomic, strong) NSMutableDictionary *cellDic;
 
 @property (nonatomic, weak) PlayerTopCollectionViewCell *playingCell;
@@ -66,9 +67,16 @@
 - (NSMutableArray *)dataArray
 {
     if (!_dataArray) {
-        _dataArray = [NSMutableArray array];
+        _dataArray = [NSMutableArray arrayWithObjects:@"Player_add_video_image",@"Player_add_video_image",@"Player_add_video_image",@"Player_add_video_image", nil];
     }
     return _dataArray;
+}
+- (NSMutableArray *)allDataArray
+{
+    if (!_allDataArray) {
+        _allDataArray = [NSMutableArray array];
+    }
+    return _allDataArray;
 }
 - (void)dosetup {
     [super dosetup];
@@ -114,23 +122,31 @@
     _tipImageView = [UIImageView new];
     _tipImageView.image = UIImageWithFileName(@"videoing_show_tip_image");
     _tipImageView.hidden = YES;
-    [self.collectionView addSubview:_tipImageView];
+    [_playerView addSubview:_tipImageView];
     [_tipImageView lgx_makeConstraints:^(LGXLayoutMaker *make) {
-        make.xCenter.lgx_equalTo(self.collectionView.lgx_xCenter);
-        make.topEdge.lgx_equalTo(self.collectionView.lgx_topEdge).lgx_floatOffset(15);
+        make.xCenter.lgx_equalTo(self.playerView.lgx_xCenter);
+        make.topEdge.lgx_equalTo(self.playerView.lgx_topEdge).lgx_floatOffset(15);
     }];
     
 }
 -(void)makeCellScale:(BOOL)scale
 {
-    if (![self chengkVideoNormalPlay]) {
-        return;
-    }
+//    if (![self chengkVideoNormalPlay]) {
+//        return;
+//    }
     self.changeUI = scale;
     if (self.changeUI) {
         id obj = [self.dataArray objectAtIndex:self.selectIndexPath.row];
         self.changeDataArray = [NSArray arrayWithObjects:obj, nil];
-        _tipImageView.hidden = YES;
+        [_tipImageView lgx_remakeConstraints:^(LGXLayoutMaker *make) {
+            make.xCenter.lgx_equalTo(self.playerView.lgx_rightEdge);
+            make.topEdge.lgx_equalTo(self.playerView.lgx_topEdge).lgx_floatOffset(15);
+        }];
+    }else{
+        [_tipImageView lgx_remakeConstraints:^(LGXLayoutMaker *make) {
+            make.xCenter.lgx_equalTo(self.playerView.lgx_xCenter);
+            make.topEdge.lgx_equalTo(self.playerView.lgx_topEdge).lgx_floatOffset(15);
+        }];
     }
     
     [self.collectionView reloadData];
@@ -183,8 +199,13 @@
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (![self chengkVideoNormalPlay]) {
+        return;
+    }
+    
     id obj = [self.changeUI?self.changeDataArray:self.dataArray objectAtIndex:indexPath.row];
     if ([obj isKindOfClass:[NSString class]]) {
+        
         self.selectIndex = indexPath.row;
         MyEquipmentsViewController *mvc = [MyEquipmentsViewController new];
         mvc.dataArray = [NSArray arrayWithArray:self.allDataArray];
@@ -359,23 +380,28 @@
     if (array.count == 0) {
         return;
     }
+    [self.allDataArray removeAllObjects];
+    [self.allDataArray addObjectsFromArray:array];
     
-    self.allDataArray = [NSArray arrayWithArray:array];
-    
-    [self.dataArray removeAllObjects];
-    if (array.count > 3) {
-        NSArray *arr = [array subarrayWithRange:NSMakeRange(0, 4)];
-        [self.dataArray addObjectsFromArray:arr];
+    MyEquipmentsModel *myModel = array.firstObject;
+    if ([myModel.system_Source isEqualToString:@"GBS"] && myModel.online && !myModel.model.online) {
+        
+        [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            MyEquipmentsModel *model = obj;
+            [self gbsGetNewLiveData:model withIndex:idx];
+        }];
+        
     }else{
 
-        [self.dataArray addObjectsFromArray:array];
-
-        for (int i = 0; i < 4 - array.count; i++) {
-            [self.dataArray addObject:@"Player_add_video_image"];
-        }
+        [self.allDataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            MyEquipmentsModel *model = obj;
+            if (idx < 4) {
+                [self.dataArray replaceObjectAtIndex:idx withObject:model];
+            }
+        }];
+        [self.collectionView reloadData];
     }
-
-    [self.collectionView reloadData];
+    
 }
 #pragma mark - MyEquipmentsDelegate
 -(void)selectCarmeraModel:(MyEquipmentsModel *)model
@@ -454,9 +480,9 @@
 }
 -(void)clickSnapshotButton
 {
-    if (![self chengkVideoNormalPlay]) {
-        return;
-    }
+//    if (![self chengkVideoNormalPlay]) {
+//        return;
+//    }
     PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
     NSArray *array = [self.collectionView visibleCells];
     for (PlayerTopCollectionViewCell *cell in array) {
@@ -475,10 +501,10 @@
 }
 - (void)changeVolume:(float)volume
 {
-    if (![self chengkVideoNormalPlay]) {
-        return;
-    }
-    
+//    if (![self chengkVideoNormalPlay]) {
+//        return;
+//    }
+//
     PlayerTopCollectionViewCell *selectCell = (PlayerTopCollectionViewCell*)[self.collectionView cellForItemAtIndexPath:self.selectIndexPath];
     NSArray *array = [self.collectionView visibleCells];
     for (PlayerTopCollectionViewCell *cell in array) {
@@ -539,18 +565,76 @@
         return YES;
     }
     
-//    id obj = [self.dataArray objectAtIndex:self.selectIndexPath.row];
-//    if ([obj isKindOfClass:[LivingModel class]]) {
-//        LivingModel *model = obj;
-//        if (![WWPublicMethod isStringEmptyText:model.hls] && ![WWPublicMethod isStringEmptyText:model.flv] && ![WWPublicMethod isStringEmptyText:model.rtmp]) {
-//            return NO;
-//        }else{
-//            return YES;
-//        }
-//    }else{
-//       return YES;
-//    }
+    id obj = [self.dataArray objectAtIndex:self.selectIndexPath.row];
+    if ([obj isKindOfClass:[MyEquipmentsModel class]]) {
+        MyEquipmentsModel *model = obj;
+        return model.model.online;
+    }else{
+       return YES;
+    }
 }
+
+//gbs 设备在线，直播关闭的时候，开始直播获取新数据
+-(void)gbsGetNewLiveData:(MyEquipmentsModel*)myModel withIndex:(NSInteger)index
+{
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/live/start?systemSource=GBS&id=%@",myModel.equipment_id];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"newLivingData: %@", obj);
+        NSDictionary *dic = [NSDictionary dictionaryWithDictionary:obj];
+        LivingModel *newModel = [LivingModel makeModelData:dic];
+        
+        MyEquipmentsModel *model = [self.allDataArray objectAtIndex:index];
+        model.model.hls = newModel.hls;
+        model.model.hlsHd = newModel.hlsHd;
+        model.model.rtmp = newModel.rtmp;
+        model.model.rtmpHd = newModel.rtmpHd;
+        model.model.flv = newModel.flv;
+        model.model.flvHd = newModel.flvHd;
+        model.model.snap = newModel.snap;
+        model.model.status = newModel.status;
+        model.model.online = YES;
+
+        [[GCDQueue mainQueue] queueBlock:^{
+            [weak_self dealwithLivingData:model withIndex:index];
+        }];
+    };
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+
+        [[GCDQueue mainQueue] queueBlock:^{
+            [weak_self dealwithLivingData:myModel withIndex:index];
+        }];
+    };
+    [sence sendRequest];
+}
+
+-(void)dealwithLivingData:(MyEquipmentsModel*)model withIndex:(NSInteger)index
+{
+    [self.allDataArray replaceObjectAtIndex:index withObject:model];
+    if (index < 4) {
+        [self.dataArray replaceObjectAtIndex:index withObject:model];
+    }
+    
+//    [self.collectionView reloadData];
+    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
+
+//    //延迟处理一下
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        __weak __typeof(&*self)weakSelf = self;
+//        [weakSelf.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
+//    });
+    
+}
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
