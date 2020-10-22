@@ -8,9 +8,20 @@
 
 #import "WWViewController.h"
 
+
+@protocol VideoUpLoadSuccessDelegate <NSObject>
+
+-(void)uploadVideoSuccess;//上传完成
+
+@end
+
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface VideoUpLoadViewController : WWViewController
+
+@property (nonatomic,assign) id<VideoUpLoadSuccessDelegate>delegate;
+
 
 @end
 

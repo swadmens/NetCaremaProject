@@ -15,8 +15,9 @@
 #import "SuperPlayerViewController.h"
 #import "RequestSence.h"
 #import "CarmeaVideosModel.h"
+#import "VideoUpLoadViewController.h"
 
-@interface DemandViewController ()<UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource>
+@interface DemandViewController ()<UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource,VideoUpLoadSuccessDelegate>
 {
     BOOL _isHadFirst; // 是否第一次加载了
 }
@@ -170,7 +171,15 @@
 //上传
 -(void)upLoadButtonClick
 {
-    [TargetEngine controller:self pushToController:PushTargetVideoUpLoad WithTargetId:nil];
+    VideoUpLoadViewController *upvc = [VideoUpLoadViewController new];
+    upvc.delegate = self;
+    upvc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:upvc animated:YES];
+    upvc.hidesBottomBarWhenPushed = NO;
+}
+-(void)uploadVideoSuccess
+{
+    [self loadNewData];
 }
 - (WWCollectionView *)collectionUpView
 {
@@ -259,9 +268,9 @@
     self.isClick = NO;
     [self setupNoDataView];
     [self setupViews];
-    [self loadNewData];
     [self getSubcatalogList];
-    
+    [self loadNewData];
+
     
     //右上角
     UIButton *upLoadBtn = [UIButton new];
@@ -272,10 +281,8 @@
     [upLoadBtn addTarget:self action:@selector(upLoadButtonClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:upLoadBtn];
     [self.navigationItem setRightBarButtonItem:rightItem];
-    
-    
-    
 }
+
 #pragma mark -- collectionDelegate
 //定义展示的Section的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
@@ -325,18 +332,13 @@
     if ([collectionView isEqual:self.collectionView]) {
         DemandModel *model = [self.dataArray objectAtIndex:indexPath.row];
         
-        NSDictionary *dic = @{
-                               @"name":model.name,
-                               @"url":model.filePath,
-                              };
-        CarmeaVideosModel *models = [CarmeaVideosModel makeModelData:dic];
-        
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
-        vc.model = models;
+        vc.ddMdodel = model;
         vc.indexInteger = indexPath.row;
-        vc.isDemandFile = YES;
         vc.isLiving = NO;
-        vc.title_value = model.name;
+        vc.isVideoFile = NO;
+        vc.isDemandFile = YES;
+        vc.title_value = model.title;
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
@@ -376,39 +378,6 @@
         return 0.1;
     }
 }
-/*
- #pragma mark ---- 侧滑删除
- // 点击了“左滑出现的Delete按钮”会调用这个方法
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
-     [self deletePresetwithIndex:indexPath];
- }
-
- //定义编辑样式
- - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-     
-     return UITableViewCellEditingStyleDelete;
- }
-
- // 修改Delete按钮文字为“删除”
- - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
- {
-     return @"删除";
- }
-
- //先要设Cell可编辑
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-     return YES;
- }
-
- //设置进入编辑状态时，Cell不会缩进
- - (BOOL)tableView: (UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-       return NO;
- }
-
- //删除预置点
- -(void)deletePresetwithIndex:(NSIndexPath*)path
- */
 - (void)loadNewData
 {
     self.page = 1;

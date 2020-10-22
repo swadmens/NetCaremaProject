@@ -241,6 +241,7 @@
     vc.allDataArray = [NSArray arrayWithArray:model.childDevices_info];
     vc.isLiving = YES;
     vc.isDemandFile = NO;
+    vc.isVideoFile = NO;
     vc.title_value = model.equipment_name;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
@@ -473,6 +474,7 @@
     vc.hidesBottomBarWhenPushed = YES;
     vc.isLiving = YES;
     vc.isDemandFile = NO;
+    vc.isVideoFile = NO;
     vc.title_value = model.equipment_name;
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
@@ -490,7 +492,8 @@
     vc.hidesBottomBarWhenPushed = YES;
     vc.isFromIndex = YES;
     vc.model = self.selectModel;
-    vc.recordType = self.selectModel.cloudRecordStatus?@"cloud":@"local";
+//    vc.recordType = self.selectModel.cloudRecordStatus?@"cloud":@"local";
+    vc.recordType = @"cloud";
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }

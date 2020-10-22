@@ -254,9 +254,11 @@
                 
                 SuperPlayerViewController *vc = [SuperPlayerViewController new];
                 vc.model = model;
+                vc.allDataArray = [NSArray arrayWithObject:self.model];
                 vc.indexInteger = indexPath.row;
-                vc.isDemandFile = YES;
+                vc.isDemandFile = NO;
                 vc.isLiving = NO;
+                vc.isVideoFile = YES;
                 vc.title_value = model.duration;
                 [self.navigationController pushViewController:vc animated:YES];
 
@@ -629,8 +631,9 @@
                 SuperPlayerViewController *vc = [SuperPlayerViewController new];
                 vc.model = model;
                 vc.indexInteger = indexRow;
-                vc.isDemandFile = YES;
+                vc.isDemandFile = NO;
                 vc.isLiving = NO;
+                vc.isVideoFile = YES;
                 vc.title_value = model.duration;
                 [weak_self.navigationController pushViewController:vc animated:YES];
 

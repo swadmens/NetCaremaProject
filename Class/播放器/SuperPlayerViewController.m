@@ -15,6 +15,7 @@
 #import "LGXVerticalButton.h"
 #import "PlayBottomDateCell.h"
 #import "PlayVideoDemadCell.h"
+#import "PlayVideoDemadInfoCell.h"
 #import "LGXThirdEngine.h"
 #import "ShareSDKMethod.h"
 #import "LocalVideoViewController.h"
@@ -98,7 +99,8 @@ PlayVideoDemadDelegate
     [self.tableView registerClass:[PlayerLocalVideosCell class] forCellReuseIdentifier:[PlayerLocalVideosCell getCellIDStr]];
     [self.tableView registerClass:[PlayBottomDateCell class] forCellReuseIdentifier:[PlayBottomDateCell getCellIDStr]];
     [self.tableView registerClass:[PlayVideoDemadCell class] forCellReuseIdentifier:[PlayVideoDemadCell getCellIDStr]];
-
+    [self.tableView registerClass:[PlayVideoDemadInfoCell class] forCellReuseIdentifier:[PlayVideoDemadInfoCell getCellIDStr]];
+    
 }
 //控制台
 -(void)setupControllView
@@ -138,8 +140,8 @@ PlayVideoDemadDelegate
     [_videoTipLabel yCenterToView:_videoTipView];
     
     
-    if (_isLiving) {
-            
+    if (!_isDemandFile) {
+        
         self.selectModel = self.allDataArray.firstObject;
         [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"local"];//本地录像
         [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"cloud"];//云端录像
@@ -147,7 +149,6 @@ PlayVideoDemadDelegate
         if (self.selectModel.model != nil) {
             [self getEquimentAbility];//获取设备能力集
         }
-        
     }
    
     //右上角按钮组
@@ -188,6 +189,8 @@ PlayVideoDemadDelegate
 -(void)backLivBtnClick
 {
     self.isLiving = YES;
+    self.isVideoFile = NO;
+    self.isDemandFile = NO;
     self.backLiveBtn.hidden = YES;
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -228,7 +231,7 @@ PlayVideoDemadDelegate
             self.videoCell = [tableView dequeueReusableCellWithIdentifier:[PlayVideoDemadCell getCellIDStr] forIndexPath:indexPath];
             self.videoCell.selectionStyle = UITableViewCellSelectionStyleNone;
             
-            [self.videoCell makeModelData:self.model];
+            [self.videoCell makeModelData:self.isDemandFile?self.ddMdodel:self.model];
             self.videoCell.delegate = self;
             
             return self.videoCell;
@@ -236,13 +239,25 @@ PlayVideoDemadDelegate
         
     }else if (indexPath.row == 1){
         
-        PlayerControlCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerControlCell getCellIDStr] forIndexPath:indexPath];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.delegate = self;
+        if (!_isDemandFile) {
         
-        [cell makeCellData:_isLiving withAbility:self.abModel];
+            PlayerControlCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerControlCell getCellIDStr] forIndexPath:indexPath];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.delegate = self;
+            
+            [cell makeCellData:_isLiving withAbility:self.abModel];
 
-        return cell;
+            return cell;
+        }else{
+            PlayVideoDemadInfoCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayVideoDemadInfoCell getCellIDStr] forIndexPath:indexPath];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            [cell makeCellData:self.ddMdodel];
+            
+            return cell;
+        }
+        
+        
     }else{
         
         PlayerLocalVideosCell *cell = [tableView dequeueReusableCellWithIdentifier:[PlayerLocalVideosCell getCellIDStr] forIndexPath:indexPath];
@@ -269,9 +284,11 @@ PlayVideoDemadDelegate
            
         };
         cell.selectedRowData = ^(CarmeaVideosModel * _Nonnull model) {
+            if (weakSelf.isLiving) {
+                weakSelf.isLiving = NO;
+                weakSelf.backLiveBtn.hidden = NO;
+            }
             weakSelf.model = model;
-            weakSelf.isLiving = NO;
-            weakSelf.backLiveBtn.hidden = NO;
             [weakSelf.tableView reloadData];
         };
    
@@ -726,6 +743,10 @@ PlayVideoDemadDelegate
         return;
     }
     
+    if (!_isLiving) {
+        return;
+    }
+    
     ChannelDetailController *cvc = [ChannelDetailController new];
     cvc.hidesBottomBarWhenPushed = YES;
     cvc.eqModel = self.selectModel;
@@ -784,9 +805,15 @@ PlayVideoDemadDelegate
         [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
         return;
     }
-    self.isLiving = NO;
+    
+    if (self.isLiving) {
+        self.isLiving = NO;
+        self.backLiveBtn.hidden = NO;
+    }
+    
+    self.isVideoFile = YES;
+    self.isDemandFile = NO;
     self.model = model;
-    self.backLiveBtn.hidden = NO;
     [self.tableView reloadData];
 }
 +(UIViewController *)viewController:(UIView *)view{

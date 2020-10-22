@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-@class CarmeaVideosModel;
+//@class CarmeaVideosModel;
 @interface PlayVideoDemadCell : WWTableViewCell
 
 @property (nonatomic, assign) id<PlayVideoDemadDelegate> delegate;
@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)makePlayerViewFullScreen;
 - (void)changeVolume:(float)volume;
 -(void)videoStandardClarity:(BOOL)standard;
--(void)makeModelData:(CarmeaVideosModel*)model;
+-(void)makeModelData:(id)obj;
 
 @end
 

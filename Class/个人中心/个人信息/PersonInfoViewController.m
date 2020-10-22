@@ -14,14 +14,7 @@
 @interface PersonInfoViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) WWTableView *tableView;
-
 @property (nonatomic,strong) NSArray *dataArray;
-
-@property (strong, nonatomic)AVPlayer *myPlayer;//播放器
-@property (strong, nonatomic)AVPlayerItem *item;//播放单元
-@property (strong, nonatomic)AVPlayerLayer *playerLayer;//播放界面（layer）
-
-@property (nonatomic, copy) void (^completionHandler)(NSString *value);
 
 
 @end

@@ -33,7 +33,8 @@
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeSixteen];
     [_titleLabel sizeToFit];
     [self.contentView addSubview:_titleLabel];
-    [_titleLabel yCenterToView:self.contentView];
+    [_titleLabel topToView:self.contentView withSpace:15];
+    [_titleLabel bottomToView:self.contentView withSpace:15];
     [_titleLabel leftToView:self.contentView withSpace:15];
     
     

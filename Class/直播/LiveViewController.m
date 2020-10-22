@@ -118,7 +118,7 @@
 
     
     [self.view addSubview:self.collectionView];
-    [self.collectionView alignTop:@"45" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
+    [self.collectionView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     
     
     _areaView = [ChooseAreaView new];
@@ -135,7 +135,7 @@
     _coverView.backgroundColor = UIColorFromRGB(0x000000, 0.7);
     [[UIApplication sharedApplication].keyWindow addSubview:_coverView];
 
-    [self creadLivingUI];
+//    [self creadLivingUI];
     [self setupNoDataView];
     [self loadNewData];
 }
@@ -220,6 +220,7 @@
         vc.allDataArray = [NSArray arrayWithObjects:model, nil];
         vc.isLiving = YES;
         vc.isDemandFile = NO;
+        vc.isVideoFile = NO;
         vc.title_value = model.model.name;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
@@ -358,8 +359,10 @@
         [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             MyEquipmentsModel *model = [MyEquipmentsModel makeModelData:dic];
-            [weak_self getDeviceLivingData:model withIndex:index withEquimentIndex:idx];
-            [tempArray addObject:model];
+            if (model.online) {
+                [tempArray addObject:model];
+                [weak_self getDeviceLivingData:model withIndex:index withEquimentIndex:tempArray.count-1];
+            }
         }];
 
         IndexDataModel *model = [self.dataArray objectAtIndex:index];

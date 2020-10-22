@@ -12,6 +12,7 @@
 #import "HikPlayerView.h"
 #import "PLPlayModel.h"
 #import "RequestSence.h"
+#import "DemandModel.h"
 
 
 @interface PlayVideoDemadCell ()<PLPlayerViewDelegate>
@@ -22,6 +23,7 @@
 @property (nonatomic, strong) PLPlayerView *playerView;
 @property (nonatomic, strong) HikPlayerView *hkPlayerView;
 @property (nonatomic, strong) CarmeaVideosModel *model;
+@property (nonatomic, strong) DemandModel *ddModel;
 
 @property (nonatomic, assign) BOOL isFullScreen;   /// 是否全屏标记
 @property (nonatomic, assign) BOOL isPlaying;
@@ -62,18 +64,12 @@
     [outlineLabel yCenterToView:_coverView];
 }
 
--(void)makeModelData:(CarmeaVideosModel*)model
+-(void)makeModelData:(id)obj
 {
-    if (model == nil) {
+    if (obj == nil) {
         return;
     }
-    
-    if (self.model != nil) {
-        [self.playerView stop];
-    }
-    
-    self.model = model;
-    
+
     self.playerView = [[PLPlayerView alloc] init];
     self.playerView.delegate = self;
     [_playView addSubview:self.playerView];
@@ -82,52 +78,71 @@
         make.edges.equalTo(self.playView);
     }];
     
-    if ([model.url hasPrefix:@"ezopen://"]) {
-        self.playerView.playType = PlayerStatusHk;
-        PLPlayModel *pModel = [PLPlayModel new];
-        pModel.video_name = model.video_name;
-        pModel.duration = model.duration;
-        pModel.videoUrl = model.url;
-        pModel.startTime = model.startTime;
-        pModel.endTime = model.endTime;
-        pModel.deviceId = model.deviceId;
-        pModel.token = model.token;
-        pModel.appKey = model.appKey;
-        pModel.recordType = model.recordType;
-        self.playerView.plModel = pModel;
-    }else if ([model.url hasPrefix:@"imou://"]){
-        self.playerView.playType = PlayerStatusDH;
-        PLPlayModel *pModel = [PLPlayModel new];
-        pModel.video_name = model.video_name;
-        pModel.duration = model.duration;
-        pModel.videoUrl = model.url;
-        pModel.startTime = model.startTime;
-        pModel.endTime = model.endTime;
-        pModel.deviceId = model.deviceId;
-        pModel.accessToken = model.accessToken;
-        pModel.channel = model.channel;
-        pModel.deviceSerial = model.deviceSerial;
-        pModel.recordRegionId = model.recordRegionId;
-        pModel.playToken = model.playToken;
-        pModel.token = model.token;
-        pModel.appKey = model.appKey;
-        pModel.recordType = model.recordType;
-        self.playerView.plModel = pModel;
+    if (self.model != nil) {
+        [self.playerView stop];
+    }
+    
+    if ([obj isKindOfClass:[CarmeaVideosModel class]]) {
+        
+        self.model = obj;
+        
+        if ([self.model.url hasPrefix:@"ezopen://"]) {
+            self.playerView.playType = PlayerStatusHk;
+            PLPlayModel *pModel = [PLPlayModel new];
+            pModel.video_name = self.model.video_name;
+            pModel.duration = self.model.duration;
+            pModel.videoUrl = self.model.url;
+            pModel.startTime = self.model.startTime;
+            pModel.endTime = self.model.endTime;
+            pModel.deviceId = self.model.deviceId;
+            pModel.token = self.model.token;
+            pModel.appKey = self.model.appKey;
+            pModel.recordType = self.model.recordType;
+            self.playerView.plModel = pModel;
+        }else if ([self.model.url hasPrefix:@"imou://"]){
+            self.playerView.playType = PlayerStatusDH;
+            PLPlayModel *pModel = [PLPlayModel new];
+            pModel.video_name = self.model.video_name;
+            pModel.duration = self.model.duration;
+            pModel.videoUrl = self.model.url;
+            pModel.startTime = self.model.startTime;
+            pModel.endTime = self.model.endTime;
+            pModel.deviceId = self.model.deviceId;
+            pModel.accessToken = self.model.accessToken;
+            pModel.channel = self.model.channel;
+            pModel.deviceSerial = self.model.deviceSerial;
+            pModel.recordRegionId = self.model.recordRegionId;
+            pModel.playToken = self.model.playToken;
+            pModel.token = self.model.token;
+            pModel.appKey = self.model.appKey;
+            pModel.recordType = self.model.recordType;
+            self.playerView.plModel = pModel;
+        }else{
+            self.playerView.playType = PlayerStatusGBS;
+            PLPlayModel *pModel = [PLPlayModel new];
+            pModel.video_name = self.model.video_name;
+            pModel.duration = self.model.duration;
+            pModel.videoUrl = self.model.url;
+            pModel.startTime = self.model.startTime;
+            pModel.endTime = self.model.endTime;
+            pModel.deviceId = self.model.deviceId;
+            pModel.StreamID = [self.model.recordType isEqualToString:@"local"]?self.model.StreamID:@" ";
+            pModel.recordType = self.model.recordType;
+            self.playerView.plModel = pModel;
+        }
+        [self configureVideo:NO];
+        [self.playerView play];
+        
     }else{
+        self.ddModel = obj;
         self.playerView.playType = PlayerStatusGBS;
         PLPlayModel *pModel = [PLPlayModel new];
-        pModel.video_name = model.video_name;
-        pModel.duration = model.duration;
-        pModel.videoUrl = model.url;
-        pModel.startTime = model.startTime;
-        pModel.endTime = model.endTime;
-        pModel.deviceId = model.deviceId;
-        pModel.StreamID = [model.recordType isEqualToString:@"local"]?model.StreamID:@" ";
-        pModel.recordType = model.recordType;
+        pModel.video_name = self.ddModel.name;
+        pModel.videoUrl = self.ddModel.filePath;
         self.playerView.plModel = pModel;
+        [self.playerView play];
     }
-//    [self configureVideo:NO];
-    [self.playerView play];
+    
 }
 - (void)play {
     [self.playerView play];

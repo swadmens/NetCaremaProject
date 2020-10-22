@@ -116,7 +116,7 @@
         if ([phone containsString:@"+86"]) {
             self.user_phone.text = [phone stringByReplacingOccurrencesOfString:@"+86" withString:@""];
         }else{
-            self.user_phone.text = phone;
+            self.user_phone.text = [WWPublicMethod isStringEmptyText:phone]?phone:@"";
         }
     }];
     

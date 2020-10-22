@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,weak) id<LocalVideoDelegate>delegate;
 
 @property (nonatomic,assign) BOOL isFromIndex;
-@property (nonatomic,strong) MyEquipmentsModel *model;//具体设备id,设备国标编号
+@property (nonatomic,strong) MyEquipmentsModel *model;
 @property (nonatomic,strong) NSString *recordType;//本地或云端录像
 
 

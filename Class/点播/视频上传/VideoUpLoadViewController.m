@@ -140,13 +140,10 @@
     [self.view endEditing:YES];
     
     if (![WWPublicMethod isStringEmptyText:self.fileName]) {
-        [_kHUDManager showMsgInView:nil withTitle:@"视频名称不能为空" isSuccess:YES];
+        [_kHUDManager showMsgInView:nil withTitle:@"视频标题不能为空" isSuccess:YES];
         return;
     }
-    if (![WWPublicMethod isStringEmptyText:self.msg_content]) {
-        [_kHUDManager showMsgInView:nil withTitle:@"视频描述不能为空" isSuccess:YES];
-        return;
-    }
+    
     if (!_isAddVideo) {
         [_kHUDManager showMsgInView:nil withTitle:@"请添加一个您要上传的视频！" isSuccess:YES];
         return;
@@ -383,10 +380,13 @@
     
     NSString *string = [NSString stringWithFormat:@"%@.mp4",self.fileName];
     
-//
-    NSString *url = [NSString stringWithFormat:@"http://39.108.215.35:11026/camera/vod/upload?name=%@&title=%@&description=%@",string,fileName,self.msg_content];
-
-//    NSString *url = [NSString stringWithFormat:@"http://192.168.6.120:11026/camera/vod/upload?name=%@&title=%@&description=%@",string,fileName,self.msg_content];
+    NSString *url;
+    if (![WWPublicMethod isStringEmptyText:self.msg_content]) {
+        url = [NSString stringWithFormat:@"http://39.108.215.35:11026/camera/vod/upload?name=%@&title=%@",string,fileName];
+    }else{
+        url = [NSString stringWithFormat:@"http://39.108.215.35:11026/camera/vod/upload?name=%@&title=%@&description=%@",string,fileName,self.msg_content];
+    }
+    
     NSString *newUrlString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];//链接含有中文转码
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -404,11 +404,18 @@
         [formData appendPartWithFileData:value name:@"file" fileName:fileName mimeType:@"video/mp4"];
 
     } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+//        DLog(@"uploadProgress = %@",uploadProgress.completedUnitCount);
+        
+        NSInteger per = uploadProgress.fractionCompleted * 100;
+        DLog(@"上传进度 ：%d%%",per);
+        
 
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"responseObject ==  %@",responseObject)
         [_kHUDManager showMsgInView:nil withTitle:@"上传完成" isSuccess:YES];
+        [self.delegate uploadVideoSuccess];
         [weak_self.navigationController popViewControllerAnimated:YES];
      
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {

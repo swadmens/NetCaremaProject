@@ -51,6 +51,7 @@
 		4A36B2F425403B6300CB344D /* WXApiManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A36B2EA25403B6200CB344D /* WXApiManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4A36B2F525403B6300CB344D /* ShareSDKMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A36B2EB25403B6200CB344D /* ShareSDKMethod.m */; };
 		4A36B2F625403B6300CB344D /* LGXThirdEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A36B2EE25403B6200CB344D /* LGXThirdEngine.m */; };
+		4A3FB09125411202006FEEBE /* PlayVideoDemadInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A3FB09025411202006FEEBE /* PlayVideoDemadInfoCell.m */; };
 		4A4605FD2407BD34007C209A /* jcore-ios-1.1.1.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A580ED824075F2C00E82675 /* jcore-ios-1.1.1.a */; };
 		4A4606012407BE1D007C209A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A4606002407BE1D007C209A /* CFNetwork.framework */; };
 		4A4606032407BE25007C209A /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A4606022407BE25007C209A /* CoreFoundation.framework */; };
@@ -828,6 +829,8 @@
 		4A36B2EC25403B6200CB344D /* LGXThirdEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGXThirdEngine.h; sourceTree = "<group>"; };
 		4A36B2ED25403B6200CB344D /* ShareSDKMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShareSDKMethod.h; sourceTree = "<group>"; };
 		4A36B2EE25403B6200CB344D /* LGXThirdEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGXThirdEngine.m; sourceTree = "<group>"; };
+		4A3FB08F25411202006FEEBE /* PlayVideoDemadInfoCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayVideoDemadInfoCell.h; sourceTree = "<group>"; };
+		4A3FB09025411202006FEEBE /* PlayVideoDemadInfoCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayVideoDemadInfoCell.m; sourceTree = "<group>"; };
 		4A4605FE2407BD55007C209A /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4A4605FF2407BD62007C209A /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
 		4A4606002407BE1D007C209A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -4500,6 +4503,8 @@
 				4AE2FBF52480B762007E3BAA /* PlayerTopAddViewCell.m */,
 				4A68BC452537D70F0024A9BF /* PlayVideoDemadCell.h */,
 				4A68BC462537D70F0024A9BF /* PlayVideoDemadCell.m */,
+				4A3FB08F25411202006FEEBE /* PlayVideoDemadInfoCell.h */,
+				4A3FB09025411202006FEEBE /* PlayVideoDemadInfoCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -5243,6 +5248,7 @@
 				4A64ECD5242C547B00D30FB1 /* NSObject+Auth.m in Sources */,
 				4A580F2B24075F2D00E82675 /* UIColor+_Hex.m in Sources */,
 				4AB50B18246A97B50064BF82 /* QRScanCodeViewController.m in Sources */,
+				4A3FB09125411202006FEEBE /* PlayVideoDemadInfoCell.m in Sources */,
 				4A580FD124075F2D00E82675 /* LoginBottomViewCell.m in Sources */,
 				4A68693B2457C8530036355E /* AddGroupTopViewCell.m in Sources */,
 				4A6869BC245ACB930036355E /* EquimentSharedViewController.m in Sources */,
