@@ -118,7 +118,7 @@
 
     
     [self.view addSubview:self.collectionView];
-    [self.collectionView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
+    [self.collectionView alignTop:@"10" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     
     
     _areaView = [ChooseAreaView new];
@@ -217,11 +217,7 @@
         //live直播
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
         vc.hidesBottomBarWhenPushed = YES;
-        vc.allDataArray = [NSArray arrayWithObjects:model, nil];
-        vc.isLiving = YES;
-        vc.isDemandFile = NO;
-        vc.isVideoFile = NO;
-        vc.title_value = model.model.name;
+        [vc makeViewLiveData:[NSArray arrayWithObjects:model, nil] withTitle:model.model.name];
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
         

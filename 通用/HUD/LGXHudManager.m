@@ -203,12 +203,13 @@
     _HUD = self.prototypeHUD;
     _HUD.indicatorView = [[JGProgressHUDRingIndicatorView alloc] initWithHUDStyle:_HUD.style];
     
-    _HUD.detailTextLabel.text = dTitle;
+    _HUD.detailTextLabel.text = nil;
     _HUD.textLabel.text = title;
     [_HUD showInView:inView?inView:self.window];
     
     _HUD.layoutChangeAnimationDuration = 0.0;
-    [self setProgress:0 animated:NO];
+    CGFloat progress = [[NSString stringWithFormat:@"%@",dTitle] floatValue];
+    [self setProgress:progress animated:NO];
     
     return _HUD;
 }

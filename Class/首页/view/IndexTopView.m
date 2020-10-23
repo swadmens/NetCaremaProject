@@ -24,6 +24,7 @@
 @property(nonatomic,strong) NSMutableArray *titleDataArray;
 @property (nonatomic, strong) NSMutableDictionary *cellDic;
 @property (nonatomic,assign) BOOL isClick;//是否点击过
+@property (nonatomic,assign) BOOL isClickSearch;//是否点击了搜索
 
 
 @end
@@ -66,7 +67,7 @@
 {
     
     self.searchButton = [UISearchBar new];
-    self.searchButton.placeholder = @"请输入关键词";
+    self.searchButton.placeholder = @"请输入设备名称";
     self.searchButton.barStyle = UISearchBarStyleMinimal;
     self.searchButton.delegate = self;
     self.searchButton.clipsToBounds = YES;
@@ -79,10 +80,10 @@
        }
     searchField1.backgroundColor = [UIColor whiteColor];
     searchField1.textColor = kColorMainTextColor;
-    searchField1.font=[UIFont customFontWithSize:kFontSizeTen];
+    searchField1.font=[UIFont customFontWithSize:kFontSizeTwelve];
     searchField1.layer.cornerRadius=12.5;
     searchField1.layer.masksToBounds=YES;
-    NSMutableAttributedString *arrStr = [[NSMutableAttributedString alloc]initWithString:searchField1.placeholder attributes:@{NSForegroundColorAttributeName:kColorThirdTextColor,NSFontAttributeName:[UIFont customFontWithSize:kFontSizeTen]}];
+    NSMutableAttributedString *arrStr = [[NSMutableAttributedString alloc]initWithString:searchField1.placeholder attributes:@{NSForegroundColorAttributeName:kColorThirdTextColor,NSFontAttributeName:[UIFont customFontWithSize:kFontSizeTwelve]}];
     searchField1.attributedPlaceholder = arrStr;
     [self.searchButton setTintColor:kColorThirdTextColor];
     [self addSubview:self.searchButton];
@@ -91,19 +92,19 @@
     [self.searchButton setBackgroundImage:searchBGImage];
     [self.searchButton bottomToView:self];
     [self.searchButton leftToView:self withSpace:15];
-    [self.searchButton addWidth:kScreenWidth-60];
-    [self.searchButton addHeight:25];
+    [self.searchButton addWidth:kScreenWidth-30];
+    [self.searchButton addHeight:30];
         
     
-    UIButton *allPlayBtn = [UIButton new];
-    allPlayBtn.hidden = YES;
-    [allPlayBtn setImage:UIImageWithFileName(@"index_search_player_image") forState:UIControlStateNormal];
-    [self addSubview:allPlayBtn];
-    [allPlayBtn yCenterToView:self.searchButton];
-    [allPlayBtn rightToView:self withSpace:10];
-    [allPlayBtn addWidth:30];
-    [allPlayBtn addHeight:30];
-    [allPlayBtn addTarget:self action:@selector(allPlayerBtnClick) forControlEvents:UIControlEventTouchUpInside];
+//    UIButton *allPlayBtn = [UIButton new];
+//    allPlayBtn.hidden = YES;
+//    [allPlayBtn setImage:UIImageWithFileName(@"index_search_player_image") forState:UIControlStateNormal];
+//    [self addSubview:allPlayBtn];
+//    [allPlayBtn yCenterToView:self.searchButton];
+//    [allPlayBtn rightToView:self withSpace:10];
+//    [allPlayBtn addWidth:30];
+//    [allPlayBtn addHeight:30];
+//    [allPlayBtn addTarget:self action:@selector(allPlayerBtnClick) forControlEvents:UIControlEventTouchUpInside];
     
     
     
@@ -124,15 +125,16 @@
     [lineLable addHeight:2];
     
     
-    [self addSubview:self.collectionUpView];
-    [self.collectionUpView yCenterToView:nameLabel];
-    [self.collectionUpView leftToView:nameLabel withSpace:10];
-    [self.collectionUpView addWidth:kScreenWidth-155];
-    [self.collectionUpView addHeight:35];
+//    [self addSubview:self.collectionUpView];
+//    [self.collectionUpView yCenterToView:nameLabel];
+//    [self.collectionUpView leftToView:nameLabel withSpace:10];
+//    [self.collectionUpView addWidth:kScreenWidth-155];
+//    [self.collectionUpView addHeight:35];
     
     
     
     UIButton *addBtn = [UIButton new];
+    addBtn.hidden = YES;
     [addBtn setImage:UIImageWithFileName(@"index_add_image") forState:UIControlStateNormal];
     [addBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
     [self addSubview:addBtn];
@@ -197,34 +199,49 @@
 }
 //搜索处理
 #pragma mark - UISearchBarDelegate
-//- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-//
-//    if (searchText.length == 0) {
-//        self.searchValue = @"";
-//        return;
-//    }else {
-//        self.searchValue = searchText;
-//    }
-//    [self loadNewData];
-//
-//}
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    self.isClickSearch = NO;
+}
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
 {
+    if (self.isClickSearch) {
+        return;
+    }
+    self.isClickSearch = YES;
     if (searchBar.text.length == 0) {
            self.searchValue = @"";
        }else {
-           self.searchValue = searchBar.text;
-           if ([self.delegate respondsToSelector:@selector(searchValue:)]) {
-               [self.delegate searchValue:searchBar.text];
-           }
+           self.searchValue = [NSString stringWithFormat:@"+and+name+eq'*%@*'",searchBar.text];
        }
+    if ([self.delegate respondsToSelector:@selector(searchValue:)]) {
+        [self.delegate searchValue:self.searchValue];
+    }
+}
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    if (self.isClickSearch) {
+        return;
+    }
+    self.isClickSearch = YES;
+    if (searchBar.text.length == 0) {
+        self.searchValue = @"";
+    }else {
+        self.searchValue = [NSString stringWithFormat:@"+and+name+eq'*%@*'",searchBar.text];
+    }
+    if ([self.delegate respondsToSelector:@selector(searchValue:)]) {
+        [self.delegate searchValue:self.searchValue];
+    }
 }
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     self.searchValue = @"";
+    self.isClickSearch = NO;
+    if ([self.delegate respondsToSelector:@selector(searchValue:)]) {
+        [self.delegate searchValue:self.searchValue];
+    }
 }
 -(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
-    [TargetEngine controller:nil pushToController:PushTargetGlobalSearch WithTargetId:nil];
+    self.isClickSearch = NO;
 }
 -(void)allPlayerBtnClick
 {

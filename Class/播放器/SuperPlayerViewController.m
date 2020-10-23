@@ -43,7 +43,15 @@ PlayVideoDemadDelegate
 >
 
 @property (nonatomic,strong) WWTableView *tableView;
-@property(nonatomic,assign) NSInteger page;
+@property (nonatomic,assign) NSInteger page;
+
+@property (nonatomic, strong) CarmeaVideosModel *model;
+@property (nonatomic, strong) DemandModel *ddMdodel;
+@property (nonatomic, strong) NSArray *allDataArray;
+
+@property (nonatomic, assign) BOOL isLiving;//是否是直播
+@property (nonatomic, assign) BOOL isVideoFile;//是否是录像文件
+@property (nonatomic, assign) BOOL isDemandFile;//是否是点播文件
 
 @property (nonatomic,strong) PlayerTableViewCell *topCell;
 @property (nonatomic,strong) PlayVideoDemadCell *videoCell;
@@ -86,7 +94,6 @@ PlayVideoDemadDelegate
 - (void)setupTableView
 {
     self.tableView = [[WWTableView alloc] init];
-//    [self.tableView setScrollEnabled:NO];
     self.tableView.backgroundColor = kColorBackgroundColor;
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -114,7 +121,6 @@ PlayVideoDemadDelegate
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = self.title_value;
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     
@@ -123,9 +129,9 @@ PlayVideoDemadDelegate
 
     self.videoing = NO;
     _videoTipView = [UIView new];
+    _videoTipView.hidden = YES;
     _videoTipView.layer.cornerRadius = 15;
     _videoTipView.backgroundColor = UIColorFromRGB(0x000000, 0.73);
-    _videoTipView.hidden = !_isLiving;
     [self.view addSubview:_videoTipView];
     [_videoTipView xCenterToView:self.view];
     [_videoTipView bottomToView:self.view withSpace:35];
@@ -133,29 +139,21 @@ PlayVideoDemadDelegate
     [_videoTipView addHeight:30];
 
     _videoTipLabel = [UILabel new];
+    _videoTipLabel.text = @"开始录像";
     _videoTipLabel.textColor = [UIColor whiteColor];
     _videoTipLabel.font = [UIFont customFontWithSize:kFontSizeEleven];
     [_videoTipView addSubview:_videoTipLabel];
     [_videoTipLabel xCenterToView:_videoTipView];
     [_videoTipLabel yCenterToView:_videoTipView];
+
     
-    
-    if (!_isDemandFile) {
-        
-        self.selectModel = self.allDataArray.firstObject;
-        [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"local"];//本地录像
-        [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"cloud"];//云端录像
-        [self tipViewHidden:YES withTitle:@"开始录像"];
-        if (self.selectModel.model != nil) {
-            [self getEquimentAbility];//获取设备能力集
-        }
-    }
-   
     //右上角按钮组
     UIButton *sharaBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [sharaBtn addTarget:self action:@selector(sharaBtnCLick) forControlEvents:UIControlEventTouchUpInside];
     [sharaBtn setImage:UIImageWithFileName(@"super_player_shara_image") forState:UIControlStateNormal];
-    [sharaBtn sizeToFit];
+//    [sharaBtn sizeToFit];
+    [sharaBtn addWidth:30];
+    [sharaBtn addHeight:30];
     UIBarButtonItem *sharaBtnItem = [[UIBarButtonItem alloc] initWithCustomView:sharaBtn];
     
     UIBarButtonItem *fixedSpaceBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
@@ -164,8 +162,11 @@ PlayVideoDemadDelegate
     UIButton *settingBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [settingBtn addTarget:self action:@selector(systemBtnCLick) forControlEvents:UIControlEventTouchUpInside];
     [settingBtn setImage:UIImageWithFileName(@"super_player_system_image") forState:UIControlStateNormal];
-    [settingBtn sizeToFit];
+    [settingBtn addWidth:30];
+    [settingBtn addHeight:30];
+//    [settingBtn sizeToFit];
     UIBarButtonItem *settingBtnItem = [[UIBarButtonItem alloc] initWithCustomView:settingBtn];
+
     
     self.navigationItem.rightBarButtonItems  = @[settingBtnItem,fixedSpaceBarButtonItem,sharaBtnItem];
     
@@ -193,6 +194,49 @@ PlayVideoDemadDelegate
     self.isDemandFile = NO;
     self.backLiveBtn.hidden = YES;
     [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0],[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+//直播
+-(void)makeViewLiveData:(NSArray*)dataArray withTitle:(NSString*)title
+{
+    self.isLiving = YES;
+    self.isVideoFile = NO;
+    self.isDemandFile = NO;
+    self.title = title;
+    self.allDataArray = [NSArray arrayWithArray:dataArray];
+    self.selectModel = self.allDataArray.firstObject;
+    [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"local"];//本地录像
+    [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"cloud"];//云端录像
+    if (self.selectModel.model != nil) {
+        [self getEquimentAbility];//获取设备能力集
+    }
+}
+
+//摄像头录像（本地/云端）
+-(void)makeViewVideoData:(MyEquipmentsModel*)model withCarmea:(CarmeaVideosModel*)carmeaModel
+{
+    self.isLiving = NO;
+    self.isVideoFile = YES;
+    self.isDemandFile = NO;
+    self.title = carmeaModel.video_name;
+    self.model = carmeaModel;
+    self.allDataArray = [NSArray arrayWithObject:model];
+    self.selectModel = self.allDataArray.firstObject;
+    [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"local"];//本地录像
+    [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"cloud"];//云端录像
+    if (self.selectModel.model != nil) {
+        [self getEquimentAbility];//获取设备能力集
+    }
+}
+
+//点播文件
+-(void)makeViewDemandData:(DemandModel*)model
+{
+    self.isLiving = NO;
+    self.isVideoFile = NO;
+    self.isDemandFile = YES;
+    self.title = model.title;
+    self.ddMdodel = model;
 }
 
 
@@ -253,6 +297,9 @@ PlayVideoDemadDelegate
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
             [cell makeCellData:self.ddMdodel];
+            cell.deleteVideoBtn = ^{
+                [self queryDeleteVideo];
+            };
             
             return cell;
         }
@@ -362,6 +409,9 @@ PlayVideoDemadDelegate
             break;
         case videoSateVideing://录像
 
+            if (![self.selectModel.system_Source isEqualToString:@"GBS"]) {
+                return;
+            }
             self.controlBtn.selected = !self.controlBtn.selected;
             [self startOrStopVideo:self.controlBtn.selected?@"start":@"stop"];
             [self.topCell startOrStopVideo:self.controlBtn.selected];
@@ -611,8 +661,6 @@ PlayVideoDemadDelegate
         DLog(@"Received: %@", obj);
         if ([states isEqualToString:@"stop"]) {
             [weak_self videoFinishDownload:obj];
-            [weak_self tipViewHidden:YES withTitle:@"录像完成"];
-
         }
     };
     sence.errorBlock = ^(NSError *error) {
@@ -703,26 +751,41 @@ PlayVideoDemadDelegate
 //右上角按钮
 -(void)sharaBtnCLick
 {
-    if (self.videoing) {
-        [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
-        return;
+//    if (self.videoing) {
+//        [_kHUDManager showMsgInView:nil withTitle:@"正在录像！" isSuccess:YES];
+//        return;
+//    }
+    NSString *url;
+    if (_isLiving) {
+        url = [self.selectModel.system_Source isEqualToString:@"DaHua"]?self.selectModel.model.hls:self.selectModel.model.rtmp;
+    }else{
+        url = self.isDemandFile?self.ddMdodel.filePath:self.model.url;
     }
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = url;
+    [_kHUDManager showMsgInView:nil withTitle:@"链接已复制至剪切板" isSuccess:YES];
     
+    return;
     //分享里面的内容
     self.shareParams = [[LGXShareParams alloc] init];
 //        [self.shareParams makeShreParamsByData:self.model.share];
             
     [ShareSDKMethod ShareTextActionWithParams:self.shareParams QRCode:^{
 
+        NSString *url;
+        if (_isLiving) {
+            url = [self.selectModel.system_Source isEqualToString:@"DaHua"]?self.selectModel.model.hls:self.selectModel.model.rtmp;
+        }else{
+            url = self.isDemandFile?self.ddMdodel.filePath:self.model.url;
+        }
+        
+        
         //视频播放地址生成二维码图片
-        [self generatingTwoDimensionalCode:@"这是用来测试的"];
+        [self generatingTwoDimensionalCode:url];
 
      } url:^{
          //链接
          DLog(@"链接");
-         UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-         pasteboard.string = @"这个也是用来测试的";
-         [_kHUDManager showMsgInView:nil withTitle:@"链接已复制至剪切板" isSuccess:YES];
          
      } Result:^(SSDKResponseState state, SSDKPlatformType platformType, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
         
@@ -1026,6 +1089,29 @@ PlayVideoDemadDelegate
         //控制台信息
         [weak_self getCarmarPresetInfo];
     };
+    [sence sendRequest];
+}
+//删除点播文件
+-(void)queryDeleteVideo
+{
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/vod/%@",self.ddMdodel.file_id];
+    
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"DELETE";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    sence.successBlock = ^(id obj) {
+        DLog(@"obj == %@",obj);
+//        [_kHUDManager showMsgInView:nil withTitle:@"视频已删除" isSuccess:YES];
+        [self.videoCell stop];
+        [self.delegate deleteDemandSuccess];
+        [self.navigationController popViewControllerAnimated:YES];
+    };
+    sence.errorBlock = ^(NSError *error) {
+        DLog(@"error == %@",error);
+        [_kHUDManager showMsgInView:nil withTitle:@"删除未完成，请重试！" isSuccess:YES];
+    };
+    
     [sence sendRequest];
 }
 /*

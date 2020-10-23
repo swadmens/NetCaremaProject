@@ -404,12 +404,11 @@
         [formData appendPartWithFileData:value name:@"file" fileName:fileName mimeType:@"video/mp4"];
 
     } progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-//        DLog(@"uploadProgress = %@",uploadProgress.completedUnitCount);
-        
-        NSInteger per = uploadProgress.fractionCompleted * 100;
-        DLog(@"上传进度 ：%d%%",per);
-        
+                
+//        NSString *details = [NSString stringWithFormat:@"%.2f",uploadProgress.fractionCompleted];
+//        [[GCDQueue mainQueue] queueBlock:^{
+//            [_kHUDManager showUploadInView:nil withTitle:@"正在上传" andDetailTitle:details];
+//        }];
 
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [_kHUDManager hideAfter:0.1 onHide:nil];

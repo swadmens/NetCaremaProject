@@ -33,6 +33,8 @@
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property(nonatomic,assign) NSInteger page;
 
+@property (nonatomic,strong) NSString *searchValue;
+
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
 @property (nonatomic, strong) IndexBottomView *bottomView;
@@ -70,7 +72,7 @@
     [self.view addSubview:self.tableView];
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 60;
-    [self.tableView alignTop:@"110" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
+    [self.tableView alignTop:@"115" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[SingleCarmeraCell class] forCellReuseIdentifier:[SingleCarmeraCell getCellIDStr]];
@@ -126,10 +128,11 @@
     
     IndexTopView *topView = [IndexTopView new];
     topView.delegate = self;
-    topView.frame = CGRectMake(0, 0, kScreenWidth, 105);
+    topView.frame = CGRectMake(0, 0, kScreenWidth, 110);
     [self.view addSubview:topView];
     
-     
+    self.searchValue = @"";
+    
     _coverView = [UIView new];
     _coverView.hidden = YES;
     _coverView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
@@ -197,7 +200,6 @@
         };
         
         cell.getModelArrayBackdata = ^(NSArray * _Nonnull array) {
-//            self.modelArray = [NSArray arrayWithArray:array];
             [self.modelDic removeObjectForKey:@(indexPath.row)];
             [self.modelDic setObject:array forKey:@(indexPath.row)];
         };
@@ -225,24 +227,9 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     IndexDataModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    
-//    [model.childDevices_info enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        MyEquipmentsModel *meModel = obj;
-//        if ([meModel.system_Source isEqualToString:@"GBS"] && meModel.online && !meModel.model.online) {
-//        }else{
-//
-//        }
-//    }];
-    
-    
-    
     SuperPlayerViewController *vc = [SuperPlayerViewController new];
     vc.hidesBottomBarWhenPushed = YES;
-    vc.allDataArray = [NSArray arrayWithArray:model.childDevices_info];
-    vc.isLiving = YES;
-    vc.isDemandFile = NO;
-    vc.isVideoFile = NO;
-    vc.title_value = model.equipment_name;
+    [vc makeViewLiveData:model.childDevices_info withTitle:model.equipment_name];
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
     
@@ -265,12 +252,20 @@
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
-    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?type=camera_Root&fragmentType=camera_Device&pageSize=100&currentPage=%ld",(long)self.page];
+//    /inventory/managedObjects?query=$filter=type+eq+camera_Root+and+has(camera_Device)%@&pageSize=100&currentPage=1
+//    +and+name+eq'*xx*'
+    
+    NSString *url = [NSString stringWithFormat:@"/inventory/managedObjects?query=$filter=type+eq+camera_Root+and+has(camera_Device)%@&pageSize=100&currentPage=%ld",self.searchValue,(long)self.page];
+    
+
+//    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?type=camera_Root&fragmentType=camera_Device&pageSize=100&currentPage=%ld",(long)self.page];
+    
+    NSString *newUrlString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];//链接含有中文转码
 
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/vnd.com.nsn.cumulocity.managedobjectcollection+json";
-    sence.pathURL = url;
+    sence.pathURL = newUrlString;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
        
@@ -451,6 +446,8 @@
 -(void)searchValue:(NSString *)value
 {
     DLog(@"搜索  ==  %@",value);
+    self.searchValue = value;
+    [self loadNewData];
 }
 -(void)navPopView:(NSInteger)value
 {
@@ -468,16 +465,16 @@
 }
 -(void)allPlayerBtn
 {
-    IndexDataModel *model = [self.dataArray objectAtIndex:0];
-    
-    SuperPlayerViewController *vc = [SuperPlayerViewController new];
-    vc.hidesBottomBarWhenPushed = YES;
-    vc.isLiving = YES;
-    vc.isDemandFile = NO;
-    vc.isVideoFile = NO;
-    vc.title_value = model.equipment_name;
-    [self.navigationController pushViewController:vc animated:YES];
-    self.hidesBottomBarWhenPushed = NO;
+//    IndexDataModel *model = [self.dataArray objectAtIndex:0];
+//
+//    SuperPlayerViewController *vc = [SuperPlayerViewController new];
+//    vc.hidesBottomBarWhenPushed = YES;
+//    vc.isLiving = YES;
+//    vc.isDemandFile = NO;
+//    vc.isVideoFile = NO;
+//    vc.title_value = model.equipment_name;
+//    [self.navigationController pushViewController:vc animated:YES];
+//    self.hidesBottomBarWhenPushed = NO;
 }
 #pragma IndexBottomDelegate
 -(void)clickCancelBtn
@@ -523,21 +520,21 @@
 //更多操作
 -(void)moreDealwith:(BOOL)online
 {
-    NSArray *arr = @[@{@"title":@"消息设置",@"image":@"index_message_image"},
+    NSArray *arr = @[
                      @{@"title":@"全部录像",@"image":@"index_all_video_image"},
-                     @{@"title":@"设备共享",@"image":@"index_equiment_shara_image"},
+//                     @{@"title":@"设备共享",@"image":@"index_equiment_shara_image"},
                      @{@"title":@"设备详情",@"image":@"index_channel_detail_image"}];
-     NSArray *arr2 = @[@{@"title":@"全部录像",@"image":@"index_all_video_image"},
-                     @{@"title":@"通道详情",@"image":@"index_channel_detail_image"}];
+//     NSArray *arr2 = @[@{@"title":@"全部录像",@"image":@"index_all_video_image"},
+//                     @{@"title":@"通道详情",@"image":@"index_channel_detail_image"}];
     
      CGFloat height;
-     if (online) {
+//     if (online) {
          [self.bottomView makeViewData:arr with:self.selectModel.deviceID];
          height = arr.count * 35 + 50;
-     }else{
-         [self.bottomView makeViewData:arr2 with:self.selectModel.deviceID];
-         height = arr2.count * 35 + 50;
-     }
+//     }else{
+//         [self.bottomView makeViewData:arr2 with:self.selectModel.deviceID];
+//         height = arr2.count * 35 + 50;
+//     }
      
     [UIView animateWithDuration:0.3 animations:^{
         self.bottomView.transform = CGAffineTransformMakeTranslation(0, -height);

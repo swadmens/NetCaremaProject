@@ -17,7 +17,7 @@
 #import "CarmeaVideosModel.h"
 #import "VideoUpLoadViewController.h"
 
-@interface DemandViewController ()<UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource,VideoUpLoadSuccessDelegate>
+@interface DemandViewController ()<UISearchBarDelegate,UICollectionViewDelegate,UICollectionViewDataSource,VideoUpLoadSuccessDelegate,SuperPlayerDelegate>
 {
     BOOL _isHadFirst; // 是否第一次加载了
 }
@@ -35,6 +35,7 @@
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSMutableArray *searchDataSource;/**<搜索结果数据源*/
 @property (nonatomic,strong) NSString *searchValue;
+@property (nonatomic,assign) BOOL isClickSearch;//是否点击了搜索
 
 
 @property (nonatomic, strong) WWCollectionView *collectionUpView;
@@ -45,6 +46,7 @@
 
 @property (nonatomic,strong) NSString *folder;//子目录
 @property (nonatomic,assign) BOOL isClick;//是否点击过
+@property (nonatomic,assign) NSIndexPath *selectPath;
 
 @end
 
@@ -94,7 +96,6 @@
 //    [self.view addSubview:self.contentView];
     self.navigationItem.titleView = self.contentView;
 
-    
     
     self.searchButton = [UISearchBar new];
     self.searchButton.placeholder = @"搜索";
@@ -257,15 +258,16 @@
     
 
     
-    [self.view addSubview:self.collectionUpView];
-    [self.collectionUpView alignTop:@"0" leading:@"0" bottom:nil trailing:@"0" toView:self.view];
-    [self.collectionUpView addHeight:35];
+//    [self.view addSubview:self.collectionUpView];
+//    [self.collectionUpView alignTop:@"0" leading:@"0" bottom:nil trailing:@"0" toView:self.view];
+//    [self.collectionUpView addHeight:35];
     
     [self.view addSubview:self.collectionView];
-    [self.collectionView alignTop:@"45" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
+    [self.collectionView alignTop:@"15" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     
     self.folder = @" ";
     self.isClick = NO;
+    self.searchValue = @"";
     [self setupNoDataView];
     [self setupViews];
     [self getSubcatalogList];
@@ -331,14 +333,11 @@
 
     if ([collectionView isEqual:self.collectionView]) {
         DemandModel *model = [self.dataArray objectAtIndex:indexPath.row];
+        self.selectPath = indexPath;
         
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
-        vc.ddMdodel = model;
-        vc.indexInteger = indexPath.row;
-        vc.isLiving = NO;
-        vc.isVideoFile = NO;
-        vc.isDemandFile = YES;
-        vc.title_value = model.title;
+        vc.delegate = self;
+        [vc makeViewDemandData:model];
         vc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:vc animated:YES];
         self.hidesBottomBarWhenPushed = NO;
@@ -412,14 +411,20 @@
 //    }
 //    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:mutData options:0 error:nil];
     
-    //提交数据
-    NSString *url = [NSString stringWithFormat:@"/inventory/managedObjects?type=vod&fragmentType=camera_Vod&pageSize=10&currentPage=%ld",(long)self.page];
+//    /inventory/managedObjects?query=$filter=type+eq+vod+and+has(camera_Vod)+and+(name+eq+xxx*+or+description+eq+xx*+or+title+eq+xx*) &pageSize=100&currentPage=1
     
+    NSString *url = [NSString stringWithFormat:@"/inventory/managedObjects?query=$filter=type+eq+vod+and+has(camera_Vod)%@&pageSize=100&currentPage=%ld",self.searchValue,(long)self.page];
+
+    
+    //提交数据
+//    NSString *url = [NSString stringWithFormat:@"/inventory/managedObjects?query=$filter=type+eq+vod+and+has(camera_Vod)&pageSize=10&currentPage=%ld%@",(long)self.page,self.searchValue];
+    NSString *newUrlString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];//链接含有中文转码
+
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
 //    sence.body = jsonData;
-    sence.pathURL = url;
+    sence.pathURL = newUrlString;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
@@ -681,30 +686,51 @@
 
 //搜索处理
 #pragma mark - UISearchBarDelegate
-//- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
-//
-//    if (searchText.length == 0) {
-//        self.searchValue = @"";
-//        return;
-//    }else {
-//        self.searchValue = searchText;
-//    }
-//    [self loadNewData];
-//
-//}
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    self.isClickSearch = NO;
+}
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
 {
+    if (self.isClickSearch) {
+        return;
+    }
+    self.isClickSearch = YES;
     if (searchBar.text.length == 0) {
            self.searchValue = @"";
        }else {
-           self.searchValue = searchBar.text;
+           self.searchValue = [NSString stringWithFormat:@"+and+(name+eq'*%@*'or+description+eq'*%@*'or+title+eq'*%@*')",searchBar.text,searchBar.text,searchBar.text];
        }
        [self loadNewData];
 }
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     self.searchValue = @"";
+    self.isClickSearch = NO;
     [self loadNewData];
+}
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    if (self.isClickSearch) {
+        return;
+    }
+    self.isClickSearch = YES;
+    if (searchBar.text.length == 0) {
+           self.searchValue = @"";
+    }else {
+        self.searchValue = [NSString stringWithFormat:@"+and+(name+eq'*%@*'or+description+eq'*%@*'or+title+eq'*%@*')",searchBar.text,searchBar.text,searchBar.text];
+    }
+    [self loadNewData];
+}
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    self.isClickSearch = NO;
+}
+//删除点播文件后处理数据
+#pragma mark - SuperPlayerDelegate
+-(void)deleteDemandSuccess
+{
+    [self.dataArray removeObjectAtIndex:self.selectPath.row];
+    [self.collectionView deleteItemsAtIndexPaths:@[self.selectPath]];
 }
 
 /*

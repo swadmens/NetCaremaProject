@@ -23,7 +23,7 @@ typedef enum : NSUInteger {
     
     PushTargetRetrievePassword = 12, /// 找回密码
     PushTargetDownloadList = 13, /// 下载列表
-    PushTargetLiveLiving = 14, /// live直播
+
     PushTargetAllGroups = 15, /// 全部分组
     PushTargetEquipmentOffline = 16, /// 设备离线
     PushTargetAddNewGroup = 17, /// 添加分组

@@ -21,7 +21,6 @@
 #import "VideoUpLoadViewController.h"//视频上传
 #import "RetrievePasswordController.h"//找回密码
 #import "DownloadListController.h"//下载列表
-#import "LiveLivingViewController.h"//live直播
 #import "AllGroupsViewController.h"//全部分组
 #import "EquipmentOfflineController.h"//设备离线
 #import "AddNewGroupController.h"//添加分组
@@ -513,13 +512,6 @@
             toController = controller;
         }
             break;
-        case PushTargetLiveLiving: //live直播
-        {
-            LiveLivingViewController *controller = [[LiveLivingViewController alloc] init];
-            controller.live_id = pushId;
-            toController = controller;
-        }
-             break;
         case PushTargetRetrievePassword: //找回密码
         {
             RetrievePasswordController *controller = [[RetrievePasswordController alloc] init];

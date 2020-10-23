@@ -233,7 +233,7 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
             [strongSelf setEnable:YES];
 			[strongSelf setKeyboardDistanceFromTextField:10.0];
             [strongSelf setShouldPlayInputClicks:YES];
-            [strongSelf setShouldResignOnTouchOutside:NO];
+            [strongSelf setShouldResignOnTouchOutside:YES];
             [strongSelf setOverrideKeyboardAppearance:NO];
             [strongSelf setKeyboardAppearance:UIKeyboardAppearanceDefault];
             [strongSelf setEnableAutoToolbar:YES];

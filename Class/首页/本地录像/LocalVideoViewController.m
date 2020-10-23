@@ -253,13 +253,14 @@
             if (_isFromIndex) {
                 
                 SuperPlayerViewController *vc = [SuperPlayerViewController new];
-                vc.model = model;
-                vc.allDataArray = [NSArray arrayWithObject:self.model];
-                vc.indexInteger = indexPath.row;
-                vc.isDemandFile = NO;
-                vc.isLiving = NO;
-                vc.isVideoFile = YES;
-                vc.title_value = model.duration;
+//                vc.model = model;
+//                vc.allDataArray = [NSArray arrayWithObject:self.model];
+//                vc.indexInteger = indexPath.row;
+//                vc.isDemandFile = NO;
+//                vc.isLiving = NO;
+//                vc.isVideoFile = YES;
+//                vc.title_value = model.duration;
+                [vc makeViewVideoData:self.model withCarmea:model];
                 [self.navigationController pushViewController:vc animated:YES];
 
             }else{
@@ -629,12 +630,13 @@
             if (weak_self.isFromIndex) {
                 
                 SuperPlayerViewController *vc = [SuperPlayerViewController new];
-                vc.model = model;
-                vc.indexInteger = indexRow;
-                vc.isDemandFile = NO;
-                vc.isLiving = NO;
-                vc.isVideoFile = YES;
-                vc.title_value = model.duration;
+//                vc.model = model;
+//                vc.indexInteger = indexRow;
+//                vc.isDemandFile = NO;
+//                vc.isLiving = NO;
+//                vc.isVideoFile = YES;
+//                vc.title_value = model.duration;
+                [vc makeViewVideoData:self.model withCarmea:model];
                 [weak_self.navigationController pushViewController:vc animated:YES];
 
             }else{

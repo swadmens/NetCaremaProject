@@ -10,19 +10,29 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol SuperPlayerDelegate <NSObject>
+
+//删除点播文件回调方法
+-(void)deleteDemandSuccess;
+
+@end
+
+
 @class DemandModel;
 @class CarmeaVideosModel;
+@class MyEquipmentsModel;
 @interface SuperPlayerViewController : WWViewController
 
-@property (nonatomic,strong) NSString *live_type;
-@property (nonatomic,strong) NSString *title_value;
-@property (nonatomic,strong) CarmeaVideosModel *model;
-@property (nonatomic,strong) DemandModel *ddMdodel;
-@property (nonatomic,strong) NSArray *allDataArray;
-@property (nonatomic,assign) NSInteger indexInteger;
-@property (nonatomic,assign) BOOL isLiving;//是否是直播
-@property (nonatomic, assign) BOOL isVideoFile;//是否是录像文件
-@property (nonatomic, assign) BOOL isDemandFile;//是否是点播文件
+@property (nonatomic,assign) id<SuperPlayerDelegate>delegate;
+
+//直播
+-(void)makeViewLiveData:(NSArray*)dataArray withTitle:(NSString*)title;
+
+//摄像头录像（本地/云端）
+-(void)makeViewVideoData:(MyEquipmentsModel*)model withCarmea:(CarmeaVideosModel*)carmeaModel;
+
+//点播文件
+-(void)makeViewDemandData:(DemandModel*)model;
 
 +(UIViewController *)viewController:(UIView *)view;
 

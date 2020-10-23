@@ -78,7 +78,7 @@
     _titleLabel.text = model.name;
     NSArray *time1 = [model.creationTime componentsSeparatedByString:@"."];
     _createTimeLabel.text = [time1[0] stringByReplacingOccurrencesOfString:@"T" withString:@" "];
-    _describeLabel.text = model.describe;
+    _describeLabel.text = [WWPublicMethod isStringEmptyText:model.describe]?model.describe:@"";
 }
 -(void)deleteVideoBtnClick
 {
@@ -86,29 +86,12 @@
     [[TCNewAlertView shareInstance] showAlert:nil message:@"确认删除该视频吗？" cancelTitle:@"取消" viewController:nil confirm:^(NSInteger buttonTag) {
         
         if (buttonTag == 0) {
-            [self queryDeleteVideo];
+//            [self queryDeleteVideo];
+            if (self.deleteVideoBtn) {
+                self.deleteVideoBtn();
+            }
         }
     } buttonTitles:@"确定", nil];
-}
--(void)queryDeleteVideo
-{
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/vod/%@",self.model.file_id];
-    
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"DELETE";
-    sence.pathHeader = @"application/json";
-    sence.pathURL = url;
-    sence.successBlock = ^(id obj) {
-        DLog(@"obj == %@",obj);
-        [_kHUDManager showMsgInView:nil withTitle:@"视频已删除" isSuccess:YES];
-        [[SuperPlayerViewController viewController:self].navigationController popViewControllerAnimated:YES];
-    };
-    sence.errorBlock = ^(NSError *error) {
-        DLog(@"error == %@",error);
-        [_kHUDManager showMsgInView:nil withTitle:@"删除未完成，请重试！" isSuccess:YES];
-    };
-    
-    [sence sendRequest];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

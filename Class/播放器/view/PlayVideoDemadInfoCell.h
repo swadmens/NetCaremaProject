@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class DemandModel;
 @interface PlayVideoDemadInfoCell : WWTableViewCell
 
+@property (nonatomic,copy) void(^deleteVideoBtn)(void);
 -(void)makeCellData:(DemandModel*)model;
 
 
