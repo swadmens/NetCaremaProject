@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(void)clickCancelBtn;
 
--(void)clickAllVideos;
+-(void)clickAllVideos:(NSInteger)indexs;
 
 -(void)clickChannelDetails;
 

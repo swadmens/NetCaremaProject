@@ -80,7 +80,7 @@ EZPlayerDelegate
 
 @property (nonatomic, strong) PLControlView *controlView;
 
-// 很多时候调用stop之后，播放器可能还会返回请他状态，导致逻辑混乱，记录一下，只要调用了播放器的 stop 方法，就将 isStop 置为 YES 做标记
+// 很多时候调用stop之后，播放器可能还会返回其它状态，导致逻辑混乱，记录一下，只要调用了播放器的 stop 方法，就将 isStop 置为 YES 做标记
 @property (nonatomic, assign) BOOL isStop;
 
 @property (nonatomic, assign) BOOL isStartPlay;
@@ -581,7 +581,7 @@ EZPlayerDelegate
 }
 
 - (void)clickEnterFullScreenButton {
-
+    
     self.isFullScreen = YES;
     if (UIDeviceOrientationLandscapeRight == [[UIDevice currentDevice]orientation]) {
         [self transformWithOrientation:UIDeviceOrientationLandscapeRight];
@@ -917,20 +917,19 @@ EZPlayerDelegate
 - (void)setupPlayer {
     [self unsetupPlayer];
     
-    NSLog(@"播放地址: %@", self.clarity?_plModel.videoUrl:_plModel.videoHDUrl);
+    NSString *playUrl = self.clarity?_plModel.videoUrl:_plModel.videoHDUrl;
+    NSLog(@"播放地址: %@", playUrl);
+    if (![WWPublicMethod isStringEmptyText:playUrl]) {
+        [_kHUDManager showMsgInView:nil withTitle:@"视频地址有误！！！" isSuccess:YES];
+        return;
+    }
+    
+    
     
     if (![WWPublicMethod isStringEmptyText:_plModel.videoHDUrl]) {
         _plModel.videoHDUrl = _plModel.videoUrl;
     }
     
-    if (![WWPublicMethod isStringEmptyText:_plModel.videoUrl] && ![WWPublicMethod isStringEmptyText:_plModel.videoHDUrl]) {
-//        [_kHUDManager showMsgInView:nil withTitle:@"视频地址有误！！！" isSuccess:YES];
-        if (_isFullScreen) {
-            [self clickExitFullScreenButton];
-        }
-//        return;
-    }
- 
     self.thumbImageView.hidden = NO;
     [self.thumbImageView yy_setImageWithURL:[NSURL URLWithString:_plModel.picUrl] options:YYWebImageOptionProgressive];
     
@@ -952,6 +951,8 @@ EZPlayerDelegate
             self.isLiving = NO;
         } else if ([urlString hasSuffix:@".m3u8"]) {
             format = kPLPLAY_FORMAT_M3U8;
+            self.isLiving = YES;
+        }else{
             self.isLiving = YES;
         }
         [self.playerOption setOptionValue:@(format) forKey:PLPlayerOptionKeyVideoPreferFormat];
@@ -987,7 +988,7 @@ EZPlayerDelegate
 
         [EZOpenSDK initLibWithAppKey:_plModel.appKey];
         [EZOpenSDK setAccessToken:_plModel.token];
-        
+
         _m_deltaTime = [self transformToDeltaTime:_plModel.startTime EndTime:_plModel.endTime];
 
 //        NSString *url = @"http://hls01open.ys7.com/openlive/ed751f99c9a9446f8235f09152e3abd3.m3u8";
@@ -1021,7 +1022,7 @@ EZPlayerDelegate
         [self.m_play setSurfaceBGColor:[UIColor blackColor]];
         [self insertSubview:[self.m_play getWindowView] atIndex:0];
         [self.m_play setWindowListener:self];
-        
+
         _m_deltaTime = [self transformToDeltaTime:_plModel.startTime EndTime:_plModel.endTime];
 
         

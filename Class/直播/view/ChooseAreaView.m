@@ -65,7 +65,7 @@
      
         self.backgroundColor = kColorBackgroundColor;
         
-        NSDictionary *dic = @{@"first":@(0),@"second":@(0),@"three":@(0)};
+        NSDictionary *dic = @{@"first":@(0),@"three":@(0)};
         [self.dataDic  addEntriesFromDictionary:dic];
         
         //UI视图
@@ -82,14 +82,14 @@
     self.leftTableView.rowHeight = 33;
 //    self.leftTableView.estimatedRowHeight = 60;
     [self.leftTableView alignTop:@"10" leading:@"0" bottom:@"50" trailing:nil toView:self];
-    [self.leftTableView addWidth:60];
+    [self.leftTableView addWidth:kScreenWidth/3];
     self.leftTableView.delegate = self;
     self.leftTableView.dataSource = self;
     [self.leftTableView registerClass:[AreaNormalCell class] forCellReuseIdentifier:[AreaNormalCell getCellIDStr]];
     
     self.midTableView = [[WWTableView alloc] init];
     self.midTableView.backgroundColor = UIColorFromRGB(0xf8f8f8, 1);
-    [self addSubview:self.midTableView];
+//    [self addSubview:self.midTableView];
     self.midTableView.rowHeight = 33;
 //    self.leftTableView.estimatedRowHeight = 60;
     [self.midTableView alignTop:@"10" leading:@"60" bottom:@"50" trailing:nil toView:self];
@@ -98,12 +98,15 @@
     self.midTableView.dataSource = self;
     [self.midTableView registerClass:[AreaNormalCell class] forCellReuseIdentifier:[AreaNormalCell getCellIDStr]];
     
+    
+    NSString *leftSpace = [NSString stringWithFormat:@"%f",kScreenWidth/3];
+    
     self.rightTableView = [[WWTableView alloc] init];
     self.rightTableView.backgroundColor = [UIColor whiteColor];
     [self addSubview:self.rightTableView];
     self.rightTableView.rowHeight = 33;
 //    self.leftTableView.estimatedRowHeight = 60;
-    [self.rightTableView alignTop:@"10" leading:@"165" bottom:@"50" trailing:@"0" toView:self];
+    [self.rightTableView alignTop:@"10" leading:leftSpace bottom:@"50" trailing:@"0" toView:self];
     self.rightTableView.delegate = self;
     self.rightTableView.dataSource = self;
     [self.rightTableView registerClass:[AreaSelectCell class] forCellReuseIdentifier:[AreaSelectCell getCellIDStr]];
@@ -151,7 +154,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if ([tableView isEqual:self.leftTableView]) {
-        return 1;
+        return 5;
     }else{
         return 8;
     }
@@ -167,14 +170,16 @@
         [tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
         
        return cell;
-    }else if([tableView isEqual:self.midTableView]){
-        AreaNormalCell *cell = [tableView dequeueReusableCellWithIdentifier:[AreaNormalCell getCellIDStr] forIndexPath:indexPath];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        [tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
-
-       return cell;
-    }else{
+    }
+//    else if([tableView isEqual:self.midTableView]){
+//        AreaNormalCell *cell = [tableView dequeueReusableCellWithIdentifier:[AreaNormalCell getCellIDStr] forIndexPath:indexPath];
+//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//
+//        [tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
+//
+//       return cell;
+//    }
+    else{
         AreaSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:[AreaSelectCell getCellIDStr] forIndexPath:indexPath];
          
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -193,22 +198,24 @@
         
         
         [self.dataDic setValue:@(indexPath.row) forKey:@"first"];
-        [self.dataDic setValue:@(0) forKey:@"second"];
-        [self.dataDic setValue:@(0) forKey:@"three"];
+//        [self.dataDic setValue:@(0) forKey:@"second"];
+//        [self.dataDic setValue:@(0) forKey:@"three"];
 
         
-        [self.midTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
+//        [self.midTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
         [self.rightTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
 
           
-    }else if([tableView isEqual:self.midTableView]){
-          
-        [self.dataDic setValue:@(indexPath.row) forKey:@"second"];
-        [self.dataDic setValue:@(0) forKey:@"three"];
-
-        [self.rightTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
-      
-    }else{
+    }
+//    else if([tableView isEqual:self.midTableView]){
+//
+//        [self.dataDic setValue:@(indexPath.row) forKey:@"second"];
+//        [self.dataDic setValue:@(0) forKey:@"three"];
+//
+//        [self.rightTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
+//
+//    }
+    else{
         [self.dataDic setValue:@(indexPath.row) forKey:@"three"];
     }
 }
@@ -217,11 +224,11 @@
 -(void)resetDataClick
 {
     [self.dataDic removeAllObjects];
-    NSDictionary *dic = @{@"first":@(0),@"second":@(0),@"three":@(0)};
+    NSDictionary *dic = @{@"first":@(0),@"three":@(0)};
     [self.dataDic  addEntriesFromDictionary:dic];
     
     [self.leftTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
-    [self.midTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
+//    [self.midTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
     [self.rightTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
 }
 //确定选择

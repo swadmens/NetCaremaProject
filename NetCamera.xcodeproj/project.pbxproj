@@ -711,6 +711,10 @@
 		4AE929002417753400CFBBD8 /* shara_arcode_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE928F82417753400CFBBD8 /* shara_arcode_image@3x.png */; };
 		4AE929012417753400CFBBD8 /* shara_qq_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AE928F92417753400CFBBD8 /* shara_qq_image@2x.png */; };
 		4AF4CA6724E661F200C95400 /* MovEncodeToMpegTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AF4CA6524E661F100C95400 /* MovEncodeToMpegTool.m */; };
+		4AFC83842546719D00F92BCD /* demand_download_black_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AFC83822546719D00F92BCD /* demand_download_black_image@3x.png */; };
+		4AFC83852546719D00F92BCD /* demand_download_black_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AFC83832546719D00F92BCD /* demand_download_black_image@2x.png */; };
+		4AFC838D2546A8F700F92BCD /* AreaSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC838C2546A8F700F92BCD /* AreaSetupViewController.m */; };
+		4AFC83922546AF0D00F92BCD /* AreaSetupViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83912546AF0D00F92BCD /* AreaSetupViewCell.m */; };
 		BC690A0D7092344C888D3680 /* libPods-NetCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90767F8A11353B268BDE0918 /* libPods-NetCamera.a */; };
 /* End PBXBuildFile section */
 
@@ -1885,6 +1889,12 @@
 		4AE928F92417753400CFBBD8 /* shara_qq_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "shara_qq_image@2x.png"; sourceTree = "<group>"; };
 		4AF4CA6524E661F100C95400 /* MovEncodeToMpegTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovEncodeToMpegTool.m; sourceTree = "<group>"; };
 		4AF4CA6624E661F100C95400 /* MovEncodeToMpegTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovEncodeToMpegTool.h; sourceTree = "<group>"; };
+		4AFC83822546719D00F92BCD /* demand_download_black_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "demand_download_black_image@3x.png"; sourceTree = "<group>"; };
+		4AFC83832546719D00F92BCD /* demand_download_black_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "demand_download_black_image@2x.png"; sourceTree = "<group>"; };
+		4AFC838B2546A8F700F92BCD /* AreaSetupViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AreaSetupViewController.h; sourceTree = "<group>"; };
+		4AFC838C2546A8F700F92BCD /* AreaSetupViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AreaSetupViewController.m; sourceTree = "<group>"; };
+		4AFC83902546AF0D00F92BCD /* AreaSetupViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AreaSetupViewCell.h; sourceTree = "<group>"; };
+		4AFC83912546AF0D00F92BCD /* AreaSetupViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AreaSetupViewCell.m; sourceTree = "<group>"; };
 		5DB9CFF7FE0AF07CD2DB397C /* Pods-NetCamera.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetCamera.release.xcconfig"; path = "Pods/Target Support Files/Pods-NetCamera/Pods-NetCamera.release.xcconfig"; sourceTree = "<group>"; };
 		90767F8A11353B268BDE0918 /* libPods-NetCamera.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NetCamera.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A13654334E02429EFAB7F139 /* Pods-NetCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetCamera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NetCamera/Pods-NetCamera.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2057,6 +2067,8 @@
 		4A4606BE2407C513007C209A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4AFC83832546719D00F92BCD /* demand_download_black_image@2x.png */,
+				4AFC83822546719D00F92BCD /* demand_download_black_image@3x.png */,
 				4ACE9604253D3646009D7B4C /* index_reduce_image@2x.png */,
 				4ACE9602253D3646009D7B4C /* index_reduce_image@3x.png */,
 				4ACE9601253D3646009D7B4C /* player_control_disabled_image@2x.png */,
@@ -2380,6 +2392,8 @@
 				4A46089C24091381007C209A /* PersonInfoViewCell.m */,
 				4AB29A3A2410DB59004CA6B5 /* DownloadListCell.h */,
 				4AB29A3B2410DB59004CA6B5 /* DownloadListCell.m */,
+				4AFC83902546AF0D00F92BCD /* AreaSetupViewCell.h */,
+				4AFC83912546AF0D00F92BCD /* AreaSetupViewCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -3061,6 +3075,7 @@
 		4A580D8B24075F2C00E82675 /* 个人中心 */ = {
 			isa = PBXGroup;
 			children = (
+				4AFC83882546A56500F92BCD /* 区域设置 */,
 				4AB29A362410D945004CA6B5 /* 下载列表 */,
 				4A460897240912D0007C209A /* 个人信息 */,
 				4A46087B240900CA007C209A /* model */,
@@ -4489,6 +4504,15 @@
 			path = model;
 			sourceTree = "<group>";
 		};
+		4AFC83882546A56500F92BCD /* 区域设置 */ = {
+			isa = PBXGroup;
+			children = (
+				4AFC838B2546A8F700F92BCD /* AreaSetupViewController.h */,
+				4AFC838C2546A8F700F92BCD /* AreaSetupViewController.m */,
+			);
+			path = "区域设置";
+			sourceTree = "<group>";
+		};
 		5A4FE72A19D9927536936FD0 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -4673,6 +4697,7 @@
 				4AB50B31246D20710064BF82 /* friends_empty_backimage@3x.png in Resources */,
 				4AB50A1A2466424E0064BF82 /* video_control_down_image@2x.png in Resources */,
 				4A580F1F24075F2D00E82675 /* PingFang Light.ttf in Resources */,
+				4AFC83852546719D00F92BCD /* demand_download_black_image@2x.png in Resources */,
 				4AB299E6240E36F4004CA6B5 /* playback_play_image@3x.png in Resources */,
 				4AD26FE524639F9A00D462B4 /* black_back_image@3x.png in Resources */,
 				4AB299C1240DF453004CA6B5 /* demand_choose_backimage@2x.png in Resources */,
@@ -4862,6 +4887,7 @@
 				4A4607072407C514007C209A /* new_guide_p1_img@3x.png in Resources */,
 				4AB50A20246642E90064BF82 /* video_control_stop_image@2x.png in Resources */,
 				4AB50B502476631B0064BF82 /* player_screenshots_disabled_image@2x.png in Resources */,
+				4AFC83842546719D00F92BCD /* demand_download_black_image@3x.png in Resources */,
 				4AB299B4240DE3DF004CA6B5 /* demand_edit_image@2x.png in Resources */,
 				4AB50AA62468EDF40064BF82 /* WMZDialog.bundle in Resources */,
 				4AB29A05240F80D1004CA6B5 /* choose_area_up_image@3x.png in Resources */,
@@ -5093,6 +5119,7 @@
 				4A8D98D52521746200295CAC /* WXZPickCityView.m in Sources */,
 				4A14BC4A24F49FBA003ADC07 /* AFImageDownloader.m in Sources */,
 				4A8D98D22521746200295CAC /* WXZPickTimeView.m in Sources */,
+				4AFC83922546AF0D00F92BCD /* AreaSetupViewCell.m in Sources */,
 				4A580F1924075F2D00E82675 /* RefreshControlView.m in Sources */,
 				4A580FE024075F2D00E82675 /* UIView+autolayout.m in Sources */,
 				4A64ED05242DF2E000D30FB1 /* DemandViewCell.m in Sources */,
@@ -5221,6 +5248,7 @@
 				4A3FB09125411202006FEEBE /* PlayVideoDemadInfoCell.m in Sources */,
 				4A580FD124075F2D00E82675 /* LoginBottomViewCell.m in Sources */,
 				4A68693B2457C8530036355E /* AddGroupTopViewCell.m in Sources */,
+				4AFC838D2546A8F700F92BCD /* AreaSetupViewController.m in Sources */,
 				4A6869BC245ACB930036355E /* EquimentSharedViewController.m in Sources */,
 				4AD270182463FFAB00D462B4 /* UIButton+Ex.m in Sources */,
 				4A580F2924075F2D00E82675 /* LGXNavigationController.m in Sources */,

@@ -167,11 +167,11 @@
 - (CGSize)intrinsicContentSize {
     return UILayoutFittingExpandedSize;
 }
-//- (MainViewController *)customTabBarController
-//{
-//    AppDelegate *adelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-//    return (MainViewController *)adelegate.tabBarController;
-//}
+- (MainViewController *)customTabBarController
+{
+    AppDelegate *adelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    return (MainViewController *)adelegate.tabBarController;
+}
 - (LGXNavigationController *)customNavigationController
 {
     return (LGXNavigationController *)self.navigationController;

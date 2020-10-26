@@ -26,7 +26,7 @@
     self.contentView.backgroundColor = [UIColor whiteColor];
     
     _titleLabel = [UILabel new];
-    _titleLabel.text = @"门店一";
+    _titleLabel.text = @"type+fragmentType";
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
     _titleLabel.textColor = kColorMainTextColor;
     [self.contentView addSubview:_titleLabel];

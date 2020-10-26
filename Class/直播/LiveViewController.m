@@ -118,7 +118,7 @@
 
     
     [self.view addSubview:self.collectionView];
-    [self.collectionView alignTop:@"10" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
+    [self.collectionView alignTop:@"45" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     
     
     _areaView = [ChooseAreaView new];
@@ -135,7 +135,7 @@
     _coverView.backgroundColor = UIColorFromRGB(0x000000, 0.7);
     [[UIApplication sharedApplication].keyWindow addSubview:_coverView];
 
-//    [self creadLivingUI];
+    [self creadLivingUI];
     [self setupNoDataView];
     [self loadNewData];
 }
@@ -180,9 +180,13 @@
     __weak __typeof(self)weakself = self;
     
     if (_chooseBtn.selected) {
-       
-        [UIView animateWithDuration:0.35 animations:^{
+               
+        [UIView animateWithDuration:0.3 animations:^{
             weakself.areaView.transform = CGAffineTransformMakeTranslation(0, kScreenHeight+100);
+//            weakself.coverView.transform = CGAffineTransformMakeTranslation(0, -kScreenHeight+450);
+        }];
+        
+        [UIView animateWithDuration:0.5 animations:^{
             weakself.coverView.transform = CGAffineTransformMakeTranslation(0, -kScreenHeight+450);
         }];
     }else{

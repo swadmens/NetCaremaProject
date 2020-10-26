@@ -31,17 +31,22 @@
     }
     return _dataArray;
 }
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"我的";
     self.view.backgroundColor = kColorBackgroundColor;
-    self.navigationItem.leftBarButtonItem=nil;
-    self.FDPrefersNavigationBarHidden = YES;
+    self.FDPrefersNavigationBarHidden = YES;//隐藏导航栏
+    [self setNeedsStatusBarAppearanceUpdate];
     
+
     NSArray *arr = @[@{@"icon":@"mine_system_image",@"title":@"用户设置",@"describe":@""},
                      @{@"icon":@"mine_download_image",@"title":@"我的下载",@"describe":@""},
-//                     @{@"icon":@"mine_download_image",@"title":@"我的消息",@"describe":@""},
+                     @{@"icon":@"mine_download_image",@"title":@"区域设置",@"describe":@""},
     ];
     [self.dataArray addObjectsFromArray:arr];
         
@@ -160,7 +165,8 @@
         //下载列表
         [TargetEngine controller:self pushToController:PushTargetDownloadList WithTargetId:nil];
     }else{
-        //我的消息
+        //区域设置
+        [TargetEngine controller:self pushToController:PushTargetAreaSetup WithTargetId:nil];
     }
 }
 /*

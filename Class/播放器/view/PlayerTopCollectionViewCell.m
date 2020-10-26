@@ -171,8 +171,8 @@
 }
 -(void)makeCellData:(id)obj
 {
-    if (self.lvModel != nil) {
-        return;
+    if (self.playerView != nil) {
+        [self.playerView removeFromSuperview];
     }
     
     MyEquipmentsModel *myModel = obj;

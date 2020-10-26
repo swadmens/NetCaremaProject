@@ -55,7 +55,7 @@
     backView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:backView];
     [backView alignTop:@"0" leading:@"0" bottom:@"10" trailing:@"0" toView:self.contentView];
-    [backView addHeight:102.5];
+//    [backView addHeight:102.5];
     
     
     _showImageView = [UIImageView new];
@@ -68,7 +68,7 @@
     [_showImageView addGestureRecognizer:tap];
     
     _titleLabel = [UILabel new];
-    _titleLabel.text = @"高清延时拍摄城市路口";
+    _titleLabel.text = @"";
     _titleLabel.textColor = kColorMainTextColor;
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
     [backView addSubview:_titleLabel];
@@ -92,7 +92,7 @@
     
     
     _timeLabel = [UILabel new];
-    _timeLabel.text = @"2020-02-26 14:31:42";
+    _timeLabel.text = @"";
     _timeLabel.textColor = kColorThirdTextColor;
     _timeLabel.font = [UIFont customFontWithSize:kFontSizeTen];
     [backView addSubview:_timeLabel];
@@ -149,7 +149,11 @@
         _totalDataLabel.text = model.writeBytes;
         _progressView.hidden = YES;
         [_downLoadBtn setTitle:@"已完成" forState:UIControlStateNormal];
-    }else{
+    }
+//    else if ([model.progress floatValue] > 0 && [model.progress floatValue] < 1){
+//        [_downLoadBtn setTitle:@"继续" forState:UIControlStateNormal];
+//    }
+    else{
         [_downLoadBtn setTitle:@"下载" forState:UIControlStateNormal];
     }
 
@@ -350,7 +354,7 @@
 
 - (void)playerViewExitFullScreen:(PLPlayerView *)playerView {
     
-    [self.PLPlayer stop];
+    [self stop];
     [self.playerView removeFromSuperview];
     [self.delegate tableViewCellExitFullScreen:self];
 

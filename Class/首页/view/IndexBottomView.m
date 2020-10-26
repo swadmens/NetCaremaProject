@@ -126,8 +126,8 @@
         //全部录像
 //        [TargetEngine controller:nil pushToController:PushTargetLocalVideo WithTargetId:nil];
         
-        if ([self.delegate respondsToSelector:@selector(clickAllVideos)]) {
-            [self.delegate clickAllVideos];
+        if ([self.delegate respondsToSelector:@selector(clickAllVideos:)]) {
+            [self.delegate clickAllVideos:indexPath.row];
         }
         
     }else if ([title isEqualToString:@"index_equiment_shara_image"]){

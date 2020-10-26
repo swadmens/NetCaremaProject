@@ -39,6 +39,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"个人信息";
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
 
     
     NSString *phone = [WWPublicMethod isStringEmptyText:_kUserModel.userInfo.user_phone]?_kUserModel.userInfo.user_phone:@"";

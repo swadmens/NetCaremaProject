@@ -10,6 +10,7 @@
 #import "DemandModel.h"
 #import "RequestSence.h"
 #import "SuperPlayerViewController.h"
+#import "DownloadListController.h"
 
 
 @interface PlayVideoDemadInfoCell ()
@@ -71,6 +72,16 @@
     [self.deleteBtn addHeight:40];
     
     
+    UIButton *downloadBtn = [UIButton new];
+    [downloadBtn setImage:UIImageWithFileName(@"demand_download_black_image") forState:UIControlStateNormal];
+    [downloadBtn addTarget:self action:@selector(downloadVideoBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView addSubview:downloadBtn];
+    [downloadBtn bottomToView:self.contentView];
+    [downloadBtn rightToView:self.deleteBtn withSpace:1];
+    [downloadBtn addWidth:40];
+    [downloadBtn addHeight:40];
+    
+    
 }
 -(void)makeCellData:(DemandModel*)model
 {
@@ -92,6 +103,13 @@
             }
         }
     } buttonTitles:@"确定", nil];
+}
+-(void)downloadVideoBtnClick
+{
+    DownloadListController *dvc = [DownloadListController new];
+    dvc.dataArray = [NSArray arrayWithObject:self.model];
+    dvc.isRecord = NO;
+    [[SuperPlayerViewController viewController:self].navigationController pushViewController:dvc animated:YES];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

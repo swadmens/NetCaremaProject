@@ -254,8 +254,6 @@
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationItem.leftBarButtonItem = nil;
-//    self.FDPrefersNavigationBarHidden = YES;
-    
 
     
 //    [self.view addSubview:self.collectionUpView];

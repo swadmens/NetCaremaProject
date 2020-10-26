@@ -83,7 +83,8 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.title = @"下载列表";
-    
+    self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
+
     [self setupNoDataView];
     [self setupTableView];
     [self dealWithOrigineData];
@@ -241,47 +242,6 @@ static NSString *const _kdownloadListKey = @"download_video_list";
     self.isFullScreen = NO;
     [self setNeedsStatusBarAppearanceUpdate];
 }
-
-
-- (void)startLoadDataRequest:(NSString*)start_time withInteger:(NSInteger)idx
-{
-    [_kHUDManager showActivityInView:nil withTitle:nil];
-    
-    NSString *urlString;
-    if (_isRecord) {
-        //如果是录像文件
-        urlString = [NSString stringWithFormat:@"service/video/liveqing/record/download/%@/%@",self.downLoad_id,start_time];
-    }else{
-        urlString = [NSString stringWithFormat:@"service/video/liveqing/vod/download/%@",start_time];
-    }
-    
-    
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathHeader = @"application/json";
-    sence.pathURL = urlString;
-    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"Received: %@", obj);
-
-         CLVoiceApplyAddressModel *model = [weak_self.showDataArray objectAtIndex:idx];
-         model.url = [obj objectForKey:@"url"];
-         [weak_self.showDataArray replaceObjectAtIndex:idx withObject:model];
-         //更新缓存
-         [CLInvoiceApplyAddressModelTool updateInfoAtIndex:idx withInfo:model];
-         
-         [weak_self.tableView reloadData];
-    };
-
-    sence.errorBlock = ^(NSError *error) {
-
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"error: %@", error);
-    };
-    [sence sendRequest];
-}
-
 //处理原始数据
 -(void)dealWithOrigineData
 {
@@ -308,9 +268,7 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 //                [tempDic setValue:model.video_name forKey:@"name"];//视频名称
                 [tempDic setValue:model.duration forKey:@"duration"];//视频时长
                 [tempDic setValue:model.url forKey:@"hls"];//视频播放地址
-
-                //录像文件下载
-//                [self startLoadDataRequest:model.start_time withInteger:idx];
+                
             }else{
                 
                 DemandModel *model = obj;
@@ -318,11 +276,10 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 //                [tempDic setValue:model. forKey:@"snap"];//封面图片URL
                 [tempDic setValue:model.creationTime forKey:@"time"];//视频时间
 //                [tempDic setValue:model.creationDate forKey:@"start_time"];//视频时间
-                [tempDic setValue:model.name forKey:@"name"];//视频名称
+                [tempDic setValue:model.title forKey:@"name"];//视频名称
                 [tempDic setValue:model.filePath forKey:@"hls"];//视频播放地址
-//
-//                //点播文件下载
-//                [self startLoadDataRequest:model.video_id withInteger:idx];
+                [tempDic setValue:model.filePath forKey:@"url"];//视频下载地址
+                
             }
             
             CLVoiceApplyAddressModel *model = [CLVoiceApplyAddressModel AddressModelWithDict:tempDic];
@@ -352,11 +309,6 @@ static NSString *const _kdownloadListKey = @"download_video_list";
             if (tempName.count > 0) {
                 NSString *mes = [NSString stringWithFormat:@"任务“%@”已存在",[tempName componentsJoinedByString:@"，"]];
                 [[TCNewAlertView shareInstance] showAlert:nil message:mes cancelTitle:nil viewController:self confirm:^(NSInteger buttonTag) {
-            //              if (buttonTag == 0) {
-            
-    //                }else{
-    //
-    //                }
                 } buttonTitles:@"好的", nil];
             }
             //新增缓存信息

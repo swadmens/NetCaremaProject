@@ -154,7 +154,7 @@
     _rightBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
     [_rightBtn addTarget:self action:@selector(right_clicked) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:_rightBtn];
-    [self.navigationItem setRightBarButtonItem:rightItem];
+//    [self.navigationItem setRightBarButtonItem:rightItem];
 }
 -(void)right_clicked
 {
@@ -178,7 +178,7 @@
         return;
     }
     [UIView animateWithDuration:0.3 animations:^{
-        self.editView.transform = CGAffineTransformMakeTranslation(0, -48);
+        self.editView.transform = CGAffineTransformMakeTranslation(0, -45);
     }];
     
     [self.tableView lgx_remakeConstraints:^(LGXLayoutMaker *make) {

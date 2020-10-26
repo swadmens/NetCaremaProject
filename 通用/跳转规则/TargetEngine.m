@@ -36,6 +36,7 @@
 #import "GlobalSearchViewController.h"//全局搜索
 #import "SuperPlayerViewController.h"//播放器
 #import "AddNewEquipmentController.h"//添加设备
+#import "AreaSetupViewController.h"
 
 
 
@@ -509,6 +510,12 @@
         case PushTargetVideoUpLoad: //视频上传
         {
             VideoUpLoadViewController *controller = [[VideoUpLoadViewController alloc] init];
+            toController = controller;
+        }
+            break;
+        case PushTargetAreaSetup: //区域设置
+        {
+            AreaSetupViewController *controller = [[AreaSetupViewController alloc] init];
             toController = controller;
         }
             break;

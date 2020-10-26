@@ -25,7 +25,7 @@
     self.contentView.backgroundColor = UIColorFromRGB(0xf8f8f8, 1);
     
     _titleLabel = [UILabel new];
-    _titleLabel.text = @"区域";
+    _titleLabel.text = @"UserLocationIndex";
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
     _titleLabel.textColor = kColorMainTextColor;
     [self.contentView addSubview:_titleLabel];

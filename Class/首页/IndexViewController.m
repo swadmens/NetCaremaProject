@@ -117,14 +117,12 @@
     [self loadNewData];
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //    self.title = @"我的设备";
     self.view.backgroundColor = kColorBackgroundColor;
-    self.navigationItem.leftBarButtonItem = nil;
-    self.FDPrefersNavigationBarHidden = YES;
+    self.FDPrefersNavigationBarHidden = YES;//隐藏导航栏
     
-//    self.title = @"我的设备";
     
     IndexTopView *topView = [IndexTopView new];
     topView.delegate = self;
@@ -482,15 +480,14 @@
     self.bottomView.transform = CGAffineTransformIdentity;
     self.coverView.hidden = YES;
 }
--(void)clickAllVideos
+-(void)clickAllVideos:(NSInteger)indexs
 {
     LocalVideoViewController *vc = [LocalVideoViewController new];
     vc.delegate = self;
     vc.hidesBottomBarWhenPushed = YES;
     vc.isFromIndex = YES;
     vc.model = self.selectModel;
-//    vc.recordType = self.selectModel.cloudRecordStatus?@"cloud":@"local";
-    vc.recordType = @"cloud";
+    vc.recordType = indexs == 1?@"cloud":@"local";
     [self.navigationController pushViewController:vc animated:YES];
     self.hidesBottomBarWhenPushed = NO;
 }
@@ -521,8 +518,8 @@
 -(void)moreDealwith:(BOOL)online
 {
     NSArray *arr = @[
-                     @{@"title":@"全部录像",@"image":@"index_all_video_image"},
-//                     @{@"title":@"设备共享",@"image":@"index_equiment_shara_image"},
+                     @{@"title":@"本地录像",@"image":@"index_all_video_image"},
+                     @{@"title":@"云端录像",@"image":@"index_all_video_image"},
                      @{@"title":@"设备详情",@"image":@"index_channel_detail_image"}];
 //     NSArray *arr2 = @[@{@"title":@"全部录像",@"image":@"index_all_video_image"},
 //                     @{@"title":@"通道详情",@"image":@"index_channel_detail_image"}];
