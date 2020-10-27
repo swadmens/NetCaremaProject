@@ -253,7 +253,7 @@
 //    /inventory/managedObjects?query=$filter=type+eq+camera_Root+and+has(camera_Device)%@&pageSize=100&currentPage=1
 //    +and+name+eq'*xx*'
     
-    NSString *url = [NSString stringWithFormat:@"/inventory/managedObjects?query=$filter=type+eq+camera_Root+and+has(camera_Device)%@&pageSize=100&currentPage=%ld",self.searchValue,(long)self.page];
+    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?query=$filter=type+eq+camera_Root+and+has(camera_Device)%@&pageSize=100&currentPage=%ld",self.searchValue,(long)self.page];
     
 
 //    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?type=camera_Root&fragmentType=camera_Device&pageSize=100&currentPage=%ld",(long)self.page];

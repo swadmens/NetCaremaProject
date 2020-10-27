@@ -26,13 +26,14 @@
     self.contentView.backgroundColor = [UIColor whiteColor];
     
     _titleLabel = [UILabel new];
-    _titleLabel.text = @"type+fragmentType";
+    _titleLabel.text = @"type+fragmentType+fragmentType";
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
     _titleLabel.textColor = kColorMainTextColor;
     [self.contentView addSubview:_titleLabel];
-    [_titleLabel alignTop:@"0" leading:@"15" bottom:@"0" trailing:@"0" toView:self.contentView];
-    
-    
+    [_titleLabel leftToView:self.contentView withSpace:15];
+    [_titleLabel yCenterToView:self.contentView];
+    [_titleLabel rightToView:self.contentView withSpace:40];
+
     //
     
     _selectBtn = [UIButton new];

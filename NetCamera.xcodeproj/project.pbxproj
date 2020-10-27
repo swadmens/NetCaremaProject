@@ -715,6 +715,15 @@
 		4AFC83852546719D00F92BCD /* demand_download_black_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AFC83832546719D00F92BCD /* demand_download_black_image@2x.png */; };
 		4AFC838D2546A8F700F92BCD /* AreaSetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC838C2546A8F700F92BCD /* AreaSetupViewController.m */; };
 		4AFC83922546AF0D00F92BCD /* AreaSetupViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83912546AF0D00F92BCD /* AreaSetupViewCell.m */; };
+		4AFC83C82547A7CD00F92BCD /* mine_area_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AFC83C62547A7CC00F92BCD /* mine_area_image@2x.png */; };
+		4AFC83C92547A7CD00F92BCD /* mine_area_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AFC83C72547A7CD00F92BCD /* mine_area_image@3x.png */; };
+		4AFC83CE2547B1E600F92BCD /* AddNewAreaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83CD2547B1E600F92BCD /* AddNewAreaViewController.m */; };
+		4AFC83D32547B40700F92BCD /* AddNewAreaChooseCarmeraCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83D22547B40700F92BCD /* AddNewAreaChooseCarmeraCell.m */; };
+		4AFC83D82547B44300F92BCD /* AddNewAreaTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83D72547B44300F92BCD /* AddNewAreaTextFieldCell.m */; };
+		4AFC83DD2547C56100F92BCD /* AreaInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83DC2547C56100F92BCD /* AreaInfoViewController.m */; };
+		4AFC83E22547CED300F92BCD /* AreaSeeInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83E12547CED300F92BCD /* AreaSeeInfoController.m */; };
+		4AFC83E725480C2B00F92BCD /* AreaSetupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83E625480C2B00F92BCD /* AreaSetupModel.m */; };
+		4AFC83EC254814D900F92BCD /* ChooseAreaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83EB254814D900F92BCD /* ChooseAreaViewController.m */; };
 		BC690A0D7092344C888D3680 /* libPods-NetCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90767F8A11353B268BDE0918 /* libPods-NetCamera.a */; };
 /* End PBXBuildFile section */
 
@@ -1895,6 +1904,22 @@
 		4AFC838C2546A8F700F92BCD /* AreaSetupViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AreaSetupViewController.m; sourceTree = "<group>"; };
 		4AFC83902546AF0D00F92BCD /* AreaSetupViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AreaSetupViewCell.h; sourceTree = "<group>"; };
 		4AFC83912546AF0D00F92BCD /* AreaSetupViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AreaSetupViewCell.m; sourceTree = "<group>"; };
+		4AFC83C62547A7CC00F92BCD /* mine_area_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_area_image@2x.png"; sourceTree = "<group>"; };
+		4AFC83C72547A7CD00F92BCD /* mine_area_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mine_area_image@3x.png"; sourceTree = "<group>"; };
+		4AFC83CC2547B1E600F92BCD /* AddNewAreaViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddNewAreaViewController.h; sourceTree = "<group>"; };
+		4AFC83CD2547B1E600F92BCD /* AddNewAreaViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddNewAreaViewController.m; sourceTree = "<group>"; };
+		4AFC83D12547B40700F92BCD /* AddNewAreaChooseCarmeraCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddNewAreaChooseCarmeraCell.h; sourceTree = "<group>"; };
+		4AFC83D22547B40700F92BCD /* AddNewAreaChooseCarmeraCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddNewAreaChooseCarmeraCell.m; sourceTree = "<group>"; };
+		4AFC83D62547B44300F92BCD /* AddNewAreaTextFieldCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddNewAreaTextFieldCell.h; sourceTree = "<group>"; };
+		4AFC83D72547B44300F92BCD /* AddNewAreaTextFieldCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddNewAreaTextFieldCell.m; sourceTree = "<group>"; };
+		4AFC83DB2547C56100F92BCD /* AreaInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AreaInfoViewController.h; sourceTree = "<group>"; };
+		4AFC83DC2547C56100F92BCD /* AreaInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AreaInfoViewController.m; sourceTree = "<group>"; };
+		4AFC83E02547CED300F92BCD /* AreaSeeInfoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AreaSeeInfoController.h; sourceTree = "<group>"; };
+		4AFC83E12547CED300F92BCD /* AreaSeeInfoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AreaSeeInfoController.m; sourceTree = "<group>"; };
+		4AFC83E525480C2B00F92BCD /* AreaSetupModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AreaSetupModel.h; sourceTree = "<group>"; };
+		4AFC83E625480C2B00F92BCD /* AreaSetupModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AreaSetupModel.m; sourceTree = "<group>"; };
+		4AFC83EA254814D900F92BCD /* ChooseAreaViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChooseAreaViewController.h; sourceTree = "<group>"; };
+		4AFC83EB254814D900F92BCD /* ChooseAreaViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ChooseAreaViewController.m; sourceTree = "<group>"; };
 		5DB9CFF7FE0AF07CD2DB397C /* Pods-NetCamera.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetCamera.release.xcconfig"; path = "Pods/Target Support Files/Pods-NetCamera/Pods-NetCamera.release.xcconfig"; sourceTree = "<group>"; };
 		90767F8A11353B268BDE0918 /* libPods-NetCamera.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NetCamera.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A13654334E02429EFAB7F139 /* Pods-NetCamera.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NetCamera.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NetCamera/Pods-NetCamera.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2067,6 +2092,8 @@
 		4A4606BE2407C513007C209A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4AFC83C62547A7CC00F92BCD /* mine_area_image@2x.png */,
+				4AFC83C72547A7CD00F92BCD /* mine_area_image@3x.png */,
 				4AFC83832546719D00F92BCD /* demand_download_black_image@2x.png */,
 				4AFC83822546719D00F92BCD /* demand_download_black_image@3x.png */,
 				4ACE9604253D3646009D7B4C /* index_reduce_image@2x.png */,
@@ -2394,6 +2421,10 @@
 				4AB29A3B2410DB59004CA6B5 /* DownloadListCell.m */,
 				4AFC83902546AF0D00F92BCD /* AreaSetupViewCell.h */,
 				4AFC83912546AF0D00F92BCD /* AreaSetupViewCell.m */,
+				4AFC83D12547B40700F92BCD /* AddNewAreaChooseCarmeraCell.h */,
+				4AFC83D22547B40700F92BCD /* AddNewAreaChooseCarmeraCell.m */,
+				4AFC83D62547B44300F92BCD /* AddNewAreaTextFieldCell.h */,
+				4AFC83D72547B44300F92BCD /* AddNewAreaTextFieldCell.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -2407,6 +2438,8 @@
 				4A6D13CE243C63B80069EA93 /* CLVoiceApplyAddressModel.m */,
 				4A6D13D0243C63F50069EA93 /* CLInvoiceApplyAddressModelTool.h */,
 				4A6D13D1243C63F50069EA93 /* CLInvoiceApplyAddressModelTool.m */,
+				4AFC83E525480C2B00F92BCD /* AreaSetupModel.h */,
+				4AFC83E625480C2B00F92BCD /* AreaSetupModel.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -3872,6 +3905,10 @@
 				4A6869B4245AB9B90036355E /* ChannelDetailController.m */,
 				4A0465CC253E7CEA004B8575 /* ChannelMoreSystemController.h */,
 				4A0465CD253E7CEA004B8575 /* ChannelMoreSystemController.m */,
+				4AFC83DB2547C56100F92BCD /* AreaInfoViewController.h */,
+				4AFC83DC2547C56100F92BCD /* AreaInfoViewController.m */,
+				4AFC83EA254814D900F92BCD /* ChooseAreaViewController.h */,
+				4AFC83EB254814D900F92BCD /* ChooseAreaViewController.m */,
 			);
 			path = "通道详情";
 			sourceTree = "<group>";
@@ -4509,6 +4546,10 @@
 			children = (
 				4AFC838B2546A8F700F92BCD /* AreaSetupViewController.h */,
 				4AFC838C2546A8F700F92BCD /* AreaSetupViewController.m */,
+				4AFC83CC2547B1E600F92BCD /* AddNewAreaViewController.h */,
+				4AFC83CD2547B1E600F92BCD /* AddNewAreaViewController.m */,
+				4AFC83E02547CED300F92BCD /* AreaSeeInfoController.h */,
+				4AFC83E12547CED300F92BCD /* AreaSeeInfoController.m */,
 			);
 			path = "区域设置";
 			sourceTree = "<group>";
@@ -4724,6 +4765,7 @@
 				4A6869792459272D0036355E /* index_allplay_image@2x.png in Resources */,
 				4A64ECFD242D89BD00D30FB1 /* cursor_focus@3x.png in Resources */,
 				4AB299E1240E36F4004CA6B5 /* playback_back_image@3x.png in Resources */,
+				4AFC83C82547A7CD00F92BCD /* mine_area_image@2x.png in Resources */,
 				4AB2999E240CDBF3004CA6B5 /* push_url_image@3x.png in Resources */,
 				4AB299EE240F357C004CA6B5 /* video_delete_image@2x.png in Resources */,
 				4A4608642408E54C007C209A /* rm_key_noselect@2x.png in Resources */,
@@ -4883,6 +4925,7 @@
 				4AB299B5240DE3DF004CA6B5 /* demand_download_image@2x.png in Resources */,
 				4A4607092407C514007C209A /* new_guide_p4_img@2x.png in Resources */,
 				4A68696A24591CE00036355E /* group_row_image@3x.png in Resources */,
+				4AFC83C92547A7CD00F92BCD /* mine_area_image@3x.png in Resources */,
 				4A68695624590B050036355E /* index_channel_detail_image@3x.png in Resources */,
 				4A4607072407C514007C209A /* new_guide_p1_img@3x.png in Resources */,
 				4AB50A20246642E90064BF82 /* video_control_stop_image@2x.png in Resources */,
@@ -5066,6 +5109,7 @@
 				4AB50AB82468EDF50064BF82 /* tagOneCell.m in Sources */,
 				4A580FFE24075F2D00E82675 /* MJRefreshBackNormalFooter.m in Sources */,
 				4AE2FBF62480B762007E3BAA /* PlayerTopAddViewCell.m in Sources */,
+				4AFC83EC254814D900F92BCD /* ChooseAreaViewController.m in Sources */,
 				4A58100F24075F2D00E82675 /* FTAnimation+UIView.m in Sources */,
 				4AB29A11240F9627004CA6B5 /* AreaNormalCell.m in Sources */,
 				4A8D98F225217C2800295CAC /* CGXPickerView.m in Sources */,
@@ -5116,6 +5160,7 @@
 				4AD26FDA2462AB7800D462B4 /* DeleteGroupsTableViewCell.m in Sources */,
 				4A58103024075F2E00E82675 /* IFTTTPathPositionAnimation.m in Sources */,
 				4AB50AB52468EDF50064BF82 /* WMZTagsTool.m in Sources */,
+				4AFC83CE2547B1E600F92BCD /* AddNewAreaViewController.m in Sources */,
 				4A8D98D52521746200295CAC /* WXZPickCityView.m in Sources */,
 				4A14BC4A24F49FBA003ADC07 /* AFImageDownloader.m in Sources */,
 				4A8D98D22521746200295CAC /* WXZPickTimeView.m in Sources */,
@@ -5164,6 +5209,7 @@
 				4A6D1436243F01A70069EA93 /* YDDownloadTask.m in Sources */,
 				4AB50AA52468EDF40064BF82 /* WMZDialog+CardPresent.m in Sources */,
 				4AD270192463FFAB00D462B4 /* UIView+Ex.m in Sources */,
+				4AFC83D82547B44300F92BCD /* AddNewAreaTextFieldCell.m in Sources */,
 				4A580FF624075F2D00E82675 /* UIScrollView+MJRefresh.m in Sources */,
 				4AB50A9E2468EDF40064BF82 /* WMZDialog+DatePicker.m in Sources */,
 				4A580FD924075F2D00E82675 /* UIButton+BGColor.m in Sources */,
@@ -5190,6 +5236,7 @@
 				4A6869232456644C0036355E /* SingleCarmeraCell.m in Sources */,
 				4A8D97E2251AE4C900295CAC /* PresetView.m in Sources */,
 				4A6869A2245A67B80036355E /* CarmeraMoreSystemController.m in Sources */,
+				4AFC83D32547B40700F92BCD /* AddNewAreaChooseCarmeraCell.m in Sources */,
 				4A68693E2457C8850036355E /* SelectedCarmeraCell.m in Sources */,
 				4A58101924075F2D00E82675 /* UITableViewController+ADFlipTransition.m in Sources */,
 				4AB50AB62468EDF50064BF82 /* WMZTagParam.m in Sources */,
@@ -5200,6 +5247,7 @@
 				4A580FED24075F2D00E82675 /* MKNetworkOperation.m in Sources */,
 				4A14BC4724F49FBA003ADC07 /* UIButton+AFNetworking.m in Sources */,
 				4A36B2F225403B6300CB344D /* WXApiResponseHandler.m in Sources */,
+				4AFC83E725480C2B00F92BCD /* AreaSetupModel.m in Sources */,
 				4AB50AA92468EDF40064BF82 /* WMZDialogTool.m in Sources */,
 				4A580FF924075F2D00E82675 /* UIScrollView+MJExtension.m in Sources */,
 				4A36B2EF25403B6300CB344D /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m in Sources */,
@@ -5269,6 +5317,7 @@
 				4A580F8A24075F2D00E82675 /* EPPageControl.m in Sources */,
 				4A58102624075F2E00E82675 /* IFTTTEasingFunction.m in Sources */,
 				4A14BC4824F49FBA003ADC07 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
+				4AFC83E22547CED300F92BCD /* AreaSeeInfoController.m in Sources */,
 				4A68BC602538492F0024A9BF /* ChannelDetailFirstCell.m in Sources */,
 				4A580F2F24075F2D00E82675 /* UUIDManager.m in Sources */,
 				4A58104224075F2E00E82675 /* JXActionSheet.m in Sources */,
@@ -5409,6 +5458,7 @@
 				4A580F6E24075F2D00E82675 /* LGXBadgeView.m in Sources */,
 				4A58102D24075F2E00E82675 /* IFTTTScaleAnimation.m in Sources */,
 				4A64ECE0242D862C00D30FB1 /* HAVPlayer.m in Sources */,
+				4AFC83DD2547C56100F92BCD /* AreaInfoViewController.m in Sources */,
 				4A580F2E24075F2D00E82675 /* WWViewController.m in Sources */,
 				4AB29A0A240F8621004CA6B5 /* LiveViewCollectionViewCell.m in Sources */,
 				4AB50AD22468FB240064BF82 /* WBPopMenuModel.m in Sources */,

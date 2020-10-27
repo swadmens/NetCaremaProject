@@ -1,8 +1,8 @@
 //
-//  AreaSetupViewCell.h
+//  AddNewAreaChooseCarmeraCell.h
 //  NetCamera
 //
-//  Created by 汪伟 on 2020/10/26.
+//  Created by 汪伟 on 2020/10/27.
 //  Copyright © 2020 Guangzhou Eston Trade Co.,Ltd. All rights reserved.
 //
 
@@ -10,10 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class AreaSetupModel;
-@interface AreaSetupViewCell : WWTableViewCell
+@interface AddNewAreaChooseCarmeraCell : WWTableViewCell
 
--(void)makeCellData:(AreaSetupModel*)model;
+-(void)makeCellData:(NSDictionary*)dic;
 
 @end
 

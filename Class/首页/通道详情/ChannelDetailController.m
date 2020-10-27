@@ -18,6 +18,7 @@
 #import "MyEquipmentsModel.h"
 #import "EquimentBasicInfoController.h"
 #import "ChannelMoreSystemController.h"
+#import "AreaInfoViewController.h"
 
 @interface ChannelDetailController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -107,12 +108,20 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 0){
+    NSDictionary *dic = [self.dataArray objectAtIndex:indexPath.row];
+    NSString *title = [dic objectForKey:@"name"];
+
+    if ([title isEqualToString:self.eqModel.equipment_name]){
 //        [TargetEngine controller:self pushToController:PushTargetEquimentBasicInfo WithTargetId:self.model.equipment_id];
         EquimentBasicInfoController *infoVc = [EquimentBasicInfoController new];
         infoVc.model = self.eqModel;
         [self.navigationController pushViewController:infoVc animated:YES];
-    }else if (indexPath.row == self.dataArray.count - 1){
+    }else if ([title isEqualToString:@"区域设置"]){
+
+        //这里判断设备是否设置过区域，未设置过
+        [TargetEngine controller:self pushToController:PushTargetChooseArea WithTargetId:self.eqModel.equipment_id];
+
+    }else if ([title isEqualToString:@"更多设置"]){
         ChannelMoreSystemController *svc = [ChannelMoreSystemController new];
         svc.eqModel = self.eqModel;
         [self.navigationController pushViewController:svc animated:YES];
@@ -136,13 +145,14 @@
         NSArray *arr = @[@{@"name":weak_self.eqModel.equipment_name,@"value":@""},
                          @{@"name":@"封面",@"value":self.eqModel.model.snap},
                          @{@"name":@"通道名称",@"detail":self.eqModel.channel,@"showSwitch":@(NO),@"right":@(NO)},
-                         @{@"name":@"报警消息提醒",@"value":@(YES),@"showSwitch":@(YES),@"type":@"alarm",@"right":@(NO)},
-                         @{@"name":@"镜像翻转",@"value":@(YES),@"showSwitch":@(YES),@"type":@"audio",@"right":@(NO)},
-                         @{@"name":@"布撤防/动检",@"value":@(YES),@"showSwitch":@(YES),@"type":@"encryption",@"right":@(NO)},
+//                         @{@"name":@"报警消息提醒",@"value":@(YES),@"showSwitch":@(YES),@"type":@"alarm",@"right":@(NO)},
+//                         @{@"name":@"镜像翻转",@"value":@(YES),@"showSwitch":@(YES),@"type":@"audio",@"right":@(NO)},
+//                         @{@"name":@"布撤防/动检",@"value":@(YES),@"showSwitch":@(YES),@"type":@"encryption",@"right":@(NO)},
                          @{@"name":@"云端录像",@"value":@(self.eqModel.cloudRecordStatus),@"showSwitch":@(YES),@"type":@"cloud",@"right":@(NO)},
                          @{@"name":@"设备分享",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)},
                          @{@"name":@"设备程序版本",@"detail":@"v1.0",@"showSwitch":@(NO),@"right":@(NO)},
-                         @{@"name":@"更多设置",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)}];
+                         @{@"name":@"更多设置",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)},
+                         @{@"name":@"区域设置",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)}];
         
         [weak_self.dataArray addObjectsFromArray:arr];
         

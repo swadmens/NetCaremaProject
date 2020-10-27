@@ -1,18 +1,19 @@
 //
-//  AreaSetupViewController.m
+//  ChooseAreaViewController.m
 //  NetCamera
 //
-//  Created by 汪伟 on 2020/10/26.
+//  Created by 汪伟 on 2020/10/27.
 //  Copyright © 2020 Guangzhou Eston Trade Co.,Ltd. All rights reserved.
 //
 
-#import "AreaSetupViewController.h"
+#import "ChooseAreaViewController.h"
 #import "WWTableView.h"
 #import "AreaSetupViewCell.h"
 #import "RequestSence.h"
 #import "AreaSetupModel.h"
+#import "AreaInfoViewController.h"
 
-@interface AreaSetupViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface ChooseAreaViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
     BOOL _isHadFirst; // 是否第一次加载了
 }
@@ -24,7 +25,7 @@
 
 @end
 
-@implementation AreaSetupViewController
+@implementation ChooseAreaViewController
 -(NSMutableArray*)dataArray
 {
     if (!_dataArray) {
@@ -34,7 +35,23 @@
 }
 - (void)setupNoDataView
 {
-    self.noDataView = [self setupnoDataContentViewWithTitle:@"暂无区域信息" andImageNamed:@"device_empty_backimage" andTop:@"60"];
+    self.noDataView = [self setupnoDataContentViewWithTitle:@"暂无区域信息，请先添加" andImageNamed:@"device_empty_backimage" andTop:@"60"];
+    
+    UILabel *tipLabel = [self getNoDataTipLabel];
+    UIButton *addBtn = [UIButton new];
+    addBtn.enabled = NO;
+    [addBtn setTitle:@"去添加" forState:UIControlStateNormal];
+    [addBtn setTitleColor:kColorThirdTextColor forState:UIControlStateNormal];
+    addBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
+    [self.noDataView addSubview:addBtn];
+    [addBtn xCenterToView:self.noDataView];
+    [addBtn topToView:tipLabel withSpace:-8];
+    [addBtn addTarget:self action:@selector(addAreaInfoClick) forControlEvents:UIControlEventTouchUpInside];
+}
+//去添加区域信息
+-(void)addAreaInfoClick
+{
+    [TargetEngine controller:self pushToController:PushTargetAddNewArea WithTargetId:nil];
 }
 - (void)setupTableView
 {
@@ -43,7 +60,7 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.estimatedRowHeight = 65;
     [self.view addSubview:self.tableView];
-    [self.tableView alignTop:@"10" leading:@"0" bottom:@"58" trailing:@"0" toView:self.view];
+    [self.tableView alignTop:@"10" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:[AreaSetupViewCell class] forCellReuseIdentifier:[AreaSetupViewCell getCellIDStr]];
@@ -67,6 +84,11 @@
         }
     };
 }
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self loadNewData];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -76,37 +98,6 @@
 
     [self setupNoDataView];
     [self setupTableView];
-    
-    UIView *bottomView = [UIView new];
-    bottomView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:bottomView];
-    [bottomView alignTop:nil leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
-    [bottomView addHeight:58];
-    
-    
-    UIButton *addBtn = [UIButton new];
-    addBtn.clipsToBounds = YES;
-    addBtn.layer.cornerRadius = 19;
-    [addBtn setTitle:@"添加区域" forState:UIControlStateNormal];
-    [addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [addBtn setBackgroundImage:UIImageWithFileName(@"button_back_image") forState:UIControlStateNormal];
-    addBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
-    [addBtn addTarget:self action:@selector(addAreaButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [bottomView addSubview:addBtn];
-    [addBtn centerToView:bottomView];
-    [addBtn addWidth:kScreenWidth-30];
-    [addBtn addHeight:38];
-    
-}
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self loadNewData];
-}
-//添加区域
--(void)addAreaButtonClick
-{
-    [TargetEngine controller:self pushToController:PushTargetAddNewArea WithTargetId:nil];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -129,44 +120,12 @@
 {
     AreaSetupModel *model = [self.dataArray objectAtIndex:indexPath.row];
 
-    NSDictionary *dic = @{@"name":model.name,@"nameEn":model.nameEn,@"locationDetail":model.locationDetail,@"shortName":model.shortName};
-    NSString *pushid = [WWPublicMethod jsonTransFromObject:dic];
-    
-    
-    
-    [TargetEngine controller:self pushToController:PushTargetAreaSeeInfo WithTargetId:pushid];
-}
-#pragma mark ---- 侧滑删除
-// 点击了“左滑出现的Delete按钮”会调用这个方法
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-
-    [self.dataArray removeObjectAtIndex:indexPath.row];
-    // 刷新
-    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-    
-}
-
-//定义编辑样式
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    return UITableViewCellEditingStyleDelete;
-}
-
-// 修改Delete按钮文字为“删除”
-- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return @"删除";
-}
-
-//先要设Cell可编辑
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-
-//设置进入编辑状态时，Cell不会缩进
-- (BOOL)tableView: (UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath {
-      return NO;
+    AreaInfoViewController *avc = [AreaInfoViewController new];
+    avc.model = model;
+    avc.carmera_id = self.carmera_id;
+    avc.isAddInfo = YES;
+    [self.navigationController pushViewController:avc animated:YES];
+            
 }
 
 //获取数据

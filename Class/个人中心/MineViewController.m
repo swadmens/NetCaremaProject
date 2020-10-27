@@ -46,7 +46,7 @@
 
     NSArray *arr = @[@{@"icon":@"mine_system_image",@"title":@"用户设置",@"describe":@""},
                      @{@"icon":@"mine_download_image",@"title":@"我的下载",@"describe":@""},
-                     @{@"icon":@"mine_download_image",@"title":@"区域设置",@"describe":@""},
+                     @{@"icon":@"mine_area_image",@"title":@"区域设置",@"describe":@""},
     ];
     [self.dataArray addObjectsFromArray:arr];
         

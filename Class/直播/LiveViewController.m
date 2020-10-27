@@ -122,7 +122,7 @@
     
     
     _areaView = [ChooseAreaView new];
-    _areaView.frame = CGRectMake(0, -kScreenHeight, kScreenWidth, 350);
+    _areaView.frame = CGRectMake(0, -350, kScreenWidth, 350);
     [[UIApplication sharedApplication].keyWindow addSubview:_areaView];
     __weak __typeof(self)weakSelf = self;
     _areaView.chooseArea = ^(NSString * _Nonnull area_id) {
@@ -131,10 +131,14 @@
     };
     
     _coverView = [UIView new];
+    _coverView.userInteractionEnabled = YES;
     _coverView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight-450);
     _coverView.backgroundColor = UIColorFromRGB(0x000000, 0.7);
     [[UIApplication sharedApplication].keyWindow addSubview:_coverView];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(coverViewClick:)];
+    [_coverView addGestureRecognizer:tap];
 
+    
     [self creadLivingUI];
     [self setupNoDataView];
     [self loadNewData];
@@ -154,6 +158,7 @@
     [self.view addSubview:topView];
     [topView alignTop:@"0" leading:@"0" bottom:nil trailing:@"0" toView:self.view];
     [topView addHeight:35];
+    [topView addBottomLineByColor:kColorLineColor];
     
     
     _chooseBtn = [UIButton new];
@@ -181,12 +186,11 @@
     
     if (_chooseBtn.selected) {
                
-        [UIView animateWithDuration:0.3 animations:^{
-            weakself.areaView.transform = CGAffineTransformMakeTranslation(0, kScreenHeight+100);
-//            weakself.coverView.transform = CGAffineTransformMakeTranslation(0, -kScreenHeight+450);
+        [UIView animateWithDuration:0.35 animations:^{
+            weakself.areaView.transform = CGAffineTransformMakeTranslation(0, 450);
         }];
         
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.1 animations:^{
             weakself.coverView.transform = CGAffineTransformMakeTranslation(0, -kScreenHeight+450);
         }];
     }else{
@@ -196,6 +200,14 @@
         }];
     }
     
+}
+-(void)coverViewClick:(UITapGestureRecognizer*)tp
+{
+    __weak __typeof(self)weakself = self;
+    [UIView animateWithDuration:0.35 animations:^{
+        weakself.areaView.transform = CGAffineTransformIdentity;
+        weakself.coverView.transform = CGAffineTransformIdentity;
+    }];
 }
 
 #pragma mark -- collectionDelegate
@@ -249,7 +261,7 @@
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
     NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?type=camera_Root&fragmentType=camera_Device&pageSize=100&currentPage=%ld",(long)self.page];
-
+    
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/vnd.com.nsn.cumulocity.managedobjectcollection+json";
@@ -331,7 +343,7 @@
 -(void)getDeviceInfo:(NSString*)device_id withIndex:(NSInteger)index
 {
     NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
-//    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
+//        NSString *url = @"inventory/managedObjects?type=camera&fragmentType=camera_Device&pageSize=1000";
 
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";

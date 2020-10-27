@@ -21,7 +21,9 @@ typedef enum : NSUInteger {
     PushTargetEquipmentInformation = 6, /// 设备信息
     PushTargetVideoUpLoad = 7, /// 视频上传
     PushTargetAreaSetup = 8, /// 区域设置
-
+    PushTargetAddNewArea = 9, /// 添加区域
+    PushTargetAreaSeeInfo = 10, /// 区域信息
+    PushTargetChooseArea = 11, /// 选择区域
     PushTargetRetrievePassword = 12, /// 找回密码
     PushTargetDownloadList = 13, /// 下载列表
 

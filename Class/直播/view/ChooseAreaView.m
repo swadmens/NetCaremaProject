@@ -17,7 +17,7 @@
 @property (nonatomic,strong) WWTableView *leftTableView;
 @property (nonatomic,strong) NSMutableArray *leftDataArray;
 
-@property (nonatomic,strong) WWTableView *midTableView;
+//@property (nonatomic,strong) WWTableView *midTableView;
 @property (nonatomic,strong) NSMutableArray *midDataArray;
 
 @property (nonatomic,strong) WWTableView *rightTableView;
@@ -63,8 +63,8 @@
 {
     if (self = [super initWithFrame:frame]) {
      
-        self.backgroundColor = kColorBackgroundColor;
-        
+        self.backgroundColor = [UIColor whiteColor];
+
         NSDictionary *dic = @{@"first":@(0),@"three":@(0)};
         [self.dataDic  addEntriesFromDictionary:dic];
         
@@ -78,37 +78,32 @@
     
     self.leftTableView = [[WWTableView alloc] init];
     self.leftTableView.backgroundColor = UIColorFromRGB(0xf0f0f0, 1);
-    [self addSubview:self.leftTableView];
-    self.leftTableView.rowHeight = 33;
-//    self.leftTableView.estimatedRowHeight = 60;
-    [self.leftTableView alignTop:@"10" leading:@"0" bottom:@"50" trailing:nil toView:self];
-    [self.leftTableView addWidth:kScreenWidth/3];
     self.leftTableView.delegate = self;
     self.leftTableView.dataSource = self;
+    [self addSubview:self.leftTableView];
+    [self.leftTableView alignTop:@"0" leading:@"0" bottom:@"50" trailing:nil toView:self];
+    [self.leftTableView addWidth:kScreenWidth/3];
     [self.leftTableView registerClass:[AreaNormalCell class] forCellReuseIdentifier:[AreaNormalCell getCellIDStr]];
     
-    self.midTableView = [[WWTableView alloc] init];
-    self.midTableView.backgroundColor = UIColorFromRGB(0xf8f8f8, 1);
-//    [self addSubview:self.midTableView];
-    self.midTableView.rowHeight = 33;
-//    self.leftTableView.estimatedRowHeight = 60;
-    [self.midTableView alignTop:@"10" leading:@"60" bottom:@"50" trailing:nil toView:self];
-    [self.midTableView addWidth:105];
-    self.midTableView.delegate = self;
-    self.midTableView.dataSource = self;
-    [self.midTableView registerClass:[AreaNormalCell class] forCellReuseIdentifier:[AreaNormalCell getCellIDStr]];
-    
+//    self.midTableView = [[WWTableView alloc] init];
+//    self.midTableView.backgroundColor = UIColorFromRGB(0xf8f8f8, 1);
+//    self.midTableView.delegate = self;
+//    self.midTableView.dataSource = self;
+//    self.midTableView.rowHeight = 33;
+////    [self addSubview:self.midTableView];
+//    [self.midTableView alignTop:@"10" leading:@"60" bottom:@"50" trailing:nil toView:self];
+//    [self.midTableView addWidth:105];
+//    [self.midTableView registerClass:[AreaNormalCell class] forCellReuseIdentifier:[AreaNormalCell getCellIDStr]];
+//
     
     NSString *leftSpace = [NSString stringWithFormat:@"%f",kScreenWidth/3];
     
     self.rightTableView = [[WWTableView alloc] init];
-    self.rightTableView.backgroundColor = [UIColor whiteColor];
-    [self addSubview:self.rightTableView];
-    self.rightTableView.rowHeight = 33;
-//    self.leftTableView.estimatedRowHeight = 60;
-    [self.rightTableView alignTop:@"10" leading:leftSpace bottom:@"50" trailing:@"0" toView:self];
+    self.rightTableView.backgroundColor = UIColorFromRGB(0xf0f0f0, 1);
     self.rightTableView.delegate = self;
     self.rightTableView.dataSource = self;
+    [self addSubview:self.rightTableView];
+    [self.rightTableView alignTop:@"0" leading:leftSpace bottom:@"50" trailing:@"0" toView:self];
     [self.rightTableView registerClass:[AreaSelectCell class] forCellReuseIdentifier:[AreaSelectCell getCellIDStr]];
     
     
@@ -154,11 +149,19 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if ([tableView isEqual:self.leftTableView]) {
-        return 5;
+        return 10;
     }else{
-        return 8;
+        return 20;
     }
     
+}
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([tableView isEqual:self.leftTableView]) {
+        return 40;
+    }else{
+        return 35;
+    }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -181,16 +184,15 @@
 //    }
     else{
         AreaSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:[AreaSelectCell getCellIDStr] forIndexPath:indexPath];
-         
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-         
-         
+                  
         [tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
 
         
         return cell;
     }
 }
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     
