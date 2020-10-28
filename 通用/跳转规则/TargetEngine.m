@@ -38,7 +38,6 @@
 #import "AddNewEquipmentController.h"//添加设备
 #import "AreaSetupViewController.h"//区域设置
 #import "AddNewAreaViewController.h"//添加区域
-#import "AreaSeeInfoController.h"//区域信息
 #import "ChooseAreaViewController.h"//选择区域
 
 @interface TargetEngine ()
@@ -522,13 +521,6 @@
         case PushTargetAddNewArea: //添加区域
         {
             AddNewAreaViewController *controller = [[AddNewAreaViewController alloc] init];
-            toController = controller;
-        }
-            break;
-        case PushTargetAreaSeeInfo: //添加区域
-        {
-            AreaSeeInfoController *controller = [[AreaSeeInfoController alloc] init];
-            controller.area_id = pushId;
             toController = controller;
         }
             break;

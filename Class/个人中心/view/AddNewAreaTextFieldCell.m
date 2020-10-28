@@ -42,9 +42,8 @@
     [_nameTextField addTarget:self action:@selector(valueChange:) forControlEvents:UIControlEventEditingChanged];
     
 }
--(void)makeCellData:(NSDictionary*)dic withEdit:(BOOL)isEdit
+-(void)makeCellData:(NSDictionary*)dic
 {
-    _nameTextField.enabled = isEdit;
     _titleLabel.text = [dic objectForKey:@"title"];
     NSString *detail = [dic objectForKey:@"detail"];
     if ([detail hasPrefix:@"请输入"]) {
@@ -52,6 +51,10 @@
     }else{
         _nameTextField.text = [dic objectForKey:@"detail"];
     }
+    
+    BOOL isEdit = [[dic objectForKey:@"isedit"] boolValue];
+    _nameTextField.enabled = isEdit;
+    
 
 }
 #pragma mark - UITextFieldDelegate

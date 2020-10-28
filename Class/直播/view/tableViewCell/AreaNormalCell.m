@@ -7,6 +7,7 @@
 //
 
 #import "AreaNormalCell.h"
+#import "AreaInfoModel.h"
 
 @interface AreaNormalCell ()
 
@@ -34,9 +35,13 @@
     [_titleLabel yCenterToView:self.contentView];
     [_titleLabel rightToView:self.contentView withSpace:10];
     
-    
-    
 }
+-(void)makeCellData:(AreaInfoModel *)model
+{
+    _titleLabel.text = model.areaType;
+
+}
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

@@ -33,6 +33,7 @@ NSString *_kStaticURL;
     if (self) {
         self.hostURL = @"";
         self.requestMethod = @"GET";
+        self.bodyMethod = @"POST";
         self.cancelRequestWhenReuqestAgain = YES;
         [self doSetup];
     }
@@ -162,7 +163,7 @@ NSString *_kStaticURL;
 -(void)bodyMutRequest
 {
     NSString *url = [NSString stringWithFormat:@"%@%@",[SharedClient requestURL],self.pathURL];
-    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:@"POST" URLString:url parameters:nil error:nil];
+    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] requestWithMethod:self.bodyMethod URLString:url parameters:nil error:nil];
     // 设置请求头
     [request setValue:self.pathHeader forHTTPHeaderField:@"Accept"];
     [request setValue:self.pathHeader forHTTPHeaderField:@"Content-Type"];

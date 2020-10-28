@@ -43,6 +43,7 @@
 		4A14BC4924F49FBA003ADC07 /* AFAutoPurgingImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A14BC3924F49FB9003ADC07 /* AFAutoPurgingImageCache.m */; };
 		4A14BC4A24F49FBA003ADC07 /* AFImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A14BC3B24F49FB9003ADC07 /* AFImageDownloader.m */; };
 		4A1842B324187CA20052580F /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A4605FF2407BD62007C209A /* libstdc++.6.0.9.tbd */; };
+		4A29D0D4254953AC00688C19 /* AreaInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A29D0D3254953AC00688C19 /* AreaInfoModel.m */; };
 		4A36B2EF25403B6300CB344D /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A36B2DD25403B6200CB344D /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4A36B2F025403B6300CB344D /* SendMessageToWXReq+requestWithTextOrMediaMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A36B2E025403B6200CB344D /* SendMessageToWXReq+requestWithTextOrMediaMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4A36B2F125403B6300CB344D /* WXMediaMessage+messageConstruct.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A36B2E125403B6200CB344D /* WXMediaMessage+messageConstruct.m */; };
@@ -721,7 +722,6 @@
 		4AFC83D32547B40700F92BCD /* AddNewAreaChooseCarmeraCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83D22547B40700F92BCD /* AddNewAreaChooseCarmeraCell.m */; };
 		4AFC83D82547B44300F92BCD /* AddNewAreaTextFieldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83D72547B44300F92BCD /* AddNewAreaTextFieldCell.m */; };
 		4AFC83DD2547C56100F92BCD /* AreaInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83DC2547C56100F92BCD /* AreaInfoViewController.m */; };
-		4AFC83E22547CED300F92BCD /* AreaSeeInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83E12547CED300F92BCD /* AreaSeeInfoController.m */; };
 		4AFC83E725480C2B00F92BCD /* AreaSetupModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83E625480C2B00F92BCD /* AreaSetupModel.m */; };
 		4AFC83EC254814D900F92BCD /* ChooseAreaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC83EB254814D900F92BCD /* ChooseAreaViewController.m */; };
 		BC690A0D7092344C888D3680 /* libPods-NetCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90767F8A11353B268BDE0918 /* libPods-NetCamera.a */; };
@@ -824,6 +824,8 @@
 		4A14BC3924F49FB9003ADC07 /* AFAutoPurgingImageCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFAutoPurgingImageCache.m; sourceTree = "<group>"; };
 		4A14BC3A24F49FB9003ADC07 /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFNetworkActivityIndicatorManager.h; sourceTree = "<group>"; };
 		4A14BC3B24F49FB9003ADC07 /* AFImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFImageDownloader.m; sourceTree = "<group>"; };
+		4A29D0D2254953AC00688C19 /* AreaInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AreaInfoModel.h; sourceTree = "<group>"; };
+		4A29D0D3254953AC00688C19 /* AreaInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AreaInfoModel.m; sourceTree = "<group>"; };
 		4A36B2DD25403B6200CB344D /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GetMessageFromWXResp+responseWithTextOrMediaMessage.m"; sourceTree = "<group>"; };
 		4A36B2DE25403B6200CB344D /* WXMediaMessage+messageConstruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WXMediaMessage+messageConstruct.h"; sourceTree = "<group>"; };
 		4A36B2DF25403B6200CB344D /* Constant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constant.h; sourceTree = "<group>"; };
@@ -1914,8 +1916,6 @@
 		4AFC83D72547B44300F92BCD /* AddNewAreaTextFieldCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddNewAreaTextFieldCell.m; sourceTree = "<group>"; };
 		4AFC83DB2547C56100F92BCD /* AreaInfoViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AreaInfoViewController.h; sourceTree = "<group>"; };
 		4AFC83DC2547C56100F92BCD /* AreaInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AreaInfoViewController.m; sourceTree = "<group>"; };
-		4AFC83E02547CED300F92BCD /* AreaSeeInfoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AreaSeeInfoController.h; sourceTree = "<group>"; };
-		4AFC83E12547CED300F92BCD /* AreaSeeInfoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AreaSeeInfoController.m; sourceTree = "<group>"; };
 		4AFC83E525480C2B00F92BCD /* AreaSetupModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AreaSetupModel.h; sourceTree = "<group>"; };
 		4AFC83E625480C2B00F92BCD /* AreaSetupModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AreaSetupModel.m; sourceTree = "<group>"; };
 		4AFC83EA254814D900F92BCD /* ChooseAreaViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChooseAreaViewController.h; sourceTree = "<group>"; };
@@ -4135,6 +4135,8 @@
 			children = (
 				4A64ECC2242B5A5A00D30FB1 /* LivingModel.h */,
 				4A64ECC3242B5A5A00D30FB1 /* LivingModel.m */,
+				4A29D0D2254953AC00688C19 /* AreaInfoModel.h */,
+				4A29D0D3254953AC00688C19 /* AreaInfoModel.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -4548,8 +4550,6 @@
 				4AFC838C2546A8F700F92BCD /* AreaSetupViewController.m */,
 				4AFC83CC2547B1E600F92BCD /* AddNewAreaViewController.h */,
 				4AFC83CD2547B1E600F92BCD /* AddNewAreaViewController.m */,
-				4AFC83E02547CED300F92BCD /* AreaSeeInfoController.h */,
-				4AFC83E12547CED300F92BCD /* AreaSeeInfoController.m */,
 			);
 			path = "区域设置";
 			sourceTree = "<group>";
@@ -5231,6 +5231,7 @@
 				4A580FE424075F2D00E82675 /* UIImage+loadImage.m in Sources */,
 				4AB50A982468EDF40064BF82 /* WMZDialog+Write.m in Sources */,
 				4A58100124075F2D00E82675 /* MJRefreshAutoNormalFooter.m in Sources */,
+				4A29D0D4254953AC00688C19 /* AreaInfoModel.m in Sources */,
 				4A36B2F425403B6300CB344D /* WXApiManager.m in Sources */,
 				4A14BC4224F49FBA003ADC07 /* UIProgressView+AFNetworking.m in Sources */,
 				4A6869232456644C0036355E /* SingleCarmeraCell.m in Sources */,
@@ -5317,7 +5318,6 @@
 				4A580F8A24075F2D00E82675 /* EPPageControl.m in Sources */,
 				4A58102624075F2E00E82675 /* IFTTTEasingFunction.m in Sources */,
 				4A14BC4824F49FBA003ADC07 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
-				4AFC83E22547CED300F92BCD /* AreaSeeInfoController.m in Sources */,
 				4A68BC602538492F0024A9BF /* ChannelDetailFirstCell.m in Sources */,
 				4A580F2F24075F2D00E82675 /* UUIDManager.m in Sources */,
 				4A58104224075F2E00E82675 /* JXActionSheet.m in Sources */,

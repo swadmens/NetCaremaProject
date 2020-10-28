@@ -14,26 +14,30 @@
 {
     MyEquipmentsModel *model = [MyEquipmentsModel new];
     
-    NSDictionary *managedObject = [dic objectForKey:@"managedObject"];
-    model.equipment_id = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"id"]];
-    model.equipment_name = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"name"]];
-    model.owner = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"owner"]];
-    model.system_Source = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"system_Source"]];
-    model.channel = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"channel"]];
-    model.deviceSerial = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"deviceSerial"]];
+//    NSDictionary *managedObject = [dic objectForKey:@"managedObject"];
     
-    NSArray *time1 = [[NSString stringWithFormat:@"%@",[managedObject objectForKey:@"creationTime"]] componentsSeparatedByString:@"."];
+    
+    
+    
+    model.equipment_id = [NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]];
+    model.equipment_name = [NSString stringWithFormat:@"%@",[dic objectForKey:@"name"]];
+    model.owner = [NSString stringWithFormat:@"%@",[dic objectForKey:@"owner"]];
+    model.system_Source = [NSString stringWithFormat:@"%@",[dic objectForKey:@"system_Source"]];
+    model.channel = [NSString stringWithFormat:@"%@",[dic objectForKey:@"channel"]];
+    model.deviceSerial = [NSString stringWithFormat:@"%@",[dic objectForKey:@"deviceSerial"]];
+    
+    NSArray *time1 = [[NSString stringWithFormat:@"%@",[dic objectForKey:@"creationTime"]] componentsSeparatedByString:@"."];
     model.creationTime = [time1[0] stringByReplacingOccurrencesOfString:@"T" withString:@" "];
     
-    NSArray *lastUpdated_time = [[NSString stringWithFormat:@"%@",[managedObject objectForKey:@"lastUpdated"]] componentsSeparatedByString:@"."];
+    NSArray *lastUpdated_time = [[NSString stringWithFormat:@"%@",[dic objectForKey:@"lastUpdated"]] componentsSeparatedByString:@"."];
     model.lastUpdated = [lastUpdated_time[0] stringByReplacingOccurrencesOfString:@"T" withString:@" "];
     
     
-    NSString *switchStatus = [NSString stringWithFormat:@"%@",[managedObject objectForKey:@"cloudRecordStatus"]];
+    NSString *switchStatus = [NSString stringWithFormat:@"%@",[dic objectForKey:@"cloudRecordStatus"]];
     model.cloudRecordStatus = [[switchStatus isEqualToString:@"on"] || [switchStatus isEqualToString:@"ON"]?@(YES):@(NO) boolValue];
 
     
-    NSArray *preArr = [NSArray arrayWithArray:[managedObject objectForKey:@"presets"]];
+    NSArray *preArr = [NSArray arrayWithArray:[dic objectForKey:@"presets"]];
     NSMutableArray *tempPreArr = [NSMutableArray arrayWithCapacity:preArr.count];
     [preArr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSDictionary *preDic = obj;
@@ -44,13 +48,13 @@
 
 
     
-    NSDictionary *statesDic = [managedObject objectForKey:@"c8y_Availability"];
+    NSDictionary *statesDic = [dic objectForKey:@"c8y_Availability"];
     NSString *status = [NSString stringWithFormat:@"%@",[statesDic objectForKey:@"status"]];
     model.equipment_states = [status hasPrefix:@"UN"]?@"离线":@"在线";
     model.online = [[status hasPrefix:@"UN"]?@(NO):@(YES) boolValue];
 
     
-    NSDictionary *sourceInfo = [managedObject objectForKey:@"sourceInfo"];
+    NSDictionary *sourceInfo = [dic objectForKey:@"sourceInfo"];
     model.address = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"address"]];
     model.createdAt = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"createdAt"]];
     model.deviceID = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"deviceID"]];
@@ -61,7 +65,7 @@
     model.snapURL = [NSString stringWithFormat:@"%@",[sourceInfo objectForKey:@"snapURL"]];
 
     
-    NSDictionary *c8y_RequiredAvailability = [managedObject objectForKey:@"c8y_RequiredAvailability"];
+    NSDictionary *c8y_RequiredAvailability = [dic objectForKey:@"c8y_RequiredAvailability"];
     model.responseInterval = [NSString stringWithFormat:@"%@",[c8y_RequiredAvailability objectForKey:@"responseInterval"]];
 
     

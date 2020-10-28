@@ -11,11 +11,13 @@
 #import "AddNewAreaChooseCarmeraCell.h"
 #import "AddNewAreaTextFieldCell.h"
 #import "RequestSence.h"
+#import "AreaSetupModel.h"
 
 @interface AddNewAreaViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong) WWTableView *tableView;
 @property (nonatomic,strong) NSMutableArray *dataArray;
+@property (nonatomic,strong) UIButton *rightBtn;
 
 @property (nonatomic,strong) NSString *name;//位置分类
 @property (nonatomic,strong) NSString *nameEn;//分类别名
@@ -47,22 +49,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"添加区域";
     self.view.backgroundColor = kColorBackgroundColor;
-    
-    
-    NSArray *Arr = @[
-//    @{@"title":@"摄像头",@"detail":@"选择一个要添加区域的设备"},
-                     @{@"title":@"位置分类",@"detail":@"请输入位置分类"},
-                     @{@"title":@"分类别名",@"detail":@"请输入分类别名"},
-                     @{@"title":@"位置信息",@"detail":@"请输入位置信息"},
-                     @{@"title":@"位置别名",@"detail":@"请输入位置别名"},
-//                     @{@"title":@"楼宇",@"detail":@"请输入楼宇"},
-//                     @{@"title":@"楼层",@"detail":@"请输入楼层"},
-//                     @{@"title":@"备注",@"detail":@"请输入备注"}
-    ];
-    [self.dataArray addObjectsFromArray:Arr];
-    
     
     
     [self setupTableView];
@@ -87,7 +74,71 @@
     [addBtn addWidth:kScreenWidth-30];
     [addBtn addHeight:38];
     
+    if (self.model != nil) {
+        self.title = @"区域详情";
+        bottomView.hidden = YES;
+        NSArray *Arr = @[
+                         @{@"title":@"位置分类",@"detail":self.model.name,@"isedit":@(NO)},
+                         @{@"title":@"分类别名",@"detail":self.model.nameEn,@"isedit":@(NO)},
+                         @{@"title":@"位置信息",@"detail":self.model.locationDetail,@"isedit":@(NO)},
+                         @{@"title":@"位置别名",@"detail":self.model.shortName,@"isedit":@(NO)},
+        ];
+        [self.dataArray addObjectsFromArray:Arr];
+        
+        //右上角按钮
+        _rightBtn = [UIButton new];
+        [_rightBtn setTitle:@"编辑" forState:UIControlStateNormal];
+        [_rightBtn setTitle:@"保存" forState:UIControlStateSelected];
+        [_rightBtn setTitleColor:kColorMainColor forState:UIControlStateSelected];
+        [_rightBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _rightBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFifty];
+        [_rightBtn addTarget:self action:@selector(right_clicked) forControlEvents:UIControlEventTouchUpInside];
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:_rightBtn];
+        [self.navigationItem setRightBarButtonItem:rightItem];
+        
+    }else{
+        self.title = @"添加区域";
+        NSArray *Arr = @[
+                         @{@"title":@"位置分类",@"detail":@"请输入位置分类",@"isedit":@(YES)},
+                         @{@"title":@"分类别名",@"detail":@"请输入分类别名",@"isedit":@(YES)},
+                         @{@"title":@"位置信息",@"detail":@"请输入位置信息",@"isedit":@(YES)},
+                         @{@"title":@"位置别名",@"detail":@"请输入位置别名",@"isedit":@(YES)},
+        ];
+        [self.dataArray addObjectsFromArray:Arr];
+    }
+    
+    
 }
+
+//右上角
+-(void)right_clicked
+{
+    self.rightBtn.selected = !self.rightBtn.selected;
+    [self.tableView reloadData];
+    if (self.rightBtn.selected) {
+        //开始编辑
+        [self.dataArray removeAllObjects];
+        NSArray *Arr = @[
+                         @{@"title":@"位置分类",@"detail":self.model.name,@"isedit":@(YES)},
+                         @{@"title":@"分类别名",@"detail":self.model.nameEn,@"isedit":@(YES)},
+                         @{@"title":@"位置信息",@"detail":self.model.locationDetail,@"isedit":@(YES)},
+                         @{@"title":@"位置别名",@"detail":self.model.shortName,@"isedit":@(YES)},
+        ];
+        [self.dataArray addObjectsFromArray:Arr];
+        self.name = self.model.name;
+        self.nameEn = self.model.nameEn;
+        self.locationDetail = self.model.locationDetail;
+        self.shortName = self.model.shortName;
+        [self.tableView reloadData];
+        
+    }else{
+        //保存编辑
+        [self addNewAreaOrEdit:YES];
+    }
+    
+}
+
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.dataArray.count;
@@ -96,19 +147,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *dic = [self.dataArray objectAtIndex:indexPath.row];
-    
-//    if (indexPath.row == 0) {
-//        AddNewAreaChooseCarmeraCell *cell = [tableView dequeueReusableCellWithIdentifier:[AddNewAreaChooseCarmeraCell getCellIDStr] forIndexPath:indexPath];
-//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//
-//        [cell makeCellData:dic];
-//
-//        return cell;
-//    }else{
+
     AddNewAreaTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:[AddNewAreaTextFieldCell getCellIDStr] forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    [cell makeCellData:dic withEdit:YES];
+    [cell makeCellData:dic];
     cell.textFieldValue = ^(NSString * _Nonnull text) {
       
         if (indexPath.row == 0) {
@@ -124,17 +167,16 @@
     };
     
     return cell;
-//    }
 }
-//确定
+//确定,新增区域
 -(void)addAreaButtonClick
 {
+    [self addNewAreaOrEdit:NO];
+}
+//新增或编辑区域
+-(void)addNewAreaOrEdit:(BOOL)isEdit
+{
     //提交数据
-    DLog(@"self.name  ==  %@",self.name);
-    DLog(@"self.nameEn  ==  %@",self.nameEn);
-    DLog(@"self.locationDetail  ==  %@",self.locationDetail);
-    DLog(@"self.shortName  ==  %@",self.shortName);
-    
     if (![WWPublicMethod isStringEmptyText:self.name]) {
         [_kHUDManager showMsgInView:nil withTitle:@"请填写位置分类！" isSuccess:YES];
         return;
@@ -158,6 +200,9 @@
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
     NSString *url = @"service/cameraManagement/camera/area";
+    if (isEdit) {
+        url = [NSString stringWithFormat:@"service/cameraManagement/camera/area/%@",self.model.area_id];
+    }
     NSDictionary *finalParams = @{
                                 @"name": self.name,
                                 @"nameEn": self.nameEn,
@@ -172,15 +217,18 @@
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"BODY";
+    sence.bodyMethod = isEdit?@"PUT":@"POST";
     sence.pathHeader = @"application/json";
     sence.body = jsonData;
     sence.pathURL = url;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"Received: %@", obj);
+//        DLog(@"Received: %@", obj);
+        if ([weak_self.delegate respondsToSelector:@selector(uploadAreaSuccess)]) {
+            [weak_self.delegate uploadAreaSuccess];
+        }
         [weak_self.navigationController popViewControllerAnimated:YES];
-        
     };
     sence.errorBlock = ^(NSError *error) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
@@ -189,7 +237,6 @@
         [_kHUDManager showMsgInView:nil withTitle:@"添加失败，请重试！" isSuccess:YES];
     };
     [sence sendRequest];
-    
 }
 
 /*

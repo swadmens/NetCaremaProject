@@ -92,7 +92,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.title = @"区域设置";
+    self.title = @"选择区域";
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     self.view.backgroundColor = kColorBackgroundColor;
 

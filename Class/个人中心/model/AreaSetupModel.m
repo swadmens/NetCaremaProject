@@ -27,7 +27,7 @@
     model.floor = [NSString stringWithFormat:@"%@",[dic objectForKey:@"floor"]];
     model.building = [NSString stringWithFormat:@"%@",[dic objectForKey:@"building"]];
     
-    model.deviceIds = [NSArray arrayWithArray:[dic objectForKey:@"deviceIds"]];
+//    model.deviceIds = [NSArray arrayWithArray:[dic objectForKey:@"deviceIds"]];
 
     
     return model;

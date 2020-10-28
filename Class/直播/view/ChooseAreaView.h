@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,strong) void(^chooseArea)(NSString *area_id);
 
+-(void)makeViewData:(NSArray*)array;
 
 @end
 

@@ -367,7 +367,8 @@
 
         [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
-            MyEquipmentsModel *model = [MyEquipmentsModel makeModelData:dic];
+            NSDictionary *managedObject = [dic objectForKey:@"managedObject"];
+            MyEquipmentsModel *model = [MyEquipmentsModel makeModelData:managedObject];
             [weak_self getDeviceLivingData:model withIndex:index withEquimentIndex:idx];
             [tempArray addObject:model];
         }];

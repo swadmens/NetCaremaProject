@@ -42,6 +42,8 @@ typedef void(^RequestCacheBlock)(id obj);
 @property (nonatomic, strong) NSArray *fileArray;
 /// 请求Body
 @property (nonatomic, strong) NSData *body;
+@property (nonatomic, strong) NSString *bodyMethod;
+
 /// 请求头
 @property (nonatomic, strong) NSString *pathHeader;
 @property (nonatomic, strong) NSString *api_key;

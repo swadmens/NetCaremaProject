@@ -10,7 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class AreaInfoModel;
 @interface AreaNormalCell : WWTableViewCell
+
+-(void)makeCellData:(AreaInfoModel*)model;
 
 @end
 

@@ -11,8 +11,9 @@
 #import "AreaSetupViewCell.h"
 #import "RequestSence.h"
 #import "AreaSetupModel.h"
+#import "AddNewAreaViewController.h"
 
-@interface AreaSetupViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface AreaSetupViewController ()<UITableViewDelegate,UITableViewDataSource,AddNewAreaSuccessDelegate>
 {
     BOOL _isHadFirst; // 是否第一次加载了
 }
@@ -76,6 +77,8 @@
 
     [self setupNoDataView];
     [self setupTableView];
+    [self loadNewData];
+
     
     UIView *bottomView = [UIView new];
     bottomView.backgroundColor = [UIColor whiteColor];
@@ -101,12 +104,17 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self loadNewData];
 }
 //添加区域
 -(void)addAreaButtonClick
 {
-    [TargetEngine controller:self pushToController:PushTargetAddNewArea WithTargetId:nil];
+    AddNewAreaViewController *avc = [AddNewAreaViewController new];
+    avc.delegate = self;
+    [self.navigationController pushViewController:avc animated:YES];
+}
+-(void)uploadAreaSuccess
+{
+    [self loadNewData];
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -128,23 +136,18 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     AreaSetupModel *model = [self.dataArray objectAtIndex:indexPath.row];
-
-    NSDictionary *dic = @{@"name":model.name,@"nameEn":model.nameEn,@"locationDetail":model.locationDetail,@"shortName":model.shortName};
-    NSString *pushid = [WWPublicMethod jsonTransFromObject:dic];
     
+    AddNewAreaViewController *avc = [AddNewAreaViewController new];
+    avc.model = model;
+    avc.delegate = self;
+    [self.navigationController pushViewController:avc animated:YES];
     
-    
-    [TargetEngine controller:self pushToController:PushTargetAreaSeeInfo WithTargetId:pushid];
 }
 #pragma mark ---- 侧滑删除
 // 点击了“左滑出现的Delete按钮”会调用这个方法
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-
-    [self.dataArray removeObjectAtIndex:indexPath.row];
-    // 刷新
-    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
-    
+    [self deleteAreaDataIndexPath:indexPath];
 }
 
 //定义编辑样式
@@ -223,7 +226,6 @@
     __unsafe_unretained typeof(self) weak_self = self;
     [[GCDQueue globalQueue] queueBlock:^{
         NSArray *data = [obj objectForKey:@"managedObjects"];
-
         NSMutableArray *tempArray = [NSMutableArray array];
 
         if (weak_self.page == 1) {
@@ -265,6 +267,36 @@
         self.tableView.hidden = NO;
         self.noDataView.hidden = YES;
     }
+    
+}
+//删除区域
+-(void)deleteAreaDataIndexPath:(NSIndexPath*)indexPath
+{
+    AreaSetupModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/area/%@",model.area_id];
+    
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"DELETE";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    sence.successBlock = ^(id obj) {
+//        [_kHUDManager showMsgInView:nil withTitle:@"" isSuccess:YES];
+        DLog(@"Received: %@", obj);
+        [[GCDQueue mainQueue] queueBlock:^{
+            //删除数据
+            [self.dataArray removeObjectAtIndex:indexPath.row];
+            // 刷新
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        }];
+
+    };
+    sence.errorBlock = ^(NSError *error) {
+        DLog(@"error  ==  %@",error.userInfo);
+        [_kHUDManager showMsgInView:nil withTitle:@"删除未完成！" isSuccess:YES];
+    };
+    
+    [sence sendRequest];
     
 }
 

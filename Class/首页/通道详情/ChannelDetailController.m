@@ -19,6 +19,7 @@
 #import "EquimentBasicInfoController.h"
 #import "ChannelMoreSystemController.h"
 #import "AreaInfoViewController.h"
+#import "AreaSetupModel.h"
 
 @interface ChannelDetailController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -26,6 +27,9 @@
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
 @property (nonatomic,strong) EquipmentAbilityModel *abModel;
+
+@property (nonatomic,assign) BOOL isSetupArea;//是否设置过区域
+@property (nonatomic,strong) AreaSetupModel *model;
 
 @end
 
@@ -60,11 +64,30 @@
     self.title = @"设备详情";
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
+    self.isSetupArea = NO;
+    
+    NSArray *arr = @[@{@"name":self.eqModel.equipment_name,@"value":@""},
+//                     @{@"name":@"封面",@"value":self.eqModel.model.snap},
+                     @{@"name":@"通道名称",@"detail":self.eqModel.channel,@"showSwitch":@(NO),@"right":@(NO)},
+//                         @{@"name":@"报警消息提醒",@"value":@(YES),@"showSwitch":@(YES),@"type":@"alarm",@"right":@(NO)},
+//                         @{@"name":@"镜像翻转",@"value":@(YES),@"showSwitch":@(YES),@"type":@"audio",@"right":@(NO)},
+//                         @{@"name":@"布撤防/动检",@"value":@(YES),@"showSwitch":@(YES),@"type":@"encryption",@"right":@(NO)},
+                     @{@"name":@"云端录像",@"value":@(self.eqModel.cloudRecordStatus),@"showSwitch":@(YES),@"type":@"cloud",@"right":@(NO)},
+                     @{@"name":@"设备分享",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)},
+                     @{@"name":@"设备程序版本",@"detail":@"v1.0",@"showSwitch":@(NO),@"right":@(NO)},
+                     @{@"name":@"更多设置",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)},
+                     @{@"name":@"区域设置",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)}];
+    
+    [self.dataArray addObjectsFromArray:arr];
  
-    [self getEquimentAbility];
+//    [self getEquimentAbility];
     [self setupTableView];
 }
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self getDeviceInfo];
+}
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.dataArray.count;
@@ -118,8 +141,17 @@
         [self.navigationController pushViewController:infoVc animated:YES];
     }else if ([title isEqualToString:@"区域设置"]){
 
-        //这里判断设备是否设置过区域，未设置过
-        [TargetEngine controller:self pushToController:PushTargetChooseArea WithTargetId:self.eqModel.equipment_id];
+        //这里判断设备是否设置过区域，未设置过就先设置
+        if (self.isSetupArea) {
+            AreaInfoViewController *avc = [AreaInfoViewController new];
+            avc.model = self.model;
+            avc.carmera_id = self.eqModel.equipment_id;
+            avc.isAddInfo = NO;
+            [self.navigationController pushViewController:avc animated:YES];
+        }else{
+            [TargetEngine controller:self pushToController:PushTargetChooseArea WithTargetId:self.eqModel.equipment_id];
+        }
+        
 
     }else if ([title isEqualToString:@"更多设置"]){
         ChannelMoreSystemController *svc = [ChannelMoreSystemController new];
@@ -210,6 +242,37 @@
     };
     [sence sendRequest];
     
+}
+//获取设备信息
+-(void)getDeviceInfo
+{
+    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@",self.eqModel.equipment_id];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"obj ==  %@",obj)
+        NSDictionary *areaInfo = [obj objectForKey:@"areaInfo"];
+        NSDictionary *locationInfo = [obj objectForKey:@"locationInfo"];
+        if (areaInfo != nil && locationInfo != nil) {
+            NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+            [dic addEntriesFromDictionary:areaInfo];
+            [dic addEntriesFromDictionary:locationInfo];
+            [[GCDQueue mainQueue] queueBlock:^{
+                weak_self.isSetupArea = YES;
+                weak_self.model = [AreaSetupModel makeModelData:dic];
+            }];
+        }
+        
+    };
+    sence.errorBlock = ^(NSError *error) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"error: %@", error);
+    };
+    [sence sendRequest];
 }
 
 /*

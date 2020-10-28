@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,copy) void(^textFieldValue)(NSString*text);
 
--(void)makeCellData:(NSDictionary*)dic withEdit:(BOOL)isEdit;
+-(void)makeCellData:(NSDictionary*)dic;
 
 
 @end

@@ -15,6 +15,7 @@
 #import "RequestSence.h"
 #import "MyEquipmentsModel.h"
 #import "IndexDataModel.h"
+#import "AreaInfoModel.h"
 
 
 @interface LiveViewController ()<UICollectionViewDelegate,UICollectionViewDataSource>
@@ -25,7 +26,6 @@
 
 @property (nonatomic, strong) WWCollectionView *collectionView;
 @property (strong, nonatomic) NSMutableArray *dataArray;
-@property (strong, nonatomic) NSMutableArray *dataModelArray;
 @property(nonatomic,assign) NSInteger page;
 /// 没有内容
 @property (nonatomic, strong) UIView *noDataView;
@@ -35,6 +35,12 @@
 @property (nonatomic,strong) ChooseAreaView *areaView;
 @property (nonatomic,strong) UIView *coverView;
 @property (nonatomic,assign) BOOL isLiving;//是否直播中
+
+@property (strong, nonatomic) NSMutableArray *dataAreaArray;
+
+@property (nonatomic,strong) NSString *nameEn;//分类别名
+@property (nonatomic,strong) NSString *shortName;//位置别名
+@property (nonatomic,assign) BOOL selectArea;//是否选择了区域
 
 
 @end
@@ -47,12 +53,18 @@
     }
     return _dataArray;
 }
-- (NSMutableArray *)dataModelArray
+- (NSMutableArray *)dataAreaArray
 {
-    if (!_dataModelArray) {
-        _dataModelArray = [NSMutableArray array];
+    if (!_dataAreaArray) {
+        
+        NSDictionary *dic = @{
+            @"shortNames": @[@"全部"],
+            @"areaType": @"全部"
+        };
+        AreaInfoModel *model = [AreaInfoModel makeModelData:dic];
+        _dataAreaArray = [NSMutableArray arrayWithObject:model];
     }
-    return _dataModelArray;
+    return _dataAreaArray;
 }
 - (WWCollectionView *)collectionView
 {
@@ -113,13 +125,13 @@
     self.title = @"直播";
     self.view.backgroundColor = kColorBackgroundColor;
     self.navigationItem.leftBarButtonItem=nil;
-    
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
 
     
     [self.view addSubview:self.collectionView];
     [self.collectionView alignTop:@"45" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     
+    self.selectArea = NO;
     
     _areaView = [ChooseAreaView new];
     _areaView.frame = CGRectMake(0, -350, kScreenWidth, 350);
@@ -127,6 +139,9 @@
     __weak __typeof(self)weakSelf = self;
     _areaView.chooseArea = ^(NSString * _Nonnull area_id) {
         DLog(@"选择的是  ==   %@",area_id);
+        NSDictionary *areaDic = [WWPublicMethod objectTransFromJson:area_id];
+        weakSelf.nameEn = [areaDic objectForKey:@"first"];
+        weakSelf.shortName = [areaDic objectForKey:@"three"];
         [weakSelf chooseAreaClick];
     };
     
@@ -142,6 +157,7 @@
     [self creadLivingUI];
     [self setupNoDataView];
     [self loadNewData];
+    [self getAreaLocationInfo];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -198,12 +214,29 @@
             weakself.areaView.transform = CGAffineTransformIdentity;
             weakself.coverView.transform = CGAffineTransformIdentity;
         }];
+        //点击了确定，开始筛选
+        NSString *btnTitle;
+        if ([self.shortName isEqualToString:@"全部"]) {
+            self.selectArea = NO;
+            btnTitle = @"选择区域";
+        }else{
+            self.selectArea = YES;
+            btnTitle = [NSString stringWithFormat:@"%@/%@",self.nameEn,self.shortName];
+        }
+        [[GCDQueue mainQueue] queueBlock:^{
+            [self.chooseBtn setTitle:btnTitle forState:UIControlStateNormal];
+            [self loadNewData];
+        }];
+        
+        
+        
     }
     
 }
 -(void)coverViewClick:(UITapGestureRecognizer*)tp
 {
     __weak __typeof(self)weakself = self;
+    _chooseBtn.selected = NO;
     [UIView animateWithDuration:0.35 animations:^{
         weakself.areaView.transform = CGAffineTransformIdentity;
         weakself.coverView.transform = CGAffineTransformIdentity;
@@ -214,21 +247,20 @@
 //定义展示的Section的个数
 -(NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return self.dataModelArray.count;
+    return self.dataArray.count;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     LiveViewCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[LiveViewCollectionViewCell getCellIDStr] forIndexPath:indexPath];
-    MyEquipmentsModel *model = [self.dataModelArray objectAtIndex:indexPath.row];
+    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
     [cell makeCellData:model];
-    
     
     return cell;
     
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    MyEquipmentsModel *model = [self.dataModelArray objectAtIndex:indexPath.row];
+    MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
     if (model.online) {
         //live直播
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
@@ -260,12 +292,20 @@
 {
     [_kHUDManager showActivityInView:nil withTitle:nil];
     
-    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects?type=camera_Root&fragmentType=camera_Device&pageSize=100&currentPage=%ld",(long)self.page];
+    NSString *url;
+    if (self.selectArea) {
+        url = [NSString stringWithFormat:@"inventory/managedObjects?query=$filter=type+eq+camera+and+has(camera_Device)+and+areaInfo.nameEn+eq+%@+and+areaInfo.shortName+eq+%@&pageSize=100&currentPage=%ld",self.nameEn,self.shortName,(long)self.page];
+    }else{
+        url = [NSString stringWithFormat:@"inventory/managedObjects?query=$filter=type+eq+camera+and+has(camera_Device)&pageSize=100&currentPage=%ld",(long)self.page];
+    }
     
+    NSString *newUrlString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];//链接含有中文转码
+
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
-    sence.pathHeader = @"application/vnd.com.nsn.cumulocity.managedobjectcollection+json";
-    sence.pathURL = url;
+//    sence.pathHeader = @"application/vnd.com.nsn.cumulocity.managedobjectcollection+json";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = newUrlString;
     __unsafe_unretained typeof(self) weak_self = self;
     sence.successBlock = ^(id obj) {
        
@@ -298,14 +338,17 @@
 
         if (weak_self.page == 1) {
             [weak_self.dataArray removeAllObjects];
-            [self.dataModelArray removeAllObjects];
         }
 
         [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
-            IndexDataModel *model = [IndexDataModel makeModelData:dic];
-            [tempArray addObject:model];
-            [weak_self getDeviceInfo:model.equipment_id withIndex:idx];
+
+            MyEquipmentsModel *model = [MyEquipmentsModel makeModelData:dic];
+            if (model.online) {
+                [tempArray addObject:model];
+                [weak_self getDeviceLivingData:model withEquimentIndex:tempArray.count-1];
+            }
+            
         }];
         [weak_self.dataArray addObjectsFromArray:tempArray];
         
@@ -339,55 +382,8 @@
     }
 }
 
-//获取设备信息
--(void)getDeviceInfo:(NSString*)device_id withIndex:(NSInteger)index
-{
-    NSString *url = [NSString stringWithFormat:@"inventory/managedObjects/%@/childDevices?pageSize=100&currentPage=1",device_id];
-//        NSString *url = @"inventory/managedObjects?type=camera&fragmentType=camera_Device&pageSize=1000";
-
-    RequestSence *sence = [[RequestSence alloc] init];
-    sence.requestMethod = @"GET";
-    sence.pathHeader = @"application/json";
-    sence.pathURL = url;
-    __unsafe_unretained typeof(self) weak_self = self;
-    sence.successBlock = ^(id obj) {
-        DLog(@"Received: %@", obj);
-         [weak_self handleDeviceInfoObject:obj withIndex:index];
-    };
-    sence.errorBlock = ^(NSError *error) {
-        [_kHUDManager hideAfter:0.1 onHide:nil];
-        DLog(@"error: %@", error);
-    };
-    [sence sendRequest];
-}
-- (void)handleDeviceInfoObject:(id)obj withIndex:(NSInteger)index
-{
-    _isHadFirst = YES;
-    __unsafe_unretained typeof(self) weak_self = self;
-    [[GCDQueue globalQueue] queueBlock:^{
-        NSArray *data = [obj objectForKey:@"references"];
-        NSMutableArray *tempArray = [NSMutableArray array];
-
-        [data enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSDictionary *dic = obj;
-            MyEquipmentsModel *model = [MyEquipmentsModel makeModelData:dic];
-            if (model.online) {
-                [tempArray addObject:model];
-                [weak_self getDeviceLivingData:model withIndex:index withEquimentIndex:tempArray.count-1];
-            }
-        }];
-
-        IndexDataModel *model = [self.dataArray objectAtIndex:index];
-        model.childDevices_info = [NSMutableArray arrayWithArray:tempArray];
-        [self.dataArray replaceObjectAtIndex:index withObject:model];
-
-        [[GCDQueue mainQueue] queueBlock:^{
-            [weak_self.collectionView reloadData];
-        }];
-    }];
-}
 //获取直播数据
--(void)getDeviceLivingData:(MyEquipmentsModel*)meModel withIndex:(NSInteger)index withEquimentIndex:(NSInteger)equiIndex
+-(void)getDeviceLivingData:(MyEquipmentsModel*)meModel withEquimentIndex:(NSInteger)index
 {
     NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/live/infos?systemSource=%@&id=%@",meModel.system_Source,meModel.equipment_id];
     RequestSence *sence = [[RequestSence alloc] init];
@@ -398,7 +394,7 @@
     sence.successBlock = ^(id obj) {
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"Received: %@", obj);
-        [weak_self handleDeviceLivingObject:obj withModel:meModel withIndex:index withEquimentIndex:equiIndex];
+        [weak_self handleDeviceLivingObject:obj withModel:meModel withEquimentIndex:index];
     };
     sence.errorBlock = ^(NSError *error) {
 
@@ -409,7 +405,7 @@
     [sence sendRequest];
 }
 
-- (void)handleDeviceLivingObject:(id)obj withModel:(MyEquipmentsModel*)meModel withIndex:(NSInteger)index withEquimentIndex:(NSInteger)equiIndex
+- (void)handleDeviceLivingObject:(id)obj withModel:(MyEquipmentsModel*)meModel withEquimentIndex:(NSInteger)index
 {
     [_kHUDManager hideAfter:0.1 onHide:nil];
     __unsafe_unretained typeof(self) weak_self = self;
@@ -423,22 +419,53 @@
         [dic setObject:meModel.presets forKey:@"presets"];
         LivingModel *lvModel = [LivingModel makeModelData:dic];
         
-        IndexDataModel *model = [self.dataArray objectAtIndex:index];
-        MyEquipmentsModel *eModel = [model.childDevices_info objectAtIndex:equiIndex];
+        MyEquipmentsModel *eModel = [self.dataArray objectAtIndex:index];
         eModel.model = lvModel;
-        [model.childDevices_info replaceObjectAtIndex:equiIndex withObject:eModel];
-        [self.dataArray replaceObjectAtIndex:index withObject:model];
+        [self.dataArray replaceObjectAtIndex:index withObject:eModel];
         
         [[GCDQueue mainQueue] queueBlock:^{
-            [self.dataModelArray removeAllObjects];
-            [self.dataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                IndexDataModel *indexModel = obj;
-                [self.dataModelArray addObjectsFromArray:indexModel.childDevices_info];
-            }];
             [weak_self.collectionView reloadData];
         }];
 
     }];
+}
+
+//获取区域信息
+-(void)getAreaLocationInfo
+{
+    NSString *url = @"inventory/managedObjects?type=UserLocationIndex";
+    
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        DLog(@"Received: %@", obj);
+        NSArray *managedObjects = [obj objectForKey:@"managedObjects"];
+        NSDictionary *data = managedObjects.firstObject;
+        NSArray *areas = [data objectForKey:@"areas"];
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:data.count];
+        [areas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSDictionary *dic = obj;
+            AreaInfoModel *model = [AreaInfoModel makeModelData:dic];
+            [tempArr addObject:model];
+        }];
+        [weak_self.dataAreaArray addObjectsFromArray:tempArr];
+        
+        [[GCDQueue mainQueue] queueBlock:^{
+            [weak_self.areaView makeViewData:weak_self.dataAreaArray];
+        }];
+        
+    };
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+    };
+    [sence sendRequest];
 }
 
 /*
