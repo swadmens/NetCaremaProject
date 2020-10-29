@@ -53,9 +53,7 @@
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-     
-        self.backgroundColor = [UIColor whiteColor];
-        
+        self.backgroundColor = [UIColor whiteColor];        
         //UI视图
         [self creadAreaUI];
     }
@@ -66,23 +64,22 @@
     
     self.leftTableView = [[WWTableView alloc] init];
     self.leftTableView.backgroundColor = UIColorFromRGB(0xf0f0f0, 1);
+    [self.leftTableView registerClass:[AreaNormalCell class] forCellReuseIdentifier:[AreaNormalCell getCellIDStr]];
     self.leftTableView.delegate = self;
     self.leftTableView.dataSource = self;
     [self addSubview:self.leftTableView];
     [self.leftTableView alignTop:@"0" leading:@"0" bottom:@"50" trailing:nil toView:self];
     [self.leftTableView addWidth:kScreenWidth/3];
-    [self.leftTableView registerClass:[AreaNormalCell class] forCellReuseIdentifier:[AreaNormalCell getCellIDStr]];
     
     
     NSString *leftSpace = [NSString stringWithFormat:@"%f",kScreenWidth/3];
-    
     self.rightTableView = [[WWTableView alloc] init];
-    self.rightTableView.backgroundColor = UIColorFromRGB(0xf0f0f0, 1);
+    self.rightTableView.backgroundColor = [UIColor whiteColor];
+    [self.rightTableView registerClass:[AreaSelectCell class] forCellReuseIdentifier:[AreaSelectCell getCellIDStr]];
     self.rightTableView.delegate = self;
     self.rightTableView.dataSource = self;
     [self addSubview:self.rightTableView];
     [self.rightTableView alignTop:@"0" leading:leftSpace bottom:@"50" trailing:@"0" toView:self];
-    [self.rightTableView registerClass:[AreaSelectCell class] forCellReuseIdentifier:[AreaSelectCell getCellIDStr]];
     
     
     
@@ -122,14 +119,25 @@
 }
 -(void)makeViewData:(NSArray*)array
 {
+    [self.leftDataArray removeAllObjects];
+    [self.rightDataArray removeAllObjects];
+    
     [self.leftDataArray addObjectsFromArray:array];
-    AreaInfoModel *model = self.leftDataArray.firstObject;
-    [self.rightDataArray addObjectsFromArray:model.shortNames];
-    
-    NSString *title = self.rightDataArray.firstObject;
-    NSDictionary *dic = @{@"first":model.areaType,@"three":title};
-    
-    [self.dataDic  addEntriesFromDictionary:dic];
+
+    if (self.dataDic == nil) {
+
+        AreaInfoModel *model = self.leftDataArray.firstObject;
+        [self.rightDataArray addObjectsFromArray:model.shortNames];
+        NSString *title = self.rightDataArray.firstObject;
+        NSDictionary *dic = @{@"first":model.areaType,@"firstIndex":@(0),@"three":title,@"threeIndex":@(0)};
+       [self.dataDic  addEntriesFromDictionary:dic];
+        
+    }else{
+        
+        NSInteger indexRow = [[self.dataDic objectForKey:@"firstIndex"] integerValue];
+        AreaInfoModel *model = [self.leftDataArray objectAtIndex:indexRow];
+        [self.rightDataArray addObjectsFromArray:model.shortNames];
+    }
     
     [self.leftTableView reloadData];
     [self.rightTableView reloadData];
@@ -147,35 +155,33 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([tableView isEqual:self.leftTableView]) {
-        return 40;
-    }else{
-        return 35;
-    }
+    return 35;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([tableView isEqual:self.leftTableView]) {
         
         AreaInfoModel *model = [self.leftDataArray objectAtIndex:indexPath.row];;
-
+        NSInteger indexRow = [[self.dataDic objectForKey:@"firstIndex"] integerValue];
         
         AreaNormalCell *cell = [tableView dequeueReusableCellWithIdentifier:[AreaNormalCell getCellIDStr] forIndexPath:indexPath];
-       cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
         [cell makeCellData:model];
         
-        [tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
+        [tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
         
        return cell;
     }else{
         AreaSelectCell *cell = [tableView dequeueReusableCellWithIdentifier:[AreaSelectCell getCellIDStr] forIndexPath:indexPath];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
+
+        NSInteger indexRow = [[self.dataDic objectForKey:@"threeIndex"] integerValue];
         NSString *title = [self.rightDataArray objectAtIndex:indexPath.row];
         [cell makeCellData:title];
-                  
-        [tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
+
+
+        [tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:indexRow inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
 
         return cell;
     }
@@ -193,7 +199,9 @@
         
         NSString *title = self.rightDataArray.firstObject;
         [self.dataDic setValue:model.areaType forKey:@"first"];
+        [self.dataDic setValue:@(indexPath.row) forKey:@"firstIndex"];
         [self.dataDic setValue:title forKey:@"three"];
+        [self.dataDic setValue:@(0) forKey:@"threeIndex"];
 
         
         [self.rightTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
@@ -201,6 +209,7 @@
     }else{
         NSString *title = [self.rightDataArray objectAtIndex:indexPath.row];
         [self.dataDic setValue:title forKey:@"three"];
+        [self.dataDic setValue:@(indexPath.row) forKey:@"threeIndex"];
     }
 }
 
@@ -208,19 +217,25 @@
 -(void)resetDataClick
 {
     [self.dataDic removeAllObjects];
+    [self.rightDataArray removeAllObjects];
     
     AreaInfoModel *model = self.leftDataArray.firstObject;
     [self.rightDataArray addObjectsFromArray:model.shortNames];
     NSString *title = self.rightDataArray.firstObject;
-    NSDictionary *dic = @{@"first":model.areaType,@"three":title};
-    
+    NSDictionary *dic = @{@"first":model.areaType,@"firstIndex":@(0),@"three":title,@"threeIndex":@(0)};
+    [self.dataDic  addEntriesFromDictionary:dic];
+
     [self.leftTableView reloadData];
     [self.rightTableView reloadData];
     
-    [self.dataDic  addEntriesFromDictionary:dic];
     
     [self.leftTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
     [self.rightTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
+    
+    
+    [self.leftTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:YES];
+    [self.rightTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionNone  animated:YES];
+
 }
 //确定选择
 -(void)sureChooseDataClick

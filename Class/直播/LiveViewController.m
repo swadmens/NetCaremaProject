@@ -150,14 +150,14 @@
     _coverView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight-450);
     _coverView.backgroundColor = UIColorFromRGB(0x000000, 0.7);
     [[UIApplication sharedApplication].keyWindow addSubview:_coverView];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(coverViewClick:)];
-    [_coverView addGestureRecognizer:tap];
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(coverViewClick:)];
+//    [_coverView addGestureRecognizer:tap];
 
     
     [self creadLivingUI];
     [self setupNoDataView];
     [self loadNewData];
-    [self getAreaLocationInfo];
+//    [self getAreaLocationInfo];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -201,6 +201,8 @@
     __weak __typeof(self)weakself = self;
     
     if (_chooseBtn.selected) {
+        
+        [self getAreaLocationInfo];
                
         [UIView animateWithDuration:0.35 animations:^{
             weakself.areaView.transform = CGAffineTransformMakeTranslation(0, 450);
@@ -216,7 +218,7 @@
         }];
         //点击了确定，开始筛选
         NSString *btnTitle;
-        if ([self.shortName isEqualToString:@"全部"]) {
+        if ([self.shortName isEqualToString:@"全部"] || ![WWPublicMethod isStringEmptyText:self.shortName]) {
             self.selectArea = NO;
             btnTitle = @"选择区域";
         }else{
@@ -294,9 +296,9 @@
     
     NSString *url;
     if (self.selectArea) {
-        url = [NSString stringWithFormat:@"inventory/managedObjects?query=$filter=type+eq+camera+and+has(camera_Device)+and+areaInfo.nameEn+eq+%@+and+areaInfo.shortName+eq+%@&pageSize=100&currentPage=%ld",self.nameEn,self.shortName,(long)self.page];
+        url = [NSString stringWithFormat:@"inventory/managedObjects?query=$filter=type+eq+camera+and+has(camera_Device)+and+areaInfo.nameEn+eq+%@+and+areaInfo.shortName+eq+%@&pageSize=10&currentPage=%ld",self.nameEn,self.shortName,(long)self.page];
     }else{
-        url = [NSString stringWithFormat:@"inventory/managedObjects?query=$filter=type+eq+camera+and+has(camera_Device)&pageSize=100&currentPage=%ld",(long)self.page];
+        url = [NSString stringWithFormat:@"inventory/managedObjects?query=$filter=type+eq+camera+and+has(camera_Device)&pageSize=10&currentPage=%ld",(long)self.page];
     }
     
     NSString *newUrlString = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];//链接含有中文转码
@@ -344,10 +346,10 @@
             NSDictionary *dic = obj;
 
             MyEquipmentsModel *model = [MyEquipmentsModel makeModelData:dic];
-            if (model.online) {
+//            if (model.online) {
                 [tempArray addObject:model];
                 [weak_self getDeviceLivingData:model withEquimentIndex:tempArray.count-1];
-            }
+//            }
             
         }];
         [weak_self.dataArray addObjectsFromArray:tempArray];
@@ -446,16 +448,24 @@
         NSArray *managedObjects = [obj objectForKey:@"managedObjects"];
         NSDictionary *data = managedObjects.firstObject;
         NSArray *areas = [data objectForKey:@"areas"];
-        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:data.count];
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:data.count+1];
+        
+        NSDictionary *dic = @{
+            @"shortNames": @[@"全部"],
+            @"areaType": @"全部"
+        };
+        AreaInfoModel *model = [AreaInfoModel makeModelData:dic];
+        [tempArr addObject:model];
+        
         [areas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *dic = obj;
             AreaInfoModel *model = [AreaInfoModel makeModelData:dic];
             [tempArr addObject:model];
         }];
-        [weak_self.dataAreaArray addObjectsFromArray:tempArr];
+//        [weak_self.dataAreaArray addObjectsFromArray:tempArr];
         
         [[GCDQueue mainQueue] queueBlock:^{
-            [weak_self.areaView makeViewData:weak_self.dataAreaArray];
+            [weak_self.areaView makeViewData:tempArr];
         }];
         
     };

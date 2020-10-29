@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ChooseAreaView : UIView
 
 @property (nonatomic,strong) void(^chooseArea)(NSString *area_id);
+//@property (nonatomic,strong) void(^resetChooseBtn)(void);
 
 -(void)makeViewData:(NSArray*)array;
 
