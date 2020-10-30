@@ -43,9 +43,6 @@
     [_selectBtn yCenterToView:_titleLabel];
     [_selectBtn rightToView:self.contentView withSpace:28];
 
-    
-
-    
 }
 -(void)makeCellData:(NSString*)title
 {

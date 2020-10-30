@@ -53,7 +53,6 @@
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = [UIColor whiteColor];        
         //UI视图
         [self creadAreaUI];
     }
@@ -61,14 +60,19 @@
 }
 -(void)creadAreaUI
 {
+    UIView *backView = [UIView new];
+    backView.backgroundColor = [UIColor whiteColor];
+    [self addSubview:backView];
+    [backView alignTop:@"0" leading:@"0" bottom:@"0" trailing:@"0" toView:self];
+    
     
     self.leftTableView = [[WWTableView alloc] init];
     self.leftTableView.backgroundColor = UIColorFromRGB(0xf0f0f0, 1);
     [self.leftTableView registerClass:[AreaNormalCell class] forCellReuseIdentifier:[AreaNormalCell getCellIDStr]];
     self.leftTableView.delegate = self;
     self.leftTableView.dataSource = self;
-    [self addSubview:self.leftTableView];
-    [self.leftTableView alignTop:@"0" leading:@"0" bottom:@"50" trailing:nil toView:self];
+    [backView addSubview:self.leftTableView];
+    [self.leftTableView alignTop:@"0" leading:@"0" bottom:@"50" trailing:nil toView:backView];
     [self.leftTableView addWidth:kScreenWidth/3];
     
     
@@ -78,15 +82,14 @@
     [self.rightTableView registerClass:[AreaSelectCell class] forCellReuseIdentifier:[AreaSelectCell getCellIDStr]];
     self.rightTableView.delegate = self;
     self.rightTableView.dataSource = self;
-    [self addSubview:self.rightTableView];
-    [self.rightTableView alignTop:@"0" leading:leftSpace bottom:@"50" trailing:@"0" toView:self];
-    
+    [backView addSubview:self.rightTableView];
+    [self.rightTableView alignTop:@"0" leading:leftSpace bottom:@"50" trailing:@"0" toView:backView];
     
     
     UIView *bottomView = [UIView new];
     bottomView.backgroundColor = [UIColor whiteColor];
-    [self addSubview:bottomView];
-    [bottomView alignTop:nil leading:@"0" bottom:@"0" trailing:@"0" toView:self];
+    [backView addSubview:bottomView];
+    [bottomView alignTop:nil leading:@"0" bottom:@"0" trailing:@"0" toView:backView];
     [bottomView addHeight:50];
     
     LGXVerticalButton*resetBtn = [LGXVerticalButton new];
@@ -130,7 +133,7 @@
         [self.rightDataArray addObjectsFromArray:model.shortNames];
         NSString *title = self.rightDataArray.firstObject;
         NSDictionary *dic = @{@"first":model.areaType,@"firstIndex":@(0),@"three":title,@"threeIndex":@(0)};
-       [self.dataDic  addEntriesFromDictionary:dic];
+        [self.dataDic  addEntriesFromDictionary:dic];
         
     }else{
         
@@ -151,7 +154,6 @@
     }else{
         return self.rightDataArray.count;
     }
-    
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {

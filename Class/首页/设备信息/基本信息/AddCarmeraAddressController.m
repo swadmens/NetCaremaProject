@@ -129,6 +129,8 @@
 }
 -(void)sureButtonClick
 {
+    self.address = [WWPublicMethod isStringEmptyText:self.address]?self.address:@"";
+    self.addressDetail = [WWPublicMethod isStringEmptyText:self.addressDetail]?self.addressDetail:@"";
     NSString *value = [NSString stringWithFormat:@"%@%@",self.address,self.addressDetail];
     [self.delegate addNewAddress:value];
     [self.navigationController popViewControllerAnimated:YES];

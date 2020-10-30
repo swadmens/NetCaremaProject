@@ -174,7 +174,7 @@
 #pragma AddCarmeraAddressDelegate
 -(void)addNewAddress:(NSString *)address
 {
-    self.model.address = address;
+    self.model.address = [WWPublicMethod isStringEmptyText:address]?address:self.model.address;
     [self.tableView reloadData];
 }
 

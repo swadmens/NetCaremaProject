@@ -131,42 +131,42 @@
     [self.view addSubview:self.collectionView];
     [self.collectionView alignTop:@"45" leading:@"0" bottom:@"0" trailing:@"0" toView:self.view];
     
+    [self setupNoDataView];
+    [self loadNewData];
+    
     self.selectArea = NO;
     
-    _areaView = [ChooseAreaView new];
-    _areaView.frame = CGRectMake(0, -350, kScreenWidth, 350);
-    [[UIApplication sharedApplication].keyWindow addSubview:_areaView];
+    _areaView = [[ChooseAreaView alloc]initWithFrame:CGRectMake(0, 35, kScreenWidth, 350)];
+    [self.view addSubview:_areaView];
     __weak __typeof(self)weakSelf = self;
     _areaView.chooseArea = ^(NSString * _Nonnull area_id) {
         DLog(@"选择的是  ==   %@",area_id);
         NSDictionary *areaDic = [WWPublicMethod objectTransFromJson:area_id];
         weakSelf.nameEn = [areaDic objectForKey:@"first"];
         weakSelf.shortName = [areaDic objectForKey:@"three"];
-        [weakSelf chooseAreaClick];
+        [weakSelf qureyScreeningData];
     };
+    self.areaView.transform = CGAffineTransformMakeTranslation(0, -450);
+
     
     _coverView = [UIView new];
     _coverView.userInteractionEnabled = YES;
-    _coverView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight-450);
+    _coverView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight-448);
     _coverView.backgroundColor = UIColorFromRGB(0x000000, 0.7);
     [[UIApplication sharedApplication].keyWindow addSubview:_coverView];
-//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(coverViewClick:)];
-//    [_coverView addGestureRecognizer:tap];
-
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(coverViewClick:)];
+    [_coverView addGestureRecognizer:tap];
+    
     
     [self creadLivingUI];
-    [self setupNoDataView];
-    [self loadNewData];
-//    [self getAreaLocationInfo];
+
+    
 }
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-//    if (self.dataArray.count == 0) {
-//        [self loadNewData];
-//    }
 }
-//创建UI
+//创建顶部按钮
 -(void)creadLivingUI
 {
     UIView *topView = [UIView new];
@@ -202,47 +202,45 @@
     
     if (_chooseBtn.selected) {
         
-        [self getAreaLocationInfo];
+        [self getAreaLocationInfo];//获取筛选数据
                
         [UIView animateWithDuration:0.35 animations:^{
-            weakself.areaView.transform = CGAffineTransformMakeTranslation(0, 450);
+            weakself.areaView.transform = CGAffineTransformIdentity;
         }];
-        
+
         [UIView animateWithDuration:0.1 animations:^{
-            weakself.coverView.transform = CGAffineTransformMakeTranslation(0, -kScreenHeight+450);
+            weakself.coverView.transform = CGAffineTransformMakeTranslation(0, -kScreenHeight+448);
         }];
+
     }else{
         [UIView animateWithDuration:0.35 animations:^{
-            weakself.areaView.transform = CGAffineTransformIdentity;
             weakself.coverView.transform = CGAffineTransformIdentity;
+            weakself.areaView.transform = CGAffineTransformMakeTranslation(0, -450);
         }];
-        //点击了确定，开始筛选
-        NSString *btnTitle;
-        if ([self.shortName isEqualToString:@"全部"] || ![WWPublicMethod isStringEmptyText:self.shortName]) {
-            self.selectArea = NO;
-            btnTitle = @"选择区域";
-        }else{
-            self.selectArea = YES;
-            btnTitle = [NSString stringWithFormat:@"%@/%@",self.nameEn,self.shortName];
-        }
-        [[GCDQueue mainQueue] queueBlock:^{
-            [self.chooseBtn setTitle:btnTitle forState:UIControlStateNormal];
-            [self loadNewData];
-        }];
-        
-        
-        
     }
+}
+//确定筛选数据
+-(void)qureyScreeningData
+{
+    [self chooseAreaClick];
     
+    //点击了确定，开始筛选
+    NSString *btnTitle;
+    if ([self.shortName isEqualToString:@"全部"] || ![WWPublicMethod isStringEmptyText:self.shortName]) {
+        self.selectArea = NO;
+        btnTitle = @"选择区域";
+    }else{
+        self.selectArea = YES;
+        btnTitle = [NSString stringWithFormat:@"%@/%@",self.nameEn,self.shortName];
+    }
+    [[GCDQueue mainQueue] queueBlock:^{
+        [self.chooseBtn setTitle:btnTitle forState:UIControlStateNormal];
+        [self loadNewData];
+    }];
 }
 -(void)coverViewClick:(UITapGestureRecognizer*)tp
 {
-    __weak __typeof(self)weakself = self;
-    _chooseBtn.selected = NO;
-    [UIView animateWithDuration:0.35 animations:^{
-        weakself.areaView.transform = CGAffineTransformIdentity;
-        weakself.coverView.transform = CGAffineTransformIdentity;
-    }];
+    [self chooseAreaClick];
 }
 
 #pragma mark -- collectionDelegate
@@ -264,6 +262,10 @@
 {
     MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
     if (model.online) {
+        
+//        [self.dataArray removeObjectAtIndex:indexPath.row];
+//        [self.dataArray insertObject:model atIndex:0];
+        
         //live直播
         SuperPlayerViewController *vc = [SuperPlayerViewController new];
         vc.hidesBottomBarWhenPushed = YES;

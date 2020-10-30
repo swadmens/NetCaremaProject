@@ -56,7 +56,8 @@
     }else{
         CarmeaVideosModel *models = model;
         [_showImageView yy_setImageWithURL:[NSURL URLWithString:models.picUrl] placeholder:UIImageWithFileName(@"player_hoder_image")];
-        _titleLabel.text = models.duration;
+//        NSArray *arr = [models.startTime componentsSeparatedByString:@"T"];
+        _titleLabel.text = models.startTime;
     }
 }
 @end

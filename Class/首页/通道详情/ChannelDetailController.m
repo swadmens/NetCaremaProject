@@ -66,12 +66,12 @@
     self.navigationController.navigationBar.barStyle = UIStatusBarStyleLightContent;
     self.isSetupArea = NO;
     
-    NSArray *arr = @[@{@"name":self.eqModel.equipment_name,@"value":@""},
-//                     @{@"name":@"封面",@"value":self.eqModel.model.snap},
+    NSArray *arr = @[@{@"name":[WWPublicMethod isStringEmptyText:self.eqModel.equipment_name]?self.eqModel.equipment_name:@"",@"value":@""},
+                     @{@"name":@"封面",@"value":[WWPublicMethod isStringEmptyText:self.eqModel.model.snap]?self.eqModel.model.snap:@""},
                      @{@"name":@"通道名称",@"detail":self.eqModel.channel,@"showSwitch":@(NO),@"right":@(NO)},
-//                         @{@"name":@"报警消息提醒",@"value":@(YES),@"showSwitch":@(YES),@"type":@"alarm",@"right":@(NO)},
-//                         @{@"name":@"镜像翻转",@"value":@(YES),@"showSwitch":@(YES),@"type":@"audio",@"right":@(NO)},
-//                         @{@"name":@"布撤防/动检",@"value":@(YES),@"showSwitch":@(YES),@"type":@"encryption",@"right":@(NO)},
+//                     @{@"name":@"报警消息提醒",@"value":@(YES),@"showSwitch":@(YES),@"type":@"alarm",@"right":@(NO)},
+//                     @{@"name":@"镜像翻转",@"value":@(YES),@"showSwitch":@(YES),@"type":@"audio",@"right":@(NO)},
+//                     @{@"name":@"布撤防/动检",@"value":@(YES),@"showSwitch":@(YES),@"type":@"encryption",@"right":@(NO)},
                      @{@"name":@"云端录像",@"value":@(self.eqModel.cloudRecordStatus),@"showSwitch":@(YES),@"type":@"cloud",@"right":@(NO)},
                      @{@"name":@"设备分享",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)},
                      @{@"name":@"设备程序版本",@"detail":@"v1.0",@"showSwitch":@(NO),@"right":@(NO)},
@@ -80,7 +80,7 @@
     
     [self.dataArray addObjectsFromArray:arr];
  
-//    [self getEquimentAbility];
+    [self getEquimentAbility];
     [self setupTableView];
 }
 -(void)viewWillAppear:(BOOL)animated
@@ -173,20 +173,10 @@
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"obj ==  %@",obj)
         weak_self.abModel = [EquipmentAbilityModel makeModelData:obj];
-
-        NSArray *arr = @[@{@"name":weak_self.eqModel.equipment_name,@"value":@""},
-                         @{@"name":@"封面",@"value":self.eqModel.model.snap},
-                         @{@"name":@"通道名称",@"detail":self.eqModel.channel,@"showSwitch":@(NO),@"right":@(NO)},
-//                         @{@"name":@"报警消息提醒",@"value":@(YES),@"showSwitch":@(YES),@"type":@"alarm",@"right":@(NO)},
-//                         @{@"name":@"镜像翻转",@"value":@(YES),@"showSwitch":@(YES),@"type":@"audio",@"right":@(NO)},
-//                         @{@"name":@"布撤防/动检",@"value":@(YES),@"showSwitch":@(YES),@"type":@"encryption",@"right":@(NO)},
-                         @{@"name":@"云端录像",@"value":@(self.eqModel.cloudRecordStatus),@"showSwitch":@(YES),@"type":@"cloud",@"right":@(NO)},
-                         @{@"name":@"设备分享",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)},
-                         @{@"name":@"设备程序版本",@"detail":@"v1.0",@"showSwitch":@(NO),@"right":@(NO)},
-                         @{@"name":@"更多设置",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)},
-                         @{@"name":@"区域设置",@"detail":@"",@"showSwitch":@(NO),@"right":@(YES)}];
         
-        [weak_self.dataArray addObjectsFromArray:arr];
+        if (!weak_self.abModel.cloudStorage) {
+            [self.dataArray removeObjectAtIndex:3];
+        }
         
         [[GCDQueue mainQueue] queueBlock:^{
             if (!weak_self.abModel.cloudStorage) {

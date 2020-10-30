@@ -39,13 +39,18 @@
     
     UILabel *tipLabel = [self getNoDataTipLabel];
     UIButton *addBtn = [UIButton new];
-    addBtn.enabled = NO;
+    addBtn.clipsToBounds = YES;
+    addBtn.layer.borderColor = kColorMainColor.CGColor;
+    addBtn.layer.borderWidth = 0.8;
+    addBtn.layer.cornerRadius = 5;
     [addBtn setTitle:@"去添加" forState:UIControlStateNormal];
-    [addBtn setTitleColor:kColorThirdTextColor forState:UIControlStateNormal];
+    [addBtn setTitleColor:kColorMainColor forState:UIControlStateNormal];
     addBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeFourteen];
     [self.noDataView addSubview:addBtn];
     [addBtn xCenterToView:self.noDataView];
-    [addBtn topToView:tipLabel withSpace:-8];
+    [addBtn topToView:tipLabel withSpace:5];
+    [addBtn addWidth:60];
+    [addBtn addHeight:25];
     [addBtn addTarget:self action:@selector(addAreaInfoClick) forControlEvents:UIControlEventTouchUpInside];
 }
 //去添加区域信息

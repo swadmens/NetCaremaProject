@@ -1006,6 +1006,16 @@ EZPlayerDelegate
             make.size.equalTo(CGSizeMake(kScreenWidth, height));
         }];
         
+        
+//        EZCloudRecordFile *cloudFile = [[EZCloudRecordFile alloc]init];
+//        cloudFile.
+//        self.ezPlayer = [EZPlayer createPlayerWithUrl:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl];
+//        self.ezPlayer.delegate = self;
+//        [self.ezPlayer setPlayerView:self];
+//        [self.ezPlayer startPlaybackFromCloud:cloudFile];
+        
+        
+        
     }else{
         _m_isSeeking = NO;
         

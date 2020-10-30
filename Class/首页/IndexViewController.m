@@ -102,7 +102,6 @@
     self.noDataView = [self setupnoDataContentViewWithTitle:@"网络出问题了，快去检查一下吧~" andImageNamed:@"index_empty_backimage" andTop:@"105"];
 //    // label
 //    UILabel *tipLabel = [self getNoDataTipLabel];
-//
 //    UIButton *againBtn = [UIButton new];
 //    [againBtn setTitle:@"暂无数据，轻触重试" forState:UIControlStateNormal];
 //    [againBtn setTitleColor:kColorThirdTextColor forState:UIControlStateNormal];
