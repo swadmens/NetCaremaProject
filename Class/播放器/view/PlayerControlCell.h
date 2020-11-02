@@ -19,6 +19,7 @@ typedef enum {
     videoSatesSreenshots = 5,
     videoSateVideing = 6,
     videoSateYuntai = 7,
+    videoSateTalkBack = 8,
     
 }videoSate;
 

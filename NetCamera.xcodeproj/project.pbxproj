@@ -44,6 +44,12 @@
 		4A14BC4A24F49FBA003ADC07 /* AFImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A14BC3B24F49FB9003ADC07 /* AFImageDownloader.m */; };
 		4A1842B324187CA20052580F /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A4605FF2407BD62007C209A /* libstdc++.6.0.9.tbd */; };
 		4A29D0D4254953AC00688C19 /* AreaInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A29D0D3254953AC00688C19 /* AreaInfoModel.m */; };
+		4A344400254F9BE800FE0FB4 /* player_talkback_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A3443FA254F9BE700FE0FB4 /* player_talkback_image@2x.png */; };
+		4A344401254F9BE800FE0FB4 /* player_talkback_select_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A3443FB254F9BE800FE0FB4 /* player_talkback_select_image@2x.png */; };
+		4A344402254F9BE800FE0FB4 /* player_talkback_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A3443FC254F9BE800FE0FB4 /* player_talkback_image@3x.png */; };
+		4A344403254F9BE800FE0FB4 /* player_talkback_select_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A3443FD254F9BE800FE0FB4 /* player_talkback_select_image@3x.png */; };
+		4A344404254F9BE800FE0FB4 /* player_talkback_disabled_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A3443FE254F9BE800FE0FB4 /* player_talkback_disabled_image@3x.png */; };
+		4A344405254F9BE800FE0FB4 /* player_talkback_disabled_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A3443FF254F9BE800FE0FB4 /* player_talkback_disabled_image@2x.png */; };
 		4A36B2EF25403B6300CB344D /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A36B2DD25403B6200CB344D /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4A36B2F025403B6300CB344D /* SendMessageToWXReq+requestWithTextOrMediaMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A36B2E025403B6200CB344D /* SendMessageToWXReq+requestWithTextOrMediaMessage.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4A36B2F125403B6300CB344D /* WXMediaMessage+messageConstruct.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A36B2E125403B6200CB344D /* WXMediaMessage+messageConstruct.m */; };
@@ -826,6 +832,12 @@
 		4A14BC3B24F49FB9003ADC07 /* AFImageDownloader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFImageDownloader.m; sourceTree = "<group>"; };
 		4A29D0D2254953AC00688C19 /* AreaInfoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AreaInfoModel.h; sourceTree = "<group>"; };
 		4A29D0D3254953AC00688C19 /* AreaInfoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AreaInfoModel.m; sourceTree = "<group>"; };
+		4A3443FA254F9BE700FE0FB4 /* player_talkback_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_talkback_image@2x.png"; sourceTree = "<group>"; };
+		4A3443FB254F9BE800FE0FB4 /* player_talkback_select_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_talkback_select_image@2x.png"; sourceTree = "<group>"; };
+		4A3443FC254F9BE800FE0FB4 /* player_talkback_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_talkback_image@3x.png"; sourceTree = "<group>"; };
+		4A3443FD254F9BE800FE0FB4 /* player_talkback_select_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_talkback_select_image@3x.png"; sourceTree = "<group>"; };
+		4A3443FE254F9BE800FE0FB4 /* player_talkback_disabled_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_talkback_disabled_image@3x.png"; sourceTree = "<group>"; };
+		4A3443FF254F9BE800FE0FB4 /* player_talkback_disabled_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "player_talkback_disabled_image@2x.png"; sourceTree = "<group>"; };
 		4A36B2DD25403B6200CB344D /* GetMessageFromWXResp+responseWithTextOrMediaMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GetMessageFromWXResp+responseWithTextOrMediaMessage.m"; sourceTree = "<group>"; };
 		4A36B2DE25403B6200CB344D /* WXMediaMessage+messageConstruct.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WXMediaMessage+messageConstruct.h"; sourceTree = "<group>"; };
 		4A36B2DF25403B6200CB344D /* Constant.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constant.h; sourceTree = "<group>"; };
@@ -2092,6 +2104,12 @@
 		4A4606BE2407C513007C209A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4A3443FF254F9BE800FE0FB4 /* player_talkback_disabled_image@2x.png */,
+				4A3443FE254F9BE800FE0FB4 /* player_talkback_disabled_image@3x.png */,
+				4A3443FA254F9BE700FE0FB4 /* player_talkback_image@2x.png */,
+				4A3443FC254F9BE800FE0FB4 /* player_talkback_image@3x.png */,
+				4A3443FB254F9BE800FE0FB4 /* player_talkback_select_image@2x.png */,
+				4A3443FD254F9BE800FE0FB4 /* player_talkback_select_image@3x.png */,
 				4AFC83C62547A7CC00F92BCD /* mine_area_image@2x.png */,
 				4AFC83C72547A7CD00F92BCD /* mine_area_image@3x.png */,
 				4AFC83832546719D00F92BCD /* demand_download_black_image@2x.png */,
@@ -4768,6 +4786,7 @@
 				4AFC83C82547A7CD00F92BCD /* mine_area_image@2x.png in Resources */,
 				4AB2999E240CDBF3004CA6B5 /* push_url_image@3x.png in Resources */,
 				4AB299EE240F357C004CA6B5 /* video_delete_image@2x.png in Resources */,
+				4A344402254F9BE800FE0FB4 /* player_talkback_image@3x.png in Resources */,
 				4A4608642408E54C007C209A /* rm_key_noselect@2x.png in Resources */,
 				4AB50A34246685E60064BF82 /* player_screenshots_select_image@3x.png in Resources */,
 				4A68696F24591E7B0036355E /* index_message_image@2x.png in Resources */,
@@ -4817,7 +4836,9 @@
 				4AB29A18240FA644004CA6B5 /* choose_area_reset_iamge@3x.png in Resources */,
 				4A4606FD2407C514007C209A /* new_guide_open@3x.png in Resources */,
 				4AB50B49247657370064BF82 /* help_refresh_image@2x.png in Resources */,
+				4A344401254F9BE800FE0FB4 /* player_talkback_select_image@2x.png in Resources */,
 				4AD26FFF2463E57600D462B4 /* player_full_image@2x.png in Resources */,
+				4A344403254F9BE800FE0FB4 /* player_talkback_select_image@3x.png in Resources */,
 				4AD270072463E82100D462B4 /* player_screenshots_image@2x.png in Resources */,
 				4AB50A31246685E60064BF82 /* player_videos_select_image@2x.png in Resources */,
 				4A4607342407C889007C209A /* Tabbar-5-normal@2x.png in Resources */,
@@ -4827,6 +4848,7 @@
 				4A46072E2407C889007C209A /* Tabbar-4-select@2x.png in Resources */,
 				4AB50A152466424E0064BF82 /* video_control_left_image@2x.png in Resources */,
 				4A580FF824075F2D00E82675 /* MJRefresh.bundle in Resources */,
+				4A344400254F9BE800FE0FB4 /* player_talkback_image@2x.png in Resources */,
 				4AB50B29246D20710064BF82 /* index_empty_backimage@2x.png in Resources */,
 				4AB299E3240E36F4004CA6B5 /* playback_shares_image@2x.png in Resources */,
 				4A46072A2407C889007C209A /* Tabbar-2-normal@2x.png in Resources */,
@@ -4840,11 +4862,13 @@
 				4AE0213D249B537D009CD476 /* videoing_show_tip_image@3x.png in Resources */,
 				4A0CA8C92488896E00DC97BC /* player_play_select_image@3x.png in Resources */,
 				4AE02140249C4FCA009CD476 /* channel_detail_carmera_image@2x.png in Resources */,
+				4A344404254F9BE800FE0FB4 /* player_talkback_disabled_image@3x.png in Resources */,
 				4AE928FC2417753400CFBBD8 /* shara_qq_image@3x.png in Resources */,
 				4AB299E8240E36F4004CA6B5 /* playback_full_image@3x.png in Resources */,
 				4AB2999F240CDBF3004CA6B5 /* send_url_image@2x.png in Resources */,
 				4A68697A2459272D0036355E /* index_address_image@3x.png in Resources */,
 				4A4607312407C889007C209A /* Tabbar-4-select@3x.png in Resources */,
+				4A344405254F9BE800FE0FB4 /* player_talkback_disabled_image@2x.png in Resources */,
 				4AE928FB2417753400CFBBD8 /* shara_wechat_image@3x.png in Resources */,
 				4AB299ED240F357C004CA6B5 /* video_delete_image@3x.png in Resources */,
 				4AB50AF12469464C0064BF82 /* qrcode_light_close_image@3x.png in Resources */,

@@ -28,6 +28,7 @@
 #import "AFHTTPSessionManager.h"
 #import "EquipmentAbilityModel.h"
 #import "ChannelDetailController.h"
+#import <LCOpenSDKDynamic/LCOpenSDKDynamic.h>
 
 #define KTopviewheight kScreenWidth*0.68
 
@@ -39,7 +40,8 @@ PlayerControlDelegate,
 CameraControlDelete,
 LocalVideoDelegate,
 PlayerTableViewCellDelegate,
-PlayVideoDemadDelegate
+PlayVideoDemadDelegate,
+LCOpenSDK_EventListener
 >
 
 @property (nonatomic,strong) WWTableView *tableView;
@@ -73,6 +75,10 @@ PlayVideoDemadDelegate
 @property (nonatomic,strong) UILabel *videoTipLabel;//录像提示label
 
 @property (nonatomic,strong) EquipmentAbilityModel *abModel;//设备能力集
+
+@property (nonatomic,strong) LCOpenSDK_AudioTalk* m_talker;
+@property (nonatomic,strong) LCOpenSDK_Api* m_hc;
+
 
 @end
 
@@ -428,6 +434,19 @@ PlayVideoDemadDelegate
                 self.clView.transform = CGAffineTransformIdentity;
             }else{
                [self clickMoreButton];
+            }
+        
+        break;
+        case videoSateTalkBack://对讲
+            
+            self.controlBtn.selected = !self.controlBtn.selected;
+            
+            if (self.controlBtn.isSelected) {
+                //开始对讲
+                [self startTalkBack];;
+            }else{
+                //结束对讲
+               [self endTalkBack];
             }
         
         break;
@@ -1114,6 +1133,101 @@ PlayVideoDemadDelegate
     
     [sence sendRequest];
 }
+
+//开始对讲
+-(void)startTalkBack
+{
+    DLog(@"开始对讲");
+    if (![self.selectModel.system_Source isEqualToString:@"DaHua"]) {
+        return;
+    }
+    
+    //接口初始化
+    LCOpenSDK_ApiParam * apiParam = [[LCOpenSDK_ApiParam alloc] init];
+    apiParam.procotol =  PROCOTOL_TYPE_HTTPS;
+    apiParam.addr = @"openapi.lechange.cn";
+    apiParam.port = 443;
+    apiParam.token = self.selectModel.model.liveToken;
+    self.m_hc = [[LCOpenSDK_Api shareMyInstance] initOpenApi:apiParam];
+
+    _m_talker = [[LCOpenSDK_AudioTalk alloc] init];
+    [_m_talker setListener:(id<LCOpenSDK_TalkerListener>)self];
+
+    LCOpenSDK_ParamTalk  *paramTalk = [[LCOpenSDK_ParamTalk alloc] init];
+    paramTalk.accessToken = self.selectModel.model.liveToken;
+    paramTalk.deviceID = self.selectModel.model.deviceSerial;
+    paramTalk.channel = [self.selectModel.model.channelId integerValue];
+    paramTalk.psk = @"";
+    paramTalk.playToken = self.selectModel.model.liveToken;
+    paramTalk.isOpt = YES;
+    NSInteger iretValue = [_m_talker playTalk:paramTalk];
+    if (iretValue < 0) {
+       NSLog(@"talk failed");
+        [_m_talker setListener:nil];
+        return;
+    }
+
+}
+//结束对讲
+-(void)endTalkBack
+{
+    DLog(@"结束对讲");
+    [_m_talker stopTalk];
+}
+#pragma mark - 对讲回调
+- (void)onTalkResult:(NSString*)error TYPE:(NSInteger)type
+{
+    NSLog(@"error = %@, type = %ld", error, (long)type);
+//    NSString* displayLab;
+//    if (99 == type) {
+//        displayLab = [error isEqualToString:@"-1000"] ? @"Talk Network Timeout" : [NSString stringWithFormat:@"Talk Failed，[%@]", error];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [m_tipLab setText:displayLab];
+//            UIImage* img = [UIImage leChangeImageNamed:LiveVideo_Speak_Nor_Png];
+//            [m_talkBtn setBackgroundImage:img forState:UIControlStateNormal];
+//            [self hideLoading:TALK_PROGRESS_IND];
+//            m_talkBtn.tag = 0;
+//        });
+//        return;
+//    }
+//
+//    if (nil != error && [RTSP_Result_String(STATE_RTSP_DESCRIBE_READY) isEqualToString:error]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [m_tipLab setText:@"Setting Talk..."];
+//        });
+//        return;
+//    }
+//    if (nil != error && [RTSP_Result_String(STATE_RTSP_PLAY_READY) isEqualToString:error]) {
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [m_tipLab setText:@"Start to Talk"];
+//            UIImage* img = [UIImage leChangeImageNamed:Video_SoundOff_Png];
+//            [m_soundBtn setBackgroundImage:img forState:UIControlStateNormal];
+//            [self hideLoading:TALK_PROGRESS_IND];
+//            m_soundBtn.tag = 1;
+//            m_isTalking = YES;
+//        });
+//        return;
+//    }
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [m_tipLab setText:[NSString stringWithFormat:@"Talk Failed，[%@]", error]];
+//        [self hideLoading:TALK_PROGRESS_IND];
+//        UIImage* img = [UIImage leChangeImageNamed:LiveVideo_Speak_Nor_Png];
+//        [m_talkBtn setBackgroundImage:img forState:UIControlStateNormal];
+//        m_talkBtn.tag = 0;
+//        m_isTalking = NO;
+//    });
+//    [m_talker stopTalk];
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if ((m_soundBtn.tag = m_soundState) == 0) {
+//            if (m_play) {
+//                [m_play playAudio];
+//            }
+//            UIImage* img = [UIImage leChangeImageNamed:Video_SoundOn_Png];
+//            [m_soundBtn setBackgroundImage:img forState:UIControlStateNormal];
+//        }
+//    });
+}
+
 /*
 #pragma mark - Navigation
 
