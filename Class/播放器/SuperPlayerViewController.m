@@ -124,6 +124,18 @@ LCOpenSDK_EventListener
     [self.view addSubview:self.clView];
     self.clView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight - KTopviewheight - 177);
 }
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.topCell play];
+    [self.videoCell play];
+}
+-(void)action_goback
+{
+    [self.topCell stop];
+    [self.videoCell stop];
+    [self.navigationController popViewControllerAnimated:YES];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -1069,18 +1081,6 @@ LCOpenSDK_EventListener
 
     }];
 }
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-    [self.topCell stop];
-    [self.videoCell stop];
-}
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    [self.topCell play];
-    [self.videoCell play];
-}
-
 //获取设备能力集
 -(void)getEquimentAbility
 {
@@ -1166,7 +1166,6 @@ LCOpenSDK_EventListener
         [_m_talker setListener:nil];
         return;
     }
-
 }
 //结束对讲
 -(void)endTalkBack

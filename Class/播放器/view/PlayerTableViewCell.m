@@ -208,7 +208,6 @@
         
         self.selectIndex = indexPath.row;
         MyEquipmentsViewController *mvc = [MyEquipmentsViewController new];
-        mvc.dataArray = [NSArray arrayWithArray:self.allDataArray];
         mvc.delegate = self;
         [[SuperPlayerViewController viewController:self].navigationController pushViewController:mvc animated:YES];
     }else{

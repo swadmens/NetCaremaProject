@@ -38,6 +38,7 @@ typedef enum {
 @property (nonatomic, strong) PLPlayModel *plModel;
 
 @property (nonatomic,assign) BOOL isLocalVideo;//是否是本地视频
+@property (nonatomic, assign) BOOL isLiving;//是否是直播
 
 @property (nonatomic,assign) PlayStatus playType;
 

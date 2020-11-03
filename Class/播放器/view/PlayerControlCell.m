@@ -36,7 +36,7 @@
     self.contentView.backgroundColor = [UIColor whiteColor];
     
     CGFloat space = kScreenWidth * 0.2;
-    CGFloat bigSpace = kScreenWidth * 0.25;
+    CGFloat bigSpace = kScreenWidth * 0.3;
 
     
     CGFloat btnWidth = 30;
@@ -112,7 +112,8 @@
     [_videoBtn setTitleColor:kColorSecondTextColor forState:UIControlStateNormal];
     _videoBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEight];
     [self.contentView addSubview:_videoBtn];
-    [_videoBtn addCenterX:-bigSpace/2 toView:self.contentView];
+//    [_videoBtn addCenterX:-bigSpace/2 toView:self.contentView];
+    [_videoBtn xCenterToView:self.contentView];
     [_videoBtn bottomToView:self.contentView withSpace:15];
     [_videoBtn addTarget:self action:@selector(videoBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -145,6 +146,7 @@
     [_controlBtn addTarget:self action:@selector(controlBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     
     _talkBtn = [LGXVerticalButton new];
+    _talkBtn.hidden = YES;
     [_talkBtn setImage:UIImageWithFileName(@"player_talkback_image") forState:UIControlStateNormal];
     [_talkBtn setImage:UIImageWithFileName(@"player_talkback_select_image") forState:UIControlStateSelected];
     [_talkBtn setImage:UIImageWithFileName(@"player_talkback_disabled_image") forState:UIControlStateDisabled];
@@ -158,11 +160,11 @@
 }
 -(void)makeCellData:(BOOL)isLiving withAbility:(EquipmentAbilityModel*)model
 {
-    CGFloat bigSpace = kScreenWidth * 0.25;
+    CGFloat bigSpace = kScreenWidth * 0.3;
     
     if (isLiving) {
         _controlBtn.hidden = NO;
-        _talkBtn.hidden = NO;
+//        _talkBtn.hidden = NO;
         _controlBtn.enabled = model.ptz;
         _gongGeBtn.enabled = YES;
         
@@ -171,7 +173,7 @@
         _clarityBtn.enabled = YES;
 
 //        [_videoBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
-//            make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter).lgx_floatOffset(-bigSpace/2);
+//            make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter);
 //            make.bottomEdge.lgx_equalTo(self.contentView.lgx_bottomEdge).lgx_floatOffset(-15);
 //        }];
 //

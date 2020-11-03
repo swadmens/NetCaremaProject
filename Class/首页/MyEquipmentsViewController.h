@@ -21,8 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic,weak) id<MyEquipmentsDelegate>delegate;
 
-@property (nonatomic,strong) NSArray *dataArray;
-
 @end
 
 NS_ASSUME_NONNULL_END

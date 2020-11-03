@@ -8,6 +8,7 @@
 
 #import "MyEquipmentsCell.h"
 #import "LivingModel.h"
+#import "MyEquipmentsModel.h"
 
 
 @interface MyEquipmentsCell ()
@@ -44,9 +45,8 @@
     
     
     _equipmentName = [UILabel new];
-    _equipmentName.text = @"LiveNVP官网演示";
     _equipmentName.textColor = kColorSecondTextColor;
-    _equipmentName.font = [UIFont customFontWithSize:kFontSizeTen];
+    _equipmentName.font = [UIFont customFontWithSize:kFontSizeFourteen];
     [backView addSubview:_equipmentName];
     [_equipmentName leftToView:backView withSpace:12];
     [_equipmentName yCenterToView:backView];
@@ -54,21 +54,16 @@
     
     
     _equipmentDeatil = [UILabel new];
-    _equipmentDeatil.text = @"channer100";
     _equipmentDeatil.textColor = kColorMainTextColor;
-    _equipmentDeatil.font = [UIFont customFontWithSize:kFontSizeSixteen];
+    _equipmentDeatil.font = [UIFont customFontWithSize:kFontSizeTen];
     [backView addSubview:_equipmentDeatil];
     [_equipmentDeatil centerToView:backView];
     
     
     _equipmentStates = [UILabel new];
-    _equipmentStates.text = @"在线";
-//    _equipmentStates.text = @"离线";
     _equipmentStates.textAlignment = NSTextAlignmentCenter;
     _equipmentStates.font = [UIFont customFontWithSize:kFontSizeTen];
     _equipmentStates.textColor = [UIColor whiteColor];
-    _equipmentStates.backgroundColor = UIColorFromRGB(0xF39700, 1);
-//    _equipmentStates.backgroundColor = UIColorFromRGB(0xAEAEAE, 1);
     _equipmentStates.clipsToBounds = YES;
     _equipmentStates.layer.cornerRadius = 2;
     [backView addSubview:_equipmentStates];
@@ -77,29 +72,16 @@
     [_equipmentStates addWidth:30];
     [_equipmentStates addHeight:16];
     
-    
-    
-    
-    
 }
-//-(void)setFrame:(CGRect)frame
-//{
-//    frame.origin.x += 15;
-//    frame.origin.y += 10;
-//    frame.size.height -= 10;
-//    frame.size.width -= 30;
-//    [super setFrame:frame];
-//}
--(void)makeCellData:(LivingModel *)model
+
+-(void)makeCellData:(MyEquipmentsModel *)model
 {
-    _equipmentName.text = model.name;
-//    _equipmentDeatil.text = model.;
-//    _equipmentStates.text = model.;
-//    if ([model.equipment_states isEqualToString:@"离线"]) {
-//        _equipmentStates.backgroundColor = UIColorFromRGB(0xAEAEAE, 1);
-//    }else{
-//        _equipmentStates.backgroundColor = UIColorFromRGB(0xF39700, 1);
-//    }
+    _equipmentName.text = model.equipment_name;
+    _equipmentDeatil.text = model.lastUpdated;
+    
+    _equipmentStates.text = model.online?@"在线":@"离线";
+    _equipmentStates.backgroundColor = model.online?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
+ 
 }
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

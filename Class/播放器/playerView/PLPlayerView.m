@@ -63,7 +63,6 @@ EZPlayerDelegate
 @property (nonatomic, strong) PLPlayer *player;
 @property (nonatomic, strong) PLPlayerOption *playerOption;
 @property (nonatomic, assign) BOOL isNeedSetupPlayer;
-@property (nonatomic, assign) BOOL isLiving;//是否是直播
 @property (nonatomic, assign) BOOL isFullScreen;//是否是全屏
 @property (nonatomic, assign) BOOL clarity;//是否是标清
 
@@ -942,25 +941,17 @@ EZPlayerDelegate
         NSString *urlString = _plModel.videoUrl.lowercaseString;
         if ([urlString hasSuffix:@"mp4"]) {
             format = kPLPLAY_FORMAT_MP4;
-            self.isLiving = NO;
         } else if ([urlString hasPrefix:@"rtmp:"]) {
             format = kPLPLAY_FORMAT_FLV;
-            self.isLiving = YES;
         } else if ([urlString hasSuffix:@".mp3"]) {
             format = kPLPLAY_FORMAT_MP3;
-            self.isLiving = NO;
         } else if ([urlString hasSuffix:@".m3u8"]) {
             format = kPLPLAY_FORMAT_M3U8;
-            self.isLiving = YES;
-        }else{
-            self.isLiving = YES;
         }
+        
         [self.playerOption setOptionValue:@(format) forKey:PLPlayerOptionKeyVideoPreferFormat];
         [self.playerOption setOptionValue:@(kPLLogNone) forKey:PLPlayerOptionKeyLogLevel];
-        
-//        self.player = [PLPlayer playerWithURL:[NSURL URLWithString:@"http://gbs.etoneiot.com:10000/sms/34020000002020000001/api/v1/downloads/34020000001320000001_34020000001320000001_1200000455.mp4"] option:self.playerOption];
 
-        
         NSDate *date = [NSDate date];
         self.player = [PLPlayer playerWithURL:[NSURL URLWithString:self.clarity?_plModel.videoUrl:_plModel.videoHDUrl] option:self.playerOption];
         NSLog(@"playerWithURL 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
@@ -1035,7 +1026,6 @@ EZPlayerDelegate
 
         _m_deltaTime = [self transformToDeltaTime:_plModel.startTime EndTime:_plModel.endTime];
 
-        
     }
 }
 - (NSTimeInterval)timeIntervalOfString:(NSString*)strTime
@@ -1210,7 +1200,7 @@ EZPlayerDelegate
     if (date) {
         NSLog(@"stop 耗时： %f s",[[NSDate date] timeIntervalSinceDate:date]);
     }
-    
+ 
     [self removeFullStreenNotify];
     [self resetUI];
     [self.controlView resetStatus];

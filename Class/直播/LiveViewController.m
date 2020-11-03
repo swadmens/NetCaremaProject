@@ -261,22 +261,11 @@
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     MyEquipmentsModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    if (model.online) {
-        
-//        [self.dataArray removeObjectAtIndex:indexPath.row];
-//        [self.dataArray insertObject:model atIndex:0];
-        
-        //live直播
-        SuperPlayerViewController *vc = [SuperPlayerViewController new];
-        vc.hidesBottomBarWhenPushed = YES;
-        [vc makeViewLiveData:[NSArray arrayWithObjects:model, nil] withTitle:model.model.name];
-        [self.navigationController pushViewController:vc animated:YES];
-        self.hidesBottomBarWhenPushed = NO;
-        
-    }else{
-        [_kHUDManager showMsgInView:nil withTitle:@"当前设备已离线" isSuccess:YES];
-        return;
-    }
+    SuperPlayerViewController *vc = [SuperPlayerViewController new];
+    vc.hidesBottomBarWhenPushed = YES;
+    [vc makeViewLiveData:[NSArray arrayWithObjects:model, nil] withTitle:model.model.name];
+    [self.navigationController pushViewController:vc animated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section

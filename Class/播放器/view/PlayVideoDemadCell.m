@@ -74,6 +74,7 @@
     self.playerView.delegate = self;
     [_playView addSubview:self.playerView];
     self.playerView.isLocalVideo = YES;
+    self.playerView.isLiving = NO;
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.playView);
     }];
