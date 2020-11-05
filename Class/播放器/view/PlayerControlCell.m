@@ -36,7 +36,7 @@
     self.contentView.backgroundColor = [UIColor whiteColor];
     
     CGFloat space = kScreenWidth * 0.2;
-    CGFloat bigSpace = kScreenWidth * 0.3;
+    CGFloat bigSpace = kScreenWidth * 0.25;
 
     
     CGFloat btnWidth = 30;
@@ -112,8 +112,8 @@
     [_videoBtn setTitleColor:kColorSecondTextColor forState:UIControlStateNormal];
     _videoBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeEight];
     [self.contentView addSubview:_videoBtn];
-//    [_videoBtn addCenterX:-bigSpace/2 toView:self.contentView];
-    [_videoBtn xCenterToView:self.contentView];
+    [_videoBtn addCenterX:-bigSpace/2 toView:self.contentView];
+//    [_videoBtn xCenterToView:self.contentView];
     [_videoBtn bottomToView:self.contentView withSpace:15];
     [_videoBtn addTarget:self action:@selector(videoBtnClick:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -146,7 +146,6 @@
     [_controlBtn addTarget:self action:@selector(controlBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     
     _talkBtn = [LGXVerticalButton new];
-    _talkBtn.hidden = YES;
     [_talkBtn setImage:UIImageWithFileName(@"player_talkback_image") forState:UIControlStateNormal];
     [_talkBtn setImage:UIImageWithFileName(@"player_talkback_select_image") forState:UIControlStateSelected];
     [_talkBtn setImage:UIImageWithFileName(@"player_talkback_disabled_image") forState:UIControlStateDisabled];
@@ -160,49 +159,22 @@
 }
 -(void)makeCellData:(BOOL)isLiving withAbility:(EquipmentAbilityModel*)model
 {
-    CGFloat bigSpace = kScreenWidth * 0.3;
-    
     if (isLiving) {
-        _controlBtn.hidden = NO;
-//        _talkBtn.hidden = NO;
         _controlBtn.enabled = model.ptz;
+        _talkBtn.enabled = model.audioTalk;
         _gongGeBtn.enabled = YES;
         
         _videoBtn.enabled = YES;
-//        _screenshotsBtn.enabled = YES;
         _clarityBtn.enabled = YES;
-
-//        [_videoBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
-//            make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter);
-//            make.bottomEdge.lgx_equalTo(self.contentView.lgx_bottomEdge).lgx_floatOffset(-15);
-//        }];
-//
-//        [_screenshotsBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
-//            make.xCenter.lgx_equalTo(self.videoBtn.lgx_xCenter).lgx_floatOffset(-bigSpace);
-//            make.yCenter.lgx_equalTo(self.videoBtn.lgx_yCenter);
-//        }];
         
     }else{
-//        _controlBtn.hidden = YES;
-//        _talkBtn.hidden = YES;
         _gongGeBtn.selected = YES;
         _gongGeBtn.enabled = NO;
         
         _videoBtn.enabled = NO;
-//        _screenshotsBtn.enabled = NO;
         _clarityBtn.enabled = NO;
         _controlBtn.enabled = NO;
         _talkBtn.enabled = NO;
-
-//        [_videoBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
-//            make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter).lgx_floatOffset(40);
-//            make.bottomEdge.lgx_equalTo(self.contentView.lgx_bottomEdge).lgx_floatOffset(-15);
-//        }];
-//
-//        [_screenshotsBtn lgx_remakeConstraints:^(LGXLayoutMaker *make) {
-//            make.xCenter.lgx_equalTo(self.contentView.lgx_xCenter).lgx_floatOffset(-40);
-//            make.yCenter.lgx_equalTo(self.videoBtn.lgx_yCenter);
-//        }];
     }
 }
 

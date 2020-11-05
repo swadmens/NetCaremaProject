@@ -19,6 +19,7 @@
     model.mirror = [[dic objectForKey:@"mirror"] boolValue];
     model.preset = [[dic objectForKey:@"preset"] boolValue];
     model.ptz = [[dic objectForKey:@"ptz"] boolValue];
+    model.audioTalk = [[dic objectForKey:@"audioTalk"] boolValue];
 
     return model;
 }

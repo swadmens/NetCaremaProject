@@ -56,6 +56,8 @@ pod 'JGProgressHUD'
  pod 'EZOpenSDK'
  pod 'EZUIKit'
 
+ #WebSocket
+ pod 'SocketRocket'
  
  
  #腾讯云

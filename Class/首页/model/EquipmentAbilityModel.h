@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 +(EquipmentAbilityModel*)makeModelData:(NSDictionary*)dic;
 
+@property (nonatomic,assign) BOOL audioTalk;  // 语音对讲
 @property (nonatomic,assign) BOOL ptz;  // 云台控制
 @property (nonatomic,assign) BOOL preset;  //　预置点
 @property (nonatomic,assign) BOOL cloudStorage;  //　云存储

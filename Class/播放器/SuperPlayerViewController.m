@@ -30,6 +30,10 @@
 #import "ChannelDetailController.h"
 #import <LCOpenSDKDynamic/LCOpenSDKDynamic.h>
 
+#import "WebSocketManager.h"
+#import "TalkManager.h"
+#import "AudioTalkView.h"
+
 #define KTopviewheight kScreenWidth*0.68
 
 @interface SuperPlayerViewController ()
@@ -41,7 +45,8 @@ CameraControlDelete,
 LocalVideoDelegate,
 PlayerTableViewCellDelegate,
 PlayVideoDemadDelegate,
-LCOpenSDK_EventListener
+LCOpenSDK_EventListener,
+TalkManagerSendDelegate
 >
 
 @property (nonatomic,strong) WWTableView *tableView;
@@ -68,7 +73,6 @@ LCOpenSDK_EventListener
 @property (nonatomic, strong) NSMutableArray *localVideosArray;//本地录像数据
 @property (nonatomic, strong) NSMutableArray *cloudVideosArray;//云端录像数据
 
-
 @property (nonatomic,strong) MyEquipmentsModel *selectModel;
 @property (nonatomic,assign) BOOL videoing;//是否正在录像
 @property (nonatomic,strong) UIView *videoTipView;//录像提示view
@@ -80,6 +84,11 @@ LCOpenSDK_EventListener
 @property (nonatomic,strong) LCOpenSDK_Api* m_hc;
 
 
+@property (nonatomic,strong) NSString *token;
+@property (nonatomic,strong) NSString *urlPrefixed;
+
+@property (nonatomic,strong) AudioTalkView *audioView;
+@property (nonatomic,strong) UIView *coverView;
 @end
 
 @implementation SuperPlayerViewController
@@ -123,6 +132,12 @@ LCOpenSDK_EventListener
     self.clView.delegate = self;
     [self.view addSubview:self.clView];
     self.clView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, kScreenHeight - KTopviewheight - 177);
+    
+    //语音对讲
+    self.audioView = [AudioTalkView new];
+    [[UIApplication sharedApplication].keyWindow addSubview:self.audioView];
+    self.audioView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, 150);
+    
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -144,6 +159,7 @@ LCOpenSDK_EventListener
     
     [self setupTableView];
     [self setupControllView];
+    [self getThirdInfomation];
 
     self.videoing = NO;
     _videoTipView = [UIView new];
@@ -1133,99 +1149,109 @@ LCOpenSDK_EventListener
     
     [sence sendRequest];
 }
+//获取第三方平台信息
+-(void)getThirdInfomation
+{
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/platform/%@",self.selectModel.system_Source];
+    
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    sence.successBlock = ^(id obj) {
+        DLog(@"obj == %@",obj);
+//        [_kHUDManager showMsgInView:nil withTitle:@"视频已删除" isSuccess:YES];
+        self.token = [obj objectForKey:@"token"];
+        self.urlPrefixed = [obj objectForKey:@"urlPrefixed"];
+    };
+    sence.errorBlock = ^(NSError *error) {
+        DLog(@"error == %@",error);
+    };
+    
+    [sence sendRequest];
+}
 
 //开始对讲
 -(void)startTalkBack
 {
     DLog(@"开始对讲");
-    if (![self.selectModel.system_Source isEqualToString:@"DaHua"]) {
-        return;
-    }
+//    if (![self.selectModel.system_Source isEqualToString:@"GBS"]) {
+//        return;
+//    }
     
-    //接口初始化
-    LCOpenSDK_ApiParam * apiParam = [[LCOpenSDK_ApiParam alloc] init];
-    apiParam.procotol =  PROCOTOL_TYPE_HTTPS;
-    apiParam.addr = @"openapi.lechange.cn";
-    apiParam.port = 443;
-    apiParam.token = self.selectModel.model.liveToken;
-    self.m_hc = [[LCOpenSDK_Api shareMyInstance] initOpenApi:apiParam];
+    [UIView animateWithDuration:0.3 animations:^{
+        //Y轴向上平移
+        self.audioView.transform = CGAffineTransformMakeTranslation(0, -150);
+    }];
+    
+    [WebSocketManager shared].token = self.token;
+    [WebSocketManager shared].urlPrefixed = self.urlPrefixed;
+    [WebSocketManager shared].serial = self.selectModel.deviceSerial;
+    [WebSocketManager shared].code = self.selectModel.model.channelId;
+    [[WebSocketManager shared] connectServer];
 
-    _m_talker = [[LCOpenSDK_AudioTalk alloc] init];
-    [_m_talker setListener:(id<LCOpenSDK_TalkerListener>)self];
+    
+////    [TalkManager manager].delegate = self;
+//    [TalkManager manager].ip = @"39.108.208.122";
+//    [TalkManager manager].port = 10000;
+//    [TalkManager manager].url = @"api/v1/control/ws-talk/34020000001320000001/34020000001320000001";
+//    [[TalkManager manager] startTalk];
 
-    LCOpenSDK_ParamTalk  *paramTalk = [[LCOpenSDK_ParamTalk alloc] init];
-    paramTalk.accessToken = self.selectModel.model.liveToken;
-    paramTalk.deviceID = self.selectModel.model.deviceSerial;
-    paramTalk.channel = [self.selectModel.model.channelId integerValue];
-    paramTalk.psk = @"";
-    paramTalk.playToken = self.selectModel.model.liveToken;
-    paramTalk.isOpt = YES;
-    NSInteger iretValue = [_m_talker playTalk:paramTalk];
-    if (iretValue < 0) {
-       NSLog(@"talk failed");
-        [_m_talker setListener:nil];
-        return;
-    }
+    
+//    //接口初始化
+//    LCOpenSDK_ApiParam * apiParam = [[LCOpenSDK_ApiParam alloc] init];
+//    apiParam.procotol =  PROCOTOL_TYPE_HTTPS;
+//    apiParam.addr = @"openapi.lechange.cn";
+//    apiParam.port = 443;
+//    apiParam.token = self.selectModel.model.liveToken;
+//    self.m_hc = [[LCOpenSDK_Api shareMyInstance] initOpenApi:apiParam];
+//
+//    _m_talker = [[LCOpenSDK_AudioTalk alloc] init];
+//    [_m_talker setListener:(id<LCOpenSDK_TalkerListener>)self];
+//
+//    LCOpenSDK_ParamTalk  *paramTalk = [[LCOpenSDK_ParamTalk alloc] init];
+//    paramTalk.accessToken = self.selectModel.model.liveToken;
+//    paramTalk.deviceID = self.selectModel.model.deviceSerial;
+//    paramTalk.channel = [self.selectModel.model.channelId integerValue];
+//    paramTalk.psk = @"";
+//    paramTalk.playToken = self.selectModel.model.liveToken;
+//    paramTalk.isOpt = YES;
+//    NSInteger iretValue = [_m_talker playTalk:paramTalk];
+//    if (iretValue < 0) {
+//       NSLog(@"talk failed");
+//        [_m_talker setListener:nil];
+//        return;
+//    }
 }
 //结束对讲
 -(void)endTalkBack
 {
     DLog(@"结束对讲");
-    [_m_talker stopTalk];
+//    [_m_talker stopTalk];
+    self.audioView.transform = CGAffineTransformIdentity;
+    
+    [[WebSocketManager shared] RMWebSocketClose];
+    [[TalkManager manager] stopTalk];
+
 }
+
+#pragma mark - TalkManagerSendDelegate
+-(void)sendAudioData:(NSMutableData *)data
+{
+    DLog(@"data  =  %@",data);
+}
+
+
 #pragma mark - 对讲回调
 - (void)onTalkResult:(NSString*)error TYPE:(NSInteger)type
 {
     NSLog(@"error = %@, type = %ld", error, (long)type);
-//    NSString* displayLab;
-//    if (99 == type) {
-//        displayLab = [error isEqualToString:@"-1000"] ? @"Talk Network Timeout" : [NSString stringWithFormat:@"Talk Failed，[%@]", error];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [m_tipLab setText:displayLab];
-//            UIImage* img = [UIImage leChangeImageNamed:LiveVideo_Speak_Nor_Png];
-//            [m_talkBtn setBackgroundImage:img forState:UIControlStateNormal];
-//            [self hideLoading:TALK_PROGRESS_IND];
-//            m_talkBtn.tag = 0;
-//        });
-//        return;
-//    }
-//
-//    if (nil != error && [RTSP_Result_String(STATE_RTSP_DESCRIBE_READY) isEqualToString:error]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [m_tipLab setText:@"Setting Talk..."];
-//        });
-//        return;
-//    }
-//    if (nil != error && [RTSP_Result_String(STATE_RTSP_PLAY_READY) isEqualToString:error]) {
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [m_tipLab setText:@"Start to Talk"];
-//            UIImage* img = [UIImage leChangeImageNamed:Video_SoundOff_Png];
-//            [m_soundBtn setBackgroundImage:img forState:UIControlStateNormal];
-//            [self hideLoading:TALK_PROGRESS_IND];
-//            m_soundBtn.tag = 1;
-//            m_isTalking = YES;
-//        });
-//        return;
-//    }
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [m_tipLab setText:[NSString stringWithFormat:@"Talk Failed，[%@]", error]];
-//        [self hideLoading:TALK_PROGRESS_IND];
-//        UIImage* img = [UIImage leChangeImageNamed:LiveVideo_Speak_Nor_Png];
-//        [m_talkBtn setBackgroundImage:img forState:UIControlStateNormal];
-//        m_talkBtn.tag = 0;
-//        m_isTalking = NO;
-//    });
-//    [m_talker stopTalk];
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        if ((m_soundBtn.tag = m_soundState) == 0) {
-//            if (m_play) {
-//                [m_play playAudio];
-//            }
-//            UIImage* img = [UIImage leChangeImageNamed:Video_SoundOn_Png];
-//            [m_soundBtn setBackgroundImage:img forState:UIControlStateNormal];
-//        }
-//    });
+
 }
+
+
+
+
 
 /*
 #pragma mark - Navigation

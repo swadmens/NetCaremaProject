@@ -438,6 +438,10 @@
     if (![self chengkVideoNormalPlay]) {
         return;
     }
+//    [self.allDataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+//        MyEquipmentsModel *model = obj;
+//        [self stopGbsLivingData:model];
+//    }];
 
     NSArray *array = [self.collectionView visibleCells];
     for (PlayerTopCollectionViewCell *cell in array) {
@@ -612,6 +616,33 @@
         [[GCDQueue mainQueue] queueBlock:^{
             [weak_self dealwithLivingData:myModel withIndex:index];
         }];
+    };
+    [sence sendRequest];
+}
+//停止GBS直播
+-(void)stopGbsLivingData:(MyEquipmentsModel*)myModel
+{
+    if (![myModel.system_Source isEqualToString:@"GBS"]) {
+        return;
+    }
+    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/live/stop?systemSource=GBS&id=%@",myModel.equipment_id];
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"GET";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    __unsafe_unretained typeof(self) weak_self = self;
+    sence.successBlock = ^(id obj) {
+        
+        [[GCDQueue mainQueue] queueBlock:^{
+
+        }];
+    };
+    sence.errorBlock = ^(NSError *error) {
+
+        [_kHUDManager hideAfter:0.1 onHide:nil];
+        // 请求失败
+        DLog(@"error  ==  %@",error.userInfo);
+        
     };
     [sence sendRequest];
 }

@@ -156,6 +156,10 @@
 		4A511947242B082D005A3065 /* UploadEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A511927242B082D005A3065 /* UploadEngine.m */; };
 		4A511948242B082D005A3065 /* UploadSence.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A511929242B082D005A3065 /* UploadSence.m */; };
 		4A511949242B082D005A3065 /* OneFileModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A51192A242B082D005A3065 /* OneFileModel.m */; };
+		4A5766E6255247C200E900BA /* WebSocketManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A5766E5255247C200E900BA /* WebSocketManager.m */; };
+		4A5766F325525B6900E900BA /* PCMCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A5766EE25525B6800E900BA /* PCMCapture.m */; };
+		4A5766F425525B6900E900BA /* AACEncoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A5766F025525B6800E900BA /* AACEncoder.m */; };
+		4A5766F525525B6900E900BA /* TalkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A5766F225525B6800E900BA /* TalkManager.m */; };
 		4A580BEF24075D0700E82675 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A580BEE24075D0700E82675 /* AppDelegate.mm */; };
 		4A580BF224075D0700E82675 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A580BF124075D0700E82675 /* SceneDelegate.m */; };
 		4A580BF824075D0700E82675 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A580BF624075D0700E82675 /* Main.storyboard */; };
@@ -481,6 +485,8 @@
 		4A8D98F025217C2800295CAC /* CGXAddressModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E625217C2700295CAC /* CGXAddressModel.m */; };
 		4A8D98F125217C2800295CAC /* CGXStringPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E825217C2700295CAC /* CGXStringPickerView.m */; };
 		4A8D98F225217C2800295CAC /* CGXPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E925217C2700295CAC /* CGXPickerView.m */; };
+		4A97698A2553DADD00DCFFF5 /* AudioTalkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9769892553DADD00DCFFF5 /* AudioTalkView.m */; };
+		4A9769912553E50F00DCFFF5 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9769902553E50F00DCFFF5 /* GCDAsyncSocket.m */; };
 		4AA2EE622407A0EE00C4F5DA /* DemandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE612407A0EE00C4F5DA /* DemandViewController.m */; };
 		4AA2EE652407A10000C4F5DA /* LiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE642407A10000C4F5DA /* LiveViewController.m */; };
 		4AA77B032518502E00C2D427 /* PLPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA77B012518502E00C2D427 /* PLPlayerView.m */; };
@@ -981,6 +987,14 @@
 		4A511929242B082D005A3065 /* UploadSence.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UploadSence.m; sourceTree = "<group>"; };
 		4A51192A242B082D005A3065 /* OneFileModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneFileModel.m; sourceTree = "<group>"; };
 		4A51192B242B082D005A3065 /* UploadEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadEngine.h; sourceTree = "<group>"; };
+		4A5766E4255247C200E900BA /* WebSocketManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebSocketManager.h; sourceTree = "<group>"; };
+		4A5766E5255247C200E900BA /* WebSocketManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebSocketManager.m; sourceTree = "<group>"; };
+		4A5766ED25525B6800E900BA /* AACEncoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AACEncoder.h; sourceTree = "<group>"; };
+		4A5766EE25525B6800E900BA /* PCMCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCMCapture.m; sourceTree = "<group>"; };
+		4A5766EF25525B6800E900BA /* TalkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TalkManager.h; sourceTree = "<group>"; };
+		4A5766F025525B6800E900BA /* AACEncoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AACEncoder.m; sourceTree = "<group>"; };
+		4A5766F125525B6800E900BA /* PCMCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCMCapture.h; sourceTree = "<group>"; };
+		4A5766F225525B6800E900BA /* TalkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TalkManager.m; sourceTree = "<group>"; };
 		4A580BEA24075D0700E82675 /* NetCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NetCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A580BED24075D0700E82675 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4A580BEE24075D0700E82675 /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
@@ -1603,6 +1617,10 @@
 		4A8D98E725217C2700295CAC /* NSDate+CGXPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+CGXPicker.h"; sourceTree = "<group>"; };
 		4A8D98E825217C2700295CAC /* CGXStringPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXStringPickerView.m; sourceTree = "<group>"; };
 		4A8D98E925217C2700295CAC /* CGXPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXPickerView.m; sourceTree = "<group>"; };
+		4A9769882553DADD00DCFFF5 /* AudioTalkView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioTalkView.h; sourceTree = "<group>"; };
+		4A9769892553DADD00DCFFF5 /* AudioTalkView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioTalkView.m; sourceTree = "<group>"; };
+		4A97698F2553E50F00DCFFF5 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
+		4A9769902553E50F00DCFFF5 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
 		4AA2EE602407A0EE00C4F5DA /* DemandViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemandViewController.h; sourceTree = "<group>"; };
 		4AA2EE612407A0EE00C4F5DA /* DemandViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemandViewController.m; sourceTree = "<group>"; };
 		4AA2EE632407A10000C4F5DA /* LiveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveViewController.h; sourceTree = "<group>"; };
@@ -2634,6 +2652,30 @@
 			path = "上传管理";
 			sourceTree = "<group>";
 		};
+		4A5766E3255247B200E900BA /* WebSocket */ = {
+			isa = PBXGroup;
+			children = (
+				4A5766E4255247C200E900BA /* WebSocketManager.h */,
+				4A5766E5255247C200E900BA /* WebSocketManager.m */,
+			);
+			path = WebSocket;
+			sourceTree = "<group>";
+		};
+		4A5766EC25525B6800E900BA /* 语音对讲 */ = {
+			isa = PBXGroup;
+			children = (
+				4A97698F2553E50F00DCFFF5 /* GCDAsyncSocket.h */,
+				4A9769902553E50F00DCFFF5 /* GCDAsyncSocket.m */,
+				4A5766ED25525B6800E900BA /* AACEncoder.h */,
+				4A5766F025525B6800E900BA /* AACEncoder.m */,
+				4A5766F125525B6800E900BA /* PCMCapture.h */,
+				4A5766EE25525B6800E900BA /* PCMCapture.m */,
+				4A5766EF25525B6800E900BA /* TalkManager.h */,
+				4A5766F225525B6800E900BA /* TalkManager.m */,
+			);
+			path = "语音对讲";
+			sourceTree = "<group>";
+		};
 		4A580BE124075D0700E82675 = {
 			isa = PBXGroup;
 			children = (
@@ -2990,6 +3032,8 @@
 		4A580D3124075F2B00E82675 /* WWLibrary */ = {
 			isa = PBXGroup;
 			children = (
+				4A5766EC25525B6800E900BA /* 语音对讲 */,
+				4A5766E3255247B200E900BA /* WebSocket */,
 				4A04620724F5F9A100DDD408 /* MQTT */,
 				4AB50ADA246928290064BF82 /* 二维码扫描 */,
 				4A64ECD8242D862C00D30FB1 /* 视频录制 */,
@@ -4038,6 +4082,15 @@
 			path = CGXPickView;
 			sourceTree = "<group>";
 		};
+		4A9769872553DAB600DCFFF5 /* 语音对讲 */ = {
+			isa = PBXGroup;
+			children = (
+				4A9769882553DADD00DCFFF5 /* AudioTalkView.h */,
+				4A9769892553DADD00DCFFF5 /* AudioTalkView.m */,
+			);
+			path = "语音对讲";
+			sourceTree = "<group>";
+		};
 		4AA77B0025184FF400C2D427 /* playerView */ = {
 			isa = PBXGroup;
 			children = (
@@ -4513,6 +4566,7 @@
 		4AD26FE62463AE6B00D462B4 /* 播放器 */ = {
 			isa = PBXGroup;
 			children = (
+				4A9769872553DAB600DCFFF5 /* 语音对讲 */,
 				4A8D980E252078DB00295CAC /* hikPlayerView */,
 				4A8D97D8251AE47300295CAC /* 摄像头控制 */,
 				4A8D97D7251AE47300295CAC /* 预置点 */,
@@ -5211,6 +5265,7 @@
 				4AB50AA02468EDF40064BF82 /* WMZDialog+Pay.m in Sources */,
 				4AD2701C2464E9C700D462B4 /* PlayerTopCollectionViewCell.m in Sources */,
 				4A58106324075F2E00E82675 /* SCLButton.m in Sources */,
+				4A9769912553E50F00DCFFF5 /* GCDAsyncSocket.m in Sources */,
 				4A64ECE7242D875B00D30FB1 /* TCNavigationController.m in Sources */,
 				4A6869B5245AB9B90036355E /* ChannelDetailController.m in Sources */,
 				4A8D987725207E5F00295CAC /* EZPlaybackProgressBar.m in Sources */,
@@ -5234,6 +5289,7 @@
 				4AB50AA52468EDF40064BF82 /* WMZDialog+CardPresent.m in Sources */,
 				4AD270192463FFAB00D462B4 /* UIView+Ex.m in Sources */,
 				4AFC83D82547B44300F92BCD /* AddNewAreaTextFieldCell.m in Sources */,
+				4A5766F525525B6900E900BA /* TalkManager.m in Sources */,
 				4A580FF624075F2D00E82675 /* UIScrollView+MJRefresh.m in Sources */,
 				4AB50A9E2468EDF40064BF82 /* WMZDialog+DatePicker.m in Sources */,
 				4A580FD924075F2D00E82675 /* UIButton+BGColor.m in Sources */,
@@ -5261,6 +5317,7 @@
 				4A6869232456644C0036355E /* SingleCarmeraCell.m in Sources */,
 				4A8D97E2251AE4C900295CAC /* PresetView.m in Sources */,
 				4A6869A2245A67B80036355E /* CarmeraMoreSystemController.m in Sources */,
+				4A97698A2553DADD00DCFFF5 /* AudioTalkView.m in Sources */,
 				4AFC83D32547B40700F92BCD /* AddNewAreaChooseCarmeraCell.m in Sources */,
 				4A68693E2457C8850036355E /* SelectedCarmeraCell.m in Sources */,
 				4A58101924075F2D00E82675 /* UITableViewController+ADFlipTransition.m in Sources */,
@@ -5340,6 +5397,7 @@
 				4A580F2824075F2D00E82675 /* LGXButton.m in Sources */,
 				4A58103324075F2E00E82675 /* IFTTTLayerStrokeStartAnimation.m in Sources */,
 				4A580F8A24075F2D00E82675 /* EPPageControl.m in Sources */,
+				4A5766E6255247C200E900BA /* WebSocketManager.m in Sources */,
 				4A58102624075F2E00E82675 /* IFTTTEasingFunction.m in Sources */,
 				4A14BC4824F49FBA003ADC07 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				4A68BC602538492F0024A9BF /* ChannelDetailFirstCell.m in Sources */,
@@ -5380,6 +5438,7 @@
 				4A4608B1240C9B0A007C209A /* CarmeaVideosViewController.m in Sources */,
 				4A580F8824075F2D00E82675 /* GuideViewController.m in Sources */,
 				4A580F8624075F2D00E82675 /* LGXSMSEngine.m in Sources */,
+				4A5766F425525B6900E900BA /* AACEncoder.m in Sources */,
 				4A580FF424075F2D00E82675 /* NSAlert+MKNetworkKitAdditions.m in Sources */,
 				4A51192C242B082D005A3065 /* MyMD5.m in Sources */,
 				4A58101724075F2D00E82675 /* ADFlipTransition.m in Sources */,
@@ -5473,6 +5532,7 @@
 				4AB50AAD2468EDF40064BF82 /* WMZDialog+BuyCar.m in Sources */,
 				4A46089A240912DB007C209A /* PersonInfoViewController.m in Sources */,
 				4A8D98F025217C2800295CAC /* CGXAddressModel.m in Sources */,
+				4A5766F325525B6900E900BA /* PCMCapture.m in Sources */,
 				4A580F6F24075F2D00E82675 /* TargetEngine.m in Sources */,
 				4A4608AB240C9AB5007C209A /* EquimentBasicInfoController.m in Sources */,
 				4A580F2724075F2D00E82675 /* UITabBar+badgeView.m in Sources */,
