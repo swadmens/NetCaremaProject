@@ -10,15 +10,14 @@
 #import "AACEncoder.h"
 #import "PCMCapture.h"
 #import "WebSocketManager.h"
-#import "GCDAsyncSocket.h"
+#import "SocketRocketUtility.h"
 
 
 #define SAMPLE_RATE 16000
 #define BIT_RATE SAMPLE_RATE*16
 
-@interface TalkManager ()<PCMCaptureDelegate,AACSendDelegate,GCDAsyncSocketDelegate>
+@interface TalkManager ()<PCMCaptureDelegate,AACSendDelegate,WebSocketManagerDelegate>
 
-@property (nonatomic,retain) GCDAsyncSocket *socket;
 @property (nonatomic, strong) AACEncoder *aac;
 @property (nonatomic, strong) PCMCapture *captureSession;
 
@@ -52,107 +51,53 @@
 
 - (void)startTalk {
     //先建立连接，连接建立成功后开启语音
-    [self connectServer:self.ip port:self.port];
+    [[SocketRocketUtility instance] SRWebSocketOpen];
+    
+    return;
+    [WebSocketManager shared].token = self.token;
+    //    [WebSocketManager shared].urlPrefixed = self.urlPrefixed;
+    //    [WebSocketManager shared].serial = self.selectModel.deviceSerial;
+    //    [WebSocketManager shared].code = self.selectModel.model.channelId;
+    [WebSocketManager shared].delegate = self;
+    [[WebSocketManager shared] connectServer];
+}
 
-//    [self startCapture];
+#pragma mark - WebSocketManagerDelegate
+- (void)webSocketConnectType:(WebSocketConnectType)connectType
+{
+    switch (connectType) {
+        case WebSocketDefault:
+            //初始状态，未连接
+            DLog(@"···············初始状态，未连接··········");
+            
+            break;
+        case WebSocketConnect:
+            //已连接
+            DLog(@"···········已连接·········");
+            [self startCapture];
+            
+            break;
+        case WebSocketDisconnect:
+            //断开连接
+            DLog(@"·········断开连接······");
+
+            break;
+        case WebSocketFailConnect:
+            //连接失败
+            DLog(@"·······连接失败·····");
+            break;
+            
+        default:
+            break;
+    }
 }
 
 - (void)stopTalk {
     //停止语音，断开连接
+    [[SocketRocketUtility instance] SRWebSocketClose];
+    [[WebSocketManager shared] RMWebSocketClose];
     [_captureSession stop];
-    self.socket = nil;
-    [self doTeardown:self.url];
 }
-
-- (int)connectServer:(NSString *)hostIP port:(int)hostPort {
-    if (_socket == nil) {
-        _socket = [[GCDAsyncSocket alloc] initWithDelegate:self delegateQueue:dispatch_get_main_queue()];
-        NSError *err = nil;
-        int t = [_socket connectToHost:hostIP onPort:hostPort error:&err];
-        if (!t) {
-            return 0;
-        }else{
-            return 1;
-        }
-    }else {
-        [_socket readDataWithTimeout:-1 tag:0];
-        return 1;
-    }
-}
-
-- (void)socket:(GCDAsyncSocket *)sock didConnectToHost:(NSString *)host port:(uint16_t)port {
-    BOOL state = [self.socket isConnected];
-    if (state) {
-        [self sendCmd];
-    }
-}
-
-- (void)socketDidDisconnect:(GCDAsyncSocket *)sock withError:(NSError *)err {
-    BOOL state = [_socket isConnected];
-    NSLog(@"disconnect,state=%d",state);
-    self.socket = nil;
-}
-
-- (void)sendCmd
-{
-    [self doSetup:self.url];
-}
-
-- (void)doSetup:(NSString *)url {
-    NSMutableString *dataString = [NSMutableString string];
-    [dataString appendString:[NSString stringWithFormat:@"SETUP %@ RTSP/1.0\r\n", url]];
-    [dataString appendString:@"Content-Length: 0\r\n"];
-    [dataString appendFormat:@"CSeq: 0\r\n"];
-    [dataString appendString:@"Transport: RTP/AVP/DHTP;unicast\r\n"];
-    [dataString appendString:@"\r\n"];
-    NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
-    [self.socket writeData:data withTimeout:-1 tag:0];
-    [self.socket readDataWithTimeout:-1 tag:0];
-}
-
-- (void)doPlay:(NSString *)url {
-    NSMutableString *dataString = [NSMutableString string];
-    [dataString appendString:[NSString stringWithFormat:@"PLAY %@ RTSP/1.0\r\n", url]];
-    [dataString appendString:@"Content-Length: 0\r\n"];
-    [dataString appendFormat:@"CSeq: 1\r\n"];
-    [dataString appendString:@"\r\n"];
-    NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
-    [self.socket writeData:data withTimeout:-1 tag:1];
-    [self.socket readDataWithTimeout:-1 tag:1];
-}
-
-- (void)doTeardown:(NSString *)url {
-    NSMutableString *dataString = [NSMutableString string];
-    [dataString appendString:[NSString stringWithFormat:@"TEARDOWN %@ RTSP/1.0\r\n", url]];
-    [dataString appendString:@"Content-Length: 0\r\n"];
-    [dataString appendString:@"CSeq: 2\r\n"];
-    [dataString appendString:@"\r\n"];
-    NSData *data = [dataString dataUsingEncoding:NSUTF8StringEncoding];
-    [self.socket writeData:data withTimeout:-1 tag:2];
-}
-
-- (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag {
-    NSString *dataString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    switch (tag) {
-        case 0:
-//            [self doPlay:self.url];
-            break;
-        case 1:
-            [self startCapture];
-            break;
-        case 200:
-            if (!dataString) {
-//                [self getPayload:data];
-            }
-            break;
-        default:
-            break;
-    }
-    [sock readDataWithTimeout:-1 tag:200];
-}
-
-
-
 
 - (void)startCapture {
     [_captureSession start];
@@ -172,9 +117,10 @@
 }
 
 - (void)sendData:(NSMutableData *)data {
-    [self.socket writeData:data withTimeout:-1 tag:100];
+//    [self.socket writeData:data withTimeout:-1 tag:100];
 //    [self.delegate sendAudioData:data];
 //    DLog(@"声音data ==  %@",data);
+//    [WebSocketManager shared] sendDataToServer:<#(nonnull NSString *)#>
 }
 
 

@@ -42,6 +42,7 @@
 -(void)cancelViewClick
 {
     self.transform = CGAffineTransformIdentity;
+    [self.delegate viewColseBtnClick:self];
 }
 
 /*

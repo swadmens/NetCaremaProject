@@ -45,17 +45,30 @@
 - (void)connectServer{
     self.isActivelyClose = NO;
     
-    NSString *url = [NSString stringWithFormat:@"ws://39.108.208.122:10000/websocket/api/v1/control/ws-talk/%@/%@/%@",self.token,@"34020000001320000001",@"34020000001320000001"];
+//    NSString *urls = [NSString stringWithFormat:@"wss://39.108.208.122:10000/websocket/api/v1/control/ws-talk/%@/%@/%@",self.token,@"34020000001320000001",@"34020000001320000001"];
     
-//    NSString *url = @"ws://39.108.208.122:10000/websocket";
-    DLog(@"url ==%@",url);
+    NSString *urls = @"wss://39.108.208.122:10000/websocket";
+    DLog(@"url ==%@",urls);
     
 //    self.webSocket = [[RMWebSocket alloc] initWithURL:[NSURL URLWithString:@"https://dev-im-gateway.runxsports.com/ws/token=88888888"]];
-//    self.webSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:url]];
+//    self.webSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:urls]];
     
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:url]];
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:urls]];
 //    [request setValue:@"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MDQ2MjQ0NTQsInB3IjoiZjBiMDBjNjZhZDEwOTUzNmEwMzMzOTM5MjdmNDBkMDkiLCJ0bSI6MTYwNDAxOTY1NCwidW4iOiJhZG1pbiJ9.xzRkJMiIb6rvLawR3Ln8MUQqOPj9TsL-w_ClE-h9eWA" forHTTPHeaderField:@"Authorization"];
-    self.webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+    
+    
+//    NSURL *url = [[NSURL alloc] initWithString:urls];
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+//    NSString *cerPath = [[NSBundle mainBundle] pathForResource:@"catchtoy.itcheku.com" ofType:@"cer"];
+//    NSData *certData = [[NSData alloc] initWithContentsOfFile:cerPath];
+//    CFDataRef certDataRef = (__bridge CFDataRef)certData;
+//    SecCertificateRef certRef = SecCertificateCreateWithData(NULL, certDataRef);
+//    id certificate = (__bridge id)certRef;
+//    [request setSR_SSLPinnedCertificates:@[certificate]];
+//    self.webSocket =  [[SRWebSocket alloc] initWithURLRequest:request];
+    
+    
+    self.webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urls]]];
     self.webSocket.delegate = self;
     [self.webSocket open];
 }
@@ -71,9 +84,11 @@
     
     NSLog(@"socket 开始连接");
     self.isConnect = YES;
-    self.connectType = WebSocketConnect;
-
+    
     [self initHeartBeat];///开始心跳
+    if ([self.delegate respondsToSelector:@selector(webSocketConnectType:)]) {
+        [self.delegate webSocketConnectType:WebSocketConnect];
+    }
     
 }
 
@@ -81,8 +96,10 @@
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error{
     NSLog(@"连接失败 error =%@",error.userInfo);
     self.isConnect = NO;
-    self.connectType = WebSocketDisconnect;
-
+    
+    if ([self.delegate respondsToSelector:@selector(webSocketConnectType:)]) {
+        [self.delegate webSocketConnectType:WebSocketFailConnect];
+    }
     NSLog(@"连接失败，这里可以实现掉线自动重连，要注意以下几点");
     NSLog(@"1.判断当前网络环境，如果断网了就不要连了，等待网络到来，在发起重连");
     NSLog(@"3.连接次数限制，如果连接失败了，重试10次左右就可以了");
@@ -113,10 +130,14 @@
     self.isConnect = NO;
 
     if(self.isActivelyClose){
-        self.connectType = WebSocketDefault;
+        if ([self.delegate respondsToSelector:@selector(webSocketConnectType:)]) {
+            [self.delegate webSocketConnectType:WebSocketDefault];
+        }
         return;
     }else{
-        self.connectType = WebSocketDisconnect;
+        if ([self.delegate respondsToSelector:@selector(webSocketConnectType:)]) {
+            [self.delegate webSocketConnectType:WebSocketDisconnect];
+        }
     }
     
     NSLog(@"被关闭连接，code:%ld,reason:%@,wasClean:%d",code,reason,wasClean);
@@ -247,7 +268,9 @@
 - (void)RMWebSocketClose{
     self.isActivelyClose = YES;
     self.isConnect = NO;
-    self.connectType = WebSocketDefault;
+    if ([self.delegate respondsToSelector:@selector(webSocketConnectType:)]) {
+        [self.delegate webSocketConnectType:WebSocketDefault];
+    }
     if(self.webSocket)
     {
         [self.webSocket close];

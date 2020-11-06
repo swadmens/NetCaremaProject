@@ -29,8 +29,6 @@
 #import "EquipmentAbilityModel.h"
 #import "ChannelDetailController.h"
 #import <LCOpenSDKDynamic/LCOpenSDKDynamic.h>
-
-#import "WebSocketManager.h"
 #import "TalkManager.h"
 #import "AudioTalkView.h"
 
@@ -46,7 +44,7 @@ LocalVideoDelegate,
 PlayerTableViewCellDelegate,
 PlayVideoDemadDelegate,
 LCOpenSDK_EventListener,
-TalkManagerSendDelegate
+AudioTalkViewDelegate
 >
 
 @property (nonatomic,strong) WWTableView *tableView;
@@ -135,8 +133,16 @@ TalkManagerSendDelegate
     
     //语音对讲
     self.audioView = [AudioTalkView new];
+    self.audioView.delegate = self;
     [[UIApplication sharedApplication].keyWindow addSubview:self.audioView];
     self.audioView.frame = CGRectMake(0, kScreenHeight, kScreenWidth, 150);
+    
+    self.coverView = [UIView new];
+    self.coverView.hidden = YES;
+    self.coverView.backgroundColor = UIColorFromRGB(0x000000, 0.3);
+    self.coverView.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight-150);
+    [[UIApplication sharedApplication].keyWindow addSubview:self.coverView];
+
     
 }
 -(void)viewWillAppear:(BOOL)animated
@@ -1182,20 +1188,12 @@ TalkManagerSendDelegate
     [UIView animateWithDuration:0.3 animations:^{
         //Y轴向上平移
         self.audioView.transform = CGAffineTransformMakeTranslation(0, -150);
+        self.coverView.hidden = NO;
     }];
     
-    [WebSocketManager shared].token = self.token;
-    [WebSocketManager shared].urlPrefixed = self.urlPrefixed;
-    [WebSocketManager shared].serial = self.selectModel.deviceSerial;
-    [WebSocketManager shared].code = self.selectModel.model.channelId;
-    [[WebSocketManager shared] connectServer];
-
-    
-////    [TalkManager manager].delegate = self;
-//    [TalkManager manager].ip = @"39.108.208.122";
-//    [TalkManager manager].port = 10000;
-//    [TalkManager manager].url = @"api/v1/control/ws-talk/34020000001320000001/34020000001320000001";
-//    [[TalkManager manager] startTalk];
+    [TalkManager manager].token = self.token;
+    [TalkManager manager].url = @"wss://39.108.208.122:10000/api/v1/control/ws-talk/34020000001320000001/34020000001320000001";
+    [[TalkManager manager] startTalk];
 
     
 //    //接口初始化
@@ -1229,18 +1227,14 @@ TalkManagerSendDelegate
     DLog(@"结束对讲");
 //    [_m_talker stopTalk];
     self.audioView.transform = CGAffineTransformIdentity;
-    
-    [[WebSocketManager shared] RMWebSocketClose];
+    self.coverView.hidden = YES;
     [[TalkManager manager] stopTalk];
-
 }
-
-#pragma mark - TalkManagerSendDelegate
--(void)sendAudioData:(NSMutableData *)data
+#pragma mark - 对讲显示页回调
+-(void)viewColseBtnClick:(AudioTalkView *)view
 {
-    DLog(@"data  =  %@",data);
+    [self playerControlwithState:videoSateTalkBack withButton:self.controlBtn];
 }
-
 
 #pragma mark - 对讲回调
 - (void)onTalkResult:(NSString*)error TYPE:(NSInteger)type

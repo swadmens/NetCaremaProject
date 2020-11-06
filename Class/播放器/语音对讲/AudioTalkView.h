@@ -9,8 +9,16 @@
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
+@class AudioTalkView;
+@protocol AudioTalkViewDelegate <NSObject>
+
+-(void)viewColseBtnClick:(AudioTalkView *_Nullable)view;
+
+@end
 
 @interface AudioTalkView : UIView
+
+@property (nonatomic, weak) id<AudioTalkViewDelegate> delegate;
 
 @end
 

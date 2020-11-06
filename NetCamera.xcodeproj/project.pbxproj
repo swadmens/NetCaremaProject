@@ -486,7 +486,7 @@
 		4A8D98F125217C2800295CAC /* CGXStringPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E825217C2700295CAC /* CGXStringPickerView.m */; };
 		4A8D98F225217C2800295CAC /* CGXPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E925217C2700295CAC /* CGXPickerView.m */; };
 		4A97698A2553DADD00DCFFF5 /* AudioTalkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9769892553DADD00DCFFF5 /* AudioTalkView.m */; };
-		4A9769912553E50F00DCFFF5 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9769902553E50F00DCFFF5 /* GCDAsyncSocket.m */; };
+		4A9769962554E83100DCFFF5 /* SocketRocketUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9769952554E83100DCFFF5 /* SocketRocketUtility.m */; };
 		4AA2EE622407A0EE00C4F5DA /* DemandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE612407A0EE00C4F5DA /* DemandViewController.m */; };
 		4AA2EE652407A10000C4F5DA /* LiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE642407A10000C4F5DA /* LiveViewController.m */; };
 		4AA77B032518502E00C2D427 /* PLPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA77B012518502E00C2D427 /* PLPlayerView.m */; };
@@ -1619,8 +1619,8 @@
 		4A8D98E925217C2700295CAC /* CGXPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXPickerView.m; sourceTree = "<group>"; };
 		4A9769882553DADD00DCFFF5 /* AudioTalkView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioTalkView.h; sourceTree = "<group>"; };
 		4A9769892553DADD00DCFFF5 /* AudioTalkView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioTalkView.m; sourceTree = "<group>"; };
-		4A97698F2553E50F00DCFFF5 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
-		4A9769902553E50F00DCFFF5 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = "<group>"; };
+		4A9769942554E83100DCFFF5 /* SocketRocketUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketRocketUtility.h; sourceTree = "<group>"; };
+		4A9769952554E83100DCFFF5 /* SocketRocketUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketRocketUtility.m; sourceTree = "<group>"; };
 		4AA2EE602407A0EE00C4F5DA /* DemandViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemandViewController.h; sourceTree = "<group>"; };
 		4AA2EE612407A0EE00C4F5DA /* DemandViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemandViewController.m; sourceTree = "<group>"; };
 		4AA2EE632407A10000C4F5DA /* LiveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveViewController.h; sourceTree = "<group>"; };
@@ -2655,6 +2655,8 @@
 		4A5766E3255247B200E900BA /* WebSocket */ = {
 			isa = PBXGroup;
 			children = (
+				4A9769942554E83100DCFFF5 /* SocketRocketUtility.h */,
+				4A9769952554E83100DCFFF5 /* SocketRocketUtility.m */,
 				4A5766E4255247C200E900BA /* WebSocketManager.h */,
 				4A5766E5255247C200E900BA /* WebSocketManager.m */,
 			);
@@ -2664,14 +2666,12 @@
 		4A5766EC25525B6800E900BA /* 语音对讲 */ = {
 			isa = PBXGroup;
 			children = (
-				4A97698F2553E50F00DCFFF5 /* GCDAsyncSocket.h */,
-				4A9769902553E50F00DCFFF5 /* GCDAsyncSocket.m */,
-				4A5766ED25525B6800E900BA /* AACEncoder.h */,
-				4A5766F025525B6800E900BA /* AACEncoder.m */,
-				4A5766F125525B6800E900BA /* PCMCapture.h */,
-				4A5766EE25525B6800E900BA /* PCMCapture.m */,
 				4A5766EF25525B6800E900BA /* TalkManager.h */,
 				4A5766F225525B6800E900BA /* TalkManager.m */,
+				4A5766F125525B6800E900BA /* PCMCapture.h */,
+				4A5766EE25525B6800E900BA /* PCMCapture.m */,
+				4A5766ED25525B6800E900BA /* AACEncoder.h */,
+				4A5766F025525B6800E900BA /* AACEncoder.m */,
 			);
 			path = "语音对讲";
 			sourceTree = "<group>";
@@ -5265,7 +5265,6 @@
 				4AB50AA02468EDF40064BF82 /* WMZDialog+Pay.m in Sources */,
 				4AD2701C2464E9C700D462B4 /* PlayerTopCollectionViewCell.m in Sources */,
 				4A58106324075F2E00E82675 /* SCLButton.m in Sources */,
-				4A9769912553E50F00DCFFF5 /* GCDAsyncSocket.m in Sources */,
 				4A64ECE7242D875B00D30FB1 /* TCNavigationController.m in Sources */,
 				4A6869B5245AB9B90036355E /* ChannelDetailController.m in Sources */,
 				4A8D987725207E5F00295CAC /* EZPlaybackProgressBar.m in Sources */,
@@ -5312,6 +5311,7 @@
 				4AB50A982468EDF40064BF82 /* WMZDialog+Write.m in Sources */,
 				4A58100124075F2D00E82675 /* MJRefreshAutoNormalFooter.m in Sources */,
 				4A29D0D4254953AC00688C19 /* AreaInfoModel.m in Sources */,
+				4A9769962554E83100DCFFF5 /* SocketRocketUtility.m in Sources */,
 				4A36B2F425403B6300CB344D /* WXApiManager.m in Sources */,
 				4A14BC4224F49FBA003ADC07 /* UIProgressView+AFNetworking.m in Sources */,
 				4A6869232456644C0036355E /* SingleCarmeraCell.m in Sources */,
