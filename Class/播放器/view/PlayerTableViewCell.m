@@ -383,6 +383,8 @@
     [self.allDataArray addObjectsFromArray:array];
     
     MyEquipmentsModel *myModel = array.firstObject;
+    self.selectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    
     if ([myModel.system_Source isEqualToString:@"GBS"] && myModel.online && !myModel.model.online) {
         
         [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {

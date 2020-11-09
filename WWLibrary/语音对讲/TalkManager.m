@@ -51,9 +51,11 @@
 
 - (void)startTalk {
     //先建立连接，连接建立成功后开启语音
-    [[SocketRocketUtility instance] SRWebSocketOpen];
     
-    return;
+//    [[SocketRocketUtility instance] SRWebSocketOpen];
+//    return;
+    
+    
     [WebSocketManager shared].token = self.token;
     //    [WebSocketManager shared].urlPrefixed = self.urlPrefixed;
     //    [WebSocketManager shared].serial = self.selectModel.deviceSerial;

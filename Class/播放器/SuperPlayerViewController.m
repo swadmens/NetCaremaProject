@@ -793,7 +793,9 @@ AudioTalkViewDelegate
     }
     
     self.selectModel = model;
-
+    [self.cloudVideosArray removeAllObjects];
+    [self.localVideosArray removeAllObjects];
+    
     [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"local"];//本地录像
     [self startLoadDataRequest:self.selectModel.equipment_id withRecordType:@"cloud"];//云端录像
 

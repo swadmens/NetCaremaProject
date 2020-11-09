@@ -47,28 +47,18 @@
     
 //    NSString *urls = [NSString stringWithFormat:@"wss://39.108.208.122:10000/websocket/api/v1/control/ws-talk/%@/%@/%@",self.token,@"34020000001320000001",@"34020000001320000001"];
     
+//    NSString *urls = @""ws://121.40.165.18:8800/websocket";
     NSString *urls = @"wss://39.108.208.122:10000/websocket";
+
     DLog(@"url ==%@",urls);
     
 //    self.webSocket = [[RMWebSocket alloc] initWithURL:[NSURL URLWithString:@"https://dev-im-gateway.runxsports.com/ws/token=88888888"]];
 //    self.webSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:urls]];
     
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:urls]];
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:urls]];
 //    [request setValue:@"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MDQ2MjQ0NTQsInB3IjoiZjBiMDBjNjZhZDEwOTUzNmEwMzMzOTM5MjdmNDBkMDkiLCJ0bSI6MTYwNDAxOTY1NCwidW4iOiJhZG1pbiJ9.xzRkJMiIb6rvLawR3Ln8MUQqOPj9TsL-w_ClE-h9eWA" forHTTPHeaderField:@"Authorization"];
-    
-    
-//    NSURL *url = [[NSURL alloc] initWithString:urls];
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-//    NSString *cerPath = [[NSBundle mainBundle] pathForResource:@"catchtoy.itcheku.com" ofType:@"cer"];
-//    NSData *certData = [[NSData alloc] initWithContentsOfFile:cerPath];
-//    CFDataRef certDataRef = (__bridge CFDataRef)certData;
-//    SecCertificateRef certRef = SecCertificateCreateWithData(NULL, certDataRef);
-//    id certificate = (__bridge id)certRef;
-//    [request setSR_SSLPinnedCertificates:@[certificate]];
-//    self.webSocket =  [[SRWebSocket alloc] initWithURLRequest:request];
-    
-    
-    self.webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urls]]];
+ 
+    self.webSocket = [[SRWebSocket alloc] initWithURLRequest:request];
     self.webSocket.delegate = self;
     [self.webSocket open];
 }
@@ -115,11 +105,11 @@
 }
 
 ///接收消息
-- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessageWithString:(NSString *)string{
-    
-    NSLog(@"接收消息----  %@",string);
+- (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
+{
+    NSLog(@"接收消息----  %@",message);
     if ([self.delegate respondsToSelector:@selector(webSocketManagerDidReceiveMessageWithString:)]) {
-        [self.delegate webSocketManagerDidReceiveMessageWithString:string];
+        [self.delegate webSocketManagerDidReceiveMessageWithString:message];
     }
 }
 

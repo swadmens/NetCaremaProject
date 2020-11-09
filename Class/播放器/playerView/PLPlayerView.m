@@ -1233,7 +1233,7 @@ EZPlayerDelegate
     self.playButton.hidden = isPlaying;
     self.pauseButton.hidden = !isPlaying;
     
-    self.centerPauseButton.hidden = !isPlaying;
+    self.centerPauseButton.hidden = isPlaying;
     self.centerPlayButton.hidden  = isPlaying;
     
     if (!isPlaying) {

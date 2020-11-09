@@ -171,11 +171,15 @@
 }
 -(void)makeCellData:(id)obj
 {
+    MyEquipmentsModel *myModel = obj;
+    if ([self.lvModel.deviceId isEqualToString:myModel.model.deviceId]) {
+        [self.playerView resume];
+        return;
+    }
+
     if (self.playerView != nil) {
         [self.playerView removeFromSuperview];
     }
-    
-    MyEquipmentsModel *myModel = obj;
     self.lvModel = myModel.model;
     
     if (!myModel.online) {
