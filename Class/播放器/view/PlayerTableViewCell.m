@@ -29,7 +29,6 @@
 
 @property (strong, nonatomic) NSMutableArray *dataArray;
 @property (strong, nonatomic) NSArray *changeDataArray;
-@property (strong, nonatomic) NSMutableArray *allDataArray;
 @property (nonatomic, strong) NSMutableDictionary *cellDic;
 
 @property (nonatomic, weak) PlayerTopCollectionViewCell *playingCell;
@@ -70,13 +69,6 @@
         _dataArray = [NSMutableArray arrayWithObjects:@"Player_add_video_image",@"Player_add_video_image",@"Player_add_video_image",@"Player_add_video_image", nil];
     }
     return _dataArray;
-}
-- (NSMutableArray *)allDataArray
-{
-    if (!_allDataArray) {
-        _allDataArray = [NSMutableArray array];
-    }
-    return _allDataArray;
 }
 - (void)dosetup {
     [super dosetup];
@@ -379,8 +371,6 @@
     if (array.count == 0) {
         return;
     }
-    [self.allDataArray removeAllObjects];
-    [self.allDataArray addObjectsFromArray:array];
     
     MyEquipmentsModel *myModel = array.firstObject;
     self.selectIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -391,10 +381,8 @@
             MyEquipmentsModel *model = obj;
             [self gbsGetNewLiveData:model withIndex:idx];
         }];
-        
     }else{
-
-        [self.allDataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             MyEquipmentsModel *model = obj;
             if (idx < 4) {
                 [self.dataArray replaceObjectAtIndex:idx withObject:model];
@@ -402,7 +390,6 @@
         }];
         [self.collectionView reloadData];
     }
-    
 }
 #pragma mark - MyEquipmentsDelegate
 -(void)selectCarmeraModel:(MyEquipmentsModel *)model
@@ -410,7 +397,11 @@
     if (model == nil) {
         return;
     }
-    [self.dataArray replaceObjectAtIndex:self.selectIndex withObject:model];
+    if ([model.system_Source isEqualToString:@"GBS"] && model.online && !model.model.online) {
+        [self gbsGetNewLiveData:model withIndex:self.selectIndex];
+    }else{
+        [self.dataArray replaceObjectAtIndex:self.selectIndex withObject:model];
+    }
         
     [UIView performWithoutAnimation:^{
        [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:self.selectIndex inSection:0]]];
@@ -440,11 +431,6 @@
     if (![self chengkVideoNormalPlay]) {
         return;
     }
-//    [self.allDataArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-//        MyEquipmentsModel *model = obj;
-//        [self stopGbsLivingData:model];
-//    }];
-
     NSArray *array = [self.collectionView visibleCells];
     for (PlayerTopCollectionViewCell *cell in array) {
         [cell stop];
@@ -594,7 +580,7 @@
         NSDictionary *dic = [NSDictionary dictionaryWithDictionary:obj];
         LivingModel *newModel = [LivingModel makeModelData:dic];
         
-        MyEquipmentsModel *model = [self.allDataArray objectAtIndex:index];
+        MyEquipmentsModel *model = myModel;
         model.model.hls = newModel.hls;
         model.model.hlsHd = newModel.hlsHd;
         model.model.rtmp = newModel.rtmp;
@@ -651,12 +637,7 @@
 
 -(void)dealwithLivingData:(MyEquipmentsModel*)model withIndex:(NSInteger)index
 {
-    [self.allDataArray replaceObjectAtIndex:index withObject:model];
-    if (index < 4) {
-        [self.dataArray replaceObjectAtIndex:index withObject:model];
-    }
-    
-//    [self.collectionView reloadData];
+    [self.dataArray replaceObjectAtIndex:index withObject:model];
     [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
 
 //    //延迟处理一下

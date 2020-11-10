@@ -276,7 +276,8 @@
 
 
 //发送数据给服务器
-- (void)sendDataToServer:(NSString *)data{
+- (void)sendDataToServer:(id)data
+{
     [self.sendDataArray addObject:data];
     
     //没有网络

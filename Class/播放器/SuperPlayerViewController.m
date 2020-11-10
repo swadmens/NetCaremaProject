@@ -206,8 +206,6 @@ AudioTalkViewDelegate
     [settingBtn addHeight:30];
 //    [settingBtn sizeToFit];
     UIBarButtonItem *settingBtnItem = [[UIBarButtonItem alloc] initWithCustomView:settingBtn];
-
-    
     self.navigationItem.rightBarButtonItems  = @[settingBtnItem,fixedSpaceBarButtonItem,sharaBtnItem];
     
      

@@ -102,6 +102,7 @@
 - (void)stop {
     
     [self.playerView stop];
+    [self.playerView removeFromSuperview];
     self.isPlaying = NO;
 }
 

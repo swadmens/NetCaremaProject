@@ -173,10 +173,9 @@
         };
         [sence sendRequest];
     }else{
+        [self.playerView removeFromSuperview];
         [self.playerView stop];
-
     }
-    
     self.isPlaying = NO;
 }
 -(void)theLocalFileDoesNotExist:(PLPlayerView *)playerView

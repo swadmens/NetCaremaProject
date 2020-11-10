@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)connectServer;//建立长连接
 - (void)reConnectServer;//重新连接
 - (void)RMWebSocketClose;//关闭长连接
-- (void)sendDataToServer:(NSString *)data;//发送数据给服务器
+- (void)sendDataToServer:(id)data;//发送数据给服务器
 
 @end
 

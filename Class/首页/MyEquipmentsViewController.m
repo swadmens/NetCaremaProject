@@ -161,10 +161,10 @@
             NSDictionary *dic = obj;
 
             MyEquipmentsModel *model = [MyEquipmentsModel makeModelData:dic];
-//            if (model.online) {
+            if (model.online) {
                 [tempArray addObject:model];
                 [weak_self getDeviceLivingData:model withEquimentIndex:tempArray.count-1];
-//            }
+            }
             
         }];
         [weak_self.dataArray addObjectsFromArray:tempArray];
