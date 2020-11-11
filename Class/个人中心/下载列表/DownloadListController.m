@@ -350,9 +350,29 @@ static NSString *const _kdownloadListKey = @"download_video_list";
 }
 
 //获取本地相册的所有视频信息
-//获取本地相册中的视频测试
 -(void)getLoaclVideos:(void (^)(NSString *url,NSUInteger length))ChooseRelultBlock;
 {
+    //判断权限
+    ALAuthorizationStatus authStatus = [ALAssetsLibrary authorizationStatus];
+
+    if (authStatus == kCLAuthorizationStatusRestricted || authStatus == kCLAuthorizationStatusDenied)
+    {
+        //无权限 可以做一个友好的提示
+        [[TCNewAlertView shareInstance] showAlert:@"温馨提示" message:@"请您先去设置允许APP访问您的相机 设置>隐私>相机" cancelTitle:@"取消" viewController:self confirm:^(NSInteger buttonTag) {
+            if (buttonTag == 0) {
+                //去设置
+                NSURL * url = [NSURL URLWithString:@"App-Prefs:root=Photos"];
+                if([[UIApplication sharedApplication] canOpenURL:url]) {
+                    NSURL*url =[NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                    [[UIApplication sharedApplication] openURL:url];
+                }
+            }
+        } buttonTitles:@"确定", nil];
+        return ;
+    }else if(authStatus == kCLAuthorizationStatusNotDetermined){
+        return;
+    }
+
     // 这里创建一个数组, 用来存储所有的相册
     NSMutableArray *allAlbumArray = [NSMutableArray array];
     // 获得相机胶卷

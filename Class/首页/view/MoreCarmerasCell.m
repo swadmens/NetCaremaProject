@@ -46,11 +46,10 @@
         _collectionView = [[WWCollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowlayout];
         // 注册
         [_collectionView registerClass:[MoreCarmerasCollectionViewCell class] forCellWithReuseIdentifier:[MoreCarmerasCollectionViewCell getCellIDStr]];
-        _collectionView.backgroundColor = [UIColor whiteColor];
+        _collectionView.backgroundColor = UIColorClearColor;
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
-    
     }
     return _collectionView;
 }

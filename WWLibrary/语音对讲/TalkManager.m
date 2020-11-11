@@ -63,7 +63,7 @@
     [WebSocketManager shared].delegate = self;
     [[WebSocketManager shared] connectServer];
     
-    
+        
 //    [self startCapture];
 }
 
