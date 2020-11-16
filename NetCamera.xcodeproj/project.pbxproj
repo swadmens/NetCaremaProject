@@ -490,6 +490,7 @@
 		4AA2EE622407A0EE00C4F5DA /* DemandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE612407A0EE00C4F5DA /* DemandViewController.m */; };
 		4AA2EE652407A10000C4F5DA /* LiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE642407A10000C4F5DA /* LiveViewController.m */; };
 		4AA77B032518502E00C2D427 /* PLPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA77B012518502E00C2D427 /* PLPlayerView.m */; };
+		4AAA1CC92562059A0086E17E /* LCOpenSDKDynamic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AAA1CC82562059A0086E17E /* LCOpenSDKDynamic.framework */; };
 		4AAB80C8252317B50006849F /* PLPlayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB80C7252317B50006849F /* PLPlayModel.m */; };
 		4AAB80CE252474180006849F /* LCOpenSDKDynamic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AAB80CD252474180006849F /* LCOpenSDKDynamic.framework */; };
 		4AAB80CF252474190006849F /* LCOpenSDKDynamic.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4AAB80CD252474180006849F /* LCOpenSDKDynamic.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -497,7 +498,6 @@
 		4AAB80D5252474B80006849F /* MediaAccessibility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AAB80D4252474B80006849F /* MediaAccessibility.framework */; };
 		4AAB80D7252474D00006849F /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AAB80D6252474D00006849F /* CoreVideo.framework */; };
 		4AAB80D9252474EA0006849F /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AAB80D8252474EA0006849F /* AVFoundation.framework */; };
-		4AAB80DE252475D40006849F /* LCOpenSDKDynamic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AAB80DD252475D40006849F /* LCOpenSDKDynamic.framework */; };
 		4AB2999D240CDBF3004CA6B5 /* send_url_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB29999240CDBF2004CA6B5 /* send_url_image@3x.png */; };
 		4AB2999E240CDBF3004CA6B5 /* push_url_image@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB2999A240CDBF2004CA6B5 /* push_url_image@3x.png */; };
 		4AB2999F240CDBF3004CA6B5 /* send_url_image@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB2999B240CDBF2004CA6B5 /* send_url_image@2x.png */; };
@@ -1627,6 +1627,7 @@
 		4AA2EE642407A10000C4F5DA /* LiveViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LiveViewController.m; sourceTree = "<group>"; };
 		4AA77B012518502E00C2D427 /* PLPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLPlayerView.m; sourceTree = "<group>"; };
 		4AA77B022518502E00C2D427 /* PLPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLPlayerView.h; sourceTree = "<group>"; };
+		4AAA1CC82562059A0086E17E /* LCOpenSDKDynamic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LCOpenSDKDynamic.framework; sourceTree = "<group>"; };
 		4AAB80C6252317B50006849F /* PLPlayModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLPlayModel.h; sourceTree = "<group>"; };
 		4AAB80C7252317B50006849F /* PLPlayModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLPlayModel.m; sourceTree = "<group>"; };
 		4AAB80CD252474180006849F /* LCOpenSDKDynamic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LCOpenSDKDynamic.framework; path = "../IOS_SDK&DEMO/LCOpenSDKDynamic.framework"; sourceTree = "<group>"; };
@@ -1634,7 +1635,6 @@
 		4AAB80D4252474B80006849F /* MediaAccessibility.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaAccessibility.framework; path = System/Library/Frameworks/MediaAccessibility.framework; sourceTree = SDKROOT; };
 		4AAB80D6252474D00006849F /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		4AAB80D8252474EA0006849F /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		4AAB80DD252475D40006849F /* LCOpenSDKDynamic.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LCOpenSDKDynamic.framework; sourceTree = "<group>"; };
 		4AB29999240CDBF2004CA6B5 /* send_url_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send_url_image@3x.png"; sourceTree = "<group>"; };
 		4AB2999A240CDBF2004CA6B5 /* push_url_image@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "push_url_image@3x.png"; sourceTree = "<group>"; };
 		4AB2999B240CDBF2004CA6B5 /* send_url_image@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "send_url_image@2x.png"; sourceTree = "<group>"; };
@@ -1990,10 +1990,10 @@
 				4A4606172407BE82007C209A /* WebKit.framework in Frameworks */,
 				4AAB80D9252474EA0006849F /* AVFoundation.framework in Frameworks */,
 				4A4606052407BE2F007C209A /* CoreTelephony.framework in Frameworks */,
+				4AAA1CC92562059A0086E17E /* LCOpenSDKDynamic.framework in Frameworks */,
 				4A4606092407BE3C007C209A /* CoreGraphics.framework in Frameworks */,
 				4AB29AD12411DB42004CA6B5 /* Photos.framework in Frameworks */,
 				BC690A0D7092344C888D3680 /* libPods-NetCamera.a in Frameworks */,
-				4AAB80DE252475D40006849F /* LCOpenSDKDynamic.framework in Frameworks */,
 				4AB29AC62411DA90004CA6B5 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4103,7 +4103,7 @@
 		4AAB80DC252475D40006849F /* Framework */ = {
 			isa = PBXGroup;
 			children = (
-				4AAB80DD252475D40006849F /* LCOpenSDKDynamic.framework */,
+				4AAA1CC82562059A0086E17E /* LCOpenSDKDynamic.framework */,
 			);
 			path = Framework;
 			sourceTree = "<group>";
