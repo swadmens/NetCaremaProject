@@ -173,10 +173,10 @@
 -(void)makeCellData:(id)obj
 {
     MyEquipmentsModel *myModel = obj;
-    if ([self.lvModel.deviceId isEqualToString:myModel.model.deviceId]) {
-        [self.playerView resume];
-        return;
-    }
+//    if ([self.lvModel.deviceId isEqualToString:myModel.model.deviceId]) {
+//        [self.playerView resume];
+//        return;
+//    }
 
     if (self.playerView != nil) {
         [self.playerView removeFromSuperview];

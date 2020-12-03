@@ -10,7 +10,6 @@
 #import "AACEncoder.h"
 #import "PCMCapture.h"
 #import "WebSocketManager.h"
-#import "SocketRocketUtility.h"
 
 
 #define SAMPLE_RATE 16000
@@ -51,20 +50,9 @@
 
 - (void)startTalk {
     //先建立连接，连接建立成功后开启语音
-    
-//    [[SocketRocketUtility instance] SRWebSocketOpen];
-//    return;
-    
-    
-    [WebSocketManager shared].token = self.token;
-    //    [WebSocketManager shared].urlPrefixed = self.urlPrefixed;
-    //    [WebSocketManager shared].serial = self.selectModel.deviceSerial;
-    //    [WebSocketManager shared].code = self.selectModel.model.channelId;
+    [WebSocketManager shared].urlPrefixed = self.url;
     [WebSocketManager shared].delegate = self;
     [[WebSocketManager shared] connectServer];
-    
-        
-//    [self startCapture];
 }
 
 #pragma mark - WebSocketManagerDelegate
@@ -96,7 +84,6 @@
 
 - (void)stopTalk {
     //停止语音，断开连接
-    [[SocketRocketUtility instance] SRWebSocketClose];
     [[WebSocketManager shared] RMWebSocketClose];
     [_captureSession stop];
 }
@@ -113,11 +100,13 @@
     size_t length = CMBlockBufferGetDataLength(blockBufferRef);
     Byte buffer[length];
     CMBlockBufferCopyDataBytes(blockBufferRef, 0, length, buffer);
-    NSData *data = [[NSData dataWithBytes:buffer length:length] base64EncodedDataWithOptions:0];
-//    NSData *base64Data = [data base64EncodedDataWithOptions:0];
-
-    DLog(@"声音data ==  %@", data);
-//    [[WebSocketManager shared] sendDataToServer:data];
+    NSData *data = [NSData dataWithBytes:buffer length:length];
+    
+//    NSString *stringBase64 = [data base64Encoding]; // base64格式的字符串
+    
+    NSData *base64Data = [data base64EncodedDataWithOptions:0];
+    DLog(@"声音data ==  %@", base64Data);
+    [[WebSocketManager shared] sendDataToServer:base64Data];
     
 }
 

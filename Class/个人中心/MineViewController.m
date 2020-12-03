@@ -9,6 +9,7 @@
 #import "MineViewController.h"
 #import "WWTableView.h"
 #import "MineTableViewCell.h"
+#import "PersonInfoViewController.h"
 
 @interface MineViewController ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -159,7 +160,13 @@
 {
     if (indexPath.row == 0) {
         //个人信息
-        [TargetEngine controller:self pushToController:PushTargetPersonInfoView WithTargetId:nil];
+//        [TargetEngine controller:self pushToController:PushTargetPersonInfoView WithTargetId:nil];
+        PersonInfoViewController *pvc = [PersonInfoViewController new];
+        pvc.delegateSignal = [RACSubject subject];
+        [pvc.delegateSignal subscribeNext:^(id x) {
+            DLog(@"%@",x);
+        }];
+        [self.navigationController pushViewController:pvc animated:YES];
 
     }else if (indexPath.row == 1){
         //下载列表

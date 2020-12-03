@@ -24,6 +24,7 @@
 
 #import "LocalVideoViewController.h"
 #import "ChannelDetailController.h"
+#import "EquimentAlarmsController.h"
 
 @interface IndexViewController ()<UITableViewDelegate,UITableViewDataSource,IndexTopDelegate,IndexBottomDelegate,showCarmeraDelegate,LocalVideoDelegate>
 {
@@ -156,6 +157,8 @@
                [self setupNoDataView];
                [self setupTableView];
                [self loadNewData];
+               
+               [self startSubscribe];//开始订阅
            }
 
        }];
@@ -185,6 +188,7 @@
             [self moreDealwith:offline];
         };
         
+        
         cell.rightBtnClick = ^{
             ShowCarmerasViewController *vc = [ShowCarmerasViewController new];
             vc.equipment_id = model.equipment_id;
@@ -199,6 +203,16 @@
         cell.getModelArrayBackdata = ^(NSArray * _Nonnull array) {
             [self.modelDic removeObjectForKey:@(indexPath.row)];
             [self.modelDic setObject:array forKey:@(indexPath.row)];
+        };
+        
+
+        cell.alarmMoreBtnClick = ^(NSInteger selectRow) {
+            MyEquipmentsModel *myModel = [model.childDevices_info objectAtIndex:selectRow];
+            EquimentAlarmsController *eavc = [EquimentAlarmsController new];
+            eavc.deviceId = myModel.equipment_id;
+            eavc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:eavc animated:YES];
+            self.hidesBottomBarWhenPushed = NO;
         };
         
         return cell;
@@ -216,6 +230,14 @@
             NSArray *arr = [NSArray arrayWithObjects:model, nil];
             [self.modelDic removeObjectForKey:@(indexPath.row)];
             [self.modelDic setObject:arr forKey:@(indexPath.row)];
+        };
+        cell.alarmBtnClick = ^{
+            DLog(@"告警");
+            EquimentAlarmsController *eavc = [EquimentAlarmsController new];
+            eavc.deviceId = model.childDevices_id;
+            eavc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:eavc animated:YES];
+            self.hidesBottomBarWhenPushed = NO;
         };
         
         return cell;
@@ -539,6 +561,105 @@
     }];
 }
 
+#pragma mark - 会话订阅
+//开始订阅
+-(void)startSubscribe
+{
+    NSString *url = @"cep/realtime";
+    
+    NSDictionary *sessionDic = @{
+                                @"version": @"1.0",
+                                @"minimumVersion": @"0.9",
+                                @"channel": @"/meta/handshake",
+                                @"supportedConnectionTypes": @[
+                                    @"long-polling"
+                                ],
+                                @"advice": @{
+                                    @"timeout": @(60000),
+                                    @"interval": @(0)
+                                }
+                            };
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:sessionDic options:0 error:nil];
+    
+
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"BODY";
+    sence.bodyMethod = @"POST";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    sence.body = jsonData;
+    sence.successBlock = ^(id obj) {
+        DLog(@"obj ==  %@",obj);
+        NSArray *array = (NSArray*)obj;
+        NSString *clientId = [array[0] objectForKey:@"clientId"];
+        [self subscribeConnect:clientId];
+        [self sessionSubscribe:clientId];
+
+    };
+    sence.errorBlock = ^(NSError *error) {
+        DLog(@"error == %@",error)
+    };
+    
+    [sence sendRequest];
+}
+//会话连接
+-(void)subscribeConnect:(NSString*)clientId
+{
+    NSDictionary *subscriptionDic = @{
+                                    @"channel": @"/meta/connect",
+                                    @"connectionType": @"long-polling",
+                                    @"clientId": clientId
+                                };
+    NSString *url = @"cep/realtime";
+    
+//    NSArray *array = [NSArray arrayWithObject:subscriptionDic];
+
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:subscriptionDic options:0 error:nil];
+
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"BODY";
+    sence.bodyMethod = @"POST";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    sence.body = jsonData;
+    sence.successBlock = ^(id obj) {
+        DLog(@"ConnectObj ==  %@",obj);
+//        [self sessionSubscribe:clientId];
+    };
+    sence.errorBlock = ^(NSError *error) {
+        DLog(@"ConnectErrer == %@",error)
+    };
+    
+    [sence sendRequest];
+}
+//会话订阅
+-(void)sessionSubscribe:(NSString*)clientId
+{
+    NSDictionary *subscriptionDic = @{
+                                    @"channel": @"/meta/subscribe",
+                                    @"subscription": @"/managedobjects/*",
+                                    @"clientId": clientId
+                                };
+    NSString *url = @"cep/realtime";
+
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:subscriptionDic options:0 error:nil];
+
+    RequestSence *sence = [[RequestSence alloc] init];
+    sence.requestMethod = @"BODY";
+    sence.bodyMethod = @"POST";
+    sence.pathHeader = @"application/json";
+    sence.pathURL = url;
+    sence.body = jsonData;
+    sence.successBlock = ^(id obj) {
+        DLog(@"sessionSubscribeObj ==  %@",obj);
+
+    };
+    sence.errorBlock = ^(NSError *error) {
+        DLog(@"sessionSubscribeError == %@",error)
+    };
+    
+    [sence sendRequest];
+}
 
 /*
 #pragma mark - Navigation

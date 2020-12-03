@@ -129,7 +129,7 @@
     [backView addSubview:rightBtn];
     [rightBtn rightToView:backView withSpace:8];
     [rightBtn topToView:backView withSpace:20];
-    [rightBtn addWidth:15];
+    [rightBtn addWidth:18];
     [rightBtn addHeight:25];
     
     
@@ -141,8 +141,7 @@
     [playBtn yCenterToView:rightBtn];
     [playBtn addWidth:15];
     [playBtn addHeight:25];
-    
-    
+
     [backView addSubview:self.collectionView];
     self.collectionView.frame = CGRectMake(0,  60, kScreenWidth-30, backHeight-60);
 }
@@ -151,7 +150,7 @@
     _equipmentName.text = model.equipment_name;
     _equipmentAddress.text = model.creationTime;
     _equipmentStates.text = model.equipment_states;
-
+    
     _equipmentStates.backgroundColor = model.online?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
     
     self.dataArray = [NSArray arrayWithArray:model.childDevices_info];
@@ -174,6 +173,11 @@
     cell.moreBtnClick = ^{
         if (self.moreDealClick) {
             self.moreDealClick(indexPath.row,model.online);
+        }
+    };
+    cell.alarmMoreBtnClick = ^{
+        if (self.alarmMoreBtnClick) {
+            self.alarmMoreBtnClick(indexPath.row);
         }
     };
     
@@ -231,6 +235,7 @@
 {
    
 }
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

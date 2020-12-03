@@ -33,10 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic,weak)  id<WebSocketManagerDelegate > delegate;
 @property (nonatomic, assign)   BOOL isConnect;  //是否连接
 
-@property (nonatomic,strong) NSString *token;
 @property (nonatomic,strong) NSString *urlPrefixed;
-@property (nonatomic,strong) NSString *serial;
-@property (nonatomic,strong) NSString *code;
 
 
 + (instancetype)shared;

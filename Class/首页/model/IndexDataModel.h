@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSString *system_Source;
 @property (nonatomic,strong) NSString *deviceSerial;
 @property (nonatomic,strong) NSString *responseInterval;
+@property (nonatomic,strong) NSString *major;//主要告警
 @property (nonatomic,assign) BOOL online;
 
 

@@ -97,7 +97,12 @@
     //    [TargetEngine controller:nil pushToController:PushTargetMyFriendsView WithTargetId:nil];
     if (indexPath.row == 0) {
         //昵称
-       
+        
+        if (self.delegateSignal) {
+            [self.delegateSignal sendNext:@"RAC替换代理测试"];
+        }
+        
+        
     }else if(indexPath.row == 1) {
         //手机号码
 //        [TargetEngine controller:self pushToController:PushTargetAboutUsView WithTargetId:nil];
@@ -106,8 +111,6 @@
 //        [TargetEngine controller:self pushToController:PushTargetAboutUsView WithTargetId:nil];
     }else{
         //更改密码
-        
-
     }
 }
 

@@ -68,6 +68,8 @@
     NSDictionary *c8y_RequiredAvailability = [dic objectForKey:@"c8y_RequiredAvailability"];
     model.responseInterval = [NSString stringWithFormat:@"%@",[c8y_RequiredAvailability objectForKey:@"responseInterval"]];
 
+    NSDictionary *c8y_ActiveAlarmsStatus = [dic objectForKey:@"c8y_ActiveAlarmsStatus"];
+    model.major = [NSString stringWithFormat:@"%@",[c8y_ActiveAlarmsStatus objectForKey:@"major"]];
     
 
     return model;

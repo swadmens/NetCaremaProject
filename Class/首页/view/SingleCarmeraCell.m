@@ -20,6 +20,7 @@
 @property (nonatomic,strong) UILabel *equipmentStates;
 
 @property (nonatomic,strong) UIImageView *showImageView;
+@property (nonatomic,strong) UIButton *alarmBtn;
 
 @property (nonatomic,strong) UIView *coverView;
 @property (nonatomic,strong) UILabel *timeLabel;
@@ -111,6 +112,22 @@
     [moreBtn addWidth:35];
     [moreBtn addHeight:25];
     
+    _alarmBtn = [UIButton new];
+    _alarmBtn.clipsToBounds = YES;
+    _alarmBtn.layer.cornerRadius = 10;
+    _alarmBtn.layer.borderColor = [UIColor redColor].CGColor;
+    _alarmBtn.layer.borderWidth = 0.8f;
+    _alarmBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
+//    [_alarmBtn setTitle:@"99" forState:UIControlStateNormal];
+    [_alarmBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [_alarmBtn addTarget:self action:@selector(alarmButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [backView addSubview:_alarmBtn];
+    [_alarmBtn yCenterToView:moreBtn];
+    [_alarmBtn rightToView:moreBtn withSpace:5];
+    [_alarmBtn addWidth:20];
+    [_alarmBtn addHeight:20];
+    
+    
     
     
     _showImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 70, kScreenWidth-30, backHeight-70)];
@@ -175,6 +192,15 @@
     _equipmentName.text = model.equipment_name;
     _equipmentAddress.text = model.creationTime;
     _equipmentStates.text = model.equipment_states;
+    
+    NSInteger count = [model.major integerValue];
+    if (count == 0) {
+        _alarmBtn.hidden = YES;
+    }else{
+        _alarmBtn.hidden = NO;
+        [_alarmBtn setTitle:model.major forState:UIControlStateNormal];
+    }
+    
 
     _equipmentStates.backgroundColor = model.online?UIColorFromRGB(0xF39700, 1):UIColorFromRGB(0xAEAEAE, 1);
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:myModel.model.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
@@ -198,6 +224,13 @@
         self.moreClick();
     }
 }
+-(void)alarmButtonClick
+{
+    if (self.alarmBtnClick) {
+        self.alarmBtnClick();
+    }
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

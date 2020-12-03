@@ -12,6 +12,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PersonInfoViewController : WWViewController
 
+//测试，RAC替换代理
+@property (nonatomic,strong) RACSubject *delegateSignal;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

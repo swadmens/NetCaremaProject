@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)makeCellData:(MyEquipmentsModel*)model;
 
 @property (nonatomic,copy) void(^moreBtnClick)(void);
+@property (nonatomic,copy) void(^alarmMoreBtnClick)(void);
 @property (nonatomic,copy) void(^getModelBackdata)(LivingModel *model);
 
 @end

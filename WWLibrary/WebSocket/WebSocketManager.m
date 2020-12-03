@@ -45,20 +45,7 @@
 - (void)connectServer{
     self.isActivelyClose = NO;
     
-//    NSString *urls = [NSString stringWithFormat:@"wss://39.108.208.122:10000/websocket/api/v1/control/ws-talk/%@/%@/%@",self.token,@"34020000001320000001",@"34020000001320000001"];
-    
-//    NSString *urls = @""ws://121.40.165.18:8800/websocket";
-    NSString *urls = @"wss://39.108.208.122:10000/websocket";
-
-    DLog(@"url ==%@",urls);
-    
-//    self.webSocket = [[RMWebSocket alloc] initWithURL:[NSURL URLWithString:@"https://dev-im-gateway.runxsports.com/ws/token=88888888"]];
-//    self.webSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:urls]];
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:[NSURL URLWithString:urls]];
-//    [request setValue:@"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MDQ2MjQ0NTQsInB3IjoiZjBiMDBjNjZhZDEwOTUzNmEwMzMzOTM5MjdmNDBkMDkiLCJ0bSI6MTYwNDAxOTY1NCwidW4iOiJhZG1pbiJ9.xzRkJMiIb6rvLawR3Ln8MUQqOPj9TsL-w_ClE-h9eWA" forHTTPHeaderField:@"Authorization"];
- 
-    self.webSocket = [[SRWebSocket alloc] initWithURLRequest:request];
+    self.webSocket = [[SRWebSocket alloc] initWithURL:[NSURL URLWithString:self.urlPrefixed]];
     self.webSocket.delegate = self;
     [self.webSocket open];
 }

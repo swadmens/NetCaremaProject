@@ -126,6 +126,13 @@
 //    if (![self chengkVideoNormalPlay]) {
 //        return;
 //    }
+    
+    //切换宫格视图时停止直播
+    NSArray *array = [self.collectionView visibleCells];
+    for (PlayerTopCollectionViewCell *cell in array) {
+        [cell stop];
+    }
+    
     self.changeUI = scale;
     if (self.changeUI) {
         id obj = [self.dataArray objectAtIndex:self.selectIndexPath.row];
@@ -163,30 +170,22 @@
         [cell makeCellData:obj];
         return cell;
     }else{
-        if (self.changeUI) {
-            [self.collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr]];
-            PlayerTopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[PlayerTopCollectionViewCell getCellIDStr] forIndexPath:indexPath];
-            cell.delegate = self;
-            [cell makeCellData:obj];
-            return cell;
-        }else{
-            // 每次先从字典中根据IndexPath取出唯一标识符
-            NSString *identifier = [_cellDic objectForKey:[NSString stringWithFormat:@"%@", indexPath]];
-            // 如果取出的唯一标示符不存在，则初始化唯一标示符，并将其存入字典中，对应唯一标示符注册Cell
-            if (identifier == nil) {
-               identifier = [NSString stringWithFormat:@"%@%@", [PlayerTopCollectionViewCell getCellIDStr], [NSString stringWithFormat:@"%@", indexPath]];
-               [_cellDic setValue:identifier forKey:[NSString stringWithFormat:@"%@", indexPath]];
-               // 注册Cell
-               [self.collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:identifier];
-            }
-            PlayerTopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-            cell.delegate = self;
-            [cell makeCellData:obj];
-            
-//            [collectionView selectItemAtIndexPath:self.selectIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-            
-            return cell;
+        // 每次先从字典中根据IndexPath取出唯一标识符
+        NSString *identifier = [_cellDic objectForKey:[NSString stringWithFormat:@"%@", indexPath]];
+        // 如果取出的唯一标示符不存在，则初始化唯一标示符，并将其存入字典中，对应唯一标示符注册Cell
+        if (identifier == nil) {
+           identifier = [NSString stringWithFormat:@"%@%@", [PlayerTopCollectionViewCell getCellIDStr], [NSString stringWithFormat:@"%@", indexPath]];
+           [_cellDic setValue:identifier forKey:[NSString stringWithFormat:@"%@", indexPath]];
+           // 注册Cell
+           [self.collectionView registerClass:[PlayerTopCollectionViewCell class] forCellWithReuseIdentifier:identifier];
         }
+        PlayerTopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
+        cell.delegate = self;
+        [cell makeCellData:obj];
+        
+//            [collectionView selectItemAtIndexPath:self.selectIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        
+        return cell;
     }
 }
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

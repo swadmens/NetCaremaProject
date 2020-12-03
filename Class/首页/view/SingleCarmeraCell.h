@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SingleCarmeraCell : WWTableViewCell
 
 @property (nonatomic,copy) void(^moreClick)(void);
+@property (nonatomic,copy) void(^alarmBtnClick)(void);
 @property (nonatomic,copy) void(^getSingleModelBackdata)(LivingModel *model);
 
 -(void)makeCellData:(IndexDataModel*)model;

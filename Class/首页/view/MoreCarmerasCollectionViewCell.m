@@ -21,6 +21,8 @@
 @property (nonatomic,strong) UIView *coverView;
 @property (nonatomic,strong) UILabel *timeLabel;
 
+@property (nonatomic,strong) UIButton *alarmBtn;
+
 @property (nonatomic,strong) LivingModel *model;
 @property (nonatomic,assign) BOOL isLiving;//是否直播中
 
@@ -79,6 +81,20 @@
     [moreBtn addWidth:35];
     [moreBtn addHeight:25];
     
+    _alarmBtn = [UIButton new];
+    _alarmBtn.clipsToBounds = YES;
+    _alarmBtn.layer.cornerRadius = 9;
+    _alarmBtn.layer.borderColor = [UIColor redColor].CGColor;
+    _alarmBtn.layer.borderWidth = 0.8f;
+    _alarmBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeTen];
+    [_alarmBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [_alarmBtn addTarget:self action:@selector(alarmButtonClick) forControlEvents:UIControlEventTouchUpInside];
+    [backView addSubview:_alarmBtn];
+    [_alarmBtn yCenterToView:moreBtn];
+    [_alarmBtn rightToView:moreBtn withSpace:5];
+    [_alarmBtn addWidth:18];
+    [_alarmBtn addHeight:18];
+    
     
     _coverView = [UIView new];
     _coverView.backgroundColor = UIColorFromRGB(0x060606, 0.55);
@@ -129,6 +145,16 @@
     _titleLabel.text = model.model.name;
     [_showImageView yy_setImageWithURL:[NSURL URLWithString:model.model.snap] placeholder:UIImageWithFileName(@"player_hoder_image")];
     
+    
+    NSInteger count = [model.major integerValue];
+    if (count == 0) {
+        _alarmBtn.hidden = YES;
+    }else{
+        _alarmBtn.hidden = NO;
+        [_alarmBtn setTitle:model.major forState:UIControlStateNormal];
+    }
+
+    
     if (model.online) {
         self.isLiving = YES;
         self.coverView.hidden = YES;
@@ -148,6 +174,12 @@
 {
     if (self.moreBtnClick) {
         self.moreBtnClick();
+    }
+}
+-(void)alarmButtonClick
+{
+    if (self.alarmMoreBtnClick) {
+        self.alarmMoreBtnClick();
     }
 }
 @end

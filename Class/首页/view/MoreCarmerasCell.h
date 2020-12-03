@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) void(^moreDealClick)(NSInteger selectRow,BOOL offline);
 @property (nonatomic,copy) void(^rightBtnClick)(void);
 @property (nonatomic,copy) void(^getModelArrayBackdata)(NSArray *array);
+@property (nonatomic,copy) void(^alarmMoreBtnClick)(NSInteger selectRow);
 
 -(void)makeCellData:(IndexDataModel*)model;
 

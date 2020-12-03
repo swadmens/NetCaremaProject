@@ -1158,7 +1158,8 @@ AudioTalkViewDelegate
 //获取第三方平台信息
 -(void)getThirdInfomation
 {
-    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/platform/%@",self.selectModel.system_Source];
+//    NSString *url = [NSString stringWithFormat:@"service/cameraManagement/camera/platform/%@",self.selectModel.system_Source];
+    NSString *url = @"tenant/options/LiveGBS/url_token";
     
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
@@ -1166,9 +1167,7 @@ AudioTalkViewDelegate
     sence.pathURL = url;
     sence.successBlock = ^(id obj) {
         DLog(@"obj == %@",obj);
-//        [_kHUDManager showMsgInView:nil withTitle:@"视频已删除" isSuccess:YES];
-        self.token = [obj objectForKey:@"token"];
-        self.urlPrefixed = [obj objectForKey:@"urlPrefixed"];
+        self.token = [obj objectForKey:@"value"];
     };
     sence.errorBlock = ^(NSError *error) {
         DLog(@"error == %@",error);
@@ -1191,35 +1190,11 @@ AudioTalkViewDelegate
         self.coverView.hidden = NO;
     }];
     
-    [TalkManager manager].token = self.token;
-    [TalkManager manager].url = @"wss://39.108.208.122:10000/api/v1/control/ws-talk/34020000001320000001/34020000001320000001";
-    [[TalkManager manager] startTalk];
-
+    NSString *url = [NSString stringWithFormat:@"wss://gbs.etoneiot.com:10010/api/v1/control/ws-talk/%@/%@?%@&format=pcm",self.selectModel.deviceSerial,self.selectModel.childDevice_id,self.token];
     
-//    //接口初始化
-//    LCOpenSDK_ApiParam * apiParam = [[LCOpenSDK_ApiParam alloc] init];
-//    apiParam.procotol =  PROCOTOL_TYPE_HTTPS;
-//    apiParam.addr = @"openapi.lechange.cn";
-//    apiParam.port = 443;
-//    apiParam.token = self.selectModel.model.liveToken;
-//    self.m_hc = [[LCOpenSDK_Api shareMyInstance] initOpenApi:apiParam];
-//
-//    _m_talker = [[LCOpenSDK_AudioTalk alloc] init];
-//    [_m_talker setListener:(id<LCOpenSDK_TalkerListener>)self];
-//
-//    LCOpenSDK_ParamTalk  *paramTalk = [[LCOpenSDK_ParamTalk alloc] init];
-//    paramTalk.accessToken = self.selectModel.model.liveToken;
-//    paramTalk.deviceID = self.selectModel.model.deviceSerial;
-//    paramTalk.channel = [self.selectModel.model.channelId integerValue];
-//    paramTalk.psk = @"";
-//    paramTalk.playToken = self.selectModel.model.liveToken;
-//    paramTalk.isOpt = YES;
-//    NSInteger iretValue = [_m_talker playTalk:paramTalk];
-//    if (iretValue < 0) {
-//       NSLog(@"talk failed");
-//        [_m_talker setListener:nil];
-//        return;
-//    }
+    [TalkManager manager].url = url;
+    [[TalkManager manager] startTalk];
+    
 }
 //结束对讲
 -(void)endTalkBack

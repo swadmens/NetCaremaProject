@@ -10,8 +10,7 @@
 
 @interface TalkManager : NSObject
 
-@property (nonatomic,copy)NSString *url;
-@property (nonatomic,strong) NSString *token;
+@property (nonatomic,copy) NSString *url;
 
 + (instancetype)manager;
 

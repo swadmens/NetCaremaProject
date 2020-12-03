@@ -466,6 +466,9 @@
 		4A6D1416243D8C010069EA93 /* CoreML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A6D1415243D8C010069EA93 /* CoreML.framework */; };
 		4A6D1435243F01A70069EA93 /* YDDownloadQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6D1432243F01A70069EA93 /* YDDownloadQueue.m */; };
 		4A6D1436243F01A70069EA93 /* YDDownloadTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6D1433243F01A70069EA93 /* YDDownloadTask.m */; };
+		4A6D85BD25762418009B94F4 /* EquimentAlarmsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6D85BC25762418009B94F4 /* EquimentAlarmsController.m */; };
+		4A6D85C425762552009B94F4 /* EquimentAlarmsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6D85C325762552009B94F4 /* EquimentAlarmsCell.m */; };
+		4A6D85D425763662009B94F4 /* EquimentAlarmsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A6D85D325763662009B94F4 /* EquimentAlarmsModel.m */; };
 		4A8D97DB251AE47300295CAC /* CameraControlView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D97D9251AE47300295CAC /* CameraControlView.m */; };
 		4A8D97E2251AE4C900295CAC /* PresetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D97E1251AE4C900295CAC /* PresetView.m */; };
 		4A8D9811252078EE00295CAC /* HikPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D9810252078ED00295CAC /* HikPlayerView.m */; };
@@ -486,7 +489,6 @@
 		4A8D98F125217C2800295CAC /* CGXStringPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E825217C2700295CAC /* CGXStringPickerView.m */; };
 		4A8D98F225217C2800295CAC /* CGXPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8D98E925217C2700295CAC /* CGXPickerView.m */; };
 		4A97698A2553DADD00DCFFF5 /* AudioTalkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9769892553DADD00DCFFF5 /* AudioTalkView.m */; };
-		4A9769962554E83100DCFFF5 /* SocketRocketUtility.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A9769952554E83100DCFFF5 /* SocketRocketUtility.m */; };
 		4AA2EE622407A0EE00C4F5DA /* DemandViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE612407A0EE00C4F5DA /* DemandViewController.m */; };
 		4AA2EE652407A10000C4F5DA /* LiveViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA2EE642407A10000C4F5DA /* LiveViewController.m */; };
 		4AA77B032518502E00C2D427 /* PLPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA77B012518502E00C2D427 /* PLPlayerView.m */; };
@@ -1581,6 +1583,12 @@
 		4A6D1432243F01A70069EA93 /* YDDownloadQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YDDownloadQueue.m; sourceTree = "<group>"; };
 		4A6D1433243F01A70069EA93 /* YDDownloadTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YDDownloadTask.m; sourceTree = "<group>"; };
 		4A6D1434243F01A70069EA93 /* YDDownloadQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YDDownloadQueue.h; sourceTree = "<group>"; };
+		4A6D85BB25762418009B94F4 /* EquimentAlarmsController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EquimentAlarmsController.h; sourceTree = "<group>"; };
+		4A6D85BC25762418009B94F4 /* EquimentAlarmsController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EquimentAlarmsController.m; sourceTree = "<group>"; };
+		4A6D85C225762552009B94F4 /* EquimentAlarmsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EquimentAlarmsCell.h; sourceTree = "<group>"; };
+		4A6D85C325762552009B94F4 /* EquimentAlarmsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EquimentAlarmsCell.m; sourceTree = "<group>"; };
+		4A6D85D225763662009B94F4 /* EquimentAlarmsModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EquimentAlarmsModel.h; sourceTree = "<group>"; };
+		4A6D85D325763662009B94F4 /* EquimentAlarmsModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EquimentAlarmsModel.m; sourceTree = "<group>"; };
 		4A8D97D9251AE47300295CAC /* CameraControlView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraControlView.m; sourceTree = "<group>"; };
 		4A8D97DA251AE47300295CAC /* CameraControlView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraControlView.h; sourceTree = "<group>"; };
 		4A8D97E0251AE4C900295CAC /* PresetView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PresetView.h; sourceTree = "<group>"; };
@@ -1619,8 +1627,6 @@
 		4A8D98E925217C2700295CAC /* CGXPickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGXPickerView.m; sourceTree = "<group>"; };
 		4A9769882553DADD00DCFFF5 /* AudioTalkView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioTalkView.h; sourceTree = "<group>"; };
 		4A9769892553DADD00DCFFF5 /* AudioTalkView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AudioTalkView.m; sourceTree = "<group>"; };
-		4A9769942554E83100DCFFF5 /* SocketRocketUtility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SocketRocketUtility.h; sourceTree = "<group>"; };
-		4A9769952554E83100DCFFF5 /* SocketRocketUtility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocketRocketUtility.m; sourceTree = "<group>"; };
 		4AA2EE602407A0EE00C4F5DA /* DemandViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DemandViewController.h; sourceTree = "<group>"; };
 		4AA2EE612407A0EE00C4F5DA /* DemandViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DemandViewController.m; sourceTree = "<group>"; };
 		4AA2EE632407A10000C4F5DA /* LiveViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LiveViewController.h; sourceTree = "<group>"; };
@@ -2655,8 +2661,6 @@
 		4A5766E3255247B200E900BA /* WebSocket */ = {
 			isa = PBXGroup;
 			children = (
-				4A9769942554E83100DCFFF5 /* SocketRocketUtility.h */,
-				4A9769952554E83100DCFFF5 /* SocketRocketUtility.m */,
 				4A5766E4255247C200E900BA /* WebSocketManager.h */,
 				4A5766E5255247C200E900BA /* WebSocketManager.m */,
 			);
@@ -3125,6 +3129,7 @@
 		4A580D7924075F2C00E82675 /* 首页 */ = {
 			isa = PBXGroup;
 			children = (
+				4A6D85BA257623F4009B94F4 /* 告警事件 */,
 				4AB50AFC246A3A7F0064BF82 /* 添加设备 */,
 				4AD26FDB2463977B00D462B4 /* 搜索 */,
 				4A6869B9245ACB680036355E /* 设备共享 */,
@@ -4009,6 +4014,19 @@
 				4A6D1433243F01A70069EA93 /* YDDownloadTask.m */,
 			);
 			path = YDDownload;
+			sourceTree = "<group>";
+		};
+		4A6D85BA257623F4009B94F4 /* 告警事件 */ = {
+			isa = PBXGroup;
+			children = (
+				4A6D85BB25762418009B94F4 /* EquimentAlarmsController.h */,
+				4A6D85BC25762418009B94F4 /* EquimentAlarmsController.m */,
+				4A6D85C225762552009B94F4 /* EquimentAlarmsCell.h */,
+				4A6D85C325762552009B94F4 /* EquimentAlarmsCell.m */,
+				4A6D85D225763662009B94F4 /* EquimentAlarmsModel.h */,
+				4A6D85D325763662009B94F4 /* EquimentAlarmsModel.m */,
+			);
+			path = "告警事件";
 			sourceTree = "<group>";
 		};
 		4A8D97D7251AE47300295CAC /* 预置点 */ = {
@@ -5166,6 +5184,7 @@
 				4AB29A3C2410DB59004CA6B5 /* DownloadListCell.m in Sources */,
 				4A64ECC4242B5A5A00D30FB1 /* LivingModel.m in Sources */,
 				4A580F2524075F2D00E82675 /* TopImageBottomTextView.m in Sources */,
+				4A6D85C425762552009B94F4 /* EquimentAlarmsCell.m in Sources */,
 				4AB50AD12468FB240064BF82 /* WBPopMenuSingleton.m in Sources */,
 				4AB50AB32468EDF50064BF82 /* WMZDiaLogBase.m in Sources */,
 				4AB50AAB2468EDF40064BF82 /* NSDate+WMZCalendarDate.m in Sources */,
@@ -5241,6 +5260,7 @@
 				4AFC83CE2547B1E600F92BCD /* AddNewAreaViewController.m in Sources */,
 				4A8D98D52521746200295CAC /* WXZPickCityView.m in Sources */,
 				4A14BC4A24F49FBA003ADC07 /* AFImageDownloader.m in Sources */,
+				4A6D85D425763662009B94F4 /* EquimentAlarmsModel.m in Sources */,
 				4A8D98D22521746200295CAC /* WXZPickTimeView.m in Sources */,
 				4AFC83922546AF0D00F92BCD /* AreaSetupViewCell.m in Sources */,
 				4A580F1924075F2D00E82675 /* RefreshControlView.m in Sources */,
@@ -5311,7 +5331,6 @@
 				4AB50A982468EDF40064BF82 /* WMZDialog+Write.m in Sources */,
 				4A58100124075F2D00E82675 /* MJRefreshAutoNormalFooter.m in Sources */,
 				4A29D0D4254953AC00688C19 /* AreaInfoModel.m in Sources */,
-				4A9769962554E83100DCFFF5 /* SocketRocketUtility.m in Sources */,
 				4A36B2F425403B6300CB344D /* WXApiManager.m in Sources */,
 				4A14BC4224F49FBA003ADC07 /* UIProgressView+AFNetworking.m in Sources */,
 				4A6869232456644C0036355E /* SingleCarmeraCell.m in Sources */,
@@ -5479,6 +5498,7 @@
 				4A58102024075F2D00E82675 /* IFTTTRotationAnimation.m in Sources */,
 				4A58101A24075F2D00E82675 /* UICollectionViewController+ADFlipTransition.m in Sources */,
 				4A8D98EA25217C2800295CAC /* CGXPickerViewManager.m in Sources */,
+				4A6D85BD25762418009B94F4 /* EquimentAlarmsController.m in Sources */,
 				4A0465CE253E7CEA004B8575 /* ChannelMoreSystemController.m in Sources */,
 				4A58104124075F2E00E82675 /* NSObject+Json.m in Sources */,
 				4A51192D242B082D005A3065 /* RequestSence.m in Sources */,
@@ -5747,10 +5767,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendor/JPush",
-					"$(PROJECT_DIR)/Vendor/大华视频/lib",
-					"$(PROJECT_DIR)/Vendor/大华视频/Class/lib",
-					"$(PROJECT_DIR)/Vendor/DHVideo/Class/lib",
-					"$(PROJECT_DIR)/Class/DHClass/lib",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = NetCamera.Indentifier.NetCamera;
@@ -5793,10 +5809,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Vendor/JPush",
-					"$(PROJECT_DIR)/Vendor/大华视频/lib",
-					"$(PROJECT_DIR)/Vendor/大华视频/Class/lib",
-					"$(PROJECT_DIR)/Vendor/DHVideo/Class/lib",
-					"$(PROJECT_DIR)/Class/DHClass/lib",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = NetCamera.Indentifier.NetCamera;

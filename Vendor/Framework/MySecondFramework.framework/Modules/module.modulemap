@@ -1,0 +1,6 @@
+framework module MySecondFramework {
+  umbrella header "MySecondFramework.h"
+
+  export *
+  module * { export * }
+}
