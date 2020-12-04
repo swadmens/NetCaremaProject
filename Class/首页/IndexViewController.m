@@ -593,8 +593,7 @@
         NSArray *array = (NSArray*)obj;
         NSString *clientId = [array[0] objectForKey:@"clientId"];
         [self subscribeConnect:clientId];
-        [self sessionSubscribe:clientId];
-
+//        [self sessionSubscribe:clientId];
     };
     sence.errorBlock = ^(NSError *error) {
         DLog(@"error == %@",error)
@@ -624,7 +623,7 @@
     sence.body = jsonData;
     sence.successBlock = ^(id obj) {
         DLog(@"ConnectObj ==  %@",obj);
-//        [self sessionSubscribe:clientId];
+        [self sessionSubscribe:clientId];
     };
     sence.errorBlock = ^(NSError *error) {
         DLog(@"ConnectErrer == %@",error)

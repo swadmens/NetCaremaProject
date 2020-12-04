@@ -127,15 +127,8 @@
     NSString *DateTime = [formatter stringFromDate:date];
     
     
-//    NSString *url = [NSString stringWithFormat:@"alarm/alarms?dateFrom=%@&dateTo=%@&pageSize=10&currentPage=%ld",@"2020-11-11",@"2020-12-01",self.page];
-
     NSString *url = [NSString stringWithFormat:@"alarm/alarms?status=%@&source=%@&dateFrom=%@&dateTo=%@&pageSize=10&currentPage=%ld",@"ACTIVE",self.deviceId,@"2020-11-11",@"2020-12-01",self.page];
-    
-//    if (startTime.length == 0) {
-//        url = [NSString stringWithFormat:@"alarm/alarms?status=%@&source=%@&pageSize=%@&currentPage=%@",@"",self.deviceId,@"10",self.page];
-//    }
 
-    
     RequestSence *sence = [[RequestSence alloc] init];
     sence.requestMethod = @"GET";
     sence.pathHeader = @"application/json";
