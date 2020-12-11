@@ -118,7 +118,6 @@
     _alarmBtn.layer.borderColor = [UIColor redColor].CGColor;
     _alarmBtn.layer.borderWidth = 0.8f;
     _alarmBtn.titleLabel.font = [UIFont customFontWithSize:kFontSizeTwelve];
-//    [_alarmBtn setTitle:@"99" forState:UIControlStateNormal];
     [_alarmBtn setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [_alarmBtn addTarget:self action:@selector(alarmButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [backView addSubview:_alarmBtn];
@@ -126,8 +125,6 @@
     [_alarmBtn rightToView:moreBtn withSpace:5];
     [_alarmBtn addWidth:20];
     [_alarmBtn addHeight:20];
-    
-    
     
     
     _showImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 70, kScreenWidth-30, backHeight-70)];

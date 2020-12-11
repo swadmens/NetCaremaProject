@@ -61,15 +61,14 @@
     [backView addSubview:_showImageView];
     
     
-    
     _titleLabel = [UILabel new];
-    _titleLabel.text = @"597654";
+    _titleLabel.text = @"";
     _titleLabel.textColor = kColorSecondTextColor;
     _titleLabel.font = [UIFont customFontWithSize:kFontSizeThirteen];
     [backView addSubview:_titleLabel];
     [_titleLabel leftToView:backView withSpace:8];
     [_titleLabel topToView:_showImageView withSpace:8];
-    [_titleLabel addWidth:width];
+    [_titleLabel addWidth:width - 60];
     
     
     UIButton *moreBtn = [UIButton new];
@@ -91,7 +90,7 @@
     [_alarmBtn addTarget:self action:@selector(alarmButtonClick) forControlEvents:UIControlEventTouchUpInside];
     [backView addSubview:_alarmBtn];
     [_alarmBtn yCenterToView:moreBtn];
-    [_alarmBtn rightToView:moreBtn withSpace:5];
+    [_alarmBtn rightToView:moreBtn withSpace:2];
     [_alarmBtn addWidth:18];
     [_alarmBtn addHeight:18];
     

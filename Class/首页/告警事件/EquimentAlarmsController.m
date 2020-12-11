@@ -142,7 +142,7 @@
     };
 
     sence.errorBlock = ^(NSError *error) {
-
+  
         [_kHUDManager hideAfter:0.1 onHide:nil];
         DLog(@"error: %@", error);
         [self failedOperation];
@@ -150,7 +150,6 @@
     };
     [sence sendRequest];
     
-
 }
 - (void)failedOperation
 {
@@ -180,7 +179,6 @@
             [tempArray addObject:model];
         }];
         [weak_self.dataArray addObjectsFromArray:tempArray];
-        
         
         [[GCDQueue mainQueue] queueBlock:^{
             
